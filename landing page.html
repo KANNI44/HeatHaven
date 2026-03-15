@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Heat Haven - Premium Sneaker Store</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Archivo+Black&family=Poppins:wght@300;400;500;600;700&display=swap");
+
+    body {
+      font-family: "Poppins", sans-serif;
+      background: #fff;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, .brand {
+      font-family: "Archivo Black", sans-serif;
+    }
+
+    /* =========================
+       macOS DOCK (DESKTOP ONLY)
+       ========================= */
+
+    .related-dock {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 48px;
+
+      /* ✅ ONLY CHANGE */
+      margin-top: -12px;   /* pulls dock slightly closer to heading */
+      padding-bottom: 40px;
+    }
+
+    .related-card {
+      transform-origin: center bottom;
+      transition: transform 0.12s linear;
+      will-change: transform;
+      cursor: pointer;
+    }
+
+    .related-card:hover {
+      animation: none !important;
+      box-shadow: none !important;
+    }
+
+    .related-card img {
+      pointer-events: none;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- Navigation -->
+  <nav class="bg-white shadow-md sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <div class="brand text-2xl font-bold">
+            <a href="index.html" class="text-black">HEAT HAVEN</a>
+          </div>
+          <div class="hidden md:flex items-center ml-10 space-x-8">
+            <a href="index.html" class="nav-link text-black hover:text-gray-600 px-2">Home</a>
+            <a href="product.html" class="nav-link text-black hover:text-gray-600 px-2">Products</a>
+            <a href="deals.html" class="nav-link text-black hover:text-gray-600 px-2">Hot Deals</a>
+            <a href="#contact" class="nav-link text-black hover:text-gray-600 px-2">Contact</a>
+            <a href="apparels.html" class="nav-link text-black hover:text-gray-600 px-2">Appareals</a>
+            <a href="products_apparels.html" class="nav-link text-black hover:text-gray-600 px-2">Products_Apparels</a>
+          </div>
+        </div>
+
+        <div class="flex items-center">
+          <div class="hidden md:flex items-center space-x-2">
+            <a href="#search" class="p-2 rounded-full hover:bg-gray-100">
+              <i class="fas fa-search text-gray-600"></i>
+            </a>
+            <!-- Cart with badge that updates -->
+            <a href="cart.html" class="p-2 rounded-full hover:bg-gray-100">
+              <i class="fas fa-shopping-cart text-gray-600"></i>
+              <span
+                id="cart-count"
+                class="bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center -mt-8 ml-4"
+              >0</span>
+            </a>
+            <a href="#" id="filterBtn" class="p-2 rounded-full hover:bg-gray-100">
+              <i class="fas fa-filter text-gray-600"></i>
+            </a>
+
+            
+
+            <a href="profile.html" class="p-2 rounded-full hover:bg-gray-100">
+              <i class="fas fa-user text-gray-600"></i>
+            </a>
+
+            <a
+              href="profile login.html"
+              class="ml-2 px-4 py-1.5 rounded-full text-sm font-medium border border-gray-300 text-gray-800 hover:bg-black hover:text-white transition"
+            >
+              Login
+            </a>
+          </div>
+          <button class="md:hidden p-2 rounded-md focus:outline-none" id="mobile-menu-button">
+            <i class="fas fa-bars text-black"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cart Sidebar placeholder -->
+    <div
+      id="cartSidebar"
+      class="fixed top-0 right-0 h-full w-80 bg-white shadow-lg transform translate-x-full transition-transform duration-300 z-40"
+    ></div>
+    <div id="cartOverlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-30"></div>
+
+   
+    </div>
+  </nav>
+
+<!-- ================= PRODUCT SECTION ================= -->
+<section class="max-w-7xl mx-auto px-6 py-16 grid md:grid-cols-2 gap-16">
+
+  <!-- LEFT -->
+  <div>
+    <div class="border rounded-xl p-10 shadow-sm">
+      <img
+        id="mainImage"
+        src="images/aj 1 chichgo.png"
+        class="w-full h-[400px] object-cover transition duration-300"
+      />
+    </div>
+
+    <!-- THUMBNAILS -->
+    <div class="flex gap-2 mt-6">
+      <img src="images/aj 1 chichgo.png" class="w-20 h-20 object-cover border rounded-lg">
+      <img src="images/aj 1 chicago solo (1).png" class="w-20 h-20 object-cover border rounded-lg">
+    </div>
+
+    <!-- LAST SALE GRAPH -->
+    <div class="mt-10 border rounded-xl p-6 shadow-sm">
+      <h3 class="text-lg font-semibold mb-4">Last Sale Trend</h3>
+      <div class="h-40 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400">
+        📈 Graph Placeholder
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div>
+    <h2 class="text-3xl font-bold">Air Jordan 1 Retro High</h2>
+    <p class="text-gray-500 mt-1">Chicago Bulls Edition</p>
+
+    <div class="mt-6 border rounded-xl p-6 shadow-sm">
+      <p class="text-sm text-gray-500">Last Sale</p>
+      <h3 class="text-4xl font-bold">₹5,559</h3>
+      <p class="text-green-600 text-sm">▲ ₹240 (4.5%)</p>
+
+      <!-- SIZE SELECTOR -->
+      <div class="mt-8">
+        <p class="text-sm font-semibold mb-3">Select Size</p>
+        <div class="grid grid-cols-3 gap-3">
+          <button class="border py-2 rounded-lg hover:border-black">UK 6</button>
+          <button class="border py-2 rounded-lg hover:border-black">UK 7</button>
+          <button class="border py-2 rounded-lg hover:border-black">UK 8</button>
+          <button class="border py-2 rounded-lg hover:border-black">UK 9</button>
+          <button class="border py-2 rounded-lg hover:border-black">UK 10</button>
+          <button class="border py-2 rounded-lg hover:border-black">UK 11</button>
+        </div>
+      </div>
+
+      <!-- ACTION BUTTONS -->
+      <div class="mt-8 space-y-3">
+        <button class="w-full bg-green-700 text-white py-3 rounded-xl font-semibold hover:bg-green-600">
+          Buy Now
+        </button>
+        <button class="w-full border py-3 rounded-xl font-semibold hover:bg-red-600 hover:text-white">
+          Place Bid
+        </button>
+      </div>
+    </div>
+
+    <!-- PRODUCT DETAILS -->
+    <div class="mt-12">
+      <h3 class="text-xl font-semibold mb-4">Product Details</h3>
+      <ul class="space-y-2 text-gray-600 text-sm">
+        <li>• High-cut shape inspired by the original 1985 Air Jordan 1.</li>
+        <li>• Premium leather upper.</li>
+        <li>• Padded ankle collar.</li>
+        <li>• Breathable perforated toe box.</li>
+        <li>• 100% Authentic & Verified.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================= RELATED PRODUCTS ================= -->
+<section class="max-w-7xl mx-auto px-6 pb-20">
+  <h2 class="text-2xl font-bold mb-8">Related Products</h2>
+
+  <div class="related-dock md:flex hidden" id="dock">
+
+    <div class="related-card border rounded-xl p-4 bg-white shadow-sm">
+      <img src="images/aj 1 chicago solo (1).png" class="w-full h-48 object-cover rounded-lg mb-4">
+      <h3 class="font-semibold">Air Jordan 1 Chicago</h3>
+      <p class="text-gray-500 text-sm">Starting from</p>
+      <p class="font-bold">₹6,200</p>
+    </div>
+
+    <div class="related-card border rounded-xl p-4 bg-white shadow-sm">
+      <img src="images/11 concord.png" class="w-full h-48 object-cover rounded-lg mb-4">
+      <h3 class="font-semibold">Air Jordan 11 Concord</h3>
+      <p class="text-gray-500 text-sm">Starting from</p>
+      <p class="font-bold">₹7,500</p>
+    </div>
+
+    <div class="related-card border rounded-xl p-4 bg-white shadow-sm">
+      <img src="https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/3.jpg" class="w-full h-48 object-cover rounded-lg mb-4">
+      <h3 class="font-semibold">Nike Dunk Low Panda</h3>
+      <p class="text-gray-500 text-sm">Starting from</p>
+      <p class="font-bold">₹5,800</p>
+    </div>
+
+    <div class="related-card border rounded-xl p-4 bg-white shadow-sm">
+      <img src="https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/4.jpg" class="w-full h-48 object-cover rounded-lg mb-4">
+      <h3 class="font-semibold">Yeezy Boost 350 V2</h3>
+      <p class="text-gray-500 text-sm">Starting from</p>
+      <p class="font-bold">₹8,999</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- Footer -->
+  <footer class="bg-black text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div>
+          <h3 class="text-lg font-bold mb-4">HEAT HAVEN</h3>
+          <p class="text-gray-400 text-sm">
+            Premium sneakers, exceptional service. Your ultimate destination for the hottest kicks on
+            the market.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="text-lg font-bold mb-4">Shop</h3>
+          <ul class="space-y-2">
+            <li>
+              <a href="product.html" class="text-gray-400 hover:text-white text-sm">
+                All Products
+              </a>
+            </li>
+            <li>
+              <a href="newarrivals.html" class="text-gray-400 hover:text-white text-sm">
+                Fresh Arrivals
+              </a>
+            </li>
+            <li>
+              <a href="Bestsellerrs.html" class="text-gray-400 hover:text-white text-sm">
+                Best Sellers
+              </a>
+            </li>
+            <li>
+              <a href="#" class="text-gray-400 hover:text-white text-sm">SALE ! Items</a>
+            </li>
+            <li>
+              <a href="#" class="text-gray-400 hover:text-white text-sm">Gift Cards</a>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="text-lg font-bold mb-4">Customer Service</h3>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-gray-400 hover:text-white text-sm">Contact Us</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white text-sm">FAQs</a></li>
+            <li>
+              <a href="#" class="text-gray-400 hover:text-white text-sm">
+                Shipping & Returns
+              </a>
+            </li>
+            <li><a href="#" class="text-gray-400 hover:text-white text-sm">Size Guide</a></li>
+            <li>
+              <a href="#" class="text-gray-400 hover:text-white text-sm">Privacy Policy</a>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="text-lg font-bold mb-4">Newsletter</h3>
+          <p class="text-gray-400 text-sm mb-3">
+            Subscribe to get updates on new releases, exclusive deals, and sneaker culture news.
+          </p>
+          <form class="flex">
+            <input
+              type="email"
+              placeholder="Your email"
+              class="px-4 py-2 rounded-l focus:outline-none text-gray-800 w-full"
+            />
+            <button
+              type="submit"
+              class="bg-red-500 text-white px-4 py-2 rounded-r hover:bg-red-600"
+            >
+              <i class="fas fa-arrow-right"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div
+        class="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center"
+      >
+        <p class="text-gray-400 text-sm mb-4 md:mb-0">
+          &copy; 2025 Heat Haven. All rights reserved.
+        </p>
+        <div class="flex space-x-6">
+          <a href="#" class="text-gray-400 hover:text-white">
+            <i class="fab fa-cc-visa"></i>
+          </a>
+          <a href="#" class="text-gray-400 hover:text-white">
+            <i class="fab fa-cc-mastercard"></i>
+          </a>
+          <a href="#" class="text-gray-400 hover:text-white">
+            <i class="fab fa-cc-amex"></i>
+          </a>
+          <a href="#" class="text-gray-400 hover:text-white">
+            <i class="fab fa-cc-paypal"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast -->
+  <div id="toast">
+    ✅ Item added to cart
+  </div>
+
+  <script>
+    // Mobile menu toggle
+    const mobileMenuButton = document.getElementById("mobile-menu-button");
+    const mobileMenu = document.getElementById("mobile-menu");
+    const closeMenuButton = document.getElementById("close-menu");
+
+    mobileMenuButton.addEventListener("click", () => {
+      mobileMenu.classList.add("open");
+    });
+
+    closeMenuButton.addEventListener("click", () => {
+      mobileMenu.classList.remove("open");
+    });
+
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+      anchor.addEventListener("click", function (e) {
+        const targetId = this.getAttribute("href");
+        if (!targetId || targetId === "#") return;
+        const targetElement = document.querySelector(targetId);
+        if (!targetElement) return;
+        e.preventDefault();
+        targetElement.scrollIntoView({
+          behavior: "smooth",
+        });
+        if (mobileMenu.classList.contains("open")) {
+          mobileMenu.classList.remove("open");
+        }
+      });
+    });
+
+    // Wishlist + Add to Cart spring + toast + badge count
+    document.addEventListener("click", function (event) {
+      // Wishlist
+      const wishlistBtn = event.target.closest(".wishlist-btn");
+      if (wishlistBtn) {
+        const icon = wishlistBtn.querySelector("i");
+        if (icon) {
+          icon.classList.toggle("far");
+          icon.classList.toggle("fas");
+          icon.classList.toggle("text-gray-700");
+          icon.classList.toggle("text-red-500");
+
+          icon.classList.remove("heart-spring");
+          void icon.offsetWidth;
+          icon.classList.add("heart-spring");
+        }
+        return;
+      }
+
+      // Add to Cart
+      const cartBtn = event.target.closest(".cart-animation");
+      if (cartBtn) {
+        cartBtn.classList.remove("cart-spring");
+        void cartBtn.offsetWidth;
+        cartBtn.classList.add("cart-spring");
+
+        incrementCartCount();
+        showToast("Item added to cart");
+        return;
+      }
+    });
+
+    function incrementCartCount() {
+      const badge = document.getElementById("cart-count");
+      if (!badge) return;
+      const current = parseInt(badge.textContent || "0", 10);
+      badge.textContent = current + 1;
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      if (!toast) return;
+      toast.textContent = "✅ " + message;
+      toast.classList.add("show");
+      clearTimeout(showToast._timeout);
+      showToast._timeout = setTimeout(() => {
+        toast.classList.remove("show");
+      }, 2000);
+    }
+  </script>
+</body>
+</html>
+
+
+<!-- ================= macOS DOCK JS ================= -->
+<script>
+  const dock = document.getElementById("dock");
+  const cards = Array.from(dock.querySelectorAll(".related-card"));
+
+  dock.addEventListener("mousemove", (e) => {
+    const mouseX = e.clientX;
+
+    cards.forEach(card => {
+      const rect = card.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const distance = Math.abs(mouseX - centerX);
+
+      const scale = 1 + Math.exp(-distance * 0.014) * 0.55;
+      const lift  = Math.exp(-distance * 0.018) * 30;
+
+      card.style.transform = `scale(${scale}) translateY(-${lift}px)`;
+      card.style.zIndex = Math.round(scale * 10);
+    });
+  });
+
+  dock.addEventListener("mouseleave", () => {
+    cards.forEach(card => {
+      card.style.transform = "scale(1) translateY(0)";
+      card.style.zIndex = "1";
+    });
+  });
+</script>
+
+</body>
+</html>
