@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Heat Haven – Order History</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: { colors: { amoled:'#000000', cardDark:'#0a0a0a', hoverDark:'#111111', navdark:'#0d0d0d' } } }
+    }
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body { font-family:'Poppins',sans-serif; overflow-x:hidden; }
+    html { scrollbar-gutter:stable; }
+    h1,h2,h3,.brand { font-family:'Archivo Black',sans-serif; letter-spacing:-0.5px; }
+
+    .mobile-menu { transform:translateX(100%); transition:transform 0.3s ease-in-out; }
+    .mobile-menu.open { transform:translateX(0); }
+
+    /* Dark mode icons */
+    .sun-icon  { display:block; width:20px; height:20px; }
+    .moon-icon { display:none;  width:20px; height:20px; }
+    .dark .sun-icon  { display:none; }
+    .dark .moon-icon { display:block; }
+
+    nav { background:#fff; }
+    .dark nav { background:#000; border-bottom:1px solid #1a1a1a; }
+
+    /* Toast */
+    #toast {
+      position:fixed; bottom:80px; left:50%; transform:translateX(-50%) translateY(20px);
+      background:#111; color:#fff; padding:10px 22px; border-radius:999px;
+      font-size:13px; z-index:9999; opacity:0; transition:opacity 0.3s,transform 0.3s;
+      pointer-events:none; display:flex; align-items:center; gap:8px; white-space:nowrap;
+    }
+    #toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+    /* Order card */
+    .order-card {
+      background:#fff; border:1px solid #e5e7eb; border-radius:16px;
+      transition:transform 0.25s cubic-bezier(0.175,0.885,0.32,1.275), box-shadow 0.25s ease, border-color 0.25s ease;
+      animation:card-in 0.35s ease both;
+    }
+    .order-card:hover { transform:translateY(-4px); box-shadow:0 16px 40px rgba(0,0,0,0.1); border-color:#111827; }
+    .dark .order-card { background:#0f0f0f; border-color:#1f1f1f; }
+    .dark .order-card:hover { border-color:#3f3f3f; box-shadow:0 16px 40px rgba(0,0,0,0.6); }
+    @keyframes card-in { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+    .spring-btn { transition:transform 0.15s cubic-bezier(0.22,0.61,0.36,1); }
+    .spring-btn:active { transform:scale(0.92); }
+
+    /* Nav search pill */
+    .nav-search-pill { display:flex; align-items:center; min-width:190px; padding:0; border-radius:999px; border:none; cursor:pointer; background:transparent; font-family:'Poppins',sans-serif; font-size:13px; font-weight:500; transition:transform 0.15s; position:relative; white-space:nowrap; }
+    .nav-search-pill:hover { transform:scale(1.02); }
+    .nav-search-pill .pill-border { position:absolute; inset:0; border-radius:999px; padding:2px; background:linear-gradient(100deg,#4285f4,#ea4335,#fbbc04,#34a853,#4285f4); background-size:250% 250%; animation:pill-gradient 3s ease infinite; -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0); -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none; }
+    .nav-search-pill .pill-inner { display:flex; align-items:center; gap:10px; width:100%; padding:8px 18px 8px 14px; border-radius:999px; background:#f8f9fa; position:relative; z-index:1; transition:background 0.2s; }
+    .nav-search-pill:hover .pill-inner { background:#fff; box-shadow:0 2px 16px rgba(66,133,244,0.18); }
+    .pill-search-icon { width:28px; height:28px; flex-shrink:0; background:linear-gradient(135deg,#4285f4,#34a853); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .pill-search-icon svg { width:13px; height:13px; }
+    .pill-label { flex:1; text-align:left; color:#5f6368; font-size:13px; }
+    .pill-kbd { display:inline-flex; align-items:center; background:rgba(0,0,0,0.07); border-radius:6px; padding:2px 7px; font-size:11px; font-family:monospace; color:#999; }
+    .dark .nav-search-pill .pill-inner { background:#1a1a1a; }
+    .dark .nav-search-pill:hover .pill-inner { background:#222; }
+    .dark .pill-label { color:#9aa0a6; }
+    .dark .pill-kbd { background:rgba(255,255,255,0.07); color:#666; }
+    @keyframes pill-gradient { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+
+    /* Search overlay */
+    #search-overlay { position:fixed; inset:0; z-index:9998; background:rgba(255,255,255,0.85); backdrop-filter:blur(20px); display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding-top:120px; opacity:0; pointer-events:none; transition:opacity 0.3s ease; }
+    .dark #search-overlay { background:rgba(0,0,0,0.88); }
+    #search-overlay.open { opacity:1; pointer-events:all; }
+    #search-box-wrap { width:100%; max-width:620px; padding:0 20px; }
+    .search-border-wrap { position:relative; border-radius:999px; padding:3px; background:linear-gradient(135deg,#4285f4,#ea4335,#fbbc04,#34a853,#4285f4); background-size:300% 300%; animation:gradient-shift 4s ease infinite; box-shadow:0 8px 40px rgba(66,133,244,0.25); }
+    @keyframes gradient-shift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+    .search-inner { display:flex; align-items:center; background:#fff; border-radius:999px; padding:14px 20px 14px 22px; gap:14px; }
+    .dark .search-inner { background:#111; }
+    .search-icon-wrap { color:#5f6368; flex-shrink:0; font-size:18px; }
+    #search-input { flex:1; border:none; outline:none; background:transparent; font-family:'Poppins',sans-serif; font-size:18px; color:#202124; }
+    .dark #search-input { color:#e8eaed; }
+    #search-input::placeholder { color:#9aa0a6; }
+    #search-clear-btn { background:none; border:none; cursor:pointer; color:#9aa0a6; font-size:16px; display:none; padding:4px; flex-shrink:0; }
+    #search-clear-btn.visible { display:flex; align-items:center; }
+    #search-close-hint { margin-top:16px; font-size:12px; color:#9aa0a6; }
+    #search-close-hint kbd { background:rgba(0,0,0,0.08); color:#5f6368; padding:2px 8px; border-radius:4px; font-family:monospace; }
+    .dark #search-close-hint kbd { background:rgba(255,255,255,0.1); color:#9aa0a6; }
+
+    /* Filter dropdown */
+    .range-wrap { position:relative; height:36px; display:flex; align-items:center; }
+    .range-track { position:absolute; width:100%; height:5px; background:#e5e7eb; border-radius:5px; }
+    .dark .range-track { background:#333; }
+    .range-fill { position:absolute; height:5px; background:#ef4444; border-radius:5px; pointer-events:none; }
+    .range-wrap input[type=range] { -webkit-appearance:none; appearance:none; position:absolute; width:100%; height:5px; background:transparent; pointer-events:none; outline:none; }
+    .range-wrap input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; background:#ef4444; border-radius:50%; cursor:pointer; pointer-events:all; border:2px solid #fff; box-shadow:0 1px 5px rgba(0,0,0,0.25); transition:transform 0.15s; }
+    .range-wrap input[type=range]::-webkit-slider-thumb:hover { transform:scale(1.2); }
+
+    /* Cart badge bump */
+    .cart-bump { animation:cart-bump 0.4s ease-out; }
+    @keyframes cart-bump { 0%{transform:scale(1)} 30%{transform:translateY(-4px) scale(1.2)} 60%{transform:scale(0.95)} 100%{transform:scale(1)} }
+
+    /* AMOLED scrollbar */
+    .dark ::-webkit-scrollbar { width:5px; }
+    .dark ::-webkit-scrollbar-track { background:#000; }
+    .dark ::-webkit-scrollbar-thumb { background:#222; border-radius:3px; }
+
+    /* AI Chat */
+    #hh-chat-widget { position:fixed; bottom:24px; left:24px; z-index:9999; font-family:'Poppins',sans-serif; }
+    #hh-chat-toggle { width:60px; height:60px; border-radius:50%; background:#000; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 8px 32px rgba(0,0,0,0.25); transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1); position:relative; }
+    .dark #hh-chat-toggle { background:#f0f0f0; }
+    .dark #hh-chat-toggle .icon-chat svg,.dark #hh-chat-toggle .icon-close svg { stroke:#000; }
+    #hh-chat-toggle:hover { transform:scale(1.1); }
+    #hh-chat-toggle .toggle-icon { position:absolute; transition:opacity 0.2s,transform 0.2s; }
+    #hh-chat-toggle .icon-chat  { opacity:1; transform:scale(1) rotate(0deg); }
+    #hh-chat-toggle .icon-close { opacity:0; transform:scale(0.5) rotate(-90deg); }
+    #hh-chat-widget.open #hh-chat-toggle .icon-chat  { opacity:0; transform:scale(0.5) rotate(90deg); }
+    #hh-chat-widget.open #hh-chat-toggle .icon-close { opacity:1; transform:scale(1) rotate(0deg); }
+    #hh-chat-toggle .notif-dot { position:absolute; top:2px; right:2px; width:14px; height:14px; background:#ef4444; border-radius:50%; border:2px solid white; display:none; animation:pulse-dot 2s infinite; }
+    @keyframes pulse-dot { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.3);opacity:0.7} }
+    #hh-chat-panel { position:absolute; bottom:76px; left:0; width:360px; height:520px; background:#fff; border-radius:20px; box-shadow:0 20px 60px rgba(0,0,0,0.18),0 0 0 1px rgba(0,0,0,0.06); display:flex; flex-direction:column; overflow:hidden; transform:scale(0.85) translateY(20px); transform-origin:bottom left; opacity:0; pointer-events:none; transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1),opacity 0.25s; }
+    #hh-chat-widget.open #hh-chat-panel { transform:scale(1) translateY(0); opacity:1; pointer-events:all; }
+    #hh-chat-header { background:#000; padding:16px 18px; display:flex; align-items:center; gap:12px; flex-shrink:0; }
+    .hh-avatar { width:40px; height:40px; background:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Archivo Black',sans-serif; font-size:13px; color:#000; flex-shrink:0; }
+    .hh-header-name { color:#fff; font-weight:600; font-size:14px; }
+    .hh-header-status { color:#a3a3a3; font-size:11px; display:flex; align-items:center; gap:5px; margin-top:2px; }
+    .hh-status-dot { width:7px; height:7px; background:#22c55e; border-radius:50%; animation:pulse-dot 2s infinite; }
+    #hh-messages { flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:10px; background:#fafafa; scroll-behavior:smooth; }
+    #hh-messages::-webkit-scrollbar { width:4px; }
+    #hh-messages::-webkit-scrollbar-thumb { background:#ddd; border-radius:2px; }
+    .hh-msg { display:flex; gap:8px; align-items:flex-end; animation:msg-in 0.3s ease; }
+    @keyframes msg-in { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+    .hh-msg.bot { justify-content:flex-start; }
+    .hh-msg.user { justify-content:flex-end; }
+    .hh-bot-avatar { width:28px; height:28px; background:#000; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; color:#fff; font-family:'Archivo Black',sans-serif; flex-shrink:0; }
+    .hh-bubble { max-width:78%; padding:10px 14px; border-radius:18px; font-size:13px; line-height:1.5; word-wrap:break-word; }
+    .hh-msg.bot .hh-bubble  { background:#fff; color:#111; border-radius:18px 18px 18px 4px; box-shadow:0 1px 4px rgba(0,0,0,0.08); }
+    .hh-msg.user .hh-bubble { background:#000; color:#fff; border-radius:18px 18px 4px 18px; }
+    .hh-chips { display:flex; flex-wrap:wrap; gap:6px; padding:0 16px 10px; background:#fafafa; }
+    .hh-chip { padding:6px 14px; background:#fff; border:1.5px solid #e5e5e5; border-radius:999px; font-size:12px; cursor:pointer; color:#333; font-family:'Poppins',sans-serif; font-weight:500; transition:all 0.2s; white-space:nowrap; }
+    .hh-chip:hover { background:#000; color:#fff; border-color:#000; }
+    .hh-typing { display:flex; gap:4px; align-items:center; }
+    .hh-typing span { width:7px; height:7px; background:#bbb; border-radius:50%; animation:typing 1.2s infinite ease-in-out; }
+    .hh-typing span:nth-child(2) { animation-delay:0.2s; }
+    .hh-typing span:nth-child(3) { animation-delay:0.4s; }
+    @keyframes typing { 0%,60%,100%{transform:translateY(0);opacity:0.4} 30%{transform:translateY(-5px);opacity:1} }
+    #hh-input-area { padding:12px 14px; background:#fff; border-top:1px solid #f0f0f0; display:flex; align-items:center; gap:8px; flex-shrink:0; }
+    #hh-input { flex:1; border:1.5px solid #e5e5e5; border-radius:999px; padding:9px 16px; font-size:13px; font-family:'Poppins',sans-serif; outline:none; background:#fafafa; color:#111; transition:border-color 0.2s; }
+    #hh-input:focus { border-color:#000; background:#fff; }
+    #hh-input::placeholder { color:#bbb; }
+    #hh-send { width:38px; height:38px; background:#000; border:none; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:transform 0.2s; flex-shrink:0; }
+    #hh-send:hover { transform:scale(1.1); }
+    .hh-powered { text-align:center; padding:6px; font-size:10px; color:#ccc; background:#fff; flex-shrink:0; }
+    .dark #hh-chat-panel { background:#0a0a0a; }
+    .dark #hh-messages { background:#000; }
+    .dark .hh-chips { background:#000; }
+    .dark .hh-msg.bot .hh-bubble { background:#111; color:#f0f0f0; box-shadow:none; }
+    .dark #hh-input-area { background:#0a0a0a; border-top-color:#1a1a1a; }
+    .dark #hh-input { background:#111; border-color:#222; color:#fff; }
+    .dark #hh-input:focus { border-color:#555; background:#1a1a1a; }
+    .dark .hh-chip { background:#111; border-color:#333; color:#ccc; }
+    .dark .hh-chip:hover { background:#fff; color:#000; border-color:#fff; }
+    .dark .hh-powered { background:#0a0a0a; color:#333; }
+    @media (max-width:420px) { #hh-chat-panel { width:calc(100vw - 48px); } }
+  </style>
+</head>
+
+<body class="bg-gray-50 dark:bg-amoled text-black dark:text-white transition-colors duration-300">
+
+<!-- SEARCH OVERLAY -->
+<div id="search-overlay" role="dialog" aria-label="Search">
+  <div id="search-box-wrap">
+    <div class="search-border-wrap">
+      <div class="search-inner">
+        <div class="search-icon-wrap"><i class="fas fa-search"></i></div>
+        <input id="search-input" type="text" placeholder="Search sneakers…" autocomplete="off" />
+        <button id="search-clear-btn" aria-label="Clear">✕</button>
+      </div>
+    </div>
+  </div>
+  <p id="search-close-hint">Press <kbd>Esc</kbd> to close</p>
+</div>
+
+<!-- Dark Mode Toggle -->
+<div class="fixed bottom-10 right-6 z-50">
+  <button id="theme-toggle" class="relative flex items-center justify-center w-12 h-12 rounded-full shadow-xl bg-gray-200 dark:bg-cardDark transition-all duration-300 hover:scale-110" aria-label="Toggle dark mode">
+    <svg class="sun-icon text-yellow-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="4" fill="currentColor" stroke="none"/>
+      <path stroke-linecap="round" d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+    </svg>
+    <svg class="moon-icon text-yellow-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/>
+    </svg>
+  </button>
+</div>
+
+<!-- NAV -->
+<nav class="shadow-md sticky top-0 z-40 border-b border-transparent dark:border-zinc-900">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-16">
+      <div class="flex items-center">
+        <div class="brand text-2xl font-bold">
+          <a href="index.html" class="text-black dark:text-white">HEAT HAVEN</a>
+        </div>
+        <div class="hidden md:flex items-center ml-10 space-x-6">
+          <a href="index.html"   class="text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Home</a>
+          <a href="product.html" class="text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Products</a>
+          <a href="deals.html"   class="text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Hot Deals</a>
+          <a href="owners.html"  class="text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Owners</a>
+        </div>
+      </div>
+      <div class="hidden md:flex items-center gap-2 flex-shrink-0">
+        <a href="wishlist.html" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark" aria-label="Wishlist">
+          <i class="fas fa-heart text-red-600"></i>
+        </a>
+        <button id="search-open-btn" class="nav-search-pill" aria-label="Open search">
+          <div class="pill-border"></div>
+          <span class="pill-inner">
+            <span class="pill-search-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </span>
+            <span class="pill-label">Search sneakers…</span>
+            <span class="pill-kbd">👟</span>
+          </span>
+        </button>
+        <a href="cart.html" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark relative">
+          <i class="fas fa-shopping-cart text-gray-600 dark:text-gray-300"></i>
+          <span id="cart-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+        </a>
+        <!-- Filter -->
+        <div class="relative">
+          <button id="filter-toggle-btn" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark transition-colors" aria-label="Filter">
+            <i class="fas fa-filter text-gray-600 dark:text-zinc-500 text-sm"></i>
+          </button>
+          <div id="filter-dropdown" class="hidden absolute right-0 top-12 w-72 bg-white dark:bg-zinc-950 rounded-2xl shadow-2xl dark:shadow-black border border-gray-100 dark:border-zinc-900 p-5 z-50">
+            <h3 class="text-base font-bold mb-4 dark:text-white">Filter Orders</h3>
+            <div class="mb-5">
+              <label class="block text-sm font-medium text-gray-700 dark:text-zinc-400 mb-2">Status</label>
+              <select id="filter-status" class="w-full bg-white dark:bg-zinc-900 dark:text-white border border-gray-200 dark:border-zinc-800 text-sm rounded-xl px-3 py-2.5 focus:outline-none cursor-pointer">
+                <option value="all">All Orders</option>
+                <option value="delivered">Delivered</option>
+                <option value="in transit">In Transit</option>
+                <option value="processing">Processing</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+            </div>
+            <div class="mb-5">
+              <div class="flex justify-between items-center mb-3">
+                <label class="text-sm font-medium text-gray-700 dark:text-zinc-400">Order Value</label>
+                <span id="price-range-label" class="text-sm font-semibold text-red-500">₹0 – ₹1,00,000</span>
+              </div>
+              <div class="range-wrap">
+                <div class="range-track"></div>
+                <div class="range-fill" id="range-fill"></div>
+                <input type="range" id="range-min" min="0" max="100000" value="0" step="500" />
+                <input type="range" id="range-max" min="0" max="100000" value="100000" step="500" />
+              </div>
+              <div class="flex justify-between text-xs text-gray-400 dark:text-zinc-600 mt-2">
+                <span>₹0</span><span>₹1,00,000</span>
+              </div>
+            </div>
+            <div class="flex gap-3">
+              <button id="filter-apply" class="flex-1 bg-black dark:bg-white text-white dark:text-black py-2.5 rounded-xl text-sm font-bold hover:opacity-80 transition spring-btn">Apply</button>
+              <button id="filter-reset" class="flex-1 border border-gray-200 dark:border-zinc-800 text-gray-700 dark:text-zinc-400 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-50 dark:hover:bg-zinc-900 transition spring-btn">Reset</button>
+            </div>
+          </div>
+        </div>
+        <a href="profile.html" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark">
+          <i class="fas fa-user text-gray-600 dark:text-gray-300"></i>
+        </a>
+        <a href="profile login.html" class="px-5 py-1.5 rounded-full text-sm font-medium border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all">Login</a>
+      </div>
+      <div class="md:hidden ml-auto flex items-center">
+        <button class="p-2" id="mobile-menu-button">
+          <i class="fas fa-bars text-black dark:text-white text-lg"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="mobile-menu fixed inset-y-0 right-0 w-64 bg-white dark:bg-cardDark shadow-xl z-50 p-5" id="mobile-menu">
+    <div class="flex justify-between items-center mb-8">
+      <div class="brand text-xl dark:text-white">HEAT HAVEN</div>
+      <button id="close-menu"><i class="fas fa-times text-xl dark:text-white"></i></button>
+    </div>
+    <div class="flex flex-col space-y-5">
+      <a href="index.html"    class="text-black dark:text-gray-200 font-medium">Home</a>
+      <a href="product.html"  class="text-black dark:text-gray-200 font-medium">Products</a>
+      <a href="deals.html"    class="text-black dark:text-gray-200 font-medium">Hot Deals</a>
+      <a href="owners.html"   class="text-black dark:text-gray-200 font-medium">Owners</a>
+      <a href="wishlist.html" class="flex items-center gap-2 text-red-500 font-medium"><i class="fas fa-heart text-sm"></i> Wishlist</a>
+    </div>
+    <div class="mt-6 pt-5 border-t border-gray-200 dark:border-gray-700 flex items-center gap-3 flex-wrap">
+      <a href="cart.html" class="relative p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark">
+        <i class="fas fa-shopping-cart text-gray-600 dark:text-gray-300"></i>
+        <span id="cart-count-mobile" class="absolute -top-0.5 -right-0.5 bg-red-500 text-white text-[10px] rounded-full h-5 w-5 flex items-center justify-center">0</span>
+      </a>
+      <a href="profile.html" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark">
+        <i class="fas fa-user text-gray-600 dark:text-gray-300"></i>
+      </a>
+      <a href="profile login.html" class="px-4 py-1.5 rounded-full text-sm font-medium border border-gray-300 dark:border-gray-600 hover:bg-black hover:text-white transition">Login</a>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE CONTENT -->
+<section class="py-10">
+  <div class="max-w-4xl mx-auto px-4">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h1 class="text-3xl font-bold dark:text-white">Order History</h1>
+        <p class="text-gray-500 dark:text-zinc-500 mt-1 text-sm">Track and manage your purchases</p>
+      </div>
+      <a href="product.html" class="hidden sm:flex items-center gap-2 text-sm font-semibold text-gray-500 dark:text-zinc-500 hover:text-black dark:hover:text-white transition">
+        <i class="fas fa-plus text-xs"></i> Shop More
+      </a>
+    </div>
+
+    <!-- Order list -->
+    <div id="order-list" class="flex flex-col gap-5"></div>
+
+    <!-- Empty state -->
+    <div id="no-orders" class="hidden text-center py-20">
+      <div class="text-6xl mb-4">📦</div>
+      <p class="text-xl font-bold dark:text-white mb-2">No orders found</p>
+      <p class="text-gray-400 dark:text-zinc-600 text-sm mb-6">Try adjusting your filters or place your first order</p>
+      <a href="product.html" class="inline-block bg-black dark:bg-white text-white dark:text-black px-8 py-3 rounded-full font-semibold hover:opacity-80 transition text-sm">Browse Sneakers →</a>
+    </div>
+
+  </div>
+</section>
+
+<footer class="bg-black text-white py-8 mt-4">
+  <div class="max-w-7xl mx-auto px-4 text-center text-sm text-zinc-600">© 2025 Heat Haven. All rights reserved.</div>
+</footer>
+
+<!-- Toast -->
+<div id="toast"><i class="fas fa-check-circle" style="color:#22c55e"></i><span></span></div>
+
+<!-- AI Chat Widget -->
+<div id="hh-chat-widget">
+  <div id="hh-chat-panel">
+    <div id="hh-chat-header">
+      <div class="hh-avatar">HH</div>
+      <div>
+        <div class="hh-header-name">Heat Haven Support</div>
+        <div class="hh-header-status"><span class="hh-status-dot"></span> Online · AI Assistant</div>
+      </div>
+      <button onclick="document.getElementById('hh-chat-widget').classList.remove('open')" style="background:none;border:none;color:#666;cursor:pointer;font-size:18px;padding:4px;margin-left:auto;"><i class="fas fa-chevron-down"></i></button>
+    </div>
+    <div id="hh-messages"></div>
+    <div class="hh-chips" id="hh-chips"></div>
+    <div id="hh-input-area">
+      <input id="hh-input" type="text" placeholder="Ask about your orders…" autocomplete="off"/>
+      <button id="hh-send">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+        </svg>
+      </button>
+    </div>
+    <div class="hh-powered">Powered by Heat Haven AI ✦</div>
+  </div>
+  <button id="hh-chat-toggle" aria-label="Open chat">
+    <span class="notif-dot" id="hh-notif-dot"></span>
+    <span class="toggle-icon icon-chat">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+    </span>
+    <span class="toggle-icon icon-close">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </span>
+  </button>
+</div>
+
+<script>
+// ── DARK MODE ──────────────────────────────────────────────
+if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark');
+document.getElementById('theme-toggle').addEventListener('click', () => {
+  const d = document.documentElement.classList.toggle('dark');
+  localStorage.setItem('theme', d ? 'dark' : 'light');
+});
+
+// ── MOBILE MENU ───────────────────────────────────────────
+document.getElementById('mobile-menu-button').addEventListener('click', () => document.getElementById('mobile-menu').classList.add('open'));
+document.getElementById('close-menu').addEventListener('click', () => document.getElementById('mobile-menu').classList.remove('open'));
+
+// ── CART BADGE ────────────────────────────────────────────
+function getCart() { try { return JSON.parse(localStorage.getItem('hh_cart') || '[]'); } catch(e) { return []; } }
+function updateCartBadge() {
+  const t = getCart().reduce((s,i) => s + i.qty, 0);
+  document.querySelectorAll('#cart-count,#cart-count-mobile').forEach(el => el.textContent = t);
+}
+updateCartBadge();
+
+// ── HELPERS ───────────────────────────────────────────────
+function escH(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function showToast(msg, err) {
+  const t = document.getElementById('toast');
+  t.querySelector('i').className = err ? 'fas fa-exclamation-circle' : 'fas fa-check-circle';
+  t.querySelector('i').style.color = err ? '#facc15' : '#22c55e';
+  t.querySelector('span').textContent = msg;
+  t.classList.add('show');
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+// ── STATUS CONFIG ─────────────────────────────────────────
+const STATUS = {
+  delivered:  { label:'✓ Delivered',  cls:'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400' },
+  'in transit':{ label:'🚚 In Transit', cls:'bg-yellow-100 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-400' },
+  processing: { label:'⏳ Processing', cls:'bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400' },
+  cancelled:  { label:'✕ Cancelled',  cls:'bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400' },
+};
+
+// ── ORDERS DATA ───────────────────────────────────────────
+// Load from localStorage; fall back to demo orders if empty
+function getOrders() {
+  try {
+    const stored = JSON.parse(localStorage.getItem('hh_orders') || '[]');
+    if (stored.length) return stored;
+  } catch(e) {}
+  // Demo orders (shown when no real orders yet)
+  return [
+    {
+      id: 'HH102348', date: '12 Jan 2025', status: 'delivered', total: 11118,
+      address: '238, First Floor, Mohan Garden, New Delhi', payment: 'UPI',
+      items: [
+        { name:'Air Jordan 1 Retro High', colorway:'Chicago Bulls', size:'UK 9', price:5559, qty:1, img:'images/aj 1 chichgo.png' },
+        { name:'Travis Scott x Fragment High', colorway:'Fragment', size:'UK 10', price:5559, qty:1, img:'images/travis x fragment high.png' },
+      ]
+    },
+    {
+      id: 'HH102112', date: '28 Dec 2024', status: 'in transit', total: 4759,
+      address: '238, First Floor, Mohan Garden, New Delhi', payment: 'Card',
+      items: [
+        { name:'Yeezy 700 V3 Azael', colorway:'Azael', size:'UK 8', price:4759, qty:1, img:'images/yzy 700 v3 azael.png' },
+      ]
+    },
+    {
+      id: 'HH102389', date: '27 Feb 2025', status: 'processing', total: 3559,
+      address: '238, First Floor, Mohan Garden, New Delhi', payment: 'COD',
+      items: [
+        { name:'Yeezy Boost 350 V2', colorway:'Zebra', size:'UK 9', price:3559, qty:1, img:'images/yeezy zebra solo.png' },
+      ]
+    },
+  ];
+}
+
+let allOrders = getOrders();
+
+// ── RENDER ────────────────────────────────────────────────
+function renderOrders(orders) {
+  const list    = document.getElementById('order-list');
+  const noOrds  = document.getElementById('no-orders');
+  list.innerHTML = '';
+
+  if (!orders.length) {
+    noOrds.classList.remove('hidden');
+    return;
+  }
+  noOrds.classList.add('hidden');
+
+  orders.forEach((order, oi) => {
+    const st = STATUS[order.status] || STATUS.processing;
+    const isInTransit = order.status === 'in transit';
+
+    const itemsHtml = order.items.map(item => `
+      <div class="flex gap-4 items-center">
+        <div class="w-16 h-16 rounded-xl bg-gray-50 dark:bg-zinc-900 flex-shrink-0 overflow-hidden border dark:border-zinc-800">
+          <img src="${escH(item.img)}" alt="${escH(item.name)}"
+               class="w-full h-full object-contain p-1"
+               onerror="this.src='https://via.placeholder.com/64x64/f9fafb/111?text=👟'">
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="font-semibold dark:text-white text-sm truncate">${escH(item.name)}</p>
+          <p class="text-xs text-gray-400 dark:text-zinc-500">${escH(item.colorway)} · Size: ${escH(item.size)}</p>
+          ${isInTransit ? `
+          <div class="mt-2">
+            <div class="flex justify-between text-xs text-gray-400 dark:text-zinc-600 mb-1">
+              <span>Shipped</span><span>Out for delivery</span><span>Delivered</span>
+            </div>
+            <div class="h-1.5 bg-gray-100 dark:bg-zinc-900 rounded-full overflow-hidden">
+              <div class="h-full w-2/3 bg-yellow-400 rounded-full"></div>
+            </div>
+          </div>` : ''}
+        </div>
+        <p class="font-bold dark:text-white text-sm flex-shrink-0">₹${(item.price * item.qty).toLocaleString('en-IN')}</p>
+      </div>`).join('');
+
+    const actionBtns = (() => {
+      if (order.status === 'delivered') return `
+        <button class="spring-btn reorder-btn px-4 py-2 rounded-xl text-sm font-medium border border-gray-200 dark:border-zinc-700 text-gray-600 dark:text-zinc-400 hover:bg-gray-50 dark:hover:bg-zinc-800 transition" data-id="${order.id}">View Details</button>
+        <button class="spring-btn reorder-btn px-4 py-2 rounded-xl text-sm font-bold bg-black dark:bg-white text-white dark:text-black hover:opacity-80 transition" data-id="${order.id}">Reorder</button>`;
+      if (order.status === 'in transit') return `
+        <button class="spring-btn px-4 py-2 rounded-xl text-sm font-medium border border-gray-200 dark:border-zinc-700 text-gray-600 dark:text-zinc-400 hover:bg-gray-50 dark:hover:bg-zinc-800 transition">Track Order</button>`;
+      if (order.status === 'processing') return `
+        <button class="spring-btn cancel-btn px-4 py-2 rounded-xl text-sm font-medium border border-red-200 dark:border-red-900/40 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 transition" data-id="${order.id}">Cancel</button>
+        <button class="spring-btn px-4 py-2 rounded-xl text-sm font-medium border border-gray-200 dark:border-zinc-700 text-gray-600 dark:text-zinc-400 hover:bg-gray-50 dark:hover:bg-zinc-800 transition">View Details</button>`;
+      return `<button class="spring-btn px-4 py-2 rounded-xl text-sm font-medium border border-gray-200 dark:border-zinc-700 text-gray-600 dark:text-zinc-400 transition">View Details</button>`;
+    })();
+
+    const card = document.createElement('div');
+    card.className = 'order-card p-6';
+    card.dataset.status = order.status;
+    card.dataset.total  = order.total;
+    card.style.animationDelay = (oi * 60) + 'ms';
+    card.innerHTML = `
+      <div class="flex justify-between items-start border-b border-gray-100 dark:border-zinc-800 pb-4 mb-5">
+        <div>
+          <p class="text-xs text-gray-400 dark:text-zinc-600 uppercase tracking-wider mb-0.5">Order ID</p>
+          <p class="font-bold text-base dark:text-white">#${escH(order.id)}</p>
+          <p class="text-xs text-gray-400 dark:text-zinc-500 mt-0.5 flex items-center gap-3">
+            <span>${escH(order.date)}</span>
+            ${order.payment ? `<span class="inline-flex items-center gap-1"><i class="fas fa-credit-card text-xs"></i> ${escH(order.payment)}</span>` : ''}
+          </p>
+        </div>
+        <span class="px-3 py-1 rounded-full text-xs font-semibold ${st.cls}">${st.label}</span>
+      </div>
+      <div class="space-y-4 mb-5">${itemsHtml}</div>
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between border-t border-gray-100 dark:border-zinc-800 pt-4 gap-3">
+        <div>
+          <p class="text-xs text-gray-400 dark:text-zinc-600">Order Total</p>
+          <p class="font-bold text-lg dark:text-white">₹${order.total.toLocaleString('en-IN')}</p>
+          ${order.address ? `<p class="text-xs text-gray-400 dark:text-zinc-600 mt-0.5 max-w-xs truncate"><i class="fas fa-location-dot text-xs mr-1"></i>${escH(order.address)}</p>` : ''}
+        </div>
+        <div class="flex gap-2 flex-shrink-0">${actionBtns}</div>
+      </div>`;
+    list.appendChild(card);
+  });
+
+  attachCardListeners();
+}
+
+function attachCardListeners() {
+  // Reorder
+  document.querySelectorAll('.reorder-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (btn.textContent.trim() === 'Reorder') {
+        const orderId = btn.dataset.id;
+        const order = allOrders.find(o => o.id === orderId);
+        if (!order) return;
+        const cart = getCart();
+        order.items.forEach(item => {
+          const cartItem = {
+            id:       item.name + '-' + item.size,
+            name:     item.name, colorway: item.colorway, brand: '',
+            price:    item.price, img: item.img, size: item.size, qty: item.qty,
+          };
+          const existing = cart.find(c => c.id === cartItem.id);
+          if (existing) { existing.qty += item.qty; } else { cart.push(cartItem); }
+        });
+        localStorage.setItem('hh_cart', JSON.stringify(cart));
+        updateCartBadge();
+        // Badge bump
+        const cc = document.getElementById('cart-count');
+        if (cc) { cc.classList.remove('cart-bump'); void cc.offsetWidth; cc.classList.add('cart-bump'); }
+        showToast('Items added to cart! 🛒', false);
+      } else {
+        showToast('Order details coming soon', false);
+      }
+    });
+  });
+
+  // Cancel
+  document.querySelectorAll('.cancel-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (!confirm('Cancel this order?')) return;
+      const orderId = btn.dataset.id;
+      const orders = getOrders();
+      const order = orders.find(o => o.id === orderId);
+      if (order) {
+        order.status = 'cancelled';
+        // Only persist if real orders (not demo)
+        const stored = JSON.parse(localStorage.getItem('hh_orders') || '[]');
+        if (stored.length) {
+          const idx = stored.findIndex(o => o.id === orderId);
+          if (idx !== -1) { stored[idx].status = 'cancelled'; localStorage.setItem('hh_orders', JSON.stringify(stored)); }
+        }
+      }
+      allOrders = getOrders().map(o => o.id === orderId ? {...o, status:'cancelled'} : o);
+      renderOrders(applyFilters(allOrders));
+      showToast('Order cancellation requested', false);
+    });
+  });
+}
+
+// ── FILTER ────────────────────────────────────────────────
+function applyFilters(orders) {
+  const status = document.getElementById('filter-status').value;
+  const lo = parseInt(document.getElementById('range-min').value);
+  const hi = parseInt(document.getElementById('range-max').value);
+  return orders.filter(o => {
+    const matchStatus = status === 'all' || o.status === status;
+    const matchPrice  = o.total >= lo && o.total <= hi;
+    return matchStatus && matchPrice;
+  });
+}
+
+// Slider
+const rangeMin  = document.getElementById('range-min');
+const rangeMax  = document.getElementById('range-max');
+const rangeFill = document.getElementById('range-fill');
+const priceLabel= document.getElementById('price-range-label');
+const ABS_MIN = 0, ABS_MAX = 100000;
+function updateSlider() {
+  let lo = parseInt(rangeMin.value), hi = parseInt(rangeMax.value);
+  if (hi - lo < 500) { lo = hi - 500; rangeMin.value = lo; }
+  const pct = v => ((v - ABS_MIN) / (ABS_MAX - ABS_MIN)) * 100;
+  rangeFill.style.left  = pct(lo) + '%';
+  rangeFill.style.width = (pct(hi) - pct(lo)) + '%';
+  priceLabel.textContent = '₹' + lo.toLocaleString('en-IN') + ' – ₹' + hi.toLocaleString('en-IN');
+}
+rangeMin.addEventListener('input', updateSlider);
+rangeMax.addEventListener('input', updateSlider);
+updateSlider();
+
+// Filter dropdown toggle
+const filterToggleBtn = document.getElementById('filter-toggle-btn');
+const filterDropdown  = document.getElementById('filter-dropdown');
+filterToggleBtn.addEventListener('click', e => { e.stopPropagation(); filterDropdown.classList.toggle('hidden'); });
+document.addEventListener('click', e => { if (!filterDropdown.contains(e.target) && e.target !== filterToggleBtn) filterDropdown.classList.add('hidden'); });
+
+document.getElementById('filter-apply').addEventListener('click', () => {
+  renderOrders(applyFilters(allOrders));
+  filterDropdown.classList.add('hidden');
+});
+document.getElementById('filter-reset').addEventListener('click', () => {
+  document.getElementById('filter-status').value = 'all';
+  rangeMin.value = ABS_MIN; rangeMax.value = ABS_MAX;
+  updateSlider();
+  renderOrders(allOrders);
+  filterDropdown.classList.add('hidden');
+});
+
+// ── SEARCH ────────────────────────────────────────────────
+const overlay     = document.getElementById('search-overlay');
+const searchInput = document.getElementById('search-input');
+const clearBtn    = document.getElementById('search-clear-btn');
+function openSearch()  { overlay.classList.add('open'); searchInput.focus(); }
+function closeSearch() { overlay.classList.remove('open'); searchInput.value = ''; clearBtn.classList.remove('visible'); }
+document.getElementById('search-open-btn').addEventListener('click', openSearch);
+overlay.addEventListener('click', e => { if (e.target === overlay) closeSearch(); });
+document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openSearch(); }
+  if (e.key === 'Escape' && overlay.classList.contains('open')) closeSearch();
+});
+clearBtn.addEventListener('click', () => { searchInput.value = ''; clearBtn.classList.remove('visible'); searchInput.focus(); });
+searchInput.addEventListener('input', () => clearBtn.classList.toggle('visible', searchInput.value.length > 0));
+
+// ── INITIAL RENDER ────────────────────────────────────────
+renderOrders(allOrders);
+
+// ── AI CHAT ────────────────────────────────────────────────
+function buildSystemPrompt() {
+  const orders = getOrders();
+  const orderSummary = orders.slice(0,5).map(o =>
+    `#${o.id} (${o.date}): ${o.items.map(i=>i.name).join(', ')} — ${o.status.toUpperCase()} — ₹${o.total.toLocaleString('en-IN')}`
+  ).join('\n');
+  return `You are a friendly support assistant for Heat Haven, a premium sneaker store in India.
+The user is viewing their Order History.
+
+RECENT ORDERS:\n${orderSummary || 'No orders yet'}
+
+POLICIES: Returns within 7 days unworn | Free shipping above ₹5,000 | Standard ₹99 | UPI/Card/COD
+PERSONALITY: Helpful, warm, casual. Short 2-3 sentence replies.`;
+}
+
+const QC=['Where is my order?','Can I return?','Reorder help','Shipping time','Contact support'];
+const cw=document.getElementById('hh-chat-widget'),ct=document.getElementById('hh-chat-toggle'),me=document.getElementById('hh-messages'),ie=document.getElementById('hh-input'),sb=document.getElementById('hh-send'),ce=document.getElementById('hh-chips'),nd=document.getElementById('hh-notif-dot');
+let ch=[],iT=false,hO=false;
+ct.addEventListener('click',()=>{ cw.classList.toggle('open'); if(!hO){hO=true;nd.style.display='none';setTimeout(()=>{aBot('Hey! 👋 I can help with your orders — tracking, returns, or reorders!');setTimeout(()=>showC(),600);},300);} });
+function showC(c=QC){ce.innerHTML='';c.forEach(t=>{const b=document.createElement('button');b.className='hh-chip';b.textContent=t;b.onclick=()=>{ce.innerHTML='';sM(t);};ce.appendChild(b);});}
+function aBot(h){const d=document.createElement('div');d.className='hh-msg bot';d.innerHTML=`<div class="hh-bot-avatar">HH</div><div class="hh-bubble">${h}</div>`;me.appendChild(d);me.scrollTop=me.scrollHeight;}
+function aUser(t){const d=document.createElement('div');d.className='hh-msg user';d.innerHTML=`<div class="hh-bubble">${escH(t)}</div>`;me.appendChild(d);me.scrollTop=me.scrollHeight;}
+function shT(){const d=document.createElement('div');d.className='hh-msg bot';d.id='hh-ti';d.innerHTML=`<div class="hh-bot-avatar">HH</div><div class="hh-bubble" style="padding:10px 16px"><div class="hh-typing"><span></span><span></span><span></span></div></div>`;me.appendChild(d);me.scrollTop=me.scrollHeight;}
+function hiT(){const e=document.getElementById('hh-ti');if(e)e.remove();}
+async function sM(t){t=t.trim();if(!t||iT)return;ce.innerHTML='';aUser(t);ie.value='';iT=true;sb.style.opacity='0.5';ch.push({role:'user',content:t});shT();
+try{const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:buildSystemPrompt(),messages:ch})});const d=await r.json();const rp=d.content?.[0]?.text||'Sorry, try again!';ch.push({role:'assistant',content:rp});hiT();aBot(rp.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>'));showC(['Track order','Return item','Contact support','More help']);}
+catch(e){hiT();aBot('Trouble connecting! DM us on Instagram <strong>@heatheaven.23_</strong> 🙏');}
+iT=false;sb.style.opacity='1';}
+sb.addEventListener('click',()=>sM(ie.value));
+ie.addEventListener('keydown',e=>{if(e.key==='Enter')sM(ie.value);});
+setTimeout(()=>{if(!hO)nd.style.display='block';},3000);
+</script>
+</body>
+</html>

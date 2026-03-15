@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Heat Haven - Premium Sneaker Store</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> 
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+    :root {
+      --primary: #000000;
+      --secondary: #ffffff;
+      --accent: #ff4500;
+      --light: #f8f8f8;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      color: var(--primary);
+      background-color: #000000;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4, .brand {
+      font-family: 'Archivo Black', sans-serif;
+      letter-spacing: -0.5px;
+    }
+
+    .mobile-menu {
+      transform: translateX(100%);
+      transition: transform 0.3s ease-in-out;
+    }
+    .mobile-menu.open {
+      transform: translateX(0);
+    }
+
+    /* Spring hover effect */
+    .spring-card {
+      transition:
+        transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+        box-shadow 0.25s ease,
+        background-color 0.25s ease,
+        border-color 0.25s ease;
+      box-shadow: 0 0 0 rgba(0, 0, 0, 0.25);
+      will-change: transform, box-shadow;
+    }
+
+    .spring-card:hover {
+      transform: translateY(-6px) scale(1.02);
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.45);
+    }
+
+    /* Page-load rise */
+    .rise-enter {
+      animation: riseEnter 0.5s ease-out forwards;
+    }
+
+    @keyframes riseEnter {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Click rise */
+    .rise-click {
+      animation: riseUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes riseUp {
+      0% {
+        transform: translateY(0) scale(1);
+      }
+      40% {
+        transform: translateY(-10px) scale(1.01);
+      }
+      100% {
+        transform: translateY(0) scale(1);
+      }
+    }
+  </style>
+</head>
+
+<body class="h-screen overflow-hidden bg-black text-white">
+
+  <!-- Navigation -->
+  <nav class="bg-white shadow-md sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <div class="brand text-2xl font-bold">
+            <a href="index.html" class="text-black">HEAT HAVEN</a>
+          </div> 
+          <div class="hidden md:flex items-center ml-10 space-x-8">
+            <a href="index.html" class="nav-link text-black hover:text-gray-600 px-2">Home</a>
+            <a href="product.html" class="nav-link text-black hover:text-gray-600 px-2">Products</a>
+            <a href="deals.html" class="nav-link text-black hover:text-gray-600 px-2">Hot Deals</a>
+            <a href="#contact" class="nav-link text-black hover:text-gray-600 px-2">Contact</a>
+            <a href="apparels.html" class="nav-link text-black hover:text-gray-600 px-2">Appareals</a>
+            <a href="products_apparels.html" class="nav-link text-black hover:text-gray-600 px-2">Products_Apparels</a>
+          </div>
+        </div>
+
+        <div class="flex items-center">
+          <div class="hidden md:flex items-center space-x-2">
+            <a href="#search" class="p-2 rounded-full hover:bg-gray-100">
+              <i class="fas fa-search text-gray-600"></i>
+            </a>
+            <a href="cart.html" class="p-2 rounded-full hover:bg-gray-100">
+              <i class="fas fa-shopping-cart text-gray-600"></i>
+              <span class="bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center -mt-8 ml-4">3</span>
+            </a>
+
+            <a href="profile.html" class="p-2 rounded-full hover:bg-gray-100">
+              <i class="fas fa-user text-gray-600"></i>
+            </a>
+
+            <a
+              href="profile login.html"
+              class="ml-2 px-4 py-1.5 rounded-full text-sm font-medium border border-gray-300 text-gray-800 hover:bg-black hover:text-white transition"
+            >
+              Login
+            </a>
+          </div>
+          <button class="md:hidden p-2 rounded-md focus:outline-none" id="mobile-menu-button">
+            <i class="fas fa-bars text-black"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="cartSidebar"
+      class="fixed top-0 right-0 h-full w-80 bg-white shadow-lg transform translate-x-full transition-transform duration-300 z-40"
+    ></div>
+    <div id="cartOverlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-30"></div>
+  </nav>
+
+  <!-- MAIN -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 h-[calc(100vh-4rem)]">
+    <!-- LEFT IMAGE CARD (Step Into Style) -->
+    <div class="relative hidden lg:flex items-end p-14 overflow-hidden">
+      <img
+        src="images/heat haven lgog new.png"
+        class="absolute inset-0 w-full h-full object-cover translate-x-4 scale-100"
+      />
+      <div class="absolute inset-0 bg-black/50"></div>
+
+      <div
+        id="heroCard"
+        class="spring-card rise-enter relative z-10 -translate-y-10 px-6 py-4 rounded-2xl bg-black/40 border border-white/10"
+      >
+        <h1 class="text-5xl font-bold mb-3">HEAT HAVEN 🔥</h1>
+        <p class="text-gray-200">Discover the Hottest Sneakers in the Game. </p>
+      </div>
+    </div>
+
+    <!-- SIGN UP CARD -->
+  <div class="flex items-start justify-center px-6 pt-20">
+    <div class="spring-card rise-enter bg-white text-black w-full max-w-md rounded-2xl p-8 shadow-2xl -mt-6">
+
+      <h2 class="text-2xl font-bold mb-1">Join Heat Haven 🔥</h2>
+      <p class="text-gray-500 mb-6">Create your account to access exclusive sneaker drops.</p>
+
+      <form id="signupForm" class="space-y-4">
+
+        <input type="text" placeholder="Full Name" required
+          class="w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-red-500">
+
+        <input type="email" placeholder="Email Address" required
+          class="w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-red-500">
+
+        <input type="password" id="password" placeholder="Password" required
+          class="w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-red-500">
+
+        <input type="password" id="confirmPassword" placeholder="Confirm Password" required
+          class="w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-red-500">
+
+        <label class="flex items-center text-sm text-gray-600">
+          <input type="checkbox" required class="mr-2">
+          I agree to the Terms & Privacy Policy
+        </label>
+
+        <button type="submit"
+          class="spring-card w-full bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-700">
+          Create Account
+        </button>
+
+        <div class="flex items-center gap-3 my-4">
+          <div class="h-px bg-gray-300 flex-1"></div>
+          <span class="text-gray-400 text-sm">OR</span>
+          <div class="h-px bg-gray-300 flex-1"></div>
+        </div>
+
+        <button type="button"
+          class="spring-card w-full border py-3 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-100">
+          <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5">
+          Sign up with Google
+        </button>
+
+        <button type="button"
+          class="spring-card w-full bg-black text-white py-3 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-900">
+          <img src="images/apple.png" class="w-5 invert">
+          Sign up with Apple
+        </button>
+
+      </form>
+
+      <p class="text-center text-sm mt-6">
+        Already have an account?
+        <a href="profile login.html" class="text-red-600 font-semibold hover:underline">Log in</a>
+      </p>
+
+    </div>
+  </div>
+</div>
+
+  <script>
+    const form = document.getElementById("loginForm");
+    const loginCard = document.getElementById("loginCard");
+    const heroCard = document.getElementById("heroCard");
+
+    function triggerRise(card) {
+      if (!card) return;
+      card.classList.remove("rise-click");
+      void card.offsetWidth;
+      card.classList.add("rise-click");
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      triggerRise(loginCard);
+      triggerRise(heroCard);
+
+      const email = form.querySelector("input[type='text']").value;
+      const password = form.querySelector("input[type='password']").value;
+
+      try {
+        const res = await fetch("http://localhost:5000/api/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          alert(data.message || "Invalid login");
+          return;
+        }
+        localStorage.setItem("token", data.token);
+        window.location.href = "dashboard.html";
+      } catch {
+        alert("Server not reachable");
+      }
+    });
+
+    function loginWithGoogle() {
+      triggerRise(loginCard);
+      triggerRise(heroCard);
+      window.location.href = "http://localhost:5000/api/auth/google";
+    }
+
+    function loginWithApple() {
+      triggerRise(loginCard);
+      triggerRise(heroCard);
+      window.location.href = "http://localhost:5000/api/auth/apple";
+    }
+  </script>
+</body>
+</html>

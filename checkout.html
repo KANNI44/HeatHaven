@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Heat Haven – Checkout</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: { colors: { amoled:'#000000', cardDark:'#0a0a0a', hoverDark:'#111111' } } }
+    }
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body { font-family:"Poppins",sans-serif; overflow-x:hidden; }
+    html { scrollbar-gutter:stable; }
+    h1,h2,h3,h4,.brand { font-family:"Archivo Black",sans-serif; letter-spacing:-0.5px; }
+
+    .mobile-menu { transform:translateX(100%); transition:transform 0.3s ease-in-out; }
+    .mobile-menu.open { transform:translateX(0); }
+
+    .page-transition { animation:fadeIn 0.5s ease; }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+    /* Dark mode icons */
+    .sun-icon  { display:block; width:20px; height:20px; }
+    .moon-icon { display:none;  width:20px; height:20px; }
+    .dark .sun-icon  { display:none; }
+    .dark .moon-icon { display:block; }
+
+    nav { background:#fff; }
+    .dark nav { background:#000; border-bottom:1px solid #1a1a1a; }
+
+    /* Toast */
+    #toast {
+      position:fixed; bottom:80px; left:50%; transform:translateX(-50%) translateY(20px);
+      background:#111; color:#fff; padding:10px 22px; border-radius:999px;
+      font-size:13px; z-index:9999; opacity:0; transition:opacity 0.3s,transform 0.3s;
+      pointer-events:none; display:flex; align-items:center; gap:8px; white-space:nowrap;
+    }
+    #toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+    /* ── Section cards ── */
+    .checkout-section {
+      background:#fff; border:1px solid #e5e7eb; border-radius:16px;
+      transition:border-color 0.2s, box-shadow 0.2s;
+      animation:fadeIn 0.4s ease both;
+    }
+    .dark .checkout-section { background:#0f0f0f; border-color:#1f1f1f; }
+    .checkout-section:focus-within { border-color:#000; box-shadow:0 0 0 3px rgba(0,0,0,0.06); }
+    .dark .checkout-section:focus-within { border-color:#444; box-shadow:0 0 0 3px rgba(255,255,255,0.04); }
+
+    /* ── Inputs ── */
+    .inp {
+      width:100%; border:1.5px solid #e5e7eb; border-radius:10px;
+      padding:11px 14px; font-size:14px; font-family:"Poppins",sans-serif;
+      outline:none; background:#fff; color:#111;
+      transition:border-color 0.2s, box-shadow 0.2s;
+    }
+    .inp:focus { border-color:#000; box-shadow:0 0 0 3px rgba(0,0,0,0.06); }
+    .inp::placeholder { color:#aaa; }
+    .dark .inp { background:#111; border-color:#2a2a2a; color:#f0f0f0; }
+    .dark .inp:focus { border-color:#555; box-shadow:0 0 0 3px rgba(255,255,255,0.04); }
+    .dark .inp::placeholder { color:#555; }
+
+    /* ── Payment option cards ── */
+    .pay-card {
+      border:1.5px solid #e5e7eb; border-radius:12px; padding:14px 16px;
+      cursor:pointer; transition:all 0.2s; display:flex; align-items:center; gap:12px;
+    }
+    .pay-card:hover { border-color:#000; background:#fafafa; }
+    .pay-card.selected { border-color:#000; background:#f5f5f5; }
+    .dark .pay-card { border-color:#2a2a2a; }
+    .dark .pay-card:hover { border-color:#555; background:#111; }
+    .dark .pay-card.selected { border-color:#fff; background:#111; }
+    .pay-radio {
+      width:18px; height:18px; border-radius:50%; border:2px solid #d1d5db;
+      display:flex; align-items:center; justify-content:center; flex-shrink:0;
+      transition:border-color 0.2s;
+    }
+    .pay-card.selected .pay-radio { border-color:#000; }
+    .dark .pay-card.selected .pay-radio { border-color:#fff; }
+    .pay-radio-dot {
+      width:8px; height:8px; border-radius:50%; background:#000;
+      opacity:0; transform:scale(0); transition:opacity 0.2s, transform 0.2s;
+    }
+    .pay-card.selected .pay-radio-dot { opacity:1; transform:scale(1); }
+    .dark .pay-card.selected .pay-radio-dot { background:#fff; }
+
+    /* ── Address select cards ── */
+    .addr-card {
+      border:1.5px solid #e5e7eb; border-radius:12px; padding:14px 16px;
+      cursor:pointer; transition:all 0.2s; display:flex; align-items:flex-start; gap:12px;
+    }
+    .addr-card:hover { border-color:#000; }
+    .addr-card.selected { border-color:#000; background:#fafafa; }
+    .dark .addr-card { border-color:#2a2a2a; }
+    .dark .addr-card:hover { border-color:#555; }
+    .dark .addr-card.selected { border-color:#fff; background:#111; }
+
+    /* ── Order item row ── */
+    .order-item { animation:fadeIn 0.3s ease both; }
+
+    /* ── Place order button ── */
+    .place-btn {
+      width:100%; padding:15px; border-radius:14px; border:none; cursor:pointer;
+      font-family:"Poppins",sans-serif; font-size:15px; font-weight:700;
+      background:#000; color:#fff;
+      transition:transform 0.2s cubic-bezier(0.22,0.61,0.36,1), box-shadow 0.2s, background 0.2s;
+      box-shadow:0 6px 20px rgba(0,0,0,0.2);
+    }
+    .place-btn:hover { transform:translateY(-2px); box-shadow:0 10px 28px rgba(0,0,0,0.3); background:#111; }
+    .place-btn:active { transform:scale(0.98); }
+    .dark .place-btn { background:#fff; color:#000; box-shadow:0 6px 20px rgba(255,255,255,0.08); }
+    .dark .place-btn:hover { box-shadow:0 10px 28px rgba(255,255,255,0.12); }
+
+    /* ── Step indicator ── */
+    .step { display:flex; align-items:center; gap:8px; }
+    .step-num {
+      width:28px; height:28px; border-radius:50%; font-size:12px; font-weight:700;
+      display:flex; align-items:center; justify-content:center; flex-shrink:0;
+      font-family:"Archivo Black",sans-serif;
+    }
+    .step-num.active { background:#000; color:#fff; }
+    .step-num.done   { background:#22c55e; color:#fff; }
+    .step-num.future { background:#f3f4f6; color:#9ca3af; border:1.5px solid #e5e7eb; }
+    .dark .step-num.active { background:#fff; color:#000; }
+    .dark .step-num.done   { background:#22c55e; color:#fff; }
+    .dark .step-num.future { background:#111; color:#555; border-color:#2a2a2a; }
+    .step-line { flex:1; height:2px; background:#e5e7eb; border-radius:2px; min-width:24px; }
+    .step-line.done { background:#22c55e; }
+    .dark .step-line { background:#2a2a2a; }
+
+    /* ── Success overlay ── */
+    #success-overlay {
+      position:fixed; inset:0; z-index:99999;
+      background:rgba(0,0,0,0.7); backdrop-filter:blur(8px);
+      display:flex; align-items:center; justify-content:center;
+      opacity:0; pointer-events:none; transition:opacity 0.4s ease;
+    }
+    #success-overlay.show { opacity:1; pointer-events:all; }
+    #success-box {
+      background:#fff; border-radius:24px; padding:48px 40px; text-align:center;
+      max-width:420px; width:90%; box-shadow:0 32px 80px rgba(0,0,0,0.3);
+      transform:scale(0.88) translateY(20px); transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    #success-overlay.show #success-box { transform:scale(1) translateY(0); }
+    .dark #success-box { background:#0f0f0f; border:1px solid #2a2a2a; }
+    .checkmark-circle {
+      width:80px; height:80px; border-radius:50%; background:#22c55e;
+      display:flex; align-items:center; justify-content:center; margin:0 auto 20px;
+      animation:pop-in 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.2s both;
+    }
+    @keyframes pop-in { from{transform:scale(0)} to{transform:scale(1)} }
+
+    /* ── Nav search pill ── */
+    .nav-search-pill { display:flex; align-items:center; min-width:190px; padding:0; border-radius:999px; border:none; cursor:pointer; background:transparent; font-family:"Poppins",sans-serif; font-size:13px; font-weight:500; transition:transform 0.15s; position:relative; white-space:nowrap; }
+    .nav-search-pill:hover { transform:scale(1.02); }
+    .nav-search-pill .pill-border { position:absolute; inset:0; border-radius:999px; padding:2px; background:linear-gradient(100deg,#4285f4,#ea4335,#fbbc04,#34a853,#4285f4); background-size:250% 250%; animation:pill-gradient 3s ease infinite; -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0); -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none; }
+    .nav-search-pill .pill-inner { display:flex; align-items:center; gap:10px; width:100%; padding:8px 18px 8px 14px; border-radius:999px; background:#f8f9fa; position:relative; z-index:1; transition:background 0.2s; }
+    .nav-search-pill:hover .pill-inner { background:#fff; }
+    .pill-search-icon { width:28px; height:28px; flex-shrink:0; background:linear-gradient(135deg,#4285f4,#34a853); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .pill-search-icon svg { width:13px; height:13px; }
+    .pill-label { flex:1; text-align:left; color:#5f6368; font-size:13px; }
+    .pill-kbd { display:inline-flex; align-items:center; background:rgba(0,0,0,0.07); border-radius:6px; padding:2px 7px; font-size:11px; font-family:monospace; color:#999; }
+    .dark .nav-search-pill .pill-inner { background:#1a1a1a; }
+    .dark .nav-search-pill:hover .pill-inner { background:#222; }
+    .dark .pill-label { color:#9aa0a6; }
+    .dark .pill-kbd { background:rgba(255,255,255,0.07); color:#666; }
+    @keyframes pill-gradient { 0%{background-position:0% 50%;} 50%{background-position:100% 50%;} 100%{background-position:0% 50%;} }
+
+    /* ── AI Chat ── */
+    #hh-chat-widget { position:fixed; bottom:24px; left:24px; z-index:9999; font-family:"Poppins",sans-serif; }
+    #hh-chat-toggle { width:60px; height:60px; border-radius:50%; background:#000; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 8px 32px rgba(0,0,0,0.25); transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1); position:relative; }
+    .dark #hh-chat-toggle { background:#f0f0f0; }
+    .dark #hh-chat-toggle .icon-chat svg,.dark #hh-chat-toggle .icon-close svg { stroke:#000; }
+    #hh-chat-toggle:hover { transform:scale(1.1); }
+    #hh-chat-toggle .toggle-icon { position:absolute; transition:opacity 0.2s ease,transform 0.2s ease; }
+    #hh-chat-toggle .icon-chat  { opacity:1; transform:scale(1) rotate(0deg); }
+    #hh-chat-toggle .icon-close { opacity:0; transform:scale(0.5) rotate(-90deg); }
+    #hh-chat-widget.open #hh-chat-toggle .icon-chat  { opacity:0; transform:scale(0.5) rotate(90deg); }
+    #hh-chat-widget.open #hh-chat-toggle .icon-close { opacity:1; transform:scale(1) rotate(0deg); }
+    #hh-chat-toggle .notif-dot { position:absolute; top:2px; right:2px; width:14px; height:14px; background:#ef4444; border-radius:50%; border:2px solid white; display:none; animation:pulse-dot 2s infinite; }
+    @keyframes pulse-dot { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.3);opacity:0.7} }
+    #hh-chat-panel { position:absolute; bottom:76px; left:0; width:360px; height:520px; background:#fff; border-radius:20px; box-shadow:0 20px 60px rgba(0,0,0,0.18),0 0 0 1px rgba(0,0,0,0.06); display:flex; flex-direction:column; overflow:hidden; transform:scale(0.85) translateY(20px); transform-origin:bottom left; opacity:0; pointer-events:none; transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1),opacity 0.25s ease; }
+    #hh-chat-widget.open #hh-chat-panel { transform:scale(1) translateY(0); opacity:1; pointer-events:all; }
+    #hh-chat-header { background:#000; padding:16px 18px; display:flex; align-items:center; gap:12px; flex-shrink:0; }
+    .hh-avatar { width:40px; height:40px; background:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:"Archivo Black",sans-serif; font-size:13px; color:#000; flex-shrink:0; }
+    .hh-header-name { color:#fff; font-weight:600; font-size:14px; }
+    .hh-header-status { color:#a3a3a3; font-size:11px; display:flex; align-items:center; gap:5px; margin-top:2px; }
+    .hh-status-dot { width:7px; height:7px; background:#22c55e; border-radius:50%; animation:pulse-dot 2s infinite; }
+    #hh-messages { flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:10px; background:#fafafa; scroll-behavior:smooth; }
+    #hh-messages::-webkit-scrollbar { width:4px; }
+    #hh-messages::-webkit-scrollbar-thumb { background:#ddd; border-radius:2px; }
+    .hh-msg { display:flex; gap:8px; align-items:flex-end; animation:msg-in 0.3s ease; }
+    @keyframes msg-in { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+    .hh-msg.bot { justify-content:flex-start; }
+    .hh-msg.user { justify-content:flex-end; }
+    .hh-bot-avatar { width:28px; height:28px; background:#000; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; color:#fff; font-family:"Archivo Black",sans-serif; flex-shrink:0; }
+    .hh-bubble { max-width:78%; padding:10px 14px; border-radius:18px; font-size:13px; line-height:1.5; word-wrap:break-word; }
+    .hh-msg.bot .hh-bubble { background:#fff; color:#111; border-radius:18px 18px 18px 4px; box-shadow:0 1px 4px rgba(0,0,0,0.08); }
+    .hh-msg.user .hh-bubble { background:#000; color:#fff; border-radius:18px 18px 4px 18px; }
+    .hh-chips { display:flex; flex-wrap:wrap; gap:6px; padding:0 16px 10px; background:#fafafa; }
+    .hh-chip { padding:6px 14px; background:#fff; border:1.5px solid #e5e5e5; border-radius:999px; font-size:12px; cursor:pointer; color:#333; font-family:"Poppins",sans-serif; font-weight:500; transition:all 0.2s; white-space:nowrap; }
+    .hh-chip:hover { background:#000; color:#fff; border-color:#000; }
+    .hh-typing { display:flex; gap:4px; align-items:center; }
+    .hh-typing span { width:7px; height:7px; background:#bbb; border-radius:50%; animation:typing 1.2s infinite ease-in-out; }
+    .hh-typing span:nth-child(2) { animation-delay:0.2s; }
+    .hh-typing span:nth-child(3) { animation-delay:0.4s; }
+    @keyframes typing { 0%,60%,100%{transform:translateY(0);opacity:0.4} 30%{transform:translateY(-5px);opacity:1} }
+    #hh-input-area { padding:12px 14px; background:#fff; border-top:1px solid #f0f0f0; display:flex; align-items:center; gap:8px; flex-shrink:0; }
+    #hh-input { flex:1; border:1.5px solid #e5e5e5; border-radius:999px; padding:9px 16px; font-size:13px; font-family:"Poppins",sans-serif; outline:none; background:#fafafa; color:#111; transition:border-color 0.2s; }
+    #hh-input:focus { border-color:#000; background:#fff; }
+    #hh-input::placeholder { color:#bbb; }
+    #hh-send { width:38px; height:38px; background:#000; border:none; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:transform 0.2s; flex-shrink:0; }
+    #hh-send:hover { transform:scale(1.1); }
+    .hh-powered { text-align:center; padding:6px; font-size:10px; color:#ccc; background:#fff; flex-shrink:0; }
+    .dark #hh-chat-panel { background:#0a0a0a; }
+    .dark #hh-messages { background:#000; }
+    .dark .hh-chips { background:#000; }
+    .dark .hh-msg.bot .hh-bubble { background:#111; color:#f0f0f0; box-shadow:none; }
+    .dark #hh-input-area { background:#0a0a0a; border-top-color:#1a1a1a; }
+    .dark #hh-input { background:#111; border-color:#222; color:#fff; }
+    .dark #hh-input:focus { border-color:#555; background:#1a1a1a; }
+    .dark .hh-chip { background:#111; border-color:#333; color:#ccc; }
+    .dark .hh-chip:hover { background:#fff; color:#000; border-color:#fff; }
+    .dark .hh-powered { background:#0a0a0a; color:#333; }
+    @media (max-width:420px) { #hh-chat-panel { width:calc(100vw - 48px); } }
+
+    .dark ::-webkit-scrollbar { width:5px; }
+    .dark ::-webkit-scrollbar-track { background:#000; }
+    .dark ::-webkit-scrollbar-thumb { background:#222; border-radius:3px; }
+  </style>
+</head>
+
+<body class="bg-gray-50 dark:bg-amoled text-black dark:text-white transition-colors duration-300">
+
+<!-- SUCCESS OVERLAY -->
+<div id="success-overlay">
+  <div id="success-box">
+    <div class="checkmark-circle">
+      <i class="fas fa-check text-white text-3xl"></i>
+    </div>
+    <h2 class="text-2xl font-bold mb-2 dark:text-white">Order Placed!</h2>
+    <p class="text-gray-500 dark:text-zinc-500 text-sm mb-1">Your sneakers are on their way 👟</p>
+    <p class="text-gray-400 dark:text-zinc-600 text-xs mb-6">Order ID: <span id="order-id" class="font-semibold text-black dark:text-white"></span></p>
+    <div class="flex flex-col gap-3">
+      <a href="product.html" class="block w-full bg-black dark:bg-white text-white dark:text-black py-3 rounded-xl font-semibold text-sm hover:opacity-80 transition">Continue Shopping</a>
+      <a href="orders.html" class="block w-full border border-gray-200 dark:border-zinc-700 text-gray-600 dark:text-zinc-400 py-3 rounded-xl font-medium text-sm hover:bg-gray-50 dark:hover:bg-zinc-900 transition">View My Orders</a>
+    </div>
+  </div>
+</div>
+
+<!-- Dark Mode Toggle -->
+<div class="fixed bottom-10 right-6 z-50">
+  <button id="theme-toggle" class="flex items-center justify-center w-12 h-12 rounded-full shadow-xl bg-gray-200 dark:bg-cardDark transition-all duration-300 hover:scale-110" aria-label="Toggle dark mode">
+    <svg class="sun-icon text-yellow-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="4" fill="currentColor" stroke="none"/>
+      <path stroke-linecap="round" d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+    </svg>
+    <svg class="moon-icon text-yellow-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/>
+    </svg>
+  </button>
+</div>
+
+<!-- NAV -->
+<nav class="shadow-md sticky top-0 z-40 border-b border-transparent dark:border-zinc-900">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-16">
+      <div class="flex items-center">
+        <div class="brand text-2xl font-bold">
+          <a href="index.html" class="text-black dark:text-white">HEAT HAVEN</a>
+        </div>
+        <div class="hidden md:flex items-center ml-10 space-x-6">
+          <a href="index.html"   class="text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Home</a>
+          <a href="product.html" class="text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Products</a>
+          <a href="deals.html"   class="text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Hot Deals</a>
+          <a href="owners.html"  class="text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Owners</a>
+        </div>
+      </div>
+      <div class="hidden md:flex items-center gap-2 flex-shrink-0">
+        <a href="wishlist.html" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark transition-colors" aria-label="Wishlist">
+          <i class="fas fa-heart text-red-600"></i>
+        </a>
+        <button id="search-open-btn" class="nav-search-pill" aria-label="Open search" onclick="showToast('Search not available on checkout',true)">
+          <div class="pill-border"></div>
+          <span class="pill-inner">
+            <span class="pill-search-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </span>
+            <span class="pill-label">Search sneakers…</span>
+            <span class="pill-kbd">👟</span>
+          </span>
+        </button>
+        <a href="cart.html" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark relative">
+          <i class="fas fa-shopping-cart text-gray-600 dark:text-gray-300"></i>
+          <span id="cart-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+        </a>
+        <a href="profile.html" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark">
+          <i class="fas fa-user text-gray-600 dark:text-gray-300"></i>
+        </a>
+        <a href="profile login.html" class="px-5 py-1.5 rounded-full text-sm font-medium border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all">Login</a>
+      </div>
+      <div class="md:hidden ml-auto flex items-center">
+        <button class="p-2" id="mobile-menu-button">
+          <i class="fas fa-bars text-black dark:text-white text-lg"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="mobile-menu fixed inset-y-0 right-0 w-64 bg-white dark:bg-cardDark shadow-xl z-50 p-5" id="mobile-menu">
+    <div class="flex justify-between items-center mb-8">
+      <div class="brand text-xl dark:text-white">HEAT HAVEN</div>
+      <button id="close-menu"><i class="fas fa-times text-xl dark:text-white"></i></button>
+    </div>
+    <div class="flex flex-col space-y-5">
+      <a href="index.html"    class="text-black dark:text-gray-200 font-medium">Home</a>
+      <a href="product.html"  class="text-black dark:text-gray-200 font-medium">Products</a>
+      <a href="deals.html"    class="text-black dark:text-gray-200 font-medium">Hot Deals</a>
+      <a href="owners.html"   class="text-black dark:text-gray-200 font-medium">Owners</a>
+      <a href="wishlist.html" class="flex items-center gap-2 text-red-500 font-medium"><i class="fas fa-heart text-sm"></i> Wishlist</a>
+    </div>
+    <div class="mt-6 pt-5 border-t border-gray-200 dark:border-gray-700 flex items-center gap-3 flex-wrap">
+      <a href="cart.html" class="relative p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark">
+        <i class="fas fa-shopping-cart text-gray-600 dark:text-gray-300"></i>
+        <span id="cart-count-mobile" class="absolute -top-0.5 -right-0.5 bg-red-500 text-white text-[10px] rounded-full h-5 w-5 flex items-center justify-center">0</span>
+      </a>
+      <a href="profile.html" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark">
+        <i class="fas fa-user text-gray-600 dark:text-gray-300"></i>
+      </a>
+      <a href="profile login.html" class="px-4 py-1.5 rounded-full text-sm font-medium border border-gray-300 dark:border-gray-600 hover:bg-black hover:text-white transition">Login</a>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 page-transition">
+
+  <!-- Step indicator -->
+  <div class="flex items-center gap-2 mb-8 max-w-xs">
+    <div class="step">
+      <div class="step-num done"><i class="fas fa-check text-xs"></i></div>
+      <span class="text-xs font-semibold text-green-500 hidden sm:block">Cart</span>
+    </div>
+    <div class="step-line done"></div>
+    <div class="step">
+      <div class="step-num active">2</div>
+      <span class="text-xs font-bold dark:text-white hidden sm:block">Checkout</span>
+    </div>
+    <div class="step-line future"></div>
+    <div class="step">
+      <div class="step-num future">3</div>
+      <span class="text-xs text-gray-400 hidden sm:block">Confirm</span>
+    </div>
+  </div>
+
+  <h1 class="text-3xl font-bold mb-8 dark:text-white">Checkout</h1>
+
+  <div class="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-8">
+
+    <!-- LEFT COLUMN -->
+    <div class="flex flex-col gap-6">
+
+      <!-- 1 · Delivery Address -->
+      <div class="checkout-section p-6" style="animation-delay:0ms">
+        <h2 class="text-lg font-bold mb-5 dark:text-white flex items-center gap-2">
+          <span class="w-7 h-7 rounded-full bg-black dark:bg-white text-white dark:text-black text-xs font-bold flex items-center justify-center">1</span>
+          Delivery Address
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4" id="addr-cards">
+          <!-- Rendered by JS -->
+        </div>
+        <!-- New address form (collapsed) -->
+        <details class="group">
+          <summary class="cursor-pointer text-sm font-semibold text-gray-500 dark:text-zinc-500 hover:text-black dark:hover:text-white flex items-center gap-2 select-none transition-colors">
+            <i class="fas fa-plus text-xs"></i> Add a new address
+          </summary>
+          <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <input class="inp" type="text" placeholder="Full name" />
+            <input class="inp" type="text" placeholder="Phone number" />
+            <input class="inp sm:col-span-2" type="text" placeholder="Address line 1" />
+            <input class="inp sm:col-span-2" type="text" placeholder="Address line 2 (optional)" />
+            <input class="inp" type="text" placeholder="City" />
+            <input class="inp" type="text" placeholder="PIN code" />
+            <select class="inp sm:col-span-2">
+              <option value="" disabled selected>State</option>
+              <option>Delhi</option><option>Maharashtra</option><option>Karnataka</option>
+              <option>Tamil Nadu</option><option>Uttar Pradesh</option><option>Rajasthan</option>
+              <option>West Bengal</option><option>Gujarat</option><option>Haryana</option>
+            </select>
+            <button class="sm:col-span-2 bg-black dark:bg-white text-white dark:text-black py-3 rounded-xl font-semibold text-sm hover:opacity-80 transition">Save Address</button>
+          </div>
+        </details>
+      </div>
+
+      <!-- 2 · Contact Info -->
+      <div class="checkout-section p-6" style="animation-delay:60ms">
+        <h2 class="text-lg font-bold mb-5 dark:text-white flex items-center gap-2">
+          <span class="w-7 h-7 rounded-full bg-black dark:bg-white text-white dark:text-black text-xs font-bold flex items-center justify-center">2</span>
+          Contact Details
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-gray-500 dark:text-zinc-500 mb-1.5 uppercase tracking-wide">Full Name</label>
+            <input class="inp" type="text" value="Kanishak Choudhary" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-gray-500 dark:text-zinc-500 mb-1.5 uppercase tracking-wide">Phone</label>
+            <input class="inp" type="tel" value="+91 92054 43488" />
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block text-xs font-semibold text-gray-500 dark:text-zinc-500 mb-1.5 uppercase tracking-wide">Email</label>
+            <input class="inp" type="email" value="kanishakchoudhary268@gmail.com" />
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 · Payment -->
+      <div class="checkout-section p-6" style="animation-delay:120ms">
+        <h2 class="text-lg font-bold mb-5 dark:text-white flex items-center gap-2">
+          <span class="w-7 h-7 rounded-full bg-black dark:bg-white text-white dark:text-black text-xs font-bold flex items-center justify-center">3</span>
+          Payment Method
+        </h2>
+        <div class="flex flex-col gap-3" id="pay-options">
+
+          <div class="pay-card selected" data-pay="upi" onclick="selectPay(this)">
+            <div class="pay-radio"><div class="pay-radio-dot"></div></div>
+            <div class="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-950 flex items-center justify-center flex-shrink-0">
+              <i class="fas fa-mobile-screen-button text-purple-600 text-sm"></i>
+            </div>
+            <div class="flex-1">
+              <p class="font-semibold text-sm dark:text-white">UPI</p>
+              <p class="text-xs text-gray-400 dark:text-zinc-500">GPay, PhonePe, Paytm, BHIM</p>
+            </div>
+            <span class="text-xs bg-green-100 dark:bg-green-950 text-green-600 dark:text-green-400 px-2 py-0.5 rounded-full font-semibold">Recommended</span>
+          </div>
+
+          <!-- UPI input (shows when UPI selected) -->
+          <div id="upi-input-wrap" class="px-2">
+            <input class="inp" type="text" placeholder="Enter UPI ID (e.g. name@upi)" id="upi-id" />
+          </div>
+
+          <div class="pay-card" data-pay="card" onclick="selectPay(this)">
+            <div class="pay-radio"><div class="pay-radio-dot"></div></div>
+            <div class="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-950 flex items-center justify-center flex-shrink-0">
+              <i class="fas fa-credit-card text-blue-600 text-sm"></i>
+            </div>
+            <div class="flex-1">
+              <p class="font-semibold text-sm dark:text-white">Credit / Debit Card</p>
+              <p class="text-xs text-gray-400 dark:text-zinc-500">Visa, Mastercard, RuPay, Amex</p>
+            </div>
+            <div class="flex gap-1.5">
+              <i class="fab fa-cc-visa text-lg text-blue-700"></i>
+              <i class="fab fa-cc-mastercard text-lg text-red-500"></i>
+            </div>
+          </div>
+
+          <!-- Card fields (hidden by default) -->
+          <div id="card-fields-wrap" class="px-2 hidden flex flex-col gap-3">
+            <input class="inp" type="text" placeholder="Card number" maxlength="19" id="card-num" />
+            <div class="grid grid-cols-2 gap-3">
+              <input class="inp" type="text" placeholder="MM / YY" maxlength="7" />
+              <input class="inp" type="text" placeholder="CVV" maxlength="3" />
+            </div>
+            <input class="inp" type="text" placeholder="Name on card" />
+          </div>
+
+          <div class="pay-card" data-pay="cod" onclick="selectPay(this)">
+            <div class="pay-radio"><div class="pay-radio-dot"></div></div>
+            <div class="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-950 flex items-center justify-center flex-shrink-0">
+              <i class="fas fa-money-bill-wave text-amber-600 text-sm"></i>
+            </div>
+            <div class="flex-1">
+              <p class="font-semibold text-sm dark:text-white">Cash on Delivery</p>
+              <p class="text-xs text-gray-400 dark:text-zinc-500">Pay when your order arrives</p>
+            </div>
+            <span class="text-xs bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-400 px-2 py-0.5 rounded-full font-semibold">+₹49</span>
+          </div>
+
+          <div class="pay-card" data-pay="netbanking" onclick="selectPay(this)">
+            <div class="pay-radio"><div class="pay-radio-dot"></div></div>
+            <div class="w-8 h-8 rounded-lg bg-teal-100 dark:bg-teal-950 flex items-center justify-center flex-shrink-0">
+              <i class="fas fa-building-columns text-teal-600 text-sm"></i>
+            </div>
+            <div class="flex-1">
+              <p class="font-semibold text-sm dark:text-white">Net Banking</p>
+              <p class="text-xs text-gray-400 dark:text-zinc-500">All major banks supported</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Promo code -->
+        <div class="mt-5 pt-5 border-t dark:border-zinc-800">
+          <label class="block text-xs font-semibold text-gray-500 dark:text-zinc-500 mb-2 uppercase tracking-wide">Promo Code</label>
+          <div class="flex gap-2">
+            <input class="inp flex-1" type="text" id="promo-input" placeholder="Enter promo code" />
+            <button onclick="applyPromo()" class="px-5 py-2.5 bg-black dark:bg-white text-white dark:text-black rounded-xl text-sm font-semibold hover:opacity-80 transition whitespace-nowrap">Apply</button>
+          </div>
+          <p id="promo-msg" class="text-xs mt-1.5 hidden"></p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT COLUMN — Order Summary -->
+    <div class="flex flex-col gap-5">
+
+      <!-- Items -->
+      <div class="checkout-section p-5" style="animation-delay:0ms">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-base font-bold dark:text-white">Order Summary</h2>
+          <a href="cart.html" class="text-xs text-gray-400 dark:text-zinc-600 hover:text-black dark:hover:text-white transition flex items-center gap-1">
+            <i class="fas fa-pen text-xs"></i> Edit cart
+          </a>
+        </div>
+        <div id="order-items" class="flex flex-col gap-3 max-h-72 overflow-y-auto pr-1">
+          <!-- Rendered by JS -->
+        </div>
+        <div id="empty-cart-msg" class="hidden text-center py-8 text-sm text-gray-400 dark:text-zinc-600">
+          <i class="fas fa-shopping-cart text-2xl mb-2 block"></i>
+          Your cart is empty. <a href="product.html" class="underline">Browse sneakers →</a>
+        </div>
+      </div>
+
+      <!-- Totals -->
+      <div class="checkout-section p-5" style="animation-delay:80ms">
+        <div class="flex flex-col gap-3 text-sm">
+          <div class="flex justify-between text-gray-500 dark:text-zinc-500">
+            <span>Subtotal (<span id="item-count">0</span> items)</span>
+            <span id="subtotal-val">₹0</span>
+          </div>
+          <div class="flex justify-between text-gray-500 dark:text-zinc-500">
+            <span>Shipping</span>
+            <span id="shipping-val" class="text-green-500 font-medium">Free</span>
+          </div>
+          <div id="cod-row" class="flex justify-between text-amber-600 hidden">
+            <span>COD charge</span>
+            <span>+₹49</span>
+          </div>
+          <div id="discount-row" class="flex justify-between text-green-500 hidden">
+            <span>Promo discount</span>
+            <span id="discount-val">-₹0</span>
+          </div>
+          <div class="border-t dark:border-zinc-800 pt-3 flex justify-between font-bold text-base dark:text-white">
+            <span>Total</span>
+            <span id="total-val">₹0</span>
+          </div>
+        </div>
+
+        <!-- Trust badges -->
+        <div class="mt-4 pt-4 border-t dark:border-zinc-800 grid grid-cols-3 gap-2 text-center">
+          <div class="text-xs text-gray-400 dark:text-zinc-600">
+            <i class="fas fa-shield-halved text-green-500 block text-base mb-1"></i>Secure<br>Payment
+          </div>
+          <div class="text-xs text-gray-400 dark:text-zinc-600">
+            <i class="fas fa-rotate-left text-blue-500 block text-base mb-1"></i>7-Day<br>Returns
+          </div>
+          <div class="text-xs text-gray-400 dark:text-zinc-600">
+            <i class="fas fa-certificate text-purple-500 block text-base mb-1"></i>100%<br>Authentic
+          </div>
+        </div>
+
+        <!-- Place order -->
+        <button class="place-btn mt-5" id="place-order-btn" onclick="placeOrder()">
+          <i class="fas fa-lock text-sm mr-2"></i> Place Order
+        </button>
+
+        <p class="text-xs text-center text-gray-400 dark:text-zinc-600 mt-3">
+          By placing your order you agree to our <a href="#" class="underline">Terms</a> & <a href="#" class="underline">Privacy Policy</a>
+        </p>
+      </div>
+
+      <!-- Delivery info -->
+      <div class="checkout-section p-4 flex items-start gap-3" style="animation-delay:160ms">
+        <i class="fas fa-truck text-gray-400 dark:text-zinc-500 mt-0.5"></i>
+        <div>
+          <p class="text-sm font-semibold dark:text-white">Estimated Delivery</p>
+          <p class="text-xs text-gray-400 dark:text-zinc-600 mt-0.5">3–7 business days · Free shipping on orders above ₹5,000</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast"><i class="fas fa-check-circle" style="color:#22c55e"></i><span></span></div>
+
+<!-- AI Chat Widget -->
+<div id="hh-chat-widget">
+  <div id="hh-chat-panel">
+    <div id="hh-chat-header">
+      <div class="hh-avatar">HH</div>
+      <div>
+        <div class="hh-header-name">Heat Haven Support</div>
+        <div class="hh-header-status"><span class="hh-status-dot"></span> Online · AI Assistant</div>
+      </div>
+      <button onclick="document.getElementById('hh-chat-widget').classList.remove('open')" style="background:none;border:none;color:#666;cursor:pointer;font-size:18px;padding:4px;margin-left:auto;"><i class="fas fa-chevron-down"></i></button>
+    </div>
+    <div id="hh-messages"></div>
+    <div class="hh-chips" id="hh-chips"></div>
+    <div id="hh-input-area">
+      <input id="hh-input" type="text" placeholder="Ask anything about sneakers…" autocomplete="off"/>
+      <button id="hh-send">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+        </svg>
+      </button>
+    </div>
+    <div class="hh-powered">Powered by Heat Haven AI ✦</div>
+  </div>
+  <button id="hh-chat-toggle" aria-label="Open chat">
+    <span class="notif-dot" id="hh-notif-dot"></span>
+    <span class="toggle-icon icon-chat">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+    </span>
+    <span class="toggle-icon icon-close">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </span>
+  </button>
+</div>
+
+<script>
+// ── DARK MODE ──────────────────────────────────────────────
+if (localStorage.getItem("theme") === "dark") document.documentElement.classList.add("dark");
+document.getElementById("theme-toggle").addEventListener("click", () => {
+  const d = document.documentElement.classList.toggle("dark");
+  localStorage.setItem("theme", d ? "dark" : "light");
+});
+
+// ── MOBILE MENU ───────────────────────────────────────────
+document.getElementById("mobile-menu-button").addEventListener("click", () => document.getElementById("mobile-menu").classList.add("open"));
+document.getElementById("close-menu").addEventListener("click", () => document.getElementById("mobile-menu").classList.remove("open"));
+
+// ── HELPERS ───────────────────────────────────────────────
+function escH(s) { return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function showToast(msg, err) {
+  const t = document.getElementById("toast");
+  t.querySelector("i").className = err ? "fas fa-exclamation-circle" : "fas fa-check-circle";
+  t.querySelector("i").style.color = err ? "#facc15" : "#22c55e";
+  t.querySelector("span").textContent = msg;
+  t.classList.add("show");
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(() => t.classList.remove("show"), 2400);
+}
+
+// ── CART ──────────────────────────────────────────────────
+function getCart() { try { return JSON.parse(localStorage.getItem("hh_cart") || "[]"); } catch(e) { return []; } }
+
+function updateCartBadge() {
+  const t = getCart().reduce((s,i) => s + i.qty, 0);
+  document.querySelectorAll("#cart-count,#cart-count-mobile").forEach(el => el.textContent = t);
+}
+updateCartBadge();
+
+// ── ADDRESSES ─────────────────────────────────────────────
+const ADDRESSES = [
+  { id:"home",  label:"Home",  icon:"fa-house",        name:"Kanishak Choudhary", line1:"238, First Floor, Gali No.8", line2:"Mohan Garden, New Delhi – 110058", phone:"+91 92054 43488", default:true },
+  { id:"work",  label:"Work",  icon:"fa-briefcase",    name:"Kanishak Choudhary", line1:"Office 12, Tech Park, Sector 44", line2:"Gurugram – 122003", phone:"+91 92054 43488", default:false },
+  { id:"other", label:"Other", icon:"fa-location-dot", name:"Kanishak Choudhary", line1:"House 20, Palam Vihar, Sector 1", line2:"Delhi – 110045", phone:"+91 92054 43488", default:false },
+];
+
+let selectedAddr = "home";
+
+function renderAddresses() {
+  const wrap = document.getElementById("addr-cards");
+  wrap.innerHTML = ADDRESSES.map(a => `
+    <div class="addr-card ${a.id === selectedAddr ? 'selected' : ''}" onclick="selectAddr('${a.id}')">
+      <div class="w-8 h-8 rounded-full bg-gray-100 dark:bg-zinc-800 flex items-center justify-center flex-shrink-0 mt-0.5">
+        <i class="fas ${a.icon} text-xs text-gray-500 dark:text-zinc-400"></i>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2 mb-0.5">
+          <span class="text-sm font-bold dark:text-white">${escH(a.label)}</span>
+          ${a.default ? '<span class="text-xs bg-green-100 dark:bg-green-950 text-green-600 dark:text-green-400 px-1.5 py-0.5 rounded-full font-semibold">Default</span>' : ''}
+        </div>
+        <p class="text-xs text-gray-500 dark:text-zinc-500 leading-relaxed">${escH(a.line1)}<br>${escH(a.line2)}</p>
+        <p class="text-xs text-gray-600 dark:text-zinc-400 mt-1">${escH(a.phone)}</p>
+      </div>
+      <div class="w-4 h-4 rounded-full border-2 ${a.id === selectedAddr ? 'border-black dark:border-white bg-black dark:bg-white' : 'border-gray-300 dark:border-zinc-600'} flex-shrink-0 mt-1 transition-all"></div>
+    </div>`).join("");
+}
+function selectAddr(id) {
+  selectedAddr = id;
+  renderAddresses();
+}
+renderAddresses();
+
+// ── ORDER ITEMS ───────────────────────────────────────────
+let promoApplied = false;
+let promoDiscount = 0;
+const VALID_PROMOS = { "HEAT10": 0.10, "SNEAKER20": 0.20, "FIRSTCOP": 0.15 };
+
+function renderOrderItems() {
+  const cart = getCart();
+  const wrap = document.getElementById("order-items");
+  const emptyMsg = document.getElementById("empty-cart-msg");
+
+  if (!cart.length) {
+    wrap.innerHTML = "";
+    emptyMsg.classList.remove("hidden");
+  } else {
+    emptyMsg.classList.add("hidden");
+    wrap.innerHTML = cart.map((item, i) => `
+      <div class="order-item flex items-center gap-3" style="animation-delay:${i*40}ms">
+        <div class="w-14 h-14 rounded-xl bg-gray-50 dark:bg-zinc-900 overflow-hidden flex-shrink-0 border dark:border-zinc-800">
+          <img src="${escH(item.img || '')}" alt="${escH(item.name)}" class="w-full h-full object-contain p-1"
+               onerror="this.src='https://via.placeholder.com/56x56/f9fafb/111?text=👟'">
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-semibold dark:text-white truncate">${escH(item.name)}</p>
+          <p class="text-xs text-gray-400 dark:text-zinc-500">${escH(item.colorway || '')} · ${escH(item.size || 'One Size')}</p>
+          <p class="text-xs text-gray-500 dark:text-zinc-500 mt-0.5">Qty: ${item.qty}</p>
+        </div>
+        <p class="text-sm font-bold dark:text-white flex-shrink-0">₹${(item.price * item.qty).toLocaleString("en-IN")}</p>
+      </div>`).join("");
+  }
+  updateTotals();
+}
+
+function updateTotals() {
+  const cart = getCart();
+  const subtotal = cart.reduce((s, i) => s + (i.price * i.qty), 0);
+  const itemCount = cart.reduce((s, i) => s + i.qty, 0);
+  const isCOD = document.querySelector('.pay-card.selected')?.dataset.pay === 'cod';
+  const codCharge = isCOD ? 49 : 0;
+  const discount = promoApplied ? Math.round(subtotal * promoDiscount) : 0;
+  const shipping = subtotal >= 5000 ? 0 : 99;
+  const total = subtotal + codCharge + shipping - discount;
+
+  document.getElementById("item-count").textContent = itemCount;
+  document.getElementById("subtotal-val").textContent = "₹" + subtotal.toLocaleString("en-IN");
+  document.getElementById("shipping-val").textContent = shipping === 0 ? "Free" : "₹" + shipping;
+  document.getElementById("shipping-val").className = shipping === 0 ? "text-green-500 font-medium" : "text-gray-600 dark:text-zinc-400";
+  document.getElementById("total-val").textContent   = "₹" + total.toLocaleString("en-IN");
+
+  const codRow = document.getElementById("cod-row");
+  codRow.classList.toggle("hidden", !isCOD);
+
+  const discRow = document.getElementById("discount-row");
+  discRow.classList.toggle("hidden", !promoApplied);
+  document.getElementById("discount-val").textContent = "-₹" + discount.toLocaleString("en-IN");
+}
+
+renderOrderItems();
+
+// ── PAYMENT SELECTION ────────────────────────────────────
+function selectPay(el) {
+  document.querySelectorAll(".pay-card").forEach(c => c.classList.remove("selected"));
+  el.classList.add("selected");
+  const method = el.dataset.pay;
+  document.getElementById("upi-input-wrap").style.display = method === "upi" ? "block" : "none";
+  document.getElementById("card-fields-wrap").classList.toggle("hidden", method !== "card");
+  updateTotals();
+}
+// Init UPI visible
+document.getElementById("upi-input-wrap").style.display = "block";
+
+// ── PROMO ─────────────────────────────────────────────────
+function applyPromo() {
+  const code = document.getElementById("promo-input").value.trim().toUpperCase();
+  const msg  = document.getElementById("promo-msg");
+  if (VALID_PROMOS[code]) {
+    promoApplied = true;
+    promoDiscount = VALID_PROMOS[code];
+    msg.textContent = `✅ Promo "${code}" applied — ${promoDiscount*100}% off!`;
+    msg.className = "text-xs mt-1.5 text-green-500 font-semibold";
+    msg.classList.remove("hidden");
+    updateTotals();
+    showToast(`Promo "${code}" applied! 🎉`, false);
+  } else {
+    promoApplied = false; promoDiscount = 0;
+    msg.textContent = "❌ Invalid promo code";
+    msg.className = "text-xs mt-1.5 text-red-500";
+    msg.classList.remove("hidden");
+    updateTotals();
+  }
+}
+document.getElementById("promo-input").addEventListener("keydown", e => { if(e.key === "Enter") applyPromo(); });
+
+// ── PLACE ORDER ───────────────────────────────────────────
+function placeOrder() {
+  const cart = getCart();
+  if (!cart.length) { showToast("Your cart is empty!", true); return; }
+
+  const btn = document.getElementById("place-order-btn");
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin text-sm mr-2"></i> Processing…';
+
+  setTimeout(() => {
+    const orderId = "HH" + Date.now().toString().slice(-8).toUpperCase();
+
+    // Build address label
+    const selAddrData = ADDRESSES.find(a => a.id === selectedAddr) || ADDRESSES[0];
+
+    // Payment method
+    const payMethod = document.querySelector(".pay-card.selected")?.dataset.pay || "upi";
+    const PAY_LABELS = { upi:"UPI", card:"Card", cod:"Cash on Delivery", netbanking:"Net Banking" };
+
+    // Calculate total
+    const subtotal = cart.reduce((s,i) => s + (i.price * i.qty), 0);
+    const isCOD    = payMethod === "cod";
+    const shipping = subtotal >= 5000 ? 0 : 99;
+    const discount = promoApplied ? Math.round(subtotal * promoDiscount) : 0;
+    const total    = subtotal + (isCOD ? 49 : 0) + shipping - discount;
+
+    // Save to hh_orders
+    const orders = JSON.parse(localStorage.getItem("hh_orders") || "[]");
+    orders.unshift({
+      id:      orderId,
+      date:    new Date().toLocaleDateString("en-IN", { day:"numeric", month:"short", year:"numeric" }),
+      status:  "processing",
+      items:   cart.map(i => ({ name:i.name, colorway:i.colorway||"", size:i.size||"One Size", price:i.price, qty:i.qty, img:i.img||"" })),
+      total:   total,
+      address: selAddrData.line1 + ", " + selAddrData.line2,
+      payment: PAY_LABELS[payMethod] || payMethod,
+    });
+    localStorage.setItem("hh_orders", JSON.stringify(orders));
+
+    // Clear cart
+    localStorage.setItem("hh_cart", "[]");
+    updateCartBadge();
+
+    // Show success
+    document.getElementById("order-id").textContent = "#" + orderId;
+    document.getElementById("success-overlay").classList.add("show");
+  }, 1800);
+}
+
+// ── CARD NUMBER FORMATTING ────────────────────────────────
+const cardNumInput = document.getElementById("card-num");
+if (cardNumInput) {
+  cardNumInput.addEventListener("input", function() {
+    let v = this.value.replace(/\D/g,"").substring(0,16);
+    this.value = v.replace(/(.{4})/g,"$1 ").trim();
+  });
+}
+
+// ── AI CHAT ────────────────────────────────────────────────
+const SP = "You are a friendly sneaker assistant for Heat Haven, a premium sneaker store in India. Help with sizing, shipping, payment, and returns. Currency: ₹. Keep replies 2-3 sentences, casual and helpful.";
+const QC = ["Shipping time?","Returns policy","Payment help","Size guide","Track order"];
+const cw=document.getElementById("hh-chat-widget"),ct=document.getElementById("hh-chat-toggle"),me=document.getElementById("hh-messages"),ie=document.getElementById("hh-input"),sb=document.getElementById("hh-send"),ce=document.getElementById("hh-chips"),nd=document.getElementById("hh-notif-dot");
+let ch=[],iT=false,hO=false;
+ct.addEventListener("click",()=>{ cw.classList.toggle("open"); if(!hO){hO=true;nd.style.display="none";setTimeout(()=>{aBot("Hey! 👟 Need help with your checkout?");setTimeout(()=>{aBot("I can help with payment, sizing, or delivery questions!");showC();},800);},300); } });
+function showC(c=QC){ce.innerHTML="";c.forEach(t=>{const b=document.createElement("button");b.className="hh-chip";b.textContent=t;b.onclick=()=>{ce.innerHTML="";sM(t);};ce.appendChild(b);});}
+function aBot(h){const d=document.createElement("div");d.className="hh-msg bot";d.innerHTML=`<div class="hh-bot-avatar">HH</div><div class="hh-bubble">${h}</div>`;me.appendChild(d);me.scrollTop=me.scrollHeight;}
+function aUser(t){const d=document.createElement("div");d.className="hh-msg user";d.innerHTML=`<div class="hh-bubble">${escH(t)}</div>`;me.appendChild(d);me.scrollTop=me.scrollHeight;}
+function shT(){const d=document.createElement("div");d.className="hh-msg bot";d.id="hh-ti";d.innerHTML=`<div class="hh-bot-avatar">HH</div><div class="hh-bubble" style="padding:10px 16px"><div class="hh-typing"><span></span><span></span><span></span></div></div>`;me.appendChild(d);me.scrollTop=me.scrollHeight;}
+function hiT(){const e=document.getElementById("hh-ti");if(e)e.remove();}
+async function sM(t){t=t.trim();if(!t||iT)return;ce.innerHTML="";aUser(t);ie.value="";iT=true;sb.style.opacity="0.5";ch.push({role:"user",content:t});shT();
+try{const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:SP,messages:ch})});const d=await r.json();const rp=d.content?.[0]?.text||"Sorry, try again!";ch.push({role:"assistant",content:rp});hiT();aBot(rp.replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>").replace(/\n/g,"<br>"));showC(["Tell me more","Shipping","Returns","Contact support"]);}
+catch(e){hiT();aBot("Connectivity issue! DM us on Instagram <strong>@heatheaven.23_</strong> 🙏");}
+iT=false;sb.style.opacity="1";}
+sb.addEventListener("click",()=>sM(ie.value));
+ie.addEventListener("keydown",e=>{if(e.key==="Enter")sM(ie.value);});
+setTimeout(()=>{if(!hO)nd.style.display="block";},3000);
+</script>
+</body>
+</html>
