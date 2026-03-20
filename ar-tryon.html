@@ -167,10 +167,10 @@
 <script>
 // ─── PRODUCT DATA (mirrors index.html exactly) ───────────────────────────────
 const SNEAKERS = [
-  { id:'jordan1-chicago',  name:'Air Jordan 1 Retro High', brand:'Air Jordan',     colorway:'Chicago Bulls', price:'5559', img:'images/aj 1 chicago solo (1).png',             color:'#b80000', sole:'#111', accent:'#ffffff', lace:'#ffffff' },
-  { id:'yeezy700-azael',   name:'Yeezy 700 V3',            brand:'Adidas / Yeezy', colorway:'Azael',         price:'4759', img:'images/yzy%20700%20v3%20azael.png',         color:'#1a1a2e', sole:'#2a2a3e', accent:'#4a90d9', lace:'#aaaaaa' },
-  { id:'uptempo-bulls',    name:'Nike Uptempo Slide',       brand:'Nike',           colorway:'Bulls',         price:'3559', img:'images/uptempo%20slide%20bulls.png',        color:'#cc0000', sole:'#111',    accent:'#000000', lace:'#ffffff' },
-  { id:'travis-fragment',  name:'Travis Scott × Fragment',  brand:'Air Jordan',     colorway:'Fragment',      price:'5559', img:'images/travis%20x%20fragment%20high.png',   color:'#1c2a4a', sole:'#111',    accent:'#c0a060', lace:'#dddddd' }
+  { id:'jordan1-chicago',  name:'Air Jordan 1 Retro High', brand:'Air Jordan',     colorway:'Chicago Bulls', price:'5559', img:'images/aj 1 chichgo.png',            color:'#b80000', sole:'#111',    accent:'#ffffff', lace:'#ffffff' },
+  { id:'yeezy700-azael',   name:'Yeezy 700 V3',            brand:'Adidas / Yeezy', colorway:'Azael',         price:'4759', img:'images/yzy 700 v3 azael.png',        color:'#1a1a2e', sole:'#2a2a3e', accent:'#4a90d9', lace:'#aaaaaa' },
+  { id:'uptempo-bulls',    name:'Nike Uptempo Slide',       brand:'Nike',           colorway:'Bulls',         price:'3559', img:'images/uptempo slide bulls.png',     color:'#cc0000', sole:'#111',    accent:'#000000', lace:'#ffffff' },
+  { id:'travis-fragment',  name:'Travis Scott × Fragment',  brand:'Air Jordan',     colorway:'Fragment',      price:'5559', img:'images/travis x fragment high.png',  color:'#1c2a4a', sole:'#111',    accent:'#c0a060', lace:'#dddddd' }
 ];
 
 const SIZES = ['UK 6','UK 6.5','UK 7','UK 7.5','UK 8','UK 8.5','UK 9','UK 9.5','UK 10','UK 10.5','UK 11','UK 12'];
@@ -200,6 +200,9 @@ if (urlId && !SNEAKERS.find(s => s.id === urlId)) {
 
 let selectedSneaker = urlId ? (allSneakers.find(s => s.id === urlId) || allSneakers[0]) : allSneakers[0];
 let selectedSize    = 'UK 9';
+
+// Preload all shoe images immediately so they're ready when camera opens
+allSneakers.forEach(s => { if (s.img) { const i = new Image(); i.src = s.img; } });
 let stream = null;
 let facingMode = 'user';
 let ovX = 0.5, ovY = 0.75, ovScale = 1, ovRotation = 0, ovFlipped = false;
@@ -312,6 +315,19 @@ startBtn.addEventListener('click', startCamera);
 stopBtn.addEventListener('click', stopCamera);
 switchBtn.addEventListener('click', () => { facingMode = facingMode === 'user' ? 'environment' : 'user'; startCamera(); });
 
+// ─── IMAGE CACHE ─────────────────────────────────────────────────────────────
+const imgCache = {};
+function getShoeImage(src) {
+  if (!src) return null;
+  if (imgCache[src]) return imgCache[src].complete ? imgCache[src] : null;
+  const img = new Image();
+  img.src = src;
+  img.onload  = () => {}; // cached & ready on next frame
+  img.onerror = () => { img._failed = true; };
+  imgCache[src] = img;
+  return null; // not ready yet this frame
+}
+
 // ─── DRAW LOOP ────────────────────────────────────────────────────────────────
 function drawLoop() {
   if (!stream) return;
@@ -319,74 +335,55 @@ function drawLoop() {
   const wrap = document.getElementById('cameraWrap');
   canvas.width  = wrap.clientWidth;
   canvas.height = wrap.clientHeight;
-  const cx = ovX * canvas.width;
-  const cy = ovY * canvas.height;
-  const baseW = canvas.width * 0.38 * ovScale;
-  const baseH = baseW * 0.42;
-  const s = selectedSneaker;
+
+  const cx    = ovX * canvas.width;
+  const cy    = ovY * canvas.height;
+  const baseW = canvas.width * 0.45 * ovScale;
+  const baseH = baseW * 0.55;
+  const s     = selectedSneaker;
 
   ctx.save();
   ctx.translate(cx, cy);
   ctx.rotate(ovRotation * Math.PI / 180);
   if (ovFlipped) ctx.scale(-1, 1);
 
-  // shadow
-  ctx.shadowColor = 'rgba(0,0,0,0.6)'; ctx.shadowBlur = 24; ctx.shadowOffsetY = 12;
+  const shoeImg = s.img ? getShoeImage(s.img) : null;
 
-  // sole
-  ctx.fillStyle = s.sole || '#222';
-  ctx.beginPath();
-  ctx.ellipse(baseW*0.02, baseH*0.38, baseW*0.53, baseH*0.22, 0, 0, Math.PI*2);
-  ctx.fill();
+  if (shoeImg && !shoeImg._failed) {
+    // ── Draw real shoe image ──────────────────────────────────────
+    // drop shadow
+    ctx.shadowColor   = 'rgba(0,0,0,0.55)';
+    ctx.shadowBlur    = 28;
+    ctx.shadowOffsetY = 14;
 
-  ctx.shadowColor = 'transparent';
+    ctx.drawImage(shoeImg, -baseW/2, -baseH/2, baseW, baseH);
 
-  // upper
-  const g = ctx.createLinearGradient(-baseW/2, -baseH*0.6, baseW/2, baseH*0.3);
-  g.addColorStop(0, colorAdj(s.color, 30)); g.addColorStop(0.6, s.color); g.addColorStop(1, colorAdj(s.color, -25));
-  ctx.fillStyle = g;
-  ctx.beginPath();
-  ctx.moveTo(-baseW*0.5, baseH*0.25);
-  ctx.quadraticCurveTo(-baseW*0.56, -baseH*0.08, -baseW*0.3, -baseH*0.46);
-  ctx.quadraticCurveTo(-baseW*0.06, -baseH*0.66, baseW*0.18, -baseH*0.56);
-  ctx.quadraticCurveTo(baseW*0.54, -baseH*0.36, baseW*0.52, baseH*0.1);
-  ctx.quadraticCurveTo(baseW*0.54, baseH*0.28, baseW*0.5, baseH*0.28);
-  ctx.lineTo(-baseW*0.5, baseH*0.25);
-  ctx.closePath();
-  ctx.fill();
+    ctx.shadowColor = 'transparent';
 
-  // accent stripe
-  ctx.save(); ctx.globalAlpha = 0.75; ctx.fillStyle = s.accent;
-  ctx.beginPath();
-  ctx.moveTo(-baseW*0.04, -baseH*0.38);
-  ctx.quadraticCurveTo(baseW*0.2, -baseH*0.5, baseW*0.44, -baseH*0.24);
-  ctx.lineTo(baseW*0.38, -baseH*0.1);
-  ctx.quadraticCurveTo(baseW*0.14, -baseH*0.34, -baseW*0.1, -baseH*0.22);
-  ctx.closePath(); ctx.fill(); ctx.restore();
+    // size label pill below shoe
+    const pillW = 80, pillH = 26, pillY = baseH/2 + 10;
+    ctx.fillStyle = 'rgba(0,0,0,0.65)';
+    ctx.beginPath();
+    ctx.roundRect(-pillW/2, pillY, pillW, pillH, 13);
+    ctx.fill();
+    ctx.fillStyle = '#00c9b1';
+    ctx.font = `bold ${14}px 'DM Sans', sans-serif`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(selectedSize, 0, pillY + pillH/2);
 
-  // laces
-  ctx.save(); ctx.strokeStyle = s.lace || '#eee'; ctx.lineWidth = Math.max(1.5, baseW*0.006); ctx.lineCap = 'round'; ctx.globalAlpha = 0.9;
-  for (let i = 0; i < 4; i++) {
-    const lx = -baseW*0.22 + i*baseW*0.13; const ly = -baseH*0.38 + i*baseH*0.055;
-    ctx.beginPath(); ctx.moveTo(lx-baseW*0.07, ly-baseH*0.03); ctx.lineTo(lx+baseW*0.07, ly+baseH*0.03); ctx.stroke();
+  } else {
+    // ── Fallback: emoji + label if image not loaded ───────────────
+    ctx.font = `${baseW * 0.55}px serif`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText('👟', 0, 0);
+
+    ctx.fillStyle = 'rgba(0,0,0,0.6)';
+    ctx.font = `bold 13px 'DM Sans', sans-serif`;
+    ctx.fillStyle = '#00c9b1';
+    ctx.fillText(s.name + ' · ' + selectedSize, 0, baseH * 0.45);
   }
-  ctx.restore();
-
-  // size label
-  ctx.fillStyle = 'rgba(0,0,0,0.5)';
-  ctx.font = `bold ${Math.round(baseH*0.2)}px 'DM Sans', sans-serif`;
-  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  ctx.fillText(selectedSize, 0, baseH*0.18);
 
   ctx.restore();
-}
-
-function colorAdj(hex, amt) {
-  const n = parseInt(hex.replace('#',''), 16);
-  const r = Math.min(255, Math.max(0, (n>>16)+amt));
-  const g = Math.min(255, Math.max(0, ((n>>8)&0xff)+amt));
-  const b = Math.min(255, Math.max(0, (n&0xff)+amt));
-  return `rgb(${r},${g},${b})`;
 }
 
 // ─── OVERLAY BUTTONS ─────────────────────────────────────────────────────────
