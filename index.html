@@ -43,10 +43,8 @@
     .heart-spring { animation:heart-spring 0.25s ease-out; }
     @keyframes cart-spring { 0%{transform:scale(1)} 40%{transform:scale(0.95)} 70%{transform:scale(1.05)} 100%{transform:scale(1)} }
     .cart-spring { animation:cart-spring 0.25s ease-out; }
-
     @keyframes cart-bump { 0%{transform:scale(1)} 40%{transform:scale(1.5)} 70%{transform:scale(0.85)} 100%{transform:scale(1)} }
     .cart-bump { animation:cart-bump 0.35s ease-out; }
-
     @keyframes select-shake { 0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(-4px)} 40%,80%{transform:translateX(4px)} }
     .select-shake { animation:select-shake 0.4s ease-out; }
 
@@ -62,6 +60,26 @@
     #theme-toggle .moon-icon { opacity:0; transform:rotate(90deg) scale(0.4); }
     .dark #theme-toggle .sun-icon  { opacity:0; transform:rotate(-90deg) scale(0.4); }
     .dark #theme-toggle .moon-icon { opacity:1; transform:rotate(0deg) scale(1); }
+
+    /* AR Camera Button */
+    @keyframes ar-ring {
+      0%,100% { transform:scale(1);    opacity:0.4; }
+      50%      { transform:scale(1.25); opacity:1;   }
+    }
+    #ar-cam-btn { position:relative; display:flex; align-items:center; justify-content:center; width:48px; height:48px; border-radius:50%; background:#ff4500; border:none; cursor:pointer; box-shadow:0 4px 18px rgba(255,69,0,0.45); transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease; text-decoration:none; flex-shrink:0; }
+    #ar-cam-btn:hover { transform:scale(1.12); box-shadow:0 0 0 4px rgba(255,69,0,0.2), 0 8px 28px rgba(255,69,0,0.5); }
+    #ar-cam-btn .ar-ring { position:absolute; inset:0; border-radius:50%; border:2px solid #ff4500; animation:ar-ring 2s ease-in-out infinite; pointer-events:none; }
+    #ar-cam-btn .ar-tooltip {
+      position:absolute; right:58px; top:50%; transform:translateY(-50%);
+      background:#111; color:#fff;
+      font-family:'Archivo Black',sans-serif; font-size:11px; letter-spacing:0.5px;
+      padding:5px 12px; border-radius:8px;
+      white-space:nowrap; pointer-events:none;
+      border:1px solid rgba(255,69,0,0.5);
+      opacity:0; transition:opacity 0.2s ease;
+      box-shadow:0 4px 16px rgba(0,0,0,0.4);
+    }
+    #ar-cam-btn:hover .ar-tooltip { opacity:1; }
 
     /* Nav Search Pill */
     .nav-search-pill { display:flex; align-items:center; min-width:220px; padding:0; border-radius:999px; border:none; cursor:pointer; background:transparent; font-family:"Poppins",sans-serif; font-size:13px; font-weight:500; transition:transform 0.15s; position:relative; white-space:nowrap; }
@@ -193,6 +211,151 @@
     .dark .hh-chip:hover { background:#fff; color:#000; border-color:#fff; }
     .dark .hh-powered { background:#0a0a0a; color:#333; }
     @media (max-width:420px) { #hh-chat-panel { width:calc(100vw - 48px); } }
+
+    /* ── PREMIUM ANIMATIONS ─────────────────────────────────────── */
+
+    /* Custom cursor glow */
+    #cursor-glow {
+      position:fixed; width:320px; height:320px; border-radius:50%;
+      background:radial-gradient(circle, rgba(255,69,0,0.07) 0%, transparent 70%);
+      pointer-events:none; z-index:0; transform:translate(-50%,-50%);
+      transition:opacity 0.4s ease; opacity:0;
+    }
+    body:hover #cursor-glow { opacity:1; }
+
+    /* Nav brand shimmer on load */
+    @keyframes brand-shimmer {
+      0%   { background-position: -200% center; }
+      100% { background-position:  200% center; }
+    }
+    .brand a {
+      background: linear-gradient(90deg, currentColor 40%, #ff4500 50%, currentColor 60%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: brand-shimmer 3.5s ease 0.5s 1 forwards;
+    }
+
+    /* Nav link underline slide */
+    .nav-link { position:relative; }
+    .nav-link::after {
+      content:''; position:absolute; bottom:-2px; left:0;
+      width:0; height:2px; background:#ff4500; border-radius:2px;
+      transition:width 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+    .nav-link:hover::after { width:100%; }
+
+    /* Hero text cinematic entrance */
+    @keyframes hero-word-in {
+      from { opacity:0; transform:translateY(40px) skewY(3deg); filter:blur(4px); }
+      to   { opacity:1; transform:translateY(0)    skewY(0deg);  filter:blur(0); }
+    }
+    .hero-title-word {
+      display:inline-block;
+      animation: hero-word-in 0.8s cubic-bezier(0.16,1,0.3,1) both;
+    }
+    .hero-title-word:nth-child(1) { animation-delay: 0.1s; }
+    .hero-title-word:nth-child(2) { animation-delay: 0.25s; }
+
+    @keyframes hero-sub-in {
+      from { opacity:0; transform:translateY(20px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    .hero-sub  { animation: hero-sub-in 0.7s ease 0.5s both; }
+    .hero-cta  { animation: hero-sub-in 0.7s ease 0.75s both; }
+
+    /* Hero red accent line under title */
+    @keyframes line-grow { from{width:0} to{width:80px} }
+    .hero-accent-line {
+      display:block; height:3px; background:#ff4500; border-radius:2px;
+      margin:12px auto 20px; animation:line-grow 0.6s ease 0.9s both;
+    }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity:0; transform:translateY(32px);
+      transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1),
+                  transform 0.7s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+    .reveal-left  { opacity:0; transform:translateX(-40px); transition:opacity 0.7s cubic-bezier(0.16,1,0.3,1),transform 0.7s cubic-bezier(0.16,1,0.3,1); }
+    .reveal-right { opacity:0; transform:translateX(40px);  transition:opacity 0.7s cubic-bezier(0.16,1,0.3,1),transform 0.7s cubic-bezier(0.16,1,0.3,1); }
+    .reveal-left.visible, .reveal-right.visible { opacity:1; transform:translateX(0); }
+
+    /* Staggered product cards */
+    .shoe-card { opacity:0; transform:translateY(28px) scale(0.97); transition:opacity 0.55s cubic-bezier(0.16,1,0.3,1), transform 0.55s cubic-bezier(0.16,1,0.3,1), box-shadow 0.25s ease; }
+    .shoe-card.visible { opacity:1; transform:translateY(0) scale(1); }
+    .shoe-card:hover { transform:translateY(-6px) scale(1.01) !important; box-shadow:0 20px 40px rgba(0,0,0,0.14); }
+    .dark .shoe-card:hover { box-shadow:0 0 0 1px rgba(255,69,0,0.18), 0 20px 40px rgba(0,0,0,0.6); }
+
+    /* Card shine sweep on hover */
+    .shoe-card .relative { overflow:hidden; }
+    .shoe-card .relative::after {
+      content:''; position:absolute; inset:0;
+      background:linear-gradient(115deg, transparent 40%, rgba(255,255,255,0.18) 50%, transparent 60%);
+      transform:translateX(-100%); transition:transform 0.5s ease;
+      pointer-events:none; z-index:5;
+    }
+    .shoe-card:hover .relative::after { transform:translateX(100%); }
+
+    /* Section headings slide-in underline */
+    .section-heading { position:relative; display:inline-block; }
+    .section-heading::after {
+      content:''; position:absolute; bottom:-6px; left:0;
+      width:0; height:3px; background:#ff4500; border-radius:2px;
+      transition:width 0.5s cubic-bezier(0.4,0,0.2,1) 0.1s;
+    }
+    .section-heading.visible::after { width:100%; }
+
+    /* Partner cards 3D tilt (enhanced) */
+    .deal-card {
+      transition:transform 0.3s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s ease;
+      transform-style:preserve-3d; will-change:transform;
+    }
+    .deal-card:hover {
+      transform:perspective(800px) rotateX(-4deg) rotateY(4deg) translateY(-6px) scale(1.03);
+      box-shadow:0 24px 48px rgba(0,0,0,0.16);
+    }
+
+    /* Footer reveal */
+    footer { position:relative; overflow:hidden; }
+    footer::before {
+      content:''; position:absolute; top:0; left:-100%;
+      width:60%; height:1px; background:linear-gradient(90deg,transparent,#ff4500,transparent);
+      animation:footer-line 3s ease 1.5s infinite;
+    }
+    @keyframes footer-line { 0%{left:-60%} 100%{left:140%} }
+
+    /* About section image float */
+    @keyframes float-img {
+      0%,100% { transform:translateY(0); }
+      50%      { transform:translateY(-10px); }
+    }
+    #about .hover\:-translate-y-3 { animation:float-img 5s ease-in-out infinite; }
+
+    /* Add-to-cart button ripple */
+    .add-to-cart-btn { position:relative; overflow:hidden; }
+    .add-to-cart-btn::after {
+      content:''; position:absolute; inset:0;
+      background:rgba(255,255,255,0.25); border-radius:inherit;
+      transform:scale(0); opacity:0; transition:transform 0.35s ease, opacity 0.35s ease;
+    }
+    .add-to-cart-btn:active::after { transform:scale(2); opacity:0; transition:0s; }
+
+    /* Page load — nav drop in */
+    @keyframes nav-drop {
+      from { transform:translateY(-100%); opacity:0; }
+      to   { transform:translateY(0);     opacity:1; }
+    }
+    nav { animation:nav-drop 0.6s cubic-bezier(0.16,1,0.3,1) both; }
+
+    /* Section divider shimmer */
+    .section-divider {
+      height:1px;
+      background:linear-gradient(90deg, transparent, #ff4500 30%, #ff4500 70%, transparent);
+      opacity:0.15; margin:0;
+    }
   </style>
 </head>
 
@@ -213,9 +376,24 @@
     <p id="search-close-hint">Press <kbd>Esc</kbd> to close</p>
   </div>
 
-  <!-- Dark Mode Toggle -->
-  <div class="fixed bottom-10 right-6 z-50">
-    <button id="theme-toggle" class="relative flex items-center justify-center w-12 h-12 rounded-full shadow-xl bg-gray-200 dark:bg-cardDark transition-all duration-300 hover:scale-110" aria-label="Toggle dark mode">
+  <!-- Fixed bottom-right: AR Camera + Dark Mode Toggle (stacked) -->
+  <div class="fixed bottom-10 right-6 z-50 flex flex-col items-center gap-3">
+
+    <!-- AR Camera Button -->
+    <a href="ar-tryon.html" id="ar-cam-btn" aria-label="AR Try-On">
+      <span class="ar-ring"></span>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+           stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+        <circle cx="12" cy="13" r="4"/>
+      </svg>
+      <span class="ar-tooltip">👟 AR Try-On</span>
+    </a>
+
+    <!-- Dark Mode Toggle -->
+    <button id="theme-toggle"
+            class="relative flex items-center justify-center w-12 h-12 rounded-full shadow-xl bg-gray-200 dark:bg-cardDark transition-all duration-300 hover:scale-110"
+            aria-label="Toggle dark mode">
       <svg class="sun-icon text-yellow-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
         <circle cx="12" cy="12" r="4" fill="currentColor" stroke="none"/>
         <path stroke-linecap="round" d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
@@ -224,6 +402,7 @@
         <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/>
       </svg>
     </button>
+
   </div>
 
   <!-- Filter Overlay -->
@@ -285,7 +464,6 @@
         </div>
         <div class="flex items-center">
           <div class="hidden md:flex items-center space-x-2">
-            <!-- Wishlist heart → links to wishlist.html -->
             <a href="wishlist.html" id="nav-wishlist-btn" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark transition-colors relative" aria-label="Wishlist">
               <i class="fas fa-heart text-red-600 dark:text-red-600"></i>
             </a>
@@ -332,6 +510,10 @@
         <a href="deals.html"    class="nav-link text-black dark:text-white hover:text-gray-600">Hot Deals</a>
         <a href="#contact"      class="nav-link text-black dark:text-white hover:text-gray-600">Contact</a>
         <a href="wishlist.html" class="flex items-center gap-2 text-red-500 font-medium"><i class="fas fa-heart text-sm"></i> Wishlist</a>
+        <a href="ar-tryon.html" class="flex items-center gap-2 font-semibold" style="color:#00c9b1;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          AR Try-On
+        </a>
       </div>
       <div class="mt-8 pt-4 border-t border-gray-200 dark:border-gray-700">
         <div class="flex items-center space-x-4">
@@ -361,9 +543,12 @@
         </video>
         <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
           <div class="text-center text-white px-4">
-            <h1 class="text-4xl md:text-6xl font-bold mb-4">HEAT HAVEN</h1>
-            <p class="text-xl md:text-2xl mb-8">Discover the Hottest Sneakers in the Game</p>
-            <a href="product.html" class="bg-red-500 text-white px-8 py-3 rounded-full text-lg font-medium hover:bg-gray-800 transition duration-300 inline-block">Shop Now</a>
+            <h1 class="text-4xl md:text-6xl font-bold mb-2">
+              <span class="hero-title-word">HEAT</span>&nbsp;<span class="hero-title-word">HAVEN</span>
+            </h1>
+            <span class="hero-accent-line"></span>
+            <p class="hero-sub text-xl md:text-2xl mb-8">Discover the Hottest Sneakers in the Game</p>
+            <a href="product.html" class="hero-cta bg-red-500 text-white px-8 py-3 rounded-full text-lg font-medium hover:bg-gray-800 transition duration-300 inline-block">Shop Now</a>
           </div>
         </div>
       </div>
@@ -372,7 +557,7 @@
     <!-- Products -->
     <section id="products" class="py-12 bg-white dark:bg-amoled">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl font-bold mb-2 dark:text-white">Featured Sneakers</h2>
+        <h2 class="text-3xl font-bold mb-2 dark:text-white section-heading reveal">Featured Sneakers</h2>
         <a href="product.html" class="text-black dark:text-white font-medium hover:underline">View All</a>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mt-6" id="productGrid">
 
@@ -405,6 +590,12 @@
                 </div>
                 <button class="add-to-cart-btn bg-black dark:bg-red-600 text-white px-4 py-1.5 rounded text-sm hover:bg-gray-800 cart-animation">Add to Cart</button>
               </div>
+              <div class="mt-3 pt-3 border-t border-gray-100 dark:border-zinc-800">
+                <a href="ar-tryon.html" class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition" style="color:#c30d0d;background:rgba(201, 0, 0, 0.08);border:1px solid rgba(0,201,177,0.2);">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                  Try On AR
+                </a>
+              </div>
             </div>
           </div>
 
@@ -436,6 +627,12 @@
                 </div>
                 <button class="add-to-cart-btn bg-black dark:bg-red-600 text-white px-4 py-1.5 rounded text-sm hover:bg-gray-800 cart-animation">Add to Cart</button>
               </div>
+              <div class="mt-3 pt-3 border-t border-gray-100 dark:border-zinc-800">
+                <a href="ar-tryon.html" class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition" style="color:#00c9b1;background:rgba(0,201,177,0.08);border:1px solid rgba(0,201,177,0.2);">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                  Try On AR
+                </a>
+              </div>
             </div>
           </div>
 
@@ -463,6 +660,12 @@
               <div class="flex justify-between items-center">
                 <span class="font-bold dark:text-white">₹3,559</span>
                 <button class="add-to-cart-btn bg-black dark:bg-red-600 text-white px-4 py-1.5 rounded text-sm hover:bg-gray-800 cart-animation">Add to Cart</button>
+              </div>
+              <div class="mt-3 pt-3 border-t border-gray-100 dark:border-zinc-800">
+                <a href="ar-tryon.html" class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition" style="color:#00c9b1;background:rgba(0,201,177,0.08);border:1px solid rgba(0,201,177,0.2);">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                  Try On AR
+                </a>
               </div>
             </div>
           </div>
@@ -492,6 +695,12 @@
                 <span class="font-bold dark:text-white">₹5,559</span>
                 <button class="add-to-cart-btn bg-black dark:bg-red-600 text-white px-4 py-1.5 rounded text-sm hover:bg-gray-800 cart-animation">Add to Cart</button>
               </div>
+              <div class="mt-3 pt-3 border-t border-gray-100 dark:border-zinc-800">
+                <a href="ar-tryon.html" class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition" style="color:#00c9b1;background:rgba(0,201,177,0.08);border:1px solid rgba(0,201,177,0.2);">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                  Try On AR
+                </a>
+              </div>
             </div>
           </div>
 
@@ -502,7 +711,7 @@
     <!-- Partners -->
     <section id="deals" class="py-12 bg-gray-50 dark:bg-amoled">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl font-bold mb-8 text-black dark:text-white">Sneaker Partners</h2>
+        <h2 class="text-3xl font-bold mb-8 text-black dark:text-white section-heading reveal">Sneaker Partners</h2>
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div class="deal-card bg-white dark:bg-cardDark rounded-lg overflow-hidden shadow-md transform transition duration-300 ease-out hover:-translate-y-2 hover:scale-105 hover:shadow-xl">
             <img src="images/nike logo.jpg" alt="Nike" class="w-full h-48 object-cover" />
@@ -528,13 +737,13 @@
     <section id="about" class="py-16 bg-black text-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          <div>
+          <div class="reveal-left">
             <h2 class="text-3xl font-bold mb-6">About Heat Haven</h2>
             <p class="text-gray-300 mb-4">Founded in 2025, Heat Haven has become the premier destination for sneaker enthusiasts and collectors alike.</p>
             <p class="text-gray-300 mb-4">Our team of experts carefully curates each item in our collection to ensure authenticity, quality, and style.</p>
             <p class="text-gray-300">Beyond just selling shoes, we're passionate about sneaker culture and building a movement.</p>
           </div>
-          <div class="relative transform transition duration-300 ease-out hover:-translate-y-3 hover:scale-105">
+          <div class="relative reveal-right transform transition duration-300 ease-out hover:-translate-y-3 hover:scale-105">
             <img src="images/heat haven lgog new.png" alt="Heat Haven logo" class="w-full rounded-lg shadow-lg" />
           </div>
         </div>
@@ -589,9 +798,10 @@
         <div>
           <h3 class="text-lg font-bold mb-4">Shop</h3>
           <ul class="space-y-2">
-            <li><a href="product.html"     class="text-gray-400 hover:text-white text-sm">All Products</a></li>
-            <li><a href="wishlist.html"    class="text-gray-400 hover:text-white text-sm">My Wishlist</a></li>
-            <li><a href="#"               class="text-gray-400 hover:text-white text-sm">SALE ! Items</a></li>
+            <li><a href="product.html"  class="text-gray-400 hover:text-white text-sm">All Products</a></li>
+            <li><a href="wishlist.html" class="text-gray-400 hover:text-white text-sm">My Wishlist</a></li>
+            <li><a href="ar-tryon.html" class="text-gray-400 hover:text-white text-sm">👟 AR Try-On</a></li>
+            <li><a href="#"             class="text-gray-400 hover:text-white text-sm">SALE ! Items</a></li>
           </ul>
         </div>
         <div>
@@ -665,18 +875,13 @@
   </div>
 
   <script>
-    // ─── DARK MODE ───────────────────────────────────────────────
     if (localStorage.getItem("theme") === "dark") document.documentElement.classList.add("dark");
     document.getElementById("theme-toggle").addEventListener("click", () => {
       const isDark = document.documentElement.classList.toggle("dark");
       localStorage.setItem("theme", isDark ? "dark" : "light");
     });
-
-    // ─── MOBILE MENU ─────────────────────────────────────────────
     document.getElementById("mobile-menu-button").addEventListener("click", () => document.getElementById("mobile-menu").classList.add("open"));
     document.getElementById("close-menu").addEventListener("click", () => document.getElementById("mobile-menu").classList.remove("open"));
-
-    // ─── SMOOTH SCROLL ────────────────────────────────────────────
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener("click", function(e) {
         const id = this.getAttribute("href");
@@ -688,278 +893,165 @@
         document.getElementById("mobile-menu").classList.remove("open");
       });
     });
-
-    // ─── TOAST ────────────────────────────────────────────────────
     function showToast(msg, isError) {
-      const t    = document.getElementById("toast");
-      const icon = t.querySelector("i");
-      const span = t.querySelector("span");
-      span.textContent = msg;
-      icon.className = isError ? "fas fa-exclamation-circle" : "fas fa-check-circle";
-      icon.style.color = isError ? "#facc15" : "#22c55e";
-      t.classList.remove("show");
-      void t.offsetWidth;
-      t.classList.add("show");
+      const t=document.getElementById("toast"),icon=t.querySelector("i"),span=t.querySelector("span");
+      span.textContent=msg; icon.className=isError?"fas fa-exclamation-circle":"fas fa-check-circle";
+      icon.style.color=isError?"#facc15":"#22c55e"; t.classList.remove("show"); void t.offsetWidth; t.classList.add("show");
     }
-
-    // ─── CART (localStorage) ──────────────────────────────────────
-    function getCart() { try { return JSON.parse(localStorage.getItem("hh_cart") || "[]"); } catch(e) { return []; } }
-    function saveCart(cart) { localStorage.setItem("hh_cart", JSON.stringify(cart)); }
-
+    function getCart() { try { return JSON.parse(localStorage.getItem("hh_cart")||"[]"); } catch(e){return[];} }
+    function saveCart(cart) { localStorage.setItem("hh_cart",JSON.stringify(cart)); }
     function updateCartBadge() {
-      const total = getCart().reduce((s, i) => s + i.qty, 0);
-      document.querySelectorAll("#cart-count, #cart-count-mobile").forEach(el => el.textContent = total);
+      const total=getCart().reduce((s,i)=>s+i.qty,0);
+      document.querySelectorAll("#cart-count,#cart-count-mobile").forEach(el=>el.textContent=total);
     }
-
-    document.querySelectorAll(".add-to-cart-btn").forEach(btn => {
-      btn.addEventListener("click", (e) => {
+    document.querySelectorAll(".add-to-cart-btn").forEach(btn=>{
+      btn.addEventListener("click",(e)=>{
         e.preventDefault();
-        const card = btn.closest(".shoe-card");
-        const sizeSelect = card ? card.querySelector("select") : null;
-        const size = sizeSelect ? sizeSelect.value : "";
-        if (!size) {
-          if (sizeSelect) {
-            sizeSelect.classList.add("select-shake");
-            sizeSelect.style.borderColor = "#ef4444";
-            sizeSelect.style.boxShadow = "0 0 0 2px rgba(239,68,68,0.25)";
-            setTimeout(() => { sizeSelect.classList.remove("select-shake"); sizeSelect.style.borderColor = ""; sizeSelect.style.boxShadow = ""; }, 500);
-          }
-          showToast("Pick a size first! 👟", true);
-          return;
+        const card=btn.closest(".shoe-card"),sizeSelect=card?card.querySelector("select"):null,size=sizeSelect?sizeSelect.value:"";
+        if(!size){
+          if(sizeSelect){sizeSelect.classList.add("select-shake");sizeSelect.style.borderColor="#ef4444";sizeSelect.style.boxShadow="0 0 0 2px rgba(239,68,68,0.25)";setTimeout(()=>{sizeSelect.classList.remove("select-shake");sizeSelect.style.borderColor="";sizeSelect.style.boxShadow="";},500);}
+          showToast("Pick a size first! 👟",true); return;
         }
-        const item = {
-          id:       (card.dataset.name || "item") + "-" + size,
-          name:     card.dataset.name     || "Sneaker",
-          colorway: card.dataset.colorway || "",
-          brand:    card.dataset.brand    || "",
-          price:    parseFloat(card.dataset.price) || 0,
-          img:      card.dataset.img      || "",
-          size:     size,
-          qty:      1
-        };
-        const cart = getCart();
-        const existing = cart.find(i => i.id === item.id);
-        if (existing) { existing.qty++; } else { cart.push(item); }
-        saveCart(cart);
-        updateCartBadge();
-        const badge = document.getElementById("cart-count");
-        if (badge) { badge.classList.remove("cart-bump"); void badge.offsetWidth; badge.classList.add("cart-bump"); }
-        const orig = btn.textContent;
-        btn.textContent = "✓ Added!";
-        btn.disabled = true; btn.style.opacity = "0.8";
-        setTimeout(() => { btn.textContent = orig; btn.disabled = false; btn.style.opacity = ""; }, 1500);
-        showToast("Added to cart!", false);
+        const item={id:(card.dataset.name||"item")+"-"+size,name:card.dataset.name||"Sneaker",colorway:card.dataset.colorway||"",brand:card.dataset.brand||"",price:parseFloat(card.dataset.price)||0,img:card.dataset.img||"",size,qty:1};
+        const cart=getCart(),existing=cart.find(i=>i.id===item.id);
+        if(existing){existing.qty++;}else{cart.push(item);}
+        saveCart(cart); updateCartBadge();
+        const badge=document.getElementById("cart-count");
+        if(badge){badge.classList.remove("cart-bump");void badge.offsetWidth;badge.classList.add("cart-bump");}
+        const orig=btn.textContent; btn.textContent="✓ Added!"; btn.disabled=true; btn.style.opacity="0.8";
+        setTimeout(()=>{btn.textContent=orig;btn.disabled=false;btn.style.opacity="";},1500);
+        showToast("Added to cart!",false);
       });
     });
-
-    // ─── WISHLIST (localStorage — hh_wishlist) ────────────────────
-    function getWishlist() {
-      try { return JSON.parse(localStorage.getItem("hh_wishlist") || "[]"); }
-      catch(e) { return []; }
-    }
-    function saveWishlist(w) { localStorage.setItem("hh_wishlist", JSON.stringify(w)); }
-
-    function syncWishlistUI() {
-      const w = getWishlist();
-      document.querySelectorAll(".wishlist-btn").forEach(btn => {
-        const card = btn.closest(".shoe-card");
-        if (!card) return;
-        const id = (card.dataset.name || "") + "-wish";
-        const inList = w.some(i => i.id === id);
-        const icon = btn.querySelector("i");
-        if (inList) {
-          if (icon.classList.contains("far")) icon.classList.replace("far", "fas");
-          icon.classList.add("text-red-500");
-          icon.classList.remove("text-gray-700");
-        } else {
-          if (icon.classList.contains("fas")) icon.classList.replace("fas", "far");
-          icon.classList.remove("text-red-500");
-          icon.classList.add("text-gray-700");
-        }
+    function getWishlist(){try{return JSON.parse(localStorage.getItem("hh_wishlist")||"[]");}catch(e){return[];}}
+    function saveWishlist(w){localStorage.setItem("hh_wishlist",JSON.stringify(w));}
+    function syncWishlistUI(){
+      const w=getWishlist();
+      document.querySelectorAll(".wishlist-btn").forEach(btn=>{
+        const card=btn.closest(".shoe-card"); if(!card)return;
+        const id=(card.dataset.name||"")+"-wish",inList=w.some(i=>i.id===id),icon=btn.querySelector("i");
+        if(inList){if(icon.classList.contains("far"))icon.classList.replace("far","fas");icon.classList.add("text-red-500");icon.classList.remove("text-gray-700");}
+        else{if(icon.classList.contains("fas"))icon.classList.replace("fas","far");icon.classList.remove("text-red-500");icon.classList.add("text-gray-700");}
       });
     }
-
-    document.querySelectorAll(".wishlist-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const card = btn.closest(".shoe-card");
-        if (!card) return;
-
-        const id       = (card.dataset.name || "") + "-wish";
-        const name     = card.dataset.name     || "Sneaker";
-        const colorway = card.dataset.colorway || "";
-        const brand    = card.dataset.brand    || "";
-        const price    = parseFloat(card.dataset.price) || 0;
-        const img      = card.dataset.img      || "";
-
-        let w = getWishlist();
-        const exists = w.some(i => i.id === id);
-
-        if (exists) {
-          // Remove
-          w = w.filter(i => i.id !== id);
-          saveWishlist(w);
-          syncWishlistUI();
-          showToast("Removed from wishlist", false);
-        } else {
-          // Add
-          w.push({ id, name, colorway, brand, price, img });
-          saveWishlist(w);
-          syncWishlistUI();
-          showToast("❤️ Saved to wishlist!", false);
-        }
-
-        // Heart spring animation
-        const icon = btn.querySelector("i");
-        icon.style.animation = "none";
-        void icon.offsetWidth;
-        icon.style.animation = "heart-spring 0.25s ease-out";
+    document.querySelectorAll(".wishlist-btn").forEach(btn=>{
+      btn.addEventListener("click",()=>{
+        const card=btn.closest(".shoe-card"); if(!card)return;
+        const id=(card.dataset.name||"")+"-wish",name=card.dataset.name||"Sneaker",colorway=card.dataset.colorway||"",brand=card.dataset.brand||"",price=parseFloat(card.dataset.price)||0,img=card.dataset.img||"";
+        let w=getWishlist(),exists=w.some(i=>i.id===id);
+        if(exists){w=w.filter(i=>i.id!==id);saveWishlist(w);syncWishlistUI();showToast("Removed from wishlist",false);}
+        else{w.push({id,name,colorway,brand,price,img});saveWishlist(w);syncWishlistUI();showToast("❤️ Saved to wishlist!",false);}
+        const icon=btn.querySelector("i"); icon.style.animation="none"; void icon.offsetWidth; icon.style.animation="heart-spring 0.25s ease-out";
       });
     });
-
-    // Restore red hearts on page load for already-wishlisted items
-    syncWishlistUI();
-    updateCartBadge();
-
-    // ─── FILTER PANEL ────────────────────────────────────────────
-    const filterBtn     = document.getElementById("filterBtn");
-    const filterPanel   = document.getElementById("filterPanel");
-    const filterOverlay = document.getElementById("filterOverlay");
-    const products      = document.querySelectorAll(".shoe-card");
-
-    function openFilter() {
-      const rect = filterBtn.getBoundingClientRect();
-      filterPanel.style.top   = (rect.bottom + 8 + window.scrollY) + "px";
-      filterPanel.style.right = (window.innerWidth - rect.right - 4) + "px";
-      filterPanel.classList.add("open");
-      filterOverlay.classList.remove("hidden");
-    }
-    function closeFilter() { filterPanel.classList.remove("open"); filterOverlay.classList.add("hidden"); }
-    filterBtn.addEventListener("click", (e) => {
-      e.preventDefault(); e.stopPropagation();
-      filterPanel.classList.contains("open") ? closeFilter() : openFilter();
-    });
-
-    function fpUpdate() {
-      const MIN = 1000, MAX = 700000;
-      let lo = parseInt(document.getElementById("fpMin").value);
-      let hi = parseInt(document.getElementById("fpMax").value);
-      if (lo >= hi) { lo = hi - 1000; document.getElementById("fpMin").value = lo; }
-      const leftPct  = ((lo - MIN) / (MAX - MIN)) * 100;
-      const rightPct = 100 - ((hi - MIN) / (MAX - MIN)) * 100;
-      document.getElementById("fpFill").style.left  = leftPct  + "%";
-      document.getElementById("fpFill").style.right = rightPct + "%";
-      document.getElementById("fpPriceDisplay").textContent = "₹" + lo.toLocaleString("en-IN") + " – ₹" + hi.toLocaleString("en-IN");
-    }
-    function fpApply() {
-      const brand = document.getElementById("fpBrand").value;
-      const lo    = parseInt(document.getElementById("fpMin").value);
-      const hi    = parseInt(document.getElementById("fpMax").value);
-      products.forEach(p => {
-        const price = parseInt(p.dataset.price || "0");
-        const show  = (brand === "all" || p.dataset.brand === brand) && price >= lo && price <= hi;
-        p.style.display = show ? "" : "none";
-      });
-      closeFilter();
-      showToast("Filters applied!", false);
-    }
-    function fpReset() {
-      document.getElementById("fpBrand").value = "all";
-      document.getElementById("fpMin").value   = 1000;
-      document.getElementById("fpMax").value   = 700000;
-      fpUpdate();
-      products.forEach(p => p.style.display = "");
-      closeFilter();
-    }
-    window.fpUpdate = fpUpdate; window.fpApply = fpApply; window.fpReset = fpReset; window.closeFilter = closeFilter;
-    fpUpdate();
-
-    // ─── SEARCH ───────────────────────────────────────────────────
-    const PRODUCT_INDEX = Array.from(document.querySelectorAll(".shoe-card")).map(card => ({
-      name:     card.dataset.name     || "",
-      colorway: card.dataset.colorway || "",
-      brand:    card.dataset.brand    || "",
-      price:    parseInt(card.dataset.price || "0"),
-      img:      card.dataset.img      || "",
-      el:       card
-    }));
-    const overlay      = document.getElementById("search-overlay");
-    const searchInput  = document.getElementById("search-input");
-    const clearBtn     = document.getElementById("search-clear-btn");
-    const resultsPanel = document.getElementById("search-results-panel");
-    function openSearch() { overlay.classList.add("open"); searchInput.focus(); }
-    function closeSearch() { overlay.classList.remove("open"); searchInput.value = ""; clearBtn.classList.remove("visible"); resultsPanel.innerHTML = ""; resultsPanel.classList.remove("has-results"); }
-    document.getElementById("search-open-btn").addEventListener("click", openSearch);
-    document.getElementById("search-open-btn-mobile")?.addEventListener("click", () => { document.getElementById("mobile-menu").classList.remove("open"); openSearch(); });
-    document.addEventListener("keydown", e => { if ((e.metaKey || e.ctrlKey) && e.key === "k") { e.preventDefault(); openSearch(); } });
-    overlay.addEventListener("click", e => { if (e.target === overlay) closeSearch(); });
-    document.addEventListener("keydown", e => { if (e.key === "Escape" && overlay.classList.contains("open")) closeSearch(); });
-    clearBtn.addEventListener("click", () => { searchInput.value = ""; clearBtn.classList.remove("visible"); resultsPanel.innerHTML = ""; resultsPanel.classList.remove("has-results"); searchInput.focus(); });
-    function highlight(text, query) { if (!query) return escH(text); return escH(text).replace(new RegExp(`(${escapeRegex(query)})`, "gi"), '<span class="search-highlight">$1</span>'); }
-    function escH(str) { return str.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
-    function escapeRegex(str) { return str.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"); }
-    function runSearch(query) {
-      clearBtn.classList.toggle("visible", query.length > 0);
-      if (!query.trim()) { resultsPanel.innerHTML = ""; resultsPanel.classList.remove("has-results"); return; }
-      const q = query.toLowerCase();
-      const hits = PRODUCT_INDEX.filter(p => p.name.toLowerCase().includes(q) || p.colorway.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q));
+    syncWishlistUI(); updateCartBadge();
+    const filterBtn=document.getElementById("filterBtn"),filterPanel=document.getElementById("filterPanel"),filterOverlay=document.getElementById("filterOverlay"),products=document.querySelectorAll(".shoe-card");
+    function openFilter(){const rect=filterBtn.getBoundingClientRect();filterPanel.style.top=(rect.bottom+8+window.scrollY)+"px";filterPanel.style.right=(window.innerWidth-rect.right-4)+"px";filterPanel.classList.add("open");filterOverlay.classList.remove("hidden");}
+    function closeFilter(){filterPanel.classList.remove("open");filterOverlay.classList.add("hidden");}
+    filterBtn.addEventListener("click",(e)=>{e.preventDefault();e.stopPropagation();filterPanel.classList.contains("open")?closeFilter():openFilter();});
+    function fpUpdate(){const MIN=1000,MAX=700000;let lo=parseInt(document.getElementById("fpMin").value),hi=parseInt(document.getElementById("fpMax").value);if(lo>=hi){lo=hi-1000;document.getElementById("fpMin").value=lo;}const lp=((lo-MIN)/(MAX-MIN))*100,rp=100-((hi-MIN)/(MAX-MIN))*100;document.getElementById("fpFill").style.left=lp+"%";document.getElementById("fpFill").style.right=rp+"%";document.getElementById("fpPriceDisplay").textContent="₹"+lo.toLocaleString("en-IN")+" – ₹"+hi.toLocaleString("en-IN");}
+    function fpApply(){const brand=document.getElementById("fpBrand").value,lo=parseInt(document.getElementById("fpMin").value),hi=parseInt(document.getElementById("fpMax").value);products.forEach(p=>{const price=parseInt(p.dataset.price||"0"),show=(brand==="all"||p.dataset.brand===brand)&&price>=lo&&price<=hi;p.style.display=show?"":"none";});closeFilter();showToast("Filters applied!",false);}
+    function fpReset(){document.getElementById("fpBrand").value="all";document.getElementById("fpMin").value=1000;document.getElementById("fpMax").value=700000;fpUpdate();products.forEach(p=>p.style.display="");closeFilter();}
+    window.fpUpdate=fpUpdate;window.fpApply=fpApply;window.fpReset=fpReset;window.closeFilter=closeFilter;fpUpdate();
+    const PRODUCT_INDEX=Array.from(document.querySelectorAll(".shoe-card")).map(card=>({name:card.dataset.name||"",colorway:card.dataset.colorway||"",brand:card.dataset.brand||"",price:parseInt(card.dataset.price||"0"),img:card.dataset.img||"",el:card}));
+    const overlay=document.getElementById("search-overlay"),searchInput=document.getElementById("search-input"),clearBtn=document.getElementById("search-clear-btn"),resultsPanel=document.getElementById("search-results-panel");
+    function openSearch(){overlay.classList.add("open");searchInput.focus();}
+    function closeSearch(){overlay.classList.remove("open");searchInput.value="";clearBtn.classList.remove("visible");resultsPanel.innerHTML="";resultsPanel.classList.remove("has-results");}
+    document.getElementById("search-open-btn").addEventListener("click",openSearch);
+    document.getElementById("search-open-btn-mobile")?.addEventListener("click",()=>{document.getElementById("mobile-menu").classList.remove("open");openSearch();});
+    document.addEventListener("keydown",e=>{if((e.metaKey||e.ctrlKey)&&e.key==="k"){e.preventDefault();openSearch();}});
+    overlay.addEventListener("click",e=>{if(e.target===overlay)closeSearch();});
+    document.addEventListener("keydown",e=>{if(e.key==="Escape"&&overlay.classList.contains("open"))closeSearch();});
+    clearBtn.addEventListener("click",()=>{searchInput.value="";clearBtn.classList.remove("visible");resultsPanel.innerHTML="";resultsPanel.classList.remove("has-results");searchInput.focus();});
+    function highlight(text,query){if(!query)return escH(text);return escH(text).replace(new RegExp(`(${escapeRegex(query)})`,"gi"),'<span class="search-highlight">$1</span>');}
+    function escH(str){return str.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+    function escapeRegex(str){return str.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");}
+    function runSearch(query){
+      clearBtn.classList.toggle("visible",query.length>0);
+      if(!query.trim()){resultsPanel.innerHTML="";resultsPanel.classList.remove("has-results");return;}
+      const q=query.toLowerCase(),hits=PRODUCT_INDEX.filter(p=>p.name.toLowerCase().includes(q)||p.colorway.toLowerCase().includes(q)||p.brand.toLowerCase().includes(q));
       resultsPanel.classList.add("has-results");
-      if (!hits.length) { resultsPanel.innerHTML = `<div class="search-no-results"><span class="emoji">👟</span>No sneakers found for "<strong>${escH(query)}</strong>"</div>`; return; }
-      resultsPanel.innerHTML = hits.map((p, i) => `
-        <div class="search-result-item" data-idx="${i}" role="option" tabindex="0" style="animation-delay:${i*40}ms">
-          <img class="sri-img" src="${escH(p.img)}" alt="${escH(p.name)}" onerror="this.style.background='#e5e5e5'" />
-          <div class="sri-info"><div class="sri-name">${highlight(p.name, query)}</div><div class="sri-sub">${highlight(p.colorway, query)} · ${highlight(p.brand, query)}</div></div>
-          <div class="sri-price">₹${p.price.toLocaleString("en-IN")}</div>
-        </div>`).join("");
-      resultsPanel.querySelectorAll(".search-result-item").forEach((item, i) => {
-        item.addEventListener("click", () => {
-          closeSearch();
-          setTimeout(() => { hits[i].el.scrollIntoView({ behavior:"smooth", block:"center" }); hits[i].el.style.boxShadow = "0 0 0 3px #ef4444"; setTimeout(() => { hits[i].el.style.boxShadow = ""; }, 1200); }, 200);
-        });
-      });
+      if(!hits.length){resultsPanel.innerHTML=`<div class="search-no-results"><span class="emoji">👟</span>No sneakers found for "<strong>${escH(query)}</strong>"</div>`;return;}
+      resultsPanel.innerHTML=hits.map((p,i)=>`<div class="search-result-item" data-idx="${i}" role="option" tabindex="0" style="animation-delay:${i*40}ms"><img class="sri-img" src="${escH(p.img)}" alt="${escH(p.name)}" onerror="this.style.background='#e5e5e5'" /><div class="sri-info"><div class="sri-name">${highlight(p.name,query)}</div><div class="sri-sub">${highlight(p.colorway,query)} · ${highlight(p.brand,query)}</div></div><div class="sri-price">₹${p.price.toLocaleString("en-IN")}</div></div>`).join("");
+      resultsPanel.querySelectorAll(".search-result-item").forEach((item,i)=>{item.addEventListener("click",()=>{closeSearch();setTimeout(()=>{hits[i].el.scrollIntoView({behavior:"smooth",block:"center"});hits[i].el.style.boxShadow="0 0 0 3px #ef4444";setTimeout(()=>{hits[i].el.style.boxShadow="";},1200);},200);});});
     }
     let debounceTimer;
-    searchInput.addEventListener("input", () => { clearTimeout(debounceTimer); debounceTimer = setTimeout(() => runSearch(searchInput.value), 160); });
-
-    // ─── AI CHAT ─────────────────────────────────────────────────
-    const SYSTEM_PROMPT = `You are a friendly, knowledgeable sneaker assistant for Heat Haven, a premium sneaker store based in India.
-STORE INFO: Heat Haven | Instagram: @heatheaven.23_ | Currency: ₹ | Sizes: UK 6–12
-PRODUCTS: Air Jordan 1 Retro High - Chicago Bulls - ₹5,559 | Nike Uptempo Slide Bulls - ₹3,559 | Yeezy 700 V3 Azael - ₹4,759 | Travis Scott x Fragment High - ₹5,559
-POLICIES: Free shipping above ₹5,000 | Returns: 7 days unworn | Payment: UPI/Card/COD | Delivery: 3–7 days
-PERSONALITY: Short 2-3 sentence replies, casual, enthusiastic, sneaker-culture savvy.`;
-    const QUICK_REPLIES = ["What's on sale? 🔥","Size guide","Shipping info","Best Jordans","Yeezy sizing","Returns"];
-    const chatWidget = document.getElementById("hh-chat-widget");
-    const chatToggle = document.getElementById("hh-chat-toggle");
-    const msgs = document.getElementById("hh-messages");
-    const input = document.getElementById("hh-input");
-    const sendBtn = document.getElementById("hh-send");
-    const chipsEl = document.getElementById("hh-chips");
-    const notifDot = document.getElementById("hh-notif-dot");
-    let chatHistory = [], isTyping = false, hasOpened = false;
-    chatToggle.addEventListener("click", () => { chatWidget.classList.toggle("open"); if (!hasOpened) { hasOpened = true; notifDot.style.display = "none"; showWelcome(); } });
-    function showWelcome() { setTimeout(() => { addBot("Hey! 👟 Welcome to **Heat Haven**. I'm your personal sneaker assistant."); setTimeout(() => { addBot("Ask me about products, sizing, shipping, or anything sneaker-related!"); showChips(); }, 800); }, 300); }
-    function showChips(chips = QUICK_REPLIES) { chipsEl.innerHTML = ""; chips.forEach(t => { const b = document.createElement("button"); b.className = "hh-chip"; b.textContent = t; b.onclick = () => { chipsEl.innerHTML = ""; sendMsg(t); }; chipsEl.appendChild(b); }); }
-    function addBot(text) { const d = document.createElement("div"); d.className = "hh-msg bot"; d.innerHTML = `<div class="hh-bot-avatar">HH</div><div class="hh-bubble">${text.replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>").replace(/\n/g,"<br>")}</div>`; msgs.appendChild(d); msgs.scrollTop = msgs.scrollHeight; }
-    function addUser(text) { const d = document.createElement("div"); d.className = "hh-msg user"; d.innerHTML = `<div class="hh-bubble">${text.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>`; msgs.appendChild(d); msgs.scrollTop = msgs.scrollHeight; }
-    function showTyping() { const d = document.createElement("div"); d.className = "hh-msg bot"; d.id = "hh-typing-indicator"; d.innerHTML = `<div class="hh-bot-avatar">HH</div><div class="hh-bubble" style="padding:10px 16px"><div class="hh-typing"><span></span><span></span><span></span></div></div>`; msgs.appendChild(d); msgs.scrollTop = msgs.scrollHeight; }
-    function hideTyping() { const e = document.getElementById("hh-typing-indicator"); if(e) e.remove(); }
-    async function sendMsg(text) {
-      text = text.trim(); if (!text || isTyping) return;
-      chipsEl.innerHTML = ""; addUser(text); input.value = "";
-      isTyping = true; sendBtn.style.opacity = "0.5";
-      chatHistory.push({ role:"user", content:text }); showTyping();
-      try {
-        const res  = await fetch("https://api.anthropic.com/v1/messages", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1000, system:SYSTEM_PROMPT, messages:chatHistory }) });
-        const data  = await res.json();
-        const reply = data.content?.[0]?.text || "Sorry, couldn't get a response. Try again!";
-        chatHistory.push({ role:"assistant", content:reply });
-        hideTyping(); addBot(reply);
-        showChips(["Tell me more","What's on sale?","Shipping","Contact support"]);
-      } catch(err) { hideTyping(); addBot("Connectivity issue! DM us on Instagram **@heatheaven.23_** 🙏"); }
-      isTyping = false; sendBtn.style.opacity = "1";
+    searchInput.addEventListener("input",()=>{clearTimeout(debounceTimer);debounceTimer=setTimeout(()=>runSearch(searchInput.value),160);});
+    const SYSTEM_PROMPT=`You are a friendly, knowledgeable sneaker assistant for Heat Haven, a premium sneaker store based in India.\nSTORE INFO: Heat Haven | Instagram: @heatheaven.23_ | Currency: ₹ | Sizes: UK 6–12\nPRODUCTS: Air Jordan 1 Retro High - Chicago Bulls - ₹5,559 | Nike Uptempo Slide Bulls - ₹3,559 | Yeezy 700 V3 Azael - ₹4,759 | Travis Scott x Fragment High - ₹5,559\nPOLICIES: Free shipping above ₹5,000 | Returns: 7 days unworn | Payment: UPI/Card/COD | Delivery: 3–7 days\nPERSONALITY: Short 2-3 sentence replies, casual, enthusiastic, sneaker-culture savvy.`;
+    const QUICK_REPLIES=["What's on sale? 🔥","Size guide","Shipping info","Best Jordans","Yeezy sizing","Returns"];
+    const chatWidget=document.getElementById("hh-chat-widget"),chatToggle=document.getElementById("hh-chat-toggle"),msgs=document.getElementById("hh-messages"),input=document.getElementById("hh-input"),sendBtn=document.getElementById("hh-send"),chipsEl=document.getElementById("hh-chips"),notifDot=document.getElementById("hh-notif-dot");
+    let chatHistory=[],isTyping=false,hasOpened=false;
+    chatToggle.addEventListener("click",()=>{chatWidget.classList.toggle("open");if(!hasOpened){hasOpened=true;notifDot.style.display="none";showWelcome();}});
+    function showWelcome(){setTimeout(()=>{addBot("Hey! 👟 Welcome to **Heat Haven**. I'm your personal sneaker assistant.");setTimeout(()=>{addBot("Ask me about products, sizing, shipping, or anything sneaker-related!");showChips();},800);},300);}
+    function showChips(chips=QUICK_REPLIES){chipsEl.innerHTML="";chips.forEach(t=>{const b=document.createElement("button");b.className="hh-chip";b.textContent=t;b.onclick=()=>{chipsEl.innerHTML="";sendMsg(t);};chipsEl.appendChild(b);});}
+    function addBot(text){const d=document.createElement("div");d.className="hh-msg bot";d.innerHTML=`<div class="hh-bot-avatar">HH</div><div class="hh-bubble">${text.replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>").replace(/\n/g,"<br>")}</div>`;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;}
+    function addUser(text){const d=document.createElement("div");d.className="hh-msg user";d.innerHTML=`<div class="hh-bubble">${text.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>`;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;}
+    function showTyping(){const d=document.createElement("div");d.className="hh-msg bot";d.id="hh-typing-indicator";d.innerHTML=`<div class="hh-bot-avatar">HH</div><div class="hh-bubble" style="padding:10px 16px"><div class="hh-typing"><span></span><span></span><span></span></div></div>`;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;}
+    function hideTyping(){const e=document.getElementById("hh-typing-indicator");if(e)e.remove();}
+    async function sendMsg(text){
+      text=text.trim();if(!text||isTyping)return;
+      chipsEl.innerHTML="";addUser(text);input.value="";isTyping=true;sendBtn.style.opacity="0.5";
+      chatHistory.push({role:"user",content:text});showTyping();
+      try{const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:SYSTEM_PROMPT,messages:chatHistory})});const data=await res.json();const reply=data.content?.[0]?.text||"Sorry, couldn't get a response. Try again!";chatHistory.push({role:"assistant",content:reply});hideTyping();addBot(reply);showChips(["Tell me more","What's on sale?","Shipping","Contact support"]);}
+      catch(err){hideTyping();addBot("Connectivity issue! DM us on Instagram **@heatheaven.23_** 🙏");}
+      isTyping=false;sendBtn.style.opacity="1";
     }
-    sendBtn.addEventListener("click", () => sendMsg(input.value));
-    input.addEventListener("keydown", e => { if (e.key === "Enter") sendMsg(input.value); });
-    setTimeout(() => { if (!hasOpened) notifDot.style.display = "block"; }, 3000);
+    sendBtn.addEventListener("click",()=>sendMsg(input.value));
+    input.addEventListener("keydown",e=>{if(e.key==="Enter")sendMsg(input.value);});
+    setTimeout(()=>{if(!hasOpened)notifDot.style.display="block";},3000);
+  </script>
+  <!-- Cursor glow -->
+  <div id="cursor-glow"></div>
+
+  <script>
+    // ── CURSOR GLOW ───────────────────────────────────────────────
+    const glow = document.getElementById('cursor-glow');
+    document.addEventListener('mousemove', e => {
+      glow.style.left = e.clientX + 'px';
+      glow.style.top  = e.clientY + 'px';
+    });
+
+    // ── SCROLL REVEAL ─────────────────────────────────────────────
+    const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .section-heading');
+    const cards     = document.querySelectorAll('.shoe-card');
+
+    // Stagger product cards
+    cards.forEach((card, i) => {
+      card.style.transitionDelay = (i * 0.08) + 's';
+    });
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    revealEls.forEach(el => io.observe(el));
+    cards.forEach(el => io.observe(el));
+
+    // ── NAV LINK ACTIVE STATE ─────────────────────────────────────
+    const currentPage = location.pathname.split('/').pop() || 'index.html';
+    document.querySelectorAll('.nav-link').forEach(link => {
+      if (link.getAttribute('href') === currentPage) {
+        link.classList.add('font-semibold');
+        link.style.color = '#ff4500';
+      }
+    });
+
+    // ── PARTNER CARD 3D TILT (mouse follow) ───────────────────────
+    document.querySelectorAll('.deal-card').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const r  = card.getBoundingClientRect();
+        const x  = (e.clientX - r.left) / r.width  - 0.5;
+        const y  = (e.clientY - r.top)  / r.height - 0.5;
+        card.style.transform = `perspective(800px) rotateX(${-y*10}deg) rotateY(${x*10}deg) translateY(-6px) scale(1.03)`;
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = '';
+      });
+    });
   </script>
 </body>
 </html>
