@@ -28,7 +28,6 @@
     h1,h2,h3,h4,.brand { font-family:"Archivo Black",sans-serif; letter-spacing:-0.5px; }
 
     .shoe-card { transition:transform 0.25s ease, box-shadow 0.25s ease; }
-    .shoe-card:hover { transform:translateY(-5px); box-shadow:0 12px 28px rgba(0,0,0,0.45); }
 
     .mobile-menu { transform:translateX(100%); transition:transform 0.3s ease-in-out; }
     .mobile-menu.open { transform:translateX(0); }
@@ -53,7 +52,6 @@
     .cart-bump { animation:cart-bump 0.4s ease-out; }
     @keyframes cart-bump { 0%{transform:scale(1)} 30%{transform:translateY(-4px) scale(1.15)} 60%{transform:translateY(0) scale(0.95)} 100%{transform:scale(1)} }
 
-    /* Toggle icons */
     #theme-toggle .sun-icon,
     #theme-toggle .moon-icon { position:absolute; width:1.4rem; height:1.4rem; transition:transform 0.4s ease,opacity 0.4s ease; }
     #theme-toggle .sun-icon  { opacity:1; transform:rotate(0deg) scale(1); }
@@ -61,7 +59,6 @@
     .dark #theme-toggle .sun-icon  { opacity:0; transform:rotate(-90deg) scale(0.4); }
     .dark #theme-toggle .moon-icon { opacity:1; transform:rotate(0deg) scale(1); }
 
-    /* Filter pills */
     .filter-btn.active { background:#000; color:#fff; }
     .dark .filter-btn.active { background:#ffffff; color:#000; }
 
@@ -97,7 +94,6 @@
     .range-wrap input[type=range]::-webkit-slider-thumb:hover { transform:scale(1.2); }
     .range-wrap input[type=range]::-moz-range-thumb { width:18px; height:18px; background:#ef4444; border-radius:50%; cursor:pointer; pointer-events:all; border:2px solid #fff; box-shadow:0 1px 5px rgba(0,0,0,0.25); }
 
-    /* Size shake */
     @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-4px)} 40%{transform:translateX(4px)} 60%{transform:translateX(-4px)} 80%{transform:translateX(4px)} }
     .select-shake { animation:shake 0.4s ease; }
 
@@ -204,10 +200,135 @@
     .dark .hh-chip:hover { background:#fff; color:#000; border-color:#fff; }
     .dark .hh-powered { background:#0a0a0a; color:#333; }
     @media (max-width:420px) { #hh-chat-panel { width:calc(100vw - 48px); } }
+
+    /* ══ PREMIUM ANIMATIONS (matching index.html) ══════════════════════ */
+
+    /* Cursor glow */
+    #cursor-glow {
+      position:fixed; width:320px; height:320px; border-radius:50%;
+      background:radial-gradient(circle, rgba(255,69,0,0.07) 0%, transparent 70%);
+      pointer-events:none; z-index:0; transform:translate(-50%,-50%);
+      transition:opacity 0.4s ease; opacity:0;
+    }
+    body:hover #cursor-glow { opacity:1; }
+
+    /* Nav drop-in */
+    @keyframes nav-drop {
+      from { transform:translateY(-100%); opacity:0; }
+      to   { transform:translateY(0);     opacity:1; }
+    }
+    nav { animation:nav-drop 0.6s cubic-bezier(0.16,1,0.3,1) both; }
+
+    /* Brand shimmer */
+    @keyframes brand-shimmer {
+      0%   { background-position: -200% center; }
+      100% { background-position:  200% center; }
+    }
+    .brand a {
+      background: linear-gradient(90deg, currentColor 40%, #ff4500 50%, currentColor 60%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: brand-shimmer 3.5s ease 0.5s 1 forwards;
+    }
+
+    /* Nav link underline */
+    .nav-link { position:relative; }
+    .nav-link::after {
+      content:''; position:absolute; bottom:-2px; left:0;
+      width:0; height:2px; background:#ff4500; border-radius:2px;
+      transition:width 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+    .nav-link:hover::after { width:100%; }
+
+    /* Section heading underline reveal */
+    .section-heading { position:relative; display:inline-block; }
+    .section-heading::after {
+      content:''; position:absolute; bottom:-6px; left:0;
+      width:0; height:3px; background:#ff4500; border-radius:2px;
+      transition:width 0.5s cubic-bezier(0.4,0,0.2,1) 0.1s;
+    }
+    .section-heading.visible::after { width:100%; }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity:0; transform:translateY(32px);
+      transition:opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+
+    /* Product cards — staggered entrance + hover lift */
+    .shoe-card {
+      opacity:0; transform:translateY(28px) scale(0.97);
+      transition:opacity 0.55s cubic-bezier(0.16,1,0.3,1),
+                 transform 0.55s cubic-bezier(0.16,1,0.3,1),
+                 box-shadow 0.25s ease;
+    }
+    .shoe-card.visible { opacity:1; transform:translateY(0) scale(1); }
+    .shoe-card:hover { transform:translateY(-6px) scale(1.01) !important; box-shadow:0 20px 40px rgba(0,0,0,0.14); }
+    .dark .shoe-card:hover { box-shadow:0 0 0 1px rgba(255,69,0,0.18), 0 20px 40px rgba(0,0,0,0.6); }
+
+    /* Card shine sweep */
+    .shoe-card .relative { overflow:hidden; }
+    .shoe-card .relative::after {
+      content:''; position:absolute; inset:0;
+      background:linear-gradient(115deg, transparent 40%, rgba(255,255,255,0.18) 50%, transparent 60%);
+      transform:translateX(-100%); transition:transform 0.5s ease;
+      pointer-events:none; z-index:5;
+    }
+    .shoe-card:hover .relative::after { transform:translateX(100%); }
+
+    /* Filter pill hover glow */
+    .filter-btn {
+      transition:all 0.22s cubic-bezier(0.4,0,0.2,1);
+    }
+    .filter-btn:hover:not(.active) {
+      border-color:#ff4500 !important;
+      color:#ff4500 !important;
+      transform:translateY(-1px);
+      box-shadow:0 4px 14px rgba(255,69,0,0.15);
+    }
+    .filter-btn.active {
+      box-shadow:0 4px 18px rgba(0,0,0,0.18);
+    }
+
+    /* Page fade in */
+    @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+    #brand-filter, #products { animation:fadeIn 0.6s ease 0.1s both; }
+
+    /* Footer runner line */
+    footer { position:relative; overflow:hidden; }
+    footer::before {
+      content:''; position:absolute; top:0; left:-100%;
+      width:60%; height:1px;
+      background:linear-gradient(90deg, transparent, #ff4500, transparent);
+      animation:footer-line 3s ease 1.5s infinite;
+    }
+    @keyframes footer-line { 0%{left:-60%} 100%{left:140%} }
+
+    /* Add-to-cart ripple */
+    .add-to-cart-btn { position:relative; overflow:hidden; }
+    .add-to-cart-btn::after {
+      content:''; position:absolute; inset:0;
+      background:rgba(255,255,255,0.25); border-radius:inherit;
+      transform:scale(0); opacity:0;
+      transition:transform 0.35s ease, opacity 0.35s ease;
+    }
+    .add-to-cart-btn:active::after { transform:scale(2); opacity:0; transition:0s; }
+
+    /* Wishlist button pop */
+    .wishlist-btn {
+      transition:transform 0.2s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .wishlist-btn:hover { transform:scale(1.15); }
   </style>
 </head>
 
 <body class="bg-white text-black dark:bg-amoled dark:text-white transition-colors duration-300">
+
+  <!-- Cursor glow -->
+  <div id="cursor-glow"></div>
 
   <!-- SEARCH OVERLAY -->
   <div id="search-overlay" role="dialog" aria-label="Search products">
@@ -250,16 +371,14 @@
             <a href="index.html" class="text-black dark:text-white">HEAT HAVEN</a>
           </div>
           <div class="hidden md:flex items-center ml-10 space-x-8">
-            <a href="index.html"   class="text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Home</a>
-            <a href="product.html" class="text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Products</a>
-            <a href="deals.html"   class="text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Hot Deals</a>
-            <a href="owners.html"  class="text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Owners</a>
+            <a href="index.html"   class="nav-link text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Home</a>
+            <a href="product.html" class="nav-link text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Products</a>
+            <a href="deals.html"   class="nav-link text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Hot Deals</a>
+            <a href="owners.html"  class="nav-link text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Owners</a>
           </div>
         </div>
-        
         <div class="flex items-center">
           <div class="hidden md:flex items-center space-x-2">
-            <!-- Wishlist heart → links to wishlist.html -->
             <a href="wishlist.html" id="nav-wishlist-btn" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark transition-colors relative" aria-label="Wishlist">
               <i class="fas fa-heart text-red-600 dark:text-red-600"></i>
             </a>
@@ -374,7 +493,7 @@
   <!-- Brand Filter Pills -->
   <section id="brand-filter" class="py-8 bg-gray-50 dark:bg-black border-b dark:border-zinc-900">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="text-2xl font-bold mb-5 dark:text-white">Shop by Brand</h2>
+      <h2 class="text-2xl font-bold mb-5 dark:text-white section-heading reveal">Shop by Brand</h2>
       <div class="flex space-x-3 overflow-x-auto pb-2">
         <button class="filter-btn px-5 py-2 border border-black dark:border-zinc-800 dark:text-zinc-400 rounded-full whitespace-nowrap active transition-all text-sm" data-brand="all">All Brands</button>
         <button class="filter-btn px-5 py-2 border border-black dark:border-zinc-800 dark:text-zinc-400 rounded-full whitespace-nowrap transition-all text-sm" data-brand="nike">Nike</button>
@@ -399,10 +518,8 @@
   <!-- Products Section -->
   <section id="products" class="py-12 bg-white dark:bg-amoled">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="text-3xl font-bold mb-8 dark:text-white">Featured Sneakers</h2>
+      <h2 class="text-3xl font-bold mb-8 dark:text-white section-heading reveal">Featured Sneakers</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-
-        <!-- ✅ data-img = hover image for all cards -->
 
         <div class="shoe-card bg-white dark:bg-amoled rounded-xl overflow-hidden shadow-sm dark:shadow-none group relative"
              data-brand="jordan" data-price="5559" data-name="Air Jordan 1 Retro High" data-colorway="Chicago Bulls"
@@ -801,369 +918,192 @@
       const icon = toastEl.querySelector("i");
       const span = toastEl.querySelector("span");
       if (msg) span.textContent = msg;
-      if (icon) icon.className = isError
-        ? "fas fa-exclamation-circle text-yellow-400"
-        : "fas fa-check-circle text-green-400";
+      if (icon) icon.className = isError ? "fas fa-exclamation-circle text-yellow-400" : "fas fa-check-circle text-green-400";
       toastEl.classList.add("show");
       if (toastTimeout) clearTimeout(toastTimeout);
       toastTimeout = setTimeout(() => toastEl.classList.remove("show"), 2200);
     }
 
-    // ══ CART (localStorage) ═══════════════════════════════════
-    function getCart() {
-      try { return JSON.parse(localStorage.getItem("hh_cart") || "[]"); }
-      catch(e) { return []; }
-    }
+    // ══ CART ══════════════════════════════════════════════════
+    function getCart() { try { return JSON.parse(localStorage.getItem("hh_cart") || "[]"); } catch(e) { return []; } }
     function saveCart(cart) { localStorage.setItem("hh_cart", JSON.stringify(cart)); }
-
     function updateCartBadge() {
       const total = getCart().reduce((s, i) => s + i.qty, 0);
       document.querySelectorAll("#cart-count, #cart-count-mobile").forEach(el => el.textContent = total);
     }
-
     document.querySelectorAll(".add-to-cart-btn").forEach(btn => {
       btn.addEventListener("click", (e) => {
         e.preventDefault();
         const card = btn.closest(".shoe-card");
         const sizeSelect = card ? card.querySelector("select") : null;
         const size = sizeSelect ? sizeSelect.value : "";
-
         if (!size) {
           if (sizeSelect) {
             sizeSelect.classList.add("select-shake");
             sizeSelect.style.borderColor = "#ef4444";
             sizeSelect.style.boxShadow = "0 0 0 2px rgba(239,68,68,0.25)";
-            setTimeout(() => {
-              sizeSelect.classList.remove("select-shake");
-              sizeSelect.style.borderColor = "";
-              sizeSelect.style.boxShadow = "";
-            }, 600);
+            setTimeout(() => { sizeSelect.classList.remove("select-shake"); sizeSelect.style.borderColor = ""; sizeSelect.style.boxShadow = ""; }, 600);
           }
-          showToast("Pick a size first! 👟", true);
-          return;
+          showToast("Pick a size first! 👟", true); return;
         }
-
-        const item = {
-          id:       (card.dataset.name || "item") + "-" + size,
-          name:     card.dataset.name     || "Sneaker",
-          colorway: card.dataset.colorway || "",
-          brand:    card.dataset.brand    || "",
-          price:    parseFloat(card.dataset.price) || 0,
-          img:      card.dataset.img      || "",
-          size:     size,
-          qty:      1
-        };
-
+        const item = { id:(card.dataset.name||"item")+"-"+size, name:card.dataset.name||"Sneaker", colorway:card.dataset.colorway||"", brand:card.dataset.brand||"", price:parseFloat(card.dataset.price)||0, img:card.dataset.img||"", size, qty:1 };
         const cart = getCart();
         const existing = cart.find(i => i.id === item.id);
         if (existing) { existing.qty++; } else { cart.push(item); }
-        saveCart(cart);
-        updateCartBadge();
-
-        const cartCountEl = document.getElementById("cart-count");
-        if (cartCountEl) {
-          cartCountEl.classList.remove("cart-bump");
-          void cartCountEl.offsetWidth;
-          cartCountEl.classList.add("cart-bump");
-        }
-
-        const originalText = btn.textContent;
-        btn.textContent = "✓ Added!";
-        btn.disabled = true;
-        btn.style.opacity = "0.8";
-        setTimeout(() => {
-          btn.textContent = originalText;
-          btn.disabled = false;
-          btn.style.opacity = "";
-        }, 1500);
-
+        saveCart(cart); updateCartBadge();
+        const badge = document.getElementById("cart-count");
+        if (badge) { badge.classList.remove("cart-bump"); void badge.offsetWidth; badge.classList.add("cart-bump"); }
+        const orig = btn.textContent; btn.textContent = "✓ Added!"; btn.disabled = true; btn.style.opacity = "0.8";
+        setTimeout(() => { btn.textContent = orig; btn.disabled = false; btn.style.opacity = ""; }, 1500);
         showToast("Added to cart!", false);
       });
     });
-
     updateCartBadge();
 
-    // ══ WISHLIST (localStorage — hh_wishlist) ═════════════════
-    function getWishlist() {
-      try { return JSON.parse(localStorage.getItem("hh_wishlist") || "[]"); }
-      catch(e) { return []; }
-    }
+    // ══ WISHLIST ══════════════════════════════════════════════
+    function getWishlist() { try { return JSON.parse(localStorage.getItem("hh_wishlist") || "[]"); } catch(e) { return []; } }
     function saveWishlist(w) { localStorage.setItem("hh_wishlist", JSON.stringify(w)); }
-
     function syncWishlistUI() {
       const w = getWishlist();
       document.querySelectorAll(".wishlist-btn").forEach(btn => {
-        const card = btn.closest(".shoe-card");
-        if (!card) return;
+        const card = btn.closest(".shoe-card"); if (!card) return;
         const id = (card.dataset.name || "") + "-wish";
         const inList = w.some(i => i.id === id);
         const icon = btn.querySelector("i");
-        if (inList) {
-          if (icon.classList.contains("far")) icon.classList.replace("far", "fas");
-          icon.classList.add("text-red-500");
-          icon.classList.remove("text-gray-700");
-        } else {
-          if (icon.classList.contains("fas")) icon.classList.replace("fas", "far");
-          icon.classList.remove("text-red-500");
-          icon.classList.add("text-gray-700");
-        }
+        if (inList) { if (icon.classList.contains("far")) icon.classList.replace("far","fas"); icon.classList.add("text-red-500"); icon.classList.remove("text-gray-700"); }
+        else { if (icon.classList.contains("fas")) icon.classList.replace("fas","far"); icon.classList.remove("text-red-500"); icon.classList.add("text-gray-700"); }
       });
     }
-
     document.querySelectorAll(".wishlist-btn").forEach(btn => {
       btn.addEventListener("click", () => {
-        const card = btn.closest(".shoe-card");
-        if (!card) return;
-
-        const id       = (card.dataset.name || "") + "-wish";
-        const name     = card.dataset.name     || "Sneaker";
-        const colorway = card.dataset.colorway || "";
-        const brand    = card.dataset.brand    || "";
-        const price    = parseFloat(card.dataset.price) || 0;
-        const img      = card.dataset.img      || "";
-
-        let w = getWishlist();
-        const exists = w.some(i => i.id === id);
-
-        if (exists) {
-          w = w.filter(i => i.id !== id);
-          saveWishlist(w);
-          syncWishlistUI();
-          showToast("Removed from wishlist", false);
-        } else {
-          w.push({ id, name, colorway, brand, price, img });
-          saveWishlist(w);
-          syncWishlistUI();
-          showToast("❤️ Saved to wishlist!", false);
-        }
-
-        // Heart spring animation
+        const card = btn.closest(".shoe-card"); if (!card) return;
+        const id = (card.dataset.name||"")+"-wish", name=card.dataset.name||"Sneaker", colorway=card.dataset.colorway||"", brand=card.dataset.brand||"", price=parseFloat(card.dataset.price)||0, img=card.dataset.img||"";
+        let w = getWishlist(); const exists = w.some(i => i.id === id);
+        if (exists) { w = w.filter(i => i.id !== id); saveWishlist(w); syncWishlistUI(); showToast("Removed from wishlist", false); }
+        else { w.push({id,name,colorway,brand,price,img}); saveWishlist(w); syncWishlistUI(); showToast("❤️ Saved to wishlist!", false); }
         const icon = btn.querySelector("i");
-        icon.classList.remove("heart-spring");
-        void icon.offsetWidth;
-        icon.classList.add("heart-spring");
+        icon.classList.remove("heart-spring"); void icon.offsetWidth; icon.classList.add("heart-spring");
       });
     });
-
-    // Restore red hearts on page load for already-wishlisted items
     syncWishlistUI();
 
     // ══ FILTER DROPDOWN ════════════════════════════════════════
     const filterDropdown = document.getElementById("filterDropdown");
-    const brandFilter    = document.getElementById("brandFilter");
-    const rangeMin       = document.getElementById("rangeMin");
-    const rangeMax       = document.getElementById("rangeMax");
-    const rangeFill      = document.getElementById("rangeFill");
-    const priceMinEl     = document.getElementById("priceMin");
-    const priceMaxEl     = document.getElementById("priceMax");
+    const brandFilter = document.getElementById("brandFilter");
+    const rangeMin = document.getElementById("rangeMin");
+    const rangeMax = document.getElementById("rangeMax");
+    const rangeFill = document.getElementById("rangeFill");
+    const priceMinEl = document.getElementById("priceMin");
+    const priceMaxEl = document.getElementById("priceMax");
     const PRICE_MIN = 1000, PRICE_MAX = 700000;
-
     function updateSlider() {
       let lo = parseInt(rangeMin.value), hi = parseInt(rangeMax.value);
       if (lo > hi - 500) { lo = hi - 500; rangeMin.value = lo; }
-      const pctLo = ((lo - PRICE_MIN) / (PRICE_MAX - PRICE_MIN)) * 100;
-      const pctHi = ((hi - PRICE_MIN) / (PRICE_MAX - PRICE_MIN)) * 100;
-      rangeFill.style.left  = pctLo + "%";
-      rangeFill.style.width = (pctHi - pctLo) + "%";
-      priceMinEl.textContent = lo.toLocaleString("en-IN");
-      priceMaxEl.textContent = hi.toLocaleString("en-IN");
+      const pctLo = ((lo-PRICE_MIN)/(PRICE_MAX-PRICE_MIN))*100, pctHi = ((hi-PRICE_MIN)/(PRICE_MAX-PRICE_MIN))*100;
+      rangeFill.style.left = pctLo+"%"; rangeFill.style.width = (pctHi-pctLo)+"%";
+      priceMinEl.textContent = lo.toLocaleString("en-IN"); priceMaxEl.textContent = hi.toLocaleString("en-IN");
     }
-    rangeMin.addEventListener("input", updateSlider);
-    rangeMax.addEventListener("input", updateSlider);
-    updateSlider();
-
+    rangeMin.addEventListener("input", updateSlider); rangeMax.addEventListener("input", updateSlider); updateSlider();
     document.getElementById("filterBtn").addEventListener("click", e => { e.preventDefault(); filterDropdown.classList.toggle("hidden"); });
     document.getElementById("applyFilter").addEventListener("click", () => {
-      const brand = brandFilter.value;
-      const lo = parseInt(rangeMin.value), hi = parseInt(rangeMax.value);
-      shoeCards.forEach(p => {
-        const price = parseFloat(p.dataset.price || "0");
-        const brandOk = brand === "all" || p.dataset.brand === brand;
-        const priceOk = price >= lo && price <= hi;
-        p.style.display = brandOk && priceOk ? "block" : "none";
-      });
+      const brand = brandFilter.value, lo = parseInt(rangeMin.value), hi = parseInt(rangeMax.value);
+      shoeCards.forEach(p => { const price = parseFloat(p.dataset.price||"0"), brandOk = brand==="all"||p.dataset.brand===brand, priceOk = price>=lo&&price<=hi; p.style.display = brandOk&&priceOk?"block":"none"; });
       filterDropdown.classList.add("hidden");
     });
     document.getElementById("resetFilter").addEventListener("click", () => {
-      brandFilter.value = "all"; rangeMin.value = PRICE_MIN; rangeMax.value = PRICE_MAX;
-      updateSlider(); shoeCards.forEach(p => p.style.display = "block"); filterDropdown.classList.add("hidden");
+      brandFilter.value="all"; rangeMin.value=PRICE_MIN; rangeMax.value=PRICE_MAX;
+      updateSlider(); shoeCards.forEach(p => p.style.display="block"); filterDropdown.classList.add("hidden");
     });
-    document.addEventListener("click", e => {
-      if (!filterDropdown.contains(e.target) && !e.target.closest("#filterBtn")) filterDropdown.classList.add("hidden");
-    });
+    document.addEventListener("click", e => { if (!filterDropdown.contains(e.target) && !e.target.closest("#filterBtn")) filterDropdown.classList.add("hidden"); });
 
     // ══ SEARCH ════════════════════════════════════════════════
     const PRODUCT_INDEX = Array.from(document.querySelectorAll(".shoe-card")).map(card => ({
-      name:     card.dataset.name     || "",
-      colorway: card.dataset.colorway || "",
-      brand:    card.dataset.brand    || "",
-      price:    parseInt(card.dataset.price || "0"),
-      img:      card.dataset.img      || "",
-      el:       card
+      name:card.dataset.name||"", colorway:card.dataset.colorway||"", brand:card.dataset.brand||"",
+      price:parseInt(card.dataset.price||"0"), img:card.dataset.img||"", el:card
     }));
-
-    const overlay      = document.getElementById("search-overlay");
-    const searchInput  = document.getElementById("search-input");
-    const clearBtn     = document.getElementById("search-clear-btn");
+    const overlay = document.getElementById("search-overlay");
+    const searchInput = document.getElementById("search-input");
+    const clearBtn = document.getElementById("search-clear-btn");
     const resultsPanel = document.getElementById("search-results-panel");
-
     function openSearch() { overlay.classList.add("open"); searchInput.focus(); }
-    function closeSearch() {
-      overlay.classList.remove("open");
-      searchInput.value = ""; clearBtn.classList.remove("visible");
-      resultsPanel.innerHTML = ""; resultsPanel.classList.remove("has-results");
-    }
-
+    function closeSearch() { overlay.classList.remove("open"); searchInput.value=""; clearBtn.classList.remove("visible"); resultsPanel.innerHTML=""; resultsPanel.classList.remove("has-results"); }
     document.getElementById("search-open-btn").addEventListener("click", openSearch);
-    document.addEventListener("keydown", e => {
-      if ((e.metaKey || e.ctrlKey) && e.key === "k") { e.preventDefault(); openSearch(); }
-    });
-    document.getElementById("search-open-btn-mobile")?.addEventListener("click", () => {
-      document.getElementById("mobile-menu").classList.remove("open"); openSearch();
-    });
-    overlay.addEventListener("click", e => { if (e.target === overlay) closeSearch(); });
-    document.addEventListener("keydown", e => { if (e.key === "Escape" && overlay.classList.contains("open")) closeSearch(); });
-    clearBtn.addEventListener("click", () => {
-      searchInput.value = ""; clearBtn.classList.remove("visible");
-      resultsPanel.innerHTML = ""; resultsPanel.classList.remove("has-results"); searchInput.focus();
-    });
-
+    document.addEventListener("keydown", e => { if ((e.metaKey||e.ctrlKey)&&e.key==="k") { e.preventDefault(); openSearch(); } });
+    document.getElementById("search-open-btn-mobile")?.addEventListener("click", () => { document.getElementById("mobile-menu").classList.remove("open"); openSearch(); });
+    overlay.addEventListener("click", e => { if (e.target===overlay) closeSearch(); });
+    document.addEventListener("keydown", e => { if (e.key==="Escape"&&overlay.classList.contains("open")) closeSearch(); });
+    clearBtn.addEventListener("click", () => { searchInput.value=""; clearBtn.classList.remove("visible"); resultsPanel.innerHTML=""; resultsPanel.classList.remove("has-results"); searchInput.focus(); });
     function escapeHtml(str) { return str.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
     function escapeRegex(str) { return str.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"); }
-    function highlight(text, query) {
-      if (!query) return escapeHtml(text);
-      return escapeHtml(text).replace(new RegExp(`(${escapeRegex(query)})`,"gi"),'<span class="search-highlight">$1</span>');
-    }
-
+    function highlight(text, query) { if (!query) return escapeHtml(text); return escapeHtml(text).replace(new RegExp(`(${escapeRegex(query)})`,"gi"),'<span class="search-highlight">$1</span>'); }
     function runSearch(query) {
-      clearBtn.classList.toggle("visible", query.length > 0);
-      if (!query.trim()) { resultsPanel.innerHTML = ""; resultsPanel.classList.remove("has-results"); return; }
-      const q = query.toLowerCase();
-      const hits = PRODUCT_INDEX.filter(p =>
-        p.name.toLowerCase().includes(q) || p.colorway.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q)
-      );
+      clearBtn.classList.toggle("visible", query.length>0);
+      if (!query.trim()) { resultsPanel.innerHTML=""; resultsPanel.classList.remove("has-results"); return; }
+      const q=query.toLowerCase(), hits=PRODUCT_INDEX.filter(p=>p.name.toLowerCase().includes(q)||p.colorway.toLowerCase().includes(q)||p.brand.toLowerCase().includes(q));
       resultsPanel.classList.add("has-results");
-      if (hits.length === 0) {
-        resultsPanel.innerHTML = `<div class="search-no-results"><span class="emoji">👟</span>No sneakers found for "<strong>${escapeHtml(query)}</strong>"<br><span style="font-size:11px;margin-top:6px;display:block;">Try "Jordan", "Yeezy", "Nike", or "Crocs"</span></div>`;
-        return;
-      }
-      resultsPanel.innerHTML = hits.map((p, i) => `
-        <div class="search-result-item" data-idx="${i}" role="option" tabindex="0" style="animation-delay:${i*40}ms">
-          <img class="sri-img" src="${escapeHtml(p.img)}" alt="${escapeHtml(p.name)}" onerror="this.style.background='#e5e5e5';this.src=''" />
-          <div class="sri-info">
-            <div class="sri-name">${highlight(p.name, query)}</div>
-            <div class="sri-sub">${highlight(p.colorway, query)} · ${highlight(p.brand, query)}</div>
-          </div>
-          <div class="sri-price">₹${p.price.toLocaleString("en-IN")}</div>
-        </div>`).join("");
-
-      resultsPanel.querySelectorAll(".search-result-item").forEach((item, i) => {
-        function activate() {
-          closeSearch();
-          setTimeout(() => {
-            hits[i].el.scrollIntoView({ behavior:"smooth", block:"center" });
-            hits[i].el.style.transition = "box-shadow 0.3s";
-            hits[i].el.style.boxShadow = "0 0 0 3px #ef4444";
-            setTimeout(() => { hits[i].el.style.boxShadow = ""; }, 1200);
-          }, 200);
-        }
-        item.addEventListener("click", activate);
-        item.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") activate(); });
+      if (!hits.length) { resultsPanel.innerHTML=`<div class="search-no-results"><span class="emoji">👟</span>No sneakers found for "<strong>${escapeHtml(query)}</strong>"</div>`; return; }
+      resultsPanel.innerHTML = hits.map((p,i)=>`<div class="search-result-item" data-idx="${i}" role="option" tabindex="0" style="animation-delay:${i*40}ms"><img class="sri-img" src="${escapeHtml(p.img)}" alt="${escapeHtml(p.name)}" onerror="this.style.background='#e5e5e5';this.src=''" /><div class="sri-info"><div class="sri-name">${highlight(p.name,query)}</div><div class="sri-sub">${highlight(p.colorway,query)} · ${highlight(p.brand,query)}</div></div><div class="sri-price">₹${p.price.toLocaleString("en-IN")}</div></div>`).join("");
+      resultsPanel.querySelectorAll(".search-result-item").forEach((item,i) => {
+        item.addEventListener("click", () => { closeSearch(); setTimeout(()=>{ hits[i].el.scrollIntoView({behavior:"smooth",block:"center"}); hits[i].el.style.boxShadow="0 0 0 3px #ef4444"; setTimeout(()=>{hits[i].el.style.boxShadow="";},1200); },200); });
       });
     }
-
     let debounceTimer;
-    searchInput.addEventListener("input", () => {
-      clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(() => runSearch(searchInput.value), 160);
-    });
+    searchInput.addEventListener("input", () => { clearTimeout(debounceTimer); debounceTimer = setTimeout(()=>runSearch(searchInput.value),160); });
 
     // ══ AI CHAT ════════════════════════════════════════════════
     const SYSTEM_PROMPT = `You are a friendly, knowledgeable sneaker assistant for Heat Haven, a premium sneaker store based in India.
 STORE INFO: Heat Haven | Instagram: @heatheaven.23_ | Currency: ₹ | Sizes: UK 6–12
-PRODUCTS IN STOCK:
-1. Air Jordan 1 Retro High - Chicago Bulls - ₹5,559 SALE
-2. Nike Uptempo Slide - Chicago Bulls - ₹5,559
-3. Nike SB Dunk Low - Golf - ₹5,559
-4. Adidas Campus - Clear Sky Gum - ₹5,559
-5. Air Force 1 Low - Lakers Home - ₹5,559
-6. Yeezy Boost 350 V2 - Zebra - ₹5,559
-7. Yeezy 700 V3 - Azael - ₹5,559
-8. Rick Owens Hollywood High - Black Milk - ₹5,559
-9. Puma Melns - La France - ₹5,559
-10. Travis x Fragment High - Fragment - ₹5,559
-11. New Balance 990v5 - Grey - ₹5,559
-12. Air Jordan 4 Retro - Breds - ₹5,559
-13. Salehe Bembury x Crocs - Horchata - ₹5,559
-POLICIES: Free shipping above ₹5,000 | Standard ₹99 | Returns: 7 days unworn | Payment: UPI/Card/COD | Delivery: 3–7 days
-SIZE GUIDE: Jordans/Nike → half size up | Yeezys → run small, size up | NB → true to size | Rick Owens → run large, size down
+PRODUCTS IN STOCK: Air Jordan 1 Retro High Chicago Bulls ₹5,559 SALE | Nike Uptempo Slide Chicago Bulls ₹5,559 | Nike SB Dunk Low Golf ₹5,559 | Adidas Campus Clear Sky Gum ₹5,559 | Air Force 1 Low Lakers Home ₹5,559 | Yeezy Boost 350 V2 Zebra ₹5,559 | Yeezy 700 V3 Azael ₹5,559 | Rick Owens Hollywood High Black Milk ₹5,559 | Puma Melns La France ₹5,559 | Travis x Fragment High ₹5,559 | New Balance 990v5 Grey ₹5,559 | Air Jordan 4 Retro Breds ₹5,559 | Salehe Bembury x Crocs Horchata ₹5,559
+POLICIES: Free shipping above ₹5,000 | Returns: 7 days unworn | Payment: UPI/Card/COD | Delivery: 3–7 days
 PERSONALITY: Short 2-3 sentence replies, casual, enthusiastic, sneaker-culture savvy.`;
-
     const QUICK_REPLIES = ["What's on sale? 🔥","Size guide","Shipping info","Best Jordans","Yeezy sizing","Returns"];
-    const widget = document.getElementById("hh-chat-widget");
-    const chatToggle = document.getElementById("hh-chat-toggle");
-    const msgs = document.getElementById("hh-messages");
-    const chatInput = document.getElementById("hh-input");
-    const sendBtn = document.getElementById("hh-send");
-    const chipsEl = document.getElementById("hh-chips");
-    const notifDot = document.getElementById("hh-notif-dot");
-    let chatHistory = [], isTyping = false, hasOpened = false;
+    const widget=document.getElementById("hh-chat-widget"), chatToggle=document.getElementById("hh-chat-toggle"), msgs=document.getElementById("hh-messages"), chatInput=document.getElementById("hh-input"), sendBtn=document.getElementById("hh-send"), chipsEl=document.getElementById("hh-chips"), notifDot=document.getElementById("hh-notif-dot");
+    let chatHistory=[], isTyping=false, hasOpened=false;
+    chatToggle.addEventListener("click",()=>{ widget.classList.toggle("open"); if(!hasOpened){hasOpened=true;notifDot.style.display="none";showWelcome();} });
+    function showWelcome(){ setTimeout(()=>{ addBot("Hey! 👟 Welcome to **Heat Haven**. I'm your personal sneaker assistant."); setTimeout(()=>{ addBot("Ask me about products, sizing, shipping, or anything sneaker-related!"); showChips(); },800); },300); }
+    function showChips(chips=QUICK_REPLIES){ chipsEl.innerHTML=""; chips.forEach(t=>{const b=document.createElement("button");b.className="hh-chip";b.textContent=t;b.onclick=()=>{chipsEl.innerHTML="";sendMsg(t);};chipsEl.appendChild(b);}); }
+    function addBot(text){ const d=document.createElement("div");d.className="hh-msg bot";d.innerHTML=`<div class="hh-bot-avatar">🤖</div><div class="hh-bubble">${text.replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>").replace(/\n/g,"<br>")}</div>`;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight; }
+    function addUser(text){ const d=document.createElement("div");d.className="hh-msg user";d.innerHTML=`<div class="hh-bubble">${text.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>`;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight; }
+    function showTyping(){ const d=document.createElement("div");d.className="hh-msg bot";d.id="hh-typing-indicator";d.innerHTML=`<div class="hh-bot-avatar">🤖</div><div class="hh-bubble" style="padding:10px 16px"><div class="hh-typing"><span></span><span></span><span></span></div></div>`;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight; }
+    function hideTyping(){ const e=document.getElementById("hh-typing-indicator");if(e)e.remove(); }
+    async function sendMsg(text){ text=text.trim();if(!text||isTyping)return; chipsEl.innerHTML="";addUser(text);chatInput.value="";isTyping=true;sendBtn.style.opacity="0.5";chatHistory.push({role:"user",content:text});showTyping();
+      try{ const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:SYSTEM_PROMPT,messages:chatHistory})});const data=await res.json();const reply=data.content?.[0]?.text||"Sorry, couldn't get a response. Try again!";chatHistory.push({role:"assistant",content:reply});hideTyping();addBot(reply);showChips(["Tell me more","What's on sale?","Shipping","Contact support"]); }
+      catch(err){ hideTyping();addBot("Connectivity issue! DM us on Instagram **@heatheaven.23_** 🙏"); }
+      isTyping=false;sendBtn.style.opacity="1";
+    }
+    sendBtn.addEventListener("click",()=>sendMsg(chatInput.value));
+    chatInput.addEventListener("keydown",e=>{if(e.key==="Enter")sendMsg(chatInput.value);});
+    setTimeout(()=>{if(!hasOpened)notifDot.style.display="block";},3000);
 
-    chatToggle.addEventListener("click", () => {
-      widget.classList.toggle("open");
-      if (!hasOpened) { hasOpened = true; notifDot.style.display = "none"; showWelcome(); }
+    // ══ PREMIUM ANIMATIONS ══════════════════════════════════════
+
+    // Cursor glow
+    const glow = document.getElementById('cursor-glow');
+    document.addEventListener('mousemove', e => {
+      glow.style.left = e.clientX + 'px';
+      glow.style.top  = e.clientY + 'px';
     });
-    function showWelcome() {
-      setTimeout(() => {
-        addBot("Hey! 👟 Welcome to **Heat Haven**. I'm your personal sneaker assistant.");
-        setTimeout(() => { addBot("Ask me about products, sizing, shipping, or anything sneaker-related!"); showChips(); }, 800);
-      }, 300);
-    }
-    function showChips(chips = QUICK_REPLIES) {
-      chipsEl.innerHTML = "";
-      chips.forEach(t => { const b = document.createElement("button"); b.className = "hh-chip"; b.textContent = t; b.onclick = () => { chipsEl.innerHTML = ""; sendMsg(t); }; chipsEl.appendChild(b); });
-    }
-    function addBot(text) {
-      const d = document.createElement("div"); d.className = "hh-msg bot";
-      d.innerHTML = `<div class="hh-bot-avatar">🤖</div><div class="hh-bubble">${text.replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>").replace(/\n/g,"<br>")}</div>`;
-      msgs.appendChild(d); msgs.scrollTop = msgs.scrollHeight;
-    }
-    function addUser(text) {
-      const d = document.createElement("div"); d.className = "hh-msg user";
-      d.innerHTML = `<div class="hh-bubble">${text.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>`;
-      msgs.appendChild(d); msgs.scrollTop = msgs.scrollHeight;
-    }
-    function showTyping() {
-      const d = document.createElement("div"); d.className = "hh-msg bot"; d.id = "hh-typing-indicator";
-      d.innerHTML = `<div class="hh-bot-avatar">🤖</div><div class="hh-bubble" style="padding:10px 16px"><div class="hh-typing"><span></span><span></span><span></span></div></div>`;
-      msgs.appendChild(d); msgs.scrollTop = msgs.scrollHeight;
-    }
-    function hideTyping() { const e = document.getElementById("hh-typing-indicator"); if(e) e.remove(); }
-    async function sendMsg(text) {
-      text = text.trim(); if (!text || isTyping) return;
-      chipsEl.innerHTML = ""; addUser(text); chatInput.value = "";
-      isTyping = true; sendBtn.style.opacity = "0.5";
-      chatHistory.push({ role:"user", content:text }); showTyping();
-      try {
-        const res = await fetch("https://api.anthropic.com/v1/messages", {
-          method:"POST", headers:{"Content-Type":"application/json"},
-          body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1000, system:SYSTEM_PROMPT, messages:chatHistory })
-        });
-        const data = await res.json();
-        const reply = data.content?.[0]?.text || "Sorry, couldn't get a response. Try again!";
-        chatHistory.push({ role:"assistant", content:reply });
-        hideTyping(); addBot(reply);
-        const l = text.toLowerCase();
-        if (l.includes("sale")||l.includes("deal")) showChips(["Jordan sale","Yeezy sale","Shipping info","Payment"]);
-        else if (l.includes("size")||l.includes("sizing")) showChips(["Nike sizing","Yeezy sizing","Jordan sizing","Rick Owens"]);
-        else if (l.includes("ship")||l.includes("deliver")) showChips(["Return policy","Payment","Track order","Contact support"]);
-        else showChips(["Tell me more","What's on sale?","Shipping","Contact support"]);
-      } catch(err) { hideTyping(); addBot("Connectivity issue! DM us on Instagram **@heatheaven.23_** for instant help 🙏"); }
-      isTyping = false; sendBtn.style.opacity = "1";
-    }
-    sendBtn.addEventListener("click", () => sendMsg(chatInput.value));
-    chatInput.addEventListener("keydown", e => { if (e.key === "Enter") sendMsg(chatInput.value); });
-    setTimeout(() => { if (!hasOpened) notifDot.style.display = "block"; }, 3000);
+
+    // Scroll reveal + staggered cards
+    const cards = document.querySelectorAll('.shoe-card');
+    cards.forEach((card, i) => { card.style.transitionDelay = (i * 0.07) + 's'; });
+
+    const revealEls = document.querySelectorAll('.reveal, .section-heading');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    revealEls.forEach(el => io.observe(el));
+    cards.forEach(el => io.observe(el));
+
+    // Active nav link highlight
+    const currentPage = location.pathname.split('/').pop() || 'product.html';
+    document.querySelectorAll('.nav-link').forEach(link => {
+      if (link.getAttribute('href') === currentPage) {
+        link.style.color = '#ff4500';
+        link.classList.add('font-semibold');
+      }
+    });
   </script>
 </body>
 </html>
