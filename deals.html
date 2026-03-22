@@ -26,9 +26,6 @@
     html { scrollbar-gutter:stable; }
     h1,h2,h3,h4,.brand { font-family:'Archivo Black',sans-serif; letter-spacing:-0.5px; }
 
-    .shoe-card { transition:transform 0.25s ease, box-shadow 0.25s ease; }
-    .shoe-card:hover { transform:translateY(-5px); box-shadow:0 12px 28px rgba(0,0,0,0.25); }
-
     .mobile-menu { transform:translateX(100%); transition:transform 0.3s ease-in-out; }
     .mobile-menu.open { transform:translateX(0); }
 
@@ -66,7 +63,6 @@
     .dark ::-webkit-scrollbar-track { background:#000; }
     .dark ::-webkit-scrollbar-thumb { background:#222; border-radius:3px; }
 
-    /* Size not selected shake */
     @keyframes shake {
       0%,100%{transform:translateX(0)} 20%{transform:translateX(-4px)} 40%{transform:translateX(4px)} 60%{transform:translateX(-4px)} 80%{transform:translateX(4px)}
     }
@@ -76,15 +72,12 @@
       width:38px; height:38px; display:flex; align-items:center; justify-content:center;
       border-radius:50%; background:rgba(255,255,255,0.95);
       box-shadow:0 2px 8px rgba(0,0,0,0.12); border:none; cursor:pointer;
-      transition:background 0.2s, transform 0.15s, box-shadow 0.2s;
+      transition:background 0.2s, transform 0.2s, box-shadow 0.2s;
     }
-    .wishlist-btn:hover { background:#fff; box-shadow:0 4px 14px rgba(0,0,0,0.18); transform:scale(1.1); }
+    .wishlist-btn:hover { background:#fff; box-shadow:0 4px 14px rgba(0,0,0,0.18); transform:scale(1.15); }
     .wishlist-btn i { font-size:15px; color:#374151; transition:color 0.2s; }
-    .wishlist-btn:hover i { color:#111; }
-    .dark .wishlist-btn { background:rgba(255,255,255,0.93); box-shadow:0 2px 10px rgba(0,0,0,0.5); }
-    .dark .wishlist-btn:hover { background:#fff; box-shadow:0 4px 16px rgba(0,0,0,0.6); }
-    .dark .wishlist-btn i { color:#374151; }
-    .dark .wishlist-btn:hover i { color:#111; }
+    .dark .wishlist-btn { background:rgba(255,255,255,0.93); }
+    .dark .wishlist-btn:hover { background:#fff; }
     .wishlist-btn.wishlisted i,
     .dark .wishlist-btn.wishlisted i { color:#ef4444; }
     .heart-bounce { animation:heart-pop 0.35s ease-out; }
@@ -98,7 +91,7 @@
     .range-wrap input[type=range] { -webkit-appearance:none; appearance:none; position:absolute; width:100%; height:5px; background:transparent; pointer-events:none; outline:none; }
     .range-wrap input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; background:#ef4444; border-radius:50%; cursor:pointer; pointer-events:all; border:2px solid #fff; box-shadow:0 1px 5px rgba(0,0,0,0.25); transition:transform 0.15s; }
     .range-wrap input[type=range]::-webkit-slider-thumb:hover { transform:scale(1.2); }
-    .range-wrap input[type=range]::-moz-range-thumb { width:18px; height:18px; background:#ef4444; border-radius:50%; cursor:pointer; pointer-events:all; border:2px solid #fff; box-shadow:0 1px 5px rgba(0,0,0,0.25); }
+    .range-wrap input[type=range]::-moz-range-thumb { width:18px; height:18px; background:#ef4444; border-radius:50%; cursor:pointer; pointer-events:all; border:2px solid #fff; }
 
     /* Nav Search Pill */
     .nav-search-pill { display:flex; align-items:center; min-width:220px; padding:0; border-radius:999px; border:none; cursor:pointer; background:transparent; font-family:'Poppins',sans-serif; font-size:13px; font-weight:500; transition:transform 0.15s; position:relative; white-space:nowrap; }
@@ -113,7 +106,7 @@
     .pill-label { flex:1; text-align:left; color:#5f6368; font-size:13px; }
     .nav-search-pill .pill-kbd { display:inline-flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.07); border-radius:6px; padding:2px 7px; font-size:11px; font-family:monospace; color:#999; line-height:1.5; flex-shrink:0; }
     .dark .nav-search-pill .pill-inner { background:#1a1a1a; }
-    .dark .nav-search-pill:hover .pill-inner { background:#222; box-shadow:0 2px 16px rgba(66,133,244,0.12); }
+    .dark .nav-search-pill:hover .pill-inner { background:#222; }
     .dark .pill-label { color:#9aa0a6; }
     .dark .nav-search-pill .pill-kbd { background:rgba(255,255,255,0.07); color:#666; }
     @keyframes pill-gradient { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
@@ -122,14 +115,14 @@
     #search-overlay { position:fixed; inset:0; z-index:9998; background:rgba(255,255,255,0.85); backdrop-filter:blur(20px); display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding-top:120px; opacity:0; pointer-events:none; transition:opacity 0.3s ease; }
     .dark #search-overlay { background:rgba(0,0,0,0.88); }
     #search-overlay.open { opacity:1; pointer-events:all; }
-    #search-box-wrap { width:100%; max-width:620px; padding:0 20px; position:relative; }
+    #search-box-wrap { width:100%; max-width:620px; padding:0 20px; }
     .search-border-wrap { position:relative; border-radius:999px; padding:3px; background:linear-gradient(135deg,#4285f4,#ea4335,#fbbc04,#34a853,#4285f4); background-size:300% 300%; animation:gradient-shift 4s ease infinite; box-shadow:0 8px 40px rgba(66,133,244,0.25),0 4px 20px rgba(234,67,53,0.15); }
     @keyframes gradient-shift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
     .search-inner { display:flex; align-items:center; background:#fff; border-radius:999px; padding:14px 20px 14px 22px; gap:14px; }
     .dark .search-inner { background:#111; }
     .search-icon-wrap { color:#5f6368; flex-shrink:0; font-size:18px; display:flex; align-items:center; }
     .dark .search-icon-wrap { color:#9aa0a6; }
-    #search-input { flex:1; border:none; outline:none; background:transparent; font-family:'Poppins',sans-serif; font-size:18px; color:#202124; letter-spacing:0.01em; }
+    #search-input { flex:1; border:none; outline:none; background:transparent; font-family:'Poppins',sans-serif; font-size:18px; color:#202124; }
     .dark #search-input { color:#e8eaed; }
     #search-input::placeholder { color:#9aa0a6; }
     #search-clear-btn { background:none; border:none; cursor:pointer; color:#9aa0a6; font-size:16px; display:none; padding:4px; border-radius:50%; transition:color 0.15s,background 0.15s; flex-shrink:0; }
@@ -144,7 +137,7 @@
     .search-result-item { display:flex; align-items:center; gap:14px; padding:12px 18px; background:#fff; border-radius:14px; margin-bottom:8px; cursor:pointer; transition:background 0.15s,transform 0.15s,box-shadow 0.15s; animation:result-in 0.2s ease; box-shadow:0 1px 6px rgba(0,0,0,0.08); }
     @keyframes result-in { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
     .dark .search-result-item { background:#1c1c1e; box-shadow:none; }
-    .search-result-item:hover { background:#f8f9fa; transform:translateY(-1px); box-shadow:0 4px 16px rgba(0,0,0,0.1); }
+    .search-result-item:hover { background:#f8f9fa; transform:translateY(-1px); }
     .dark .search-result-item:hover { background:#2c2c2e; }
     .sri-img { width:52px; height:52px; object-fit:cover; border-radius:10px; flex-shrink:0; background:#f1f3f4; }
     .dark .sri-img { background:#2c2c2e; }
@@ -155,8 +148,8 @@
     .dark .sri-sub { color:#9aa0a6; }
     .sri-price { font-weight:700; font-size:14px; color:#202124; flex-shrink:0; }
     .dark .sri-price { color:#e8eaed; }
-    .search-no-results { text-align:center; padding:40px 16px; background:#fff; border-radius:14px; font-size:14px; color:#5f6368; box-shadow:0 1px 6px rgba(0,0,0,0.08); }
-    .dark .search-no-results { background:#1c1c1e; color:#9aa0a6; box-shadow:none; }
+    .search-no-results { text-align:center; padding:40px 16px; background:#fff; border-radius:14px; font-size:14px; color:#5f6368; }
+    .dark .search-no-results { background:#1c1c1e; color:#9aa0a6; }
     .search-no-results .emoji { font-size:36px; display:block; margin-bottom:10px; }
     .search-highlight { color:#1a73e8; font-weight:700; }
     .dark .search-highlight { color:#8ab4f8; }
@@ -221,10 +214,123 @@
     .dark .hh-chip:hover { background:#fff; color:#000; border-color:#fff; }
     .dark .hh-powered { background:#0a0a0a; color:#333; }
     @media (max-width:420px) { #hh-chat-panel { width:calc(100vw - 48px); } }
+
+    /* ══ PREMIUM ANIMATIONS (matching index.html) ══════════════════════ */
+
+    /* Cursor glow */
+    #cursor-glow {
+      position:fixed; width:320px; height:320px; border-radius:50%;
+      background:radial-gradient(circle, rgba(255,69,0,0.07) 0%, transparent 70%);
+      pointer-events:none; z-index:0; transform:translate(-50%,-50%);
+      transition:opacity 0.4s ease; opacity:0;
+    }
+    body:hover #cursor-glow { opacity:1; }
+
+    /* Nav drop-in */
+    @keyframes nav-drop {
+      from { transform:translateY(-100%); opacity:0; }
+      to   { transform:translateY(0);     opacity:1; }
+    }
+    nav { animation:nav-drop 0.6s cubic-bezier(0.16,1,0.3,1) both; }
+
+    /* Brand shimmer */
+    @keyframes brand-shimmer {
+      0%   { background-position:-200% center; }
+      100% { background-position: 200% center; }
+    }
+    .brand a {
+      background:linear-gradient(90deg, currentColor 40%, #ff4500 50%, currentColor 60%);
+      background-size:200% auto;
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+      animation:brand-shimmer 3.5s ease 0.5s 1 forwards;
+    }
+
+    /* Nav link underline */
+    .nav-link { position:relative; }
+    .nav-link::after {
+      content:''; position:absolute; bottom:-2px; left:0;
+      width:0; height:2px; background:#ff4500; border-radius:2px;
+      transition:width 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+    .nav-link:hover::after { width:100%; }
+
+    /* Section heading underline reveal */
+    .section-heading { position:relative; display:inline-block; }
+    .section-heading::after {
+      content:''; position:absolute; bottom:-6px; left:0;
+      width:0; height:3px; background:#ff4500; border-radius:2px;
+      transition:width 0.5s cubic-bezier(0.4,0,0.2,1) 0.1s;
+    }
+    .section-heading.visible::after { width:100%; }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity:0; transform:translateY(32px);
+      transition:opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+
+    /* Product cards — staggered entrance + hover lift */
+    .shoe-card {
+      opacity:0; transform:translateY(28px) scale(0.97);
+      transition:opacity 0.55s cubic-bezier(0.16,1,0.3,1),
+                 transform 0.55s cubic-bezier(0.16,1,0.3,1),
+                 box-shadow 0.25s ease;
+    }
+    .shoe-card.visible { opacity:1; transform:translateY(0) scale(1); }
+    .shoe-card:hover { transform:translateY(-6px) scale(1.01) !important; box-shadow:0 20px 40px rgba(0,0,0,0.14); }
+    .dark .shoe-card:hover { box-shadow:0 0 0 1px rgba(255,69,0,0.18), 0 20px 40px rgba(0,0,0,0.6); }
+
+    /* Card shine sweep */
+    .shoe-card .relative { overflow:hidden; }
+    .shoe-card .relative::after {
+      content:''; position:absolute; inset:0;
+      background:linear-gradient(115deg, transparent 40%, rgba(255,255,255,0.18) 50%, transparent 60%);
+      transform:translateX(-100%); transition:transform 0.5s ease;
+      pointer-events:none; z-index:5;
+    }
+    .shoe-card:hover .relative::after { transform:translateX(100%); }
+
+    /* Filter pill hover */
+    .filter-btn { transition:all 0.22s cubic-bezier(0.4,0,0.2,1); }
+    .filter-btn:hover:not(.active) {
+      border-color:#ff4500 !important; color:#ff4500 !important;
+      transform:translateY(-1px); box-shadow:0 4px 14px rgba(255,69,0,0.15);
+    }
+
+    /* Add-to-cart ripple */
+    .add-to-cart-btn { position:relative; overflow:hidden; }
+    .add-to-cart-btn::after {
+      content:''; position:absolute; inset:0;
+      background:rgba(255,255,255,0.25); border-radius:inherit;
+      transform:scale(0); opacity:0; transition:transform 0.35s ease, opacity 0.35s ease;
+    }
+    .add-to-cart-btn:active::after { transform:scale(2); opacity:0; transition:0s; }
+
+    /* Footer runner line */
+    footer { position:relative; overflow:hidden; }
+    footer::before {
+      content:''; position:absolute; top:0; left:-100%;
+      width:60%; height:1px;
+      background:linear-gradient(90deg, transparent, #ff4500, transparent);
+      animation:footer-line 3s ease 1.5s infinite;
+    }
+    @keyframes footer-line { 0%{left:-60%} 100%{left:140%} }
+
+    /* Page fade in */
+    @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+    #products, .brand-filter-section { animation:fadeIn 0.6s ease 0.1s both; }
+
+    /* Deal badge pulse */
+    @keyframes badge-pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.85;transform:scale(1.04)} }
+    .deal-badge { animation:badge-pulse 2.5s ease-in-out infinite; }
   </style>
 </head>
 
 <body class="bg-white text-black dark:bg-amoled dark:text-white transition-colors duration-300">
+
+  <!-- Cursor glow -->
+  <div id="cursor-glow"></div>
 
   <!-- Search Overlay -->
   <div id="search-overlay" role="dialog" aria-label="Search products">
@@ -267,10 +373,10 @@
             <a href="index.html" class="text-black dark:text-white">HEAT HAVEN</a>
           </div>
           <div class="hidden md:flex items-center ml-10 space-x-8">
-            <a href="index.html"   class="text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Home</a>
-            <a href="product.html" class="text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Products</a>
-            <a href="deals.html"   class="text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Hot Deals</a>
-            <a href="owners.html"  class="text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Owners</a>
+            <a href="index.html"   class="nav-link text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Home</a>
+            <a href="product.html" class="nav-link text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Products</a>
+            <a href="deals.html"   class="nav-link text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Hot Deals</a>
+            <a href="owners.html"  class="nav-link text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Owners</a>
           </div>
         </div>
         <div class="flex items-center">
@@ -300,7 +406,7 @@
                 <h3 class="text-base font-bold mb-4 dark:text-white">Filter Products</h3>
                 <div class="mb-5">
                   <label class="block text-sm font-medium text-gray-700 dark:text-zinc-400 mb-2">Category</label>
-                  <select id="filter-brand" class="w-full bg-white dark:bg-zinc-900 dark:text-white border border-gray-200 dark:border-zinc-800 text-sm rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-red-400 cursor-pointer">
+                  <select id="filter-brand" class="w-full bg-white dark:bg-zinc-900 dark:text-white border border-gray-200 dark:border-zinc-800 text-sm rounded-xl px-3 py-2.5 focus:outline-none cursor-pointer">
                     <option value="all">All Deals</option>
                     <option value="selling hot">Selling HOT 🔥</option>
                     <option value="price drop">Price Drop 📉</option>
@@ -326,8 +432,8 @@
                   </div>
                 </div>
                 <div class="flex gap-3">
-                  <button id="filter-apply" class="flex-1 bg-black dark:bg-white text-white dark:text-black py-2.5 rounded-xl text-sm font-bold hover:bg-gray-800 dark:hover:bg-zinc-200 transition spring-btn">Apply</button>
-                  <button id="filter-reset" class="flex-1 bg-transparent border border-gray-200 dark:border-zinc-800 text-gray-700 dark:text-zinc-400 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-50 dark:hover:bg-zinc-900 transition spring-btn">Reset</button>
+                  <button id="filter-apply" class="flex-1 bg-black dark:bg-white text-white dark:text-black py-2.5 rounded-xl text-sm font-bold hover:opacity-80 transition spring-btn">Apply</button>
+                  <button id="filter-reset" class="flex-1 border border-gray-200 dark:border-zinc-800 text-gray-700 dark:text-zinc-400 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-50 dark:hover:bg-zinc-900 transition spring-btn">Reset</button>
                 </div>
               </div>
             </div>
@@ -372,9 +478,9 @@
   </nav>
 
   <!-- Brand Filter Pills -->
-  <section class="py-8 bg-gray-50 dark:bg-black border-b dark:border-zinc-900">
+  <section class="brand-filter-section py-8 bg-gray-50 dark:bg-black border-b dark:border-zinc-900">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="text-2xl font-bold mb-5 dark:text-white">Shop by Category</h2>
+      <h2 class="text-2xl font-bold mb-5 dark:text-white section-heading reveal">Shop by Category</h2>
       <div class="flex space-x-3 overflow-x-auto pb-2">
         <button class="filter-btn px-5 py-2 border border-black dark:border-zinc-800 dark:text-zinc-400 rounded-full whitespace-nowrap active text-sm transition-all" data-brand="all">All Deals</button>
         <button class="filter-btn px-5 py-2 border border-black dark:border-zinc-800 dark:text-zinc-400 rounded-full whitespace-nowrap text-sm transition-all" data-brand="selling hot">Selling HOT 🔥</button>
@@ -390,17 +496,16 @@
   <!-- Products -->
   <section id="products" class="py-12 bg-white dark:bg-amoled">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="text-3xl font-bold mb-8 dark:text-white">ALL DEALS</h2>
+      <h2 class="text-3xl font-bold mb-8 dark:text-white section-heading reveal">ALL DEALS</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
 
-        <!-- Product 1: Ferrari Team Jacket — no size select (apparel) -->
         <div class="shoe-card bg-white dark:bg-zinc-950 rounded-xl overflow-hidden shadow-sm dark:shadow-none group relative"
              data-brand="selling hot" data-name="Ferrari Team Jacket" data-colorway="Scuderia Red"
              data-price="23430" data-img="images.fade/ferrari team jacket.png">
           <div class="relative">
             <button class="wishlist-btn spring-btn absolute top-3 left-3 z-10" aria-label="Add to wishlist"><i class="far fa-heart"></i></button>
             <img src="images.fade/ferrari team jacket.png" alt="Ferrari Team Jacket" class="w-full h-64 object-cover" />
-            <div class="absolute top-2 right-2 bg-cyan-500 text-white text-xs font-bold px-2 py-1 rounded">SELLING HOT 🔥</div>
+            <div class="deal-badge absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">SELLING HOT 🔥</div>
           </div>
           <div class="p-4">
             <h3 class="text-lg font-bold mb-1 dark:text-white">Ferrari Team Jacket</h3>
@@ -410,19 +515,18 @@
                 <span class="text-gray-400 dark:text-zinc-700 line-through mr-1 text-sm">₹26,000</span>
                 <span class="font-bold dark:text-white">₹23,430</span>
               </div>
-              <button class="add-to-cart-btn bg-black dark:bg-cyan-600 text-white px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-gray-800 spring-btn transition">Add to Cart</button>
+              <button class="add-to-cart-btn bg-black dark:bg-red-600 text-white px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-gray-800 spring-btn transition">Add to Cart</button>
             </div>
           </div>
         </div>
 
-        <!-- Product 2: Seductive Scales — no size select -->
         <div class="shoe-card bg-white dark:bg-zinc-950 rounded-xl overflow-hidden shadow-sm dark:shadow-none group relative"
              data-brand="price drop" data-name="Seductive Scales" data-colorway="Unisex"
              data-price="43430" data-img="images.fade/seductive scales.png">
           <div class="relative">
             <button class="wishlist-btn spring-btn absolute top-3 left-3 z-10" aria-label="Add to wishlist"><i class="far fa-heart"></i></button>
             <img src="images.fade/seductive scales.png" alt="Seductive Scales" class="w-full h-64 object-cover" />
-            <div class="absolute top-2 right-2 bg-cyan-500 text-white text-xs font-bold px-2 py-1 rounded">PRICE DROP 📉</div>
+            <div class="deal-badge absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">PRICE DROP 📉</div>
           </div>
           <div class="p-4">
             <h3 class="text-lg font-bold mb-1 dark:text-white">Seductive Scales</h3>
@@ -432,12 +536,11 @@
                 <span class="text-gray-400 dark:text-zinc-700 line-through mr-1 text-sm">₹56,001</span>
                 <span class="font-bold dark:text-white">₹43,430</span>
               </div>
-              <button class="add-to-cart-btn bg-black dark:bg-cyan-600 text-white px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-gray-800 spring-btn transition">Add to Cart</button>
+              <button class="add-to-cart-btn bg-black dark:bg-red-600 text-white px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-gray-800 spring-btn transition">Add to Cart</button>
             </div>
           </div>
         </div>
 
-        <!-- Product 3: Bearbrick Batman — no size select (collectible) -->
         <div class="shoe-card bg-white dark:bg-zinc-950 rounded-xl overflow-hidden shadow-sm dark:shadow-none group relative"
              data-brand="limited pieces" data-name="Bearbrick Batman" data-colorway="Hush Ver. 1000%"
              data-price="54999" data-img="images/bearbrick batman.png">
@@ -445,19 +548,18 @@
             <button class="wishlist-btn spring-btn absolute top-3 left-3 z-10" aria-label="Add to wishlist"><i class="far fa-heart"></i></button>
             <img src="images/bearbrick batman.png" alt="Bearbrick Batman" class="w-full h-64 object-cover group-hover:hidden" />
             <img src="images/bearbrick batman box.png" alt="Bearbrick Batman box" class="w-full h-64 object-cover hidden group-hover:block" />
-            <div class="absolute top-2 right-2 bg-cyan-500 text-white text-xs font-bold px-2 py-1 rounded">LIMITED PIECES ⌛</div>
+            <div class="deal-badge absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">LIMITED ⌛</div>
           </div>
           <div class="p-4">
             <h3 class="text-lg font-bold mb-1 dark:text-white">Bearbrick Batman</h3>
             <p class="text-gray-500 dark:text-zinc-600 text-sm mb-3">Hush Ver. 1000%</p>
             <div class="flex justify-between items-center">
               <span class="font-bold dark:text-white">₹54,999</span>
-              <button class="add-to-cart-btn bg-black dark:bg-cyan-600 text-white px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-gray-800 spring-btn transition">Add to Cart</button>
+              <button class="add-to-cart-btn bg-black dark:bg-red-600 text-white px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-gray-800 spring-btn transition">Add to Cart</button>
             </div>
           </div>
         </div>
 
-        <!-- Product 4: Air Jordan 4 Retro — HAS size select -->
         <div class="shoe-card bg-white dark:bg-zinc-950 rounded-xl overflow-hidden shadow-sm dark:shadow-none group relative"
              data-brand="best seller" data-name="Air Jordan 4 Retro" data-colorway="Bred"
              data-price="5000" data-img="images/aj4 bred.png">
@@ -465,7 +567,7 @@
             <button class="wishlist-btn spring-btn absolute top-3 left-3 z-10" aria-label="Add to wishlist"><i class="far fa-heart"></i></button>
             <img src="images/aj4 bred solo.png" alt="Air Jordan 4" class="w-full h-64 object-cover group-hover:hidden" />
             <img src="images/aj4 bred.png" alt="Air Jordan 4 hover" class="w-full h-64 object-cover hidden group-hover:block" />
-            <div class="absolute top-2 right-2 bg-cyan-500 text-white text-xs font-bold px-2 py-1 rounded">BEST SELLER 🥇</div>
+            <div class="deal-badge absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">BEST SELLER 🥇</div>
           </div>
           <div class="p-4">
             <h3 class="text-lg font-bold mb-1 dark:text-white">Air Jordan 4 Retro</h3>
@@ -478,12 +580,11 @@
             </div>
             <div class="flex justify-between items-center">
               <span class="font-bold dark:text-white">₹5,000</span>
-              <button class="add-to-cart-btn bg-black dark:bg-cyan-600 text-white px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-gray-800 spring-btn transition">Add to Cart</button>
+              <button class="add-to-cart-btn bg-black dark:bg-red-600 text-white px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-gray-800 spring-btn transition">Add to Cart</button>
             </div>
           </div>
         </div>
 
-        <!-- Product 5: Butterfly Blossom Shirt — no size select -->
         <div class="shoe-card bg-white dark:bg-zinc-950 rounded-xl overflow-hidden shadow-sm dark:shadow-none group relative"
              data-brand="limited pieces" data-name="Butterfly Blossom Shirt" data-colorway="Green"
              data-price="32410" data-img="images.fade/butterfly blossom shirt.png">
@@ -491,19 +592,18 @@
             <button class="wishlist-btn spring-btn absolute top-3 left-3 z-10" aria-label="Add to wishlist"><i class="far fa-heart"></i></button>
             <img src="images.fade/butterfly blossom shirt.png" alt="Butterfly Blossom Shirt" class="w-full h-64 object-cover group-hover:hidden" />
             <img src="images.fade/butterfly blossom shirt-hover.png" alt="Butterfly Blossom hover" class="w-full h-64 object-cover hidden group-hover:block" />
-            <div class="absolute top-2 right-2 bg-cyan-500 text-white text-xs font-bold px-2 py-1 rounded">LIMITED PIECES ⌛</div>
+            <div class="deal-badge absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">LIMITED ⌛</div>
           </div>
           <div class="p-4">
             <h3 class="text-lg font-bold mb-1 dark:text-white">Butterfly Blossom Shirt</h3>
             <p class="text-gray-500 dark:text-zinc-600 text-sm mb-3">Green</p>
             <div class="flex justify-between items-center">
               <span class="font-bold dark:text-white">₹32,410</span>
-              <button class="add-to-cart-btn bg-black dark:bg-cyan-600 text-white px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-gray-800 spring-btn transition">Add to Cart</button>
+              <button class="add-to-cart-btn bg-black dark:bg-red-600 text-white px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-gray-800 spring-btn transition">Add to Cart</button>
             </div>
           </div>
         </div>
 
-        <!-- Product 6: Yeezy Zebra — HAS size select -->
         <div class="shoe-card bg-white dark:bg-zinc-950 rounded-xl overflow-hidden shadow-sm dark:shadow-none group relative"
              data-brand="stock clearance" data-name="Adidas Yeezy Boost V2" data-colorway="Zebra"
              data-price="3559" data-img="images/yeezy zebra.png">
@@ -511,7 +611,7 @@
             <button class="wishlist-btn spring-btn absolute top-3 left-3 z-10" aria-label="Add to wishlist"><i class="far fa-heart"></i></button>
             <img src="images/yeezy zebra solo.png" alt="Yeezy Zebra" class="w-full h-64 object-cover group-hover:hidden" />
             <img src="images/yeezy zebra.png" alt="Yeezy Zebra hover" class="w-full h-64 object-cover hidden group-hover:block" />
-            <div class="absolute top-2 right-2 bg-cyan-500 text-white text-xs font-bold px-2 py-1 rounded">STOCK CLEARANCE 🛒</div>
+            <div class="deal-badge absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">CLEARANCE 🛒</div>
           </div>
           <div class="p-4">
             <h3 class="text-lg font-bold mb-1 dark:text-white">Adidas Yeezy Boost V2</h3>
@@ -524,12 +624,11 @@
             </div>
             <div class="flex justify-between items-center">
               <span class="font-bold dark:text-white">₹3,559</span>
-              <button class="add-to-cart-btn bg-black dark:bg-cyan-600 text-white px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-gray-800 spring-btn transition">Add to Cart</button>
+              <button class="add-to-cart-btn bg-black dark:bg-red-600 text-white px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-gray-800 spring-btn transition">Add to Cart</button>
             </div>
           </div>
         </div>
 
-        <!-- Product 7: Fear Of God Hoodie — no size select -->
         <div class="shoe-card bg-white dark:bg-zinc-950 rounded-xl overflow-hidden shadow-sm dark:shadow-none group relative"
              data-brand="stock clearance" data-name="Fear Of God Essentials Hoodie" data-colorway="Black"
              data-price="3559" data-img="images.fade/essential_fear_of_god_798x1179.png">
@@ -537,14 +636,14 @@
             <button class="wishlist-btn spring-btn absolute top-3 left-3 z-10" aria-label="Add to wishlist"><i class="far fa-heart"></i></button>
             <img src="images.fade/essential_fear_of_god_798x1179.png" alt="Fear Of God Essentials" class="w-full h-64 object-cover group-hover:hidden" />
             <img src="images.fade/essential_fear_of_god back.png" alt="Fear Of God hover" class="w-full h-64 object-cover hidden group-hover:block" />
-            <div class="absolute top-2 right-2 bg-cyan-500 text-white text-xs font-bold px-2 py-1 rounded">STOCK CLEARANCE 🛒</div>
+            <div class="deal-badge absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">CLEARANCE 🛒</div>
           </div>
           <div class="p-4">
             <h3 class="text-lg font-bold mb-1 dark:text-white">Fear Of God Essentials Hoodie</h3>
             <p class="text-gray-500 dark:text-zinc-600 text-sm mb-3">Black</p>
             <div class="flex justify-between items-center">
               <span class="font-bold dark:text-white">₹3,559</span>
-              <button class="add-to-cart-btn bg-black dark:bg-cyan-600 text-white px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-gray-800 spring-btn transition">Add to Cart</button>
+              <button class="add-to-cart-btn bg-black dark:bg-red-600 text-white px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-gray-800 spring-btn transition">Add to Cart</button>
             </div>
           </div>
         </div>
@@ -666,7 +765,7 @@
     document.getElementById('mobile-menu-button').addEventListener('click', () => document.getElementById('mobile-menu').classList.add('open'));
     document.getElementById('close-menu').addEventListener('click', () => document.getElementById('mobile-menu').classList.remove('open'));
 
-    // ══ BRAND FILTER ══
+    // ══ BRAND FILTER PILLS ══
     const filterButtons = document.querySelectorAll('.filter-btn');
     const shoeCards     = document.querySelectorAll('.shoe-card');
     filterButtons.forEach(btn => {
@@ -684,90 +783,45 @@
     const toastEl = document.getElementById('toast');
     let toastTimeout;
     function showToast(msg, isError) {
-      const icon = toastEl.querySelector('i');
-      const span = toastEl.querySelector('span');
+      const icon = toastEl.querySelector('i'), span = toastEl.querySelector('span');
       if (msg) span.textContent = msg;
-      if (icon) icon.className = isError
-        ? 'fas fa-exclamation-circle text-yellow-400'
-        : 'fas fa-check-circle text-green-400';
+      if (icon) icon.className = isError ? 'fas fa-exclamation-circle text-yellow-400' : 'fas fa-check-circle text-green-400';
       toastEl.classList.add('show');
       if (toastTimeout) clearTimeout(toastTimeout);
       toastTimeout = setTimeout(() => toastEl.classList.remove('show'), 2200);
     }
 
-    // ══ CART (localStorage) ══
-    function getCart() {
-      try { return JSON.parse(localStorage.getItem('hh_cart') || '[]'); }
-      catch(e) { return []; }
-    }
+    // ══ CART ══
+    function getCart() { try { return JSON.parse(localStorage.getItem('hh_cart') || '[]'); } catch(e) { return []; } }
     function saveCart(cart) { localStorage.setItem('hh_cart', JSON.stringify(cart)); }
-
     function updateCartBadge() {
       const total = getCart().reduce((s, i) => s + i.qty, 0);
       document.querySelectorAll('#cart-count, #cart-count-mobile').forEach(el => el.textContent = total);
     }
-
     document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.preventDefault();
         const card = btn.closest('.shoe-card');
         const sizeSelect = card ? card.querySelector('select.size-select') : null;
         const size = sizeSelect ? sizeSelect.value : 'One Size';
-
-        // Only block if the card HAS a size select and nothing chosen
         if (sizeSelect && !size) {
           sizeSelect.classList.add('select-shake');
           sizeSelect.style.borderColor = '#ef4444';
           sizeSelect.style.boxShadow = '0 0 0 2px rgba(239,68,68,0.25)';
-          setTimeout(() => {
-            sizeSelect.classList.remove('select-shake');
-            sizeSelect.style.borderColor = '';
-            sizeSelect.style.boxShadow = '';
-          }, 600);
-          showToast('Pick a size first! 👟', true);
-          return;
+          setTimeout(() => { sizeSelect.classList.remove('select-shake'); sizeSelect.style.borderColor = ''; sizeSelect.style.boxShadow = ''; }, 600);
+          showToast('Pick a size first! 👟', true); return;
         }
-
-        const item = {
-          id:       (card.dataset.name || 'item') + '-' + size,
-          name:     card.dataset.name     || 'Item',
-          colorway: card.dataset.colorway || '',
-          brand:    card.dataset.brand    || '',
-          price:    parseFloat(card.dataset.price) || 0,
-          img:      card.dataset.img      || '',
-          size:     size,
-          qty:      1
-        };
-
-        const cart = getCart();
-        const existing = cart.find(i => i.id === item.id);
+        const item = { id:(card.dataset.name||'item')+'-'+size, name:card.dataset.name||'Item', colorway:card.dataset.colorway||'', brand:card.dataset.brand||'', price:parseFloat(card.dataset.price)||0, img:card.dataset.img||'', size, qty:1 };
+        const cart = getCart(), existing = cart.find(i => i.id === item.id);
         if (existing) { existing.qty++; } else { cart.push(item); }
-        saveCart(cart);
-        updateCartBadge();
-
-        // Bump badge
-        const cartCountEl = document.getElementById('cart-count');
-        if (cartCountEl) {
-          cartCountEl.classList.remove('cart-bump');
-          void cartCountEl.offsetWidth;
-          cartCountEl.classList.add('cart-bump');
-        }
-
-        // Button feedback
-        const originalText = btn.textContent;
-        btn.textContent = '✓ Added!';
-        btn.disabled = true;
-        btn.style.opacity = '0.8';
-        setTimeout(() => {
-          btn.textContent = originalText;
-          btn.disabled = false;
-          btn.style.opacity = '';
-        }, 1500);
-
+        saveCart(cart); updateCartBadge();
+        const badge = document.getElementById('cart-count');
+        if (badge) { badge.classList.remove('cart-bump'); void badge.offsetWidth; badge.classList.add('cart-bump'); }
+        const orig = btn.textContent; btn.textContent = '✓ Added!'; btn.disabled = true; btn.style.opacity = '0.8';
+        setTimeout(() => { btn.textContent = orig; btn.disabled = false; btn.style.opacity = ''; }, 1500);
         showToast('Added to cart!', false);
       });
     });
-
     updateCartBadge();
 
     // ══ WISHLIST ══
@@ -777,9 +831,7 @@
         const isWished = btn.classList.toggle('wishlisted');
         icon.classList.toggle('fas', isWished);
         icon.classList.toggle('far', !isWished);
-        icon.classList.remove('heart-bounce');
-        void icon.offsetWidth;
-        icon.classList.add('heart-bounce');
+        icon.classList.remove('heart-bounce'); void icon.offsetWidth; icon.classList.add('heart-bounce');
       });
     });
 
@@ -790,32 +842,20 @@
     document.addEventListener('click', e => {
       if (!filterDropdown.contains(e.target) && e.target !== filterToggleBtn) filterDropdown.classList.add('hidden');
     });
-
-    // Dual range slider
-    const rangeMin   = document.getElementById('range-min');
-    const rangeMax   = document.getElementById('range-max');
-    const rangeFill  = document.getElementById('range-fill');
-    const priceLabel = document.getElementById('price-range-label');
-    const ABS_MIN = 1000, ABS_MAX = 700000, MIN_GAP = 1000;
+    const rangeMin = document.getElementById('range-min'), rangeMax = document.getElementById('range-max');
+    const rangeFill = document.getElementById('range-fill'), priceLabel = document.getElementById('price-range-label');
+    const ABS_MIN = 1000, ABS_MAX = 700000;
     function formatINR(n) { return '₹' + n.toLocaleString('en-IN'); }
     function updateSlider() {
       let lo = parseInt(rangeMin.value), hi = parseInt(rangeMax.value);
-      if (hi - lo < MIN_GAP) {
-        if (this === rangeMin) { lo = hi - MIN_GAP; rangeMin.value = lo; }
-        else { hi = lo + MIN_GAP; rangeMax.value = hi; }
-      }
+      if (hi - lo < 1000) { if (this === rangeMin) { lo = hi - 1000; rangeMin.value = lo; } else { hi = lo + 1000; rangeMax.value = hi; } }
       const pct = v => ((v - ABS_MIN) / (ABS_MAX - ABS_MIN)) * 100;
-      rangeFill.style.left  = pct(lo) + '%';
-      rangeFill.style.width = (pct(hi) - pct(lo)) + '%';
+      rangeFill.style.left = pct(lo) + '%'; rangeFill.style.width = (pct(hi) - pct(lo)) + '%';
       priceLabel.textContent = formatINR(lo) + ' – ' + formatINR(hi);
     }
-    rangeMin.addEventListener('input', updateSlider);
-    rangeMax.addEventListener('input', updateSlider);
-    updateSlider.call({});
-
+    rangeMin.addEventListener('input', updateSlider); rangeMax.addEventListener('input', updateSlider); updateSlider.call({});
     document.getElementById('filter-apply').addEventListener('click', () => {
-      const brand = document.getElementById('filter-brand').value;
-      const lo = parseInt(rangeMin.value), hi = parseInt(rangeMax.value);
+      const brand = document.getElementById('filter-brand').value, lo = parseInt(rangeMin.value), hi = parseInt(rangeMax.value);
       shoeCards.forEach(card => {
         const matchBrand = brand === 'all' || card.dataset.brand === brand;
         const price = parseInt(card.dataset.price || '0');
@@ -826,8 +866,7 @@
     });
     document.getElementById('filter-reset').addEventListener('click', () => {
       document.getElementById('filter-brand').value = 'all';
-      rangeMin.value = ABS_MIN; rangeMax.value = ABS_MAX;
-      updateSlider.call({});
+      rangeMin.value = ABS_MIN; rangeMax.value = ABS_MAX; updateSlider.call({});
       shoeCards.forEach(c => c.style.display = 'block');
       filterButtons.forEach(b => b.classList.toggle('active', b.dataset.brand === 'all'));
       filterDropdown.classList.add('hidden');
@@ -835,162 +874,95 @@
 
     // ══ SEARCH ══
     const PRODUCT_INDEX = Array.from(shoeCards).map(card => ({
-      name:     card.dataset.name     || '',
-      colorway: card.dataset.colorway || '',
-      brand:    card.dataset.brand    || '',
-      price:    parseInt(card.dataset.price || '0'),
-      img:      card.dataset.img      || '',
-      el:       card
+      name:card.dataset.name||'', colorway:card.dataset.colorway||'', brand:card.dataset.brand||'',
+      price:parseInt(card.dataset.price||'0'), img:card.dataset.img||'', el:card
     }));
-    const overlay      = document.getElementById('search-overlay');
-    const searchInput  = document.getElementById('search-input');
-    const clearBtn     = document.getElementById('search-clear-btn');
-    const resultsPanel = document.getElementById('search-results-panel');
-
-    function openSearch()  { overlay.classList.add('open'); searchInput.focus(); }
-    function closeSearch() {
-      overlay.classList.remove('open');
-      searchInput.value = ''; clearBtn.classList.remove('visible');
-      resultsPanel.innerHTML = ''; resultsPanel.classList.remove('has-results');
-    }
+    const overlay = document.getElementById('search-overlay'), searchInput = document.getElementById('search-input');
+    const clearBtn = document.getElementById('search-clear-btn'), resultsPanel = document.getElementById('search-results-panel');
+    function openSearch() { overlay.classList.add('open'); searchInput.focus(); }
+    function closeSearch() { overlay.classList.remove('open'); searchInput.value=''; clearBtn.classList.remove('visible'); resultsPanel.innerHTML=''; resultsPanel.classList.remove('has-results'); }
     document.getElementById('search-open-btn').addEventListener('click', openSearch);
-    document.getElementById('search-open-btn-mobile')?.addEventListener('click', () => {
-      document.getElementById('mobile-menu').classList.remove('open'); openSearch();
-    });
+    document.getElementById('search-open-btn-mobile')?.addEventListener('click', () => { document.getElementById('mobile-menu').classList.remove('open'); openSearch(); });
     document.addEventListener('keydown', e => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openSearch(); }
-      if (e.key === 'Escape' && overlay.classList.contains('open')) closeSearch();
+      if ((e.metaKey||e.ctrlKey)&&e.key==='k') { e.preventDefault(); openSearch(); }
+      if (e.key==='Escape'&&overlay.classList.contains('open')) closeSearch();
     });
-    overlay.addEventListener('click', e => { if (e.target === overlay) closeSearch(); });
-    clearBtn.addEventListener('click', () => {
-      searchInput.value = ''; clearBtn.classList.remove('visible');
-      resultsPanel.innerHTML = ''; resultsPanel.classList.remove('has-results'); searchInput.focus();
-    });
-
-    function escHtml(str)  { return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-    function escRegex(str) { return str.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'); }
-    function highlight(text, q) {
-      if (!q) return escHtml(text);
-      return escHtml(text).replace(new RegExp(`(${escRegex(q)})`,'gi'),'<span class="search-highlight">$1</span>');
-    }
+    overlay.addEventListener('click', e => { if (e.target===overlay) closeSearch(); });
+    clearBtn.addEventListener('click', () => { searchInput.value=''; clearBtn.classList.remove('visible'); resultsPanel.innerHTML=''; resultsPanel.classList.remove('has-results'); searchInput.focus(); });
+    function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function escRegex(s) { return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'); }
+    function highlight(t,q) { if(!q)return escHtml(t); return escHtml(t).replace(new RegExp(`(${escRegex(q)})`,'gi'),'<span class="search-highlight">$1</span>'); }
     function runSearch(query) {
       clearBtn.classList.toggle('visible', query.length > 0);
-      if (!query.trim()) { resultsPanel.innerHTML = ''; resultsPanel.classList.remove('has-results'); return; }
-      const q = query.toLowerCase();
-      const hits = PRODUCT_INDEX.filter(p =>
-        p.name.toLowerCase().includes(q) || p.colorway.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q)
-      );
+      if (!query.trim()) { resultsPanel.innerHTML=''; resultsPanel.classList.remove('has-results'); return; }
+      const q = query.toLowerCase(), hits = PRODUCT_INDEX.filter(p=>p.name.toLowerCase().includes(q)||p.colorway.toLowerCase().includes(q)||p.brand.toLowerCase().includes(q));
       resultsPanel.classList.add('has-results');
-      if (hits.length === 0) {
-        resultsPanel.innerHTML = `<div class="search-no-results"><span class="emoji">🛍️</span>No deals found for "<strong>${escHtml(query)}</strong>"</div>`;
-        return;
-      }
-      resultsPanel.innerHTML = hits.map((p, i) => `
-        <div class="search-result-item" data-idx="${i}" role="option" tabindex="0" style="animation-delay:${i*40}ms">
-          <img class="sri-img" src="${escHtml(p.img)}" alt="${escHtml(p.name)}" onerror="this.style.background='#e5e5e5';this.src=''" />
-          <div class="sri-info">
-            <div class="sri-name">${highlight(p.name, query)}</div>
-            <div class="sri-sub">${highlight(p.colorway, query)} · ${highlight(p.brand, query)}</div>
-          </div>
-          <div class="sri-price">₹${p.price.toLocaleString('en-IN')}</div>
-        </div>`).join('');
-      resultsPanel.querySelectorAll('.search-result-item').forEach((item, i) => {
-        function activate() {
-          closeSearch();
-          setTimeout(() => {
-            hits[i].el.scrollIntoView({ behavior:'smooth', block:'center' });
-            hits[i].el.style.transition = 'box-shadow 0.3s';
-            hits[i].el.style.boxShadow = '0 0 0 3px #06b6d4';
-            setTimeout(() => { hits[i].el.style.boxShadow = ''; }, 1200);
-          }, 200);
-        }
-        item.addEventListener('click', activate);
-        item.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') activate(); });
+      if (!hits.length) { resultsPanel.innerHTML=`<div class="search-no-results"><span class="emoji">🛍️</span>No deals found for "<strong>${escHtml(query)}</strong>"</div>`; return; }
+      resultsPanel.innerHTML=hits.map((p,i)=>`<div class="search-result-item" data-idx="${i}" role="option" tabindex="0" style="animation-delay:${i*40}ms"><img class="sri-img" src="${escHtml(p.img)}" alt="${escHtml(p.name)}" onerror="this.style.background='#e5e5e5';this.src=''" /><div class="sri-info"><div class="sri-name">${highlight(p.name,query)}</div><div class="sri-sub">${highlight(p.colorway,query)} · ${highlight(p.brand,query)}</div></div><div class="sri-price">₹${p.price.toLocaleString('en-IN')}</div></div>`).join('');
+      resultsPanel.querySelectorAll('.search-result-item').forEach((item,i)=>{
+        item.addEventListener('click',()=>{ closeSearch(); setTimeout(()=>{ hits[i].el.scrollIntoView({behavior:'smooth',block:'center'}); hits[i].el.style.boxShadow='0 0 0 3px #ef4444'; setTimeout(()=>{hits[i].el.style.boxShadow='';},1200); },200); });
       });
     }
     let debounceTimer;
-    searchInput.addEventListener('input', () => {
-      clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(() => runSearch(searchInput.value), 160);
-    });
+    searchInput.addEventListener('input', () => { clearTimeout(debounceTimer); debounceTimer=setTimeout(()=>runSearch(searchInput.value),160); });
 
     // ══ AI CHAT ══
     const SYSTEM_PROMPT = `You are a friendly, knowledgeable assistant for Heat Haven, a premium sneaker and streetwear store in India.
 STORE INFO: Heat Haven | Instagram: @heatheaven.23_ | Currency: ₹ | Sizes: UK 6–12
-HOT DEALS IN STOCK:
-1. Ferrari Team Jacket - Scuderia Red - ₹23,430 (was ₹26,000)
-2. Seductive Scales (Unisex) - ₹43,430 (was ₹56,001)
-3. Bearbrick Batman Hush 1000% - ₹54,999
-4. Air Jordan 4 Retro - Bred - ₹5,000
-5. Butterfly Blossom Shirt - Green - ₹32,410
-6. Adidas Yeezy Boost V2 - Zebra - ₹3,559
-7. Fear Of God Essentials Hoodie - Black - ₹3,559
-POLICIES: Free shipping above ₹5,000 | Standard ₹99 | Returns: 7 days unworn | Payment: UPI/Card/COD
+HOT DEALS: Ferrari Team Jacket ₹23,430 | Seductive Scales ₹43,430 | Bearbrick Batman 1000% ₹54,999 | Air Jordan 4 Bred ₹5,000 | Butterfly Blossom Shirt ₹32,410 | Yeezy Boost V2 Zebra ₹3,559 | Fear Of God Essentials Hoodie ₹3,559
+POLICIES: Free shipping above ₹5,000 | Returns: 7 days unworn | Payment: UPI/Card/COD
 PERSONALITY: Short 2-3 sentence replies, casual, hype-culture savvy. Use deal energy!`;
-
     const QUICK_REPLIES = ["Best deals? 🔥","Shipping info","Yeezy sizing","Jordan sizing","Returns","Contact us"];
-    const widget     = document.getElementById('hh-chat-widget');
-    const chatToggle = document.getElementById('hh-chat-toggle');
-    const msgs       = document.getElementById('hh-messages');
-    const chatInput  = document.getElementById('hh-input');
-    const sendBtn    = document.getElementById('hh-send');
-    const chipsEl    = document.getElementById('hh-chips');
-    const notifDot   = document.getElementById('hh-notif-dot');
-    let chatHistory = [], isTyping = false, hasOpened = false;
+    const widget=document.getElementById('hh-chat-widget'), chatToggle=document.getElementById('hh-chat-toggle');
+    const msgs=document.getElementById('hh-messages'), chatInput=document.getElementById('hh-input');
+    const sendBtn=document.getElementById('hh-send'), chipsEl=document.getElementById('hh-chips');
+    const notifDot=document.getElementById('hh-notif-dot');
+    let chatHistory=[], isTyping=false, hasOpened=false;
+    chatToggle.addEventListener('click',()=>{ widget.classList.toggle('open'); if(!hasOpened){hasOpened=true;notifDot.style.display='none';showWelcome();} });
+    function showWelcome(){ setTimeout(()=>{ addBot("Hey! 🔥 Welcome to **Heat Haven Deals**. Copped anything yet?"); setTimeout(()=>{ addBot("Ask me about sizing, shipping, or our hottest deals!"); showChips(); },800); },300); }
+    function showChips(chips=QUICK_REPLIES){ chipsEl.innerHTML=''; chips.forEach(t=>{const b=document.createElement('button');b.className='hh-chip';b.textContent=t;b.onclick=()=>{chipsEl.innerHTML='';sendMsg(t);};chipsEl.appendChild(b);}); }
+    function addBot(text){ const d=document.createElement('div');d.className='hh-msg bot';d.innerHTML=`<div class="hh-bot-avatar">🤖</div><div class="hh-bubble">${text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>')}</div>`;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight; }
+    function addUser(text){ const d=document.createElement('div');d.className='hh-msg user';d.innerHTML=`<div class="hh-bubble">${escHtml(text)}</div>`;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight; }
+    function showTyping(){ const d=document.createElement('div');d.className='hh-msg bot';d.id='hh-typing-indicator';d.innerHTML=`<div class="hh-bot-avatar">🤖</div><div class="hh-bubble" style="padding:10px 16px"><div class="hh-typing"><span></span><span></span><span></span></div></div>`;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight; }
+    function hideTyping(){ const e=document.getElementById('hh-typing-indicator');if(e)e.remove(); }
+    async function sendMsg(text){ text=text.trim();if(!text||isTyping)return; chipsEl.innerHTML='';addUser(text);chatInput.value='';isTyping=true;sendBtn.style.opacity='0.5';chatHistory.push({role:'user',content:text});showTyping();
+      try{ const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:SYSTEM_PROMPT,messages:chatHistory})});const data=await res.json();const reply=data.content?.[0]?.text||"Sorry, try again!";chatHistory.push({role:'assistant',content:reply});hideTyping();addBot(reply);showChips(["Tell me more","Any other deals?","Shipping info","Contact support"]); }
+      catch(err){ hideTyping();addBot("Connectivity issue! DM us on Instagram **@heatheaven.23_** 🙏"); }
+      isTyping=false;sendBtn.style.opacity='1';
+    }
+    sendBtn.addEventListener('click',()=>sendMsg(chatInput.value));
+    chatInput.addEventListener('keydown',e=>{if(e.key==='Enter')sendMsg(chatInput.value);});
+    setTimeout(()=>{if(!hasOpened)notifDot.style.display='block';},3000);
 
-    chatToggle.addEventListener('click', () => {
-      widget.classList.toggle('open');
-      if (!hasOpened) { hasOpened = true; notifDot.style.display = 'none'; showWelcome(); }
+    // ══ PREMIUM ANIMATIONS ══════════════════════════════════════
+
+    // Cursor glow
+    const glow = document.getElementById('cursor-glow');
+    document.addEventListener('mousemove', e => {
+      glow.style.left = e.clientX + 'px';
+      glow.style.top  = e.clientY + 'px';
     });
-    function showWelcome() {
-      setTimeout(() => {
-        addBot("Hey! 🔥 Welcome to **Heat Haven Deals**. Copped anything yet?");
-        setTimeout(() => { addBot("Ask me about sizing, shipping, or our hottest deals!"); showChips(); }, 800);
-      }, 300);
-    }
-    function showChips(chips = QUICK_REPLIES) {
-      chipsEl.innerHTML = '';
-      chips.forEach(t => { const b = document.createElement('button'); b.className = 'hh-chip'; b.textContent = t; b.onclick = () => { chipsEl.innerHTML = ''; sendMsg(t); }; chipsEl.appendChild(b); });
-    }
-    function addBot(text) {
-      const d = document.createElement('div'); d.className = 'hh-msg bot';
-      d.innerHTML = `<div class="hh-bot-avatar">🤖</div><div class="hh-bubble">${text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>')}</div>`;
-      msgs.appendChild(d); msgs.scrollTop = msgs.scrollHeight;
-    }
-    function addUser(text) {
-      const d = document.createElement('div'); d.className = 'hh-msg user';
-      d.innerHTML = `<div class="hh-bubble">${escHtml(text)}</div>`;
-      msgs.appendChild(d); msgs.scrollTop = msgs.scrollHeight;
-    }
-    function showTyping() {
-      const d = document.createElement('div'); d.className = 'hh-msg bot'; d.id = 'hh-typing-indicator';
-      d.innerHTML = `<div class="hh-bot-avatar">🤖</div><div class="hh-bubble" style="padding:10px 16px"><div class="hh-typing"><span></span><span></span><span></span></div></div>`;
-      msgs.appendChild(d); msgs.scrollTop = msgs.scrollHeight;
-    }
-    function hideTyping() { const e = document.getElementById('hh-typing-indicator'); if(e) e.remove(); }
-    async function sendMsg(text) {
-      text = text.trim(); if (!text || isTyping) return;
-      chipsEl.innerHTML = ''; addUser(text); chatInput.value = '';
-      isTyping = true; sendBtn.style.opacity = '0.5';
-      chatHistory.push({ role:'user', content:text }); showTyping();
-      try {
-        const res = await fetch('https://api.anthropic.com/v1/messages', {
-          method:'POST', headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:1000, system:SYSTEM_PROMPT, messages:chatHistory })
-        });
-        const data = await res.json();
-        const reply = data.content?.[0]?.text || "Sorry, try again!";
-        chatHistory.push({ role:'assistant', content:reply });
-        hideTyping(); addBot(reply);
-        showChips(["Tell me more","Any other deals?","Shipping info","Contact support"]);
-      } catch(err) {
-        hideTyping(); addBot("Connectivity issue! DM us on Instagram **@heatheaven.23_** for help 🙏");
+
+    // Scroll reveal + staggered cards
+    const cards = document.querySelectorAll('.shoe-card');
+    cards.forEach((card, i) => { card.style.transitionDelay = (i * 0.07) + 's'; });
+
+    const revealEls = document.querySelectorAll('.reveal, .section-heading');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    revealEls.forEach(el => io.observe(el));
+    cards.forEach(el => io.observe(el));
+
+    // Active nav link highlight
+    const currentPage = location.pathname.split('/').pop() || 'deals.html';
+    document.querySelectorAll('.nav-link').forEach(link => {
+      if (link.getAttribute('href') === currentPage) {
+        link.style.color = '#ff4500';
+        link.classList.add('font-semibold');
       }
-      isTyping = false; sendBtn.style.opacity = '1';
-    }
-    sendBtn.addEventListener('click', () => sendMsg(chatInput.value));
-    chatInput.addEventListener('keydown', e => { if (e.key === 'Enter') sendMsg(chatInput.value); });
-    setTimeout(() => { if (!hasOpened) notifDot.style.display = 'block'; }, 3000);
+    });
   </script>
 </body>
 </html>
