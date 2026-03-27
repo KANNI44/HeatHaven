@@ -27,12 +27,10 @@
     body { font-family:"Poppins",sans-serif; overflow-x:hidden; }
     html { scrollbar-gutter:stable; }
     h1,h2,h3,h4,.brand { font-family:"Archivo Black",sans-serif; letter-spacing:-0.5px; }
-
     .hero-video { width:100%; height:80vh; object-fit:cover; object-position:center; }
     .shoe-card { transition:transform 0.25s ease, box-shadow 0.25s ease; }
     .shoe-card:hover { transform:translateY(-5px); box-shadow:0 10px 25px rgba(0,0,0,0.12); }
     .dark .shoe-card:hover { box-shadow:none; }
-
     .page-transition { animation:fadeIn 0.5s ease-in-out; }
     @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
     .mobile-menu { transform:translateX(100%); transition:transform 0.3s ease-in-out; }
@@ -47,29 +45,21 @@
     .cart-bump { animation:cart-bump 0.35s ease-out; }
     @keyframes select-shake { 0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(-4px)} 40%,80%{transform:translateX(4px)} }
     .select-shake { animation:select-shake 0.4s ease-out; }
-
-    /* Toast */
     #toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#111827; color:#fff; padding:.75rem 1.5rem; border-radius:9999px; font-size:.875rem; display:none; align-items:center; gap:.5rem; z-index:9999; }
     #toast.show { display:flex; animation:toast-fade 2.2s ease-out forwards; }
     @keyframes toast-fade { 0%{opacity:0;transform:translate(-50%,10px)} 10%,85%{opacity:1;transform:translate(-50%,0)} 100%{opacity:0;transform:translate(-50%,10px)} }
-
-    /* Dark Mode Toggle Icons */
     #theme-toggle .sun-icon,
     #theme-toggle .moon-icon { position:absolute; width:1.4rem; height:1.4rem; transition:transform 0.4s ease,opacity 0.4s ease; }
     #theme-toggle .sun-icon  { opacity:1; transform:rotate(0deg) scale(1); }
     #theme-toggle .moon-icon { opacity:0; transform:rotate(90deg) scale(0.4); }
     .dark #theme-toggle .sun-icon  { opacity:0; transform:rotate(-90deg) scale(0.4); }
     .dark #theme-toggle .moon-icon { opacity:1; transform:rotate(0deg) scale(1); }
-
-    /* AR Camera Button */
     @keyframes ar-ring { 0%,100%{transform:scale(1);opacity:0.4;} 50%{transform:scale(1.25);opacity:1;} }
     #ar-cam-btn { position:relative; display:flex; align-items:center; justify-content:center; width:48px; height:48px; border-radius:50%; background:#ff4500; border:none; cursor:pointer; box-shadow:0 4px 18px rgba(255,69,0,0.45); transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease; text-decoration:none; flex-shrink:0; }
     #ar-cam-btn:hover { transform:scale(1.12); box-shadow:0 0 0 4px rgba(255,69,0,0.2), 0 8px 28px rgba(255,69,0,0.5); }
     #ar-cam-btn .ar-ring { position:absolute; inset:0; border-radius:50%; border:2px solid #ff4500; animation:ar-ring 2s ease-in-out infinite; pointer-events:none; }
     #ar-cam-btn .ar-tooltip { position:absolute; right:58px; top:50%; transform:translateY(-50%); background:#111; color:#fff; font-family:'Archivo Black',sans-serif; font-size:11px; letter-spacing:0.5px; padding:5px 12px; border-radius:8px; white-space:nowrap; pointer-events:none; border:1px solid rgba(255,69,0,0.5); opacity:0; transition:opacity 0.2s ease; box-shadow:0 4px 16px rgba(0,0,0,0.4); }
     #ar-cam-btn:hover .ar-tooltip { opacity:1; }
-
-    /* Nav Search Pill */
     .nav-search-pill { display:flex; align-items:center; min-width:220px; padding:0; border-radius:999px; border:none; cursor:pointer; background:transparent; font-family:"Poppins",sans-serif; font-size:13px; font-weight:500; transition:transform 0.15s; position:relative; white-space:nowrap; }
     .nav-search-pill:hover { transform:scale(1.02); }
     .nav-search-pill:active { transform:scale(0.97); }
@@ -86,8 +76,6 @@
     .dark .pill-label { color:#9aa0a6; }
     .dark .nav-search-pill .pill-kbd { background:rgba(255,255,255,0.07); color:#666; }
     @keyframes pill-gradient { 0%{background-position:0% 50%;} 50%{background-position:100% 50%;} 100%{background-position:0% 50%;} }
-
-    /* Search Overlay */
     #search-overlay { position:fixed; inset:0; z-index:9998; background:rgba(255,255,255,0.85); backdrop-filter:blur(20px); display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding-top:120px; opacity:0; pointer-events:none; transition:opacity 0.3s ease; }
     .dark #search-overlay { background:rgba(0,0,0,0.88); }
     #search-overlay.open { opacity:1; pointer-events:all; }
@@ -132,8 +120,6 @@
     #search-close-hint { margin-top:16px; font-size:12px; color:#9aa0a6; font-family:"Poppins",sans-serif; }
     #search-close-hint kbd { background:rgba(0,0,0,0.08); color:#5f6368; padding:2px 8px; border-radius:4px; font-family:monospace; }
     .dark #search-close-hint kbd { background:rgba(255,255,255,0.1); color:#9aa0a6; }
-
-    /* Filter Panel */
     #filterPanel { position:fixed; z-index:9990; width:300px; background:#fff; border-radius:20px; padding:28px 24px 24px; box-shadow:0 12px 48px rgba(0,0,0,0.16),0 2px 8px rgba(0,0,0,0.08); font-family:"Poppins",sans-serif; opacity:0; pointer-events:none; transform:translateY(-12px) scale(0.97); transition:opacity 0.22s ease,transform 0.22s ease; }
     #filterPanel.open { opacity:1; pointer-events:all; transform:translateY(0) scale(1); }
     .dark #filterPanel { background:#111; box-shadow:0 12px 48px rgba(0,0,0,0.6); }
@@ -141,8 +127,6 @@
     .fp-slider::-webkit-slider-thumb { -webkit-appearance:none; width:20px; height:20px; background:#ef4444; border:3px solid #fff; border-radius:50%; cursor:pointer; pointer-events:all; box-shadow:0 1px 6px rgba(0,0,0,0.2); transition:transform 0.15s; }
     .fp-slider::-webkit-slider-thumb:hover { transform:scale(1.15); }
     .fp-slider::-moz-range-thumb { width:20px; height:20px; background:#ef4444; border:3px solid #fff; border-radius:50%; cursor:pointer; pointer-events:all; }
-
-    /* AI Chat Widget */
     #hh-chat-widget { position:fixed; bottom:24px; left:24px; z-index:9999; font-family:"Poppins",sans-serif; }
     #hh-chat-toggle { width:60px; height:60px; border-radius:50%; background:#000; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 8px 32px rgba(0,0,0,0.25); transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.3s ease; position:relative; }
     #hh-chat-toggle:hover { transform:scale(1.1); box-shadow:0 12px 40px rgba(0,0,0,0.35); }
@@ -199,8 +183,6 @@
     .dark .hh-chip:hover { background:#fff; color:#000; border-color:#fff; }
     .dark .hh-powered { background:#0a0a0a; color:#333; }
     @media (max-width:420px) { #hh-chat-panel { width:calc(100vw - 48px); } }
-
-    /* ── PREMIUM ANIMATIONS ─────────────────────────────────────── */
     #cursor-glow { position:fixed; width:320px; height:320px; border-radius:50%; background:radial-gradient(circle, rgba(255,69,0,0.07) 0%, transparent 70%); pointer-events:none; z-index:0; transform:translate(-50%,-50%); transition:opacity 0.4s ease; opacity:0; }
     body:hover #cursor-glow { opacity:1; }
     @keyframes brand-shimmer { 0%{background-position:-200% center;} 100%{background-position:200% center;} }
@@ -245,8 +227,6 @@
     @keyframes nav-drop { from{transform:translateY(-100%);opacity:0;} to{transform:translateY(0);opacity:1;} }
     nav { animation:nav-drop 0.6s cubic-bezier(0.16,1,0.3,1) both; }
     .section-divider { height:1px; background:linear-gradient(90deg, transparent, #ff4500 30%, #ff4500 70%, transparent); opacity:0.15; margin:0; }
-
-    /* ── DYNAMIC SIZE PRICING ── */
     @keyframes hh-price-pop {
       0%   { transform:scale(1);    color:inherit; }
       30%  { transform:scale(1.28); color:#ff4500; }
@@ -259,7 +239,6 @@
 
 <body class="bg-white dark:bg-amoled text-black dark:text-white transition-colors duration-300">
 
-  <!-- Search Overlay -->
   <div id="search-overlay" role="dialog" aria-label="Search products">
     <div id="search-box-wrap">
       <div class="search-border-wrap">
@@ -274,7 +253,6 @@
     <p id="search-close-hint">Press <kbd>Esc</kbd> to close</p>
   </div>
 
-  <!-- Fixed bottom-right: AR Camera + Dark Mode Toggle -->
   <div class="fixed bottom-10 right-6 z-50 flex flex-col items-center gap-3">
     <a href="ar-tryon.html" id="ar-cam-btn" aria-label="AR Try-On">
       <span class="ar-ring"></span>
@@ -295,10 +273,7 @@
     </button>
   </div>
 
-  <!-- Filter Overlay -->
   <div id="filterOverlay" class="hidden fixed inset-0 z-[9985]" onclick="closeFilter()"></div>
-
-  <!-- Filter Panel -->
   <div id="filterPanel">
     <h2 style="font-family:'Archivo Black',sans-serif;font-size:18px;font-weight:900;color:#111;margin-bottom:20px;" class="dark:text-white">Filter Products</h2>
     <div style="margin-bottom:22px;">
@@ -337,7 +312,6 @@
     </div>
   </div>
 
-  <!-- Navigation -->
   <nav class="bg-white dark:bg-amoled shadow-md sticky top-0 z-40">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between h-16">
@@ -387,7 +361,6 @@
         </div>
       </div>
     </div>
-    <!-- Mobile menu -->
     <div class="mobile-menu fixed inset-y-0 right-0 w-64 bg-white dark:bg-gray-900 shadow-lg z-50 p-4" id="mobile-menu">
       <div class="flex justify-between items-center mb-8">
         <div class="brand text-xl font-bold dark:text-white">HEAT HAVEN</div>
@@ -420,10 +393,7 @@
     </div>
   </nav>
 
-  <!-- Main Content -->
   <div id="app" class="page-transition">
-
-    <!-- Hero -->
     <section id="home" class="relative">
       <div class="relative">
         <video autoplay muted loop class="hero-video">
@@ -443,14 +413,12 @@
       </div>
     </section>
 
-    <!-- Products -->
     <section id="products" class="py-12 bg-white dark:bg-amoled">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 class="text-3xl font-bold mb-2 dark:text-white section-heading reveal">Featured Sneakers</h2>
         <a href="product.html" class="text-black dark:text-white font-medium hover:underline">View All</a>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mt-6" id="productGrid">
 
-          <!-- Product 1 -->
           <div class="shoe-card bg-white dark:bg-amoled rounded-lg overflow-hidden shadow-md dark:shadow-none transition duration-300 group relative"
                data-brand="jordan" data-name="Air Jordan 1 Retro High" data-colorway="Chicago Bulls" data-price="5559"
                data-img="images/aj%201%20chichgo.png">
@@ -469,14 +437,12 @@
                 <label class="block text-xs text-gray-500 dark:text-zinc-600 mb-1">Select size</label>
                 <select class="size-select w-full bg-white dark:bg-amoled dark:text-white border border-gray-300 dark:border-zinc-800 text-sm rounded px-2 py-1 focus:outline-none cursor-pointer">
                   <option value="" disabled selected>Choose size</option>
-                  <option>UK 6</option><option>UK 7</option><option>UK 8</option><option>UK 9</option><option>UK 10</option><option>UK 11</option><option>UK 12</option>
+                  <option value="UK 6">UK 6</option><option value="UK 7">UK 7</option><option value="UK 8">UK 8</option>
+                  <option value="UK 9">UK 9</option><option value="UK 10">UK 10</option><option value="UK 11">UK 11</option><option value="UK 12">UK 12</option>
                 </select>
               </div>
               <div class="flex justify-between items-center">
-                <div>
-                  <span class="text-gray-400 line-through mr-2 text-sm">₹6,250</span>
-                  <span class="font-bold dark:text-white">₹5,559</span>
-                </div>
+                <div><span class="font-bold dark:text-white">₹21,500</span></div>
                 <button class="add-to-cart-btn bg-black dark:bg-red-600 text-white px-4 py-1.5 rounded text-sm hover:bg-gray-800 cart-animation">Add to Cart</button>
               </div>
               <div class="mt-3 pt-3 border-t border-gray-100 dark:border-zinc-800">
@@ -488,7 +454,6 @@
             </div>
           </div>
 
-          <!-- Product 2 -->
           <div class="shoe-card bg-white dark:bg-amoled rounded-lg overflow-hidden shadow-md dark:shadow-none transition duration-300 group relative"
                data-brand="yeezy" data-name="Yeezy 700 V3" data-colorway="Azael" data-price="4759"
                data-img="images/yzy%20700%20v3%20azael.png">
@@ -506,14 +471,12 @@
                 <label class="block text-xs text-gray-500 dark:text-zinc-600 mb-1">Select size</label>
                 <select class="size-select w-full bg-white dark:bg-amoled dark:text-white border border-gray-300 dark:border-zinc-800 text-sm rounded px-2 py-1 focus:outline-none cursor-pointer">
                   <option value="" disabled selected>Choose size</option>
-                  <option>UK 6</option><option>UK 7</option><option>UK 8</option><option>UK 9</option><option>UK 10</option><option>UK 11</option><option>UK 12</option>
+                  <option value="UK 6">UK 6</option><option value="UK 7">UK 7</option><option value="UK 8">UK 8</option>
+                  <option value="UK 9">UK 9</option><option value="UK 10">UK 10</option><option value="UK 11">UK 11</option><option value="UK 12">UK 12</option>
                 </select>
               </div>
               <div class="flex justify-between items-center">
-                <div>
-                  <span class="text-gray-400 line-through mr-2 text-sm">₹5,250</span>
-                  <span class="font-bold dark:text-white">₹4,759</span>
-                </div>
+                <div><span class="font-bold dark:text-white">₹18,000</span></div>
                 <button class="add-to-cart-btn bg-black dark:bg-red-600 text-white px-4 py-1.5 rounded text-sm hover:bg-gray-800 cart-animation">Add to Cart</button>
               </div>
               <div class="mt-3 pt-3 border-t border-gray-100 dark:border-zinc-800">
@@ -525,7 +488,6 @@
             </div>
           </div>
 
-          <!-- Product 3 -->
           <div class="shoe-card bg-white dark:bg-amoled rounded-lg overflow-hidden shadow-md dark:shadow-none transition duration-300 group relative"
                data-brand="nike" data-name="Nike Uptempo Slide Bulls" data-colorway="Bulls" data-price="3559"
                data-img="images/uptempo%20slide%20bulls.png">
@@ -543,11 +505,12 @@
                 <label class="block text-xs text-gray-500 dark:text-zinc-600 mb-1">Select size</label>
                 <select class="size-select w-full bg-white dark:bg-amoled dark:text-white border border-gray-300 dark:border-zinc-800 text-sm rounded px-2 py-1 focus:outline-none cursor-pointer">
                   <option value="" disabled selected>Choose size</option>
-                  <option>UK 6</option><option>UK 7</option><option>UK 8</option><option>UK 9</option><option>UK 10</option><option>UK 11</option><option>UK 12</option>
+                  <option value="UK 6">UK 6</option><option value="UK 7">UK 7</option><option value="UK 8">UK 8</option>
+                  <option value="UK 9">UK 9</option><option value="UK 10">UK 10</option><option value="UK 11">UK 11</option><option value="UK 12">UK 12</option>
                 </select>
               </div>
               <div class="flex justify-between items-center">
-                <span class="font-bold dark:text-white">₹3,559</span>
+                <span class="font-bold dark:text-white">₹28,000</span>
                 <button class="add-to-cart-btn bg-black dark:bg-red-600 text-white px-4 py-1.5 rounded text-sm hover:bg-gray-800 cart-animation">Add to Cart</button>
               </div>
               <div class="mt-3 pt-3 border-t border-gray-100 dark:border-zinc-800">
@@ -559,7 +522,6 @@
             </div>
           </div>
 
-          <!-- Product 4 -->
           <div class="shoe-card bg-white dark:bg-amoled rounded-lg overflow-hidden shadow-md dark:shadow-none transition duration-300 group relative"
                data-brand="jordan" data-name="Travis Scott x Fragment High" data-colorway="Fragment" data-price="5559"
                data-img="images/travis%20x%20fragment%20high.png">
@@ -577,11 +539,12 @@
                 <label class="block text-xs text-gray-500 dark:text-zinc-600 mb-1">Select size</label>
                 <select class="size-select w-full bg-white dark:bg-amoled dark:text-white border border-gray-300 dark:border-zinc-800 text-sm rounded px-2 py-1 focus:outline-none cursor-pointer">
                   <option value="" disabled selected>Choose size</option>
-                  <option>UK 6</option><option>UK 7</option><option>UK 8</option><option>UK 9</option><option>UK 10</option><option>UK 11</option><option>UK 12</option>
+                  <option value="UK 6">UK 6</option><option value="UK 7">UK 7</option><option value="UK 8">UK 8</option>
+                  <option value="UK 9">UK 9</option><option value="UK 10">UK 10</option><option value="UK 11">UK 11</option><option value="UK 12">UK 12</option>
                 </select>
               </div>
               <div class="flex justify-between items-center">
-                <span class="font-bold dark:text-white">₹5,559</span>
+                <span class="font-bold dark:text-white">₹3,06,000</span>
                 <button class="add-to-cart-btn bg-black dark:bg-red-600 text-white px-4 py-1.5 rounded text-sm hover:bg-gray-800 cart-animation">Add to Cart</button>
               </div>
               <div class="mt-3 pt-3 border-t border-gray-100 dark:border-zinc-800">
@@ -597,7 +560,6 @@
       </div>
     </section>
 
-    <!-- Partners -->
     <section id="deals" class="py-12 bg-gray-50 dark:bg-amoled">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 class="text-3xl font-bold mb-8 text-black dark:text-white section-heading reveal">Sneaker Partners</h2>
@@ -622,7 +584,6 @@
       </div>
     </section>
 
-    <!-- About -->
     <section id="about" class="py-16 bg-black text-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
@@ -639,7 +600,6 @@
       </div>
     </section>
 
-    <!-- Contact -->
     <section id="contact" class="py-16 bg-white dark:bg-amoled">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 class="text-3xl font-bold mb-8 text-center dark:text-white">Contact Us ☎️</h2>
@@ -679,7 +639,6 @@
     </section>
   </div>
 
-  <!-- Footer -->
   <footer class="bg-black text-white py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -723,7 +682,6 @@
     </div>
   </footer>
 
-  <!-- Toast -->
   <div id="toast">
     <i class="fas fa-check-circle" style="color:#22c55e;"></i>
     <span>Added to cart!</span>
@@ -866,31 +824,90 @@
     }
     let debounceTimer;
     searchInput.addEventListener("input",()=>{clearTimeout(debounceTimer);debounceTimer=setTimeout(()=>runSearch(searchInput.value),160);});
-    const SYSTEM_PROMPT=`You are a friendly, knowledgeable sneaker assistant for Heat Haven, a premium sneaker store based in India.\nSTORE INFO: Heat Haven | Instagram: @heatheaven.23_ | Currency: ₹ | Sizes: UK 6–12\nPRODUCTS: Air Jordan 1 Retro High - Chicago Bulls - ₹5,559 | Nike Uptempo Slide Bulls - ₹3,559 | Yeezy 700 V3 Azael - ₹4,759 | Travis Scott x Fragment High - ₹5,559\nPOLICIES: Free shipping above ₹5,000 | Returns: 7 days unworn | Payment: UPI/Card/COD | Delivery: 3–7 days\nPERSONALITY: Short 2-3 sentence replies, casual, enthusiastic, sneaker-culture savvy.`;
-    const QUICK_REPLIES=["What's on sale? 🔥","Size guide","Shipping info","Best Jordans","Yeezy sizing","Returns"];
+
+    // ── BUILT-IN AI CHAT (no API key needed) ──────────────────────────
+    const QUICK_REPLIES = ["What's on sale? 🔥","Size guide","Shipping info","Best Jordans","Yeezy sizing","Returns policy"];
     const chatWidget=document.getElementById("hh-chat-widget"),chatToggle=document.getElementById("hh-chat-toggle"),msgs=document.getElementById("hh-messages"),input=document.getElementById("hh-input"),sendBtn=document.getElementById("hh-send"),chipsEl=document.getElementById("hh-chips"),notifDot=document.getElementById("hh-notif-dot");
-    let chatHistory=[],isTyping=false,hasOpened=false;
-    chatToggle.addEventListener("click",()=>{chatWidget.classList.toggle("open");if(!hasOpened){hasOpened=true;notifDot.style.display="none";showWelcome();}});
-    function showWelcome(){setTimeout(()=>{addBot("Hey! 👟 Welcome to **Heat Haven**. I'm your personal sneaker assistant.");setTimeout(()=>{addBot("Ask me about products, sizing, shipping, or anything sneaker-related!");showChips();},800);},300);}
+    let hasOpened=false;
+
+    // Knowledge base — keyword → response
+    const KB = [
+      { keys:["sale","deal","discount","offer"],
+        reply:"🔥 We've got the Air Jordan 1 Chicago on sale right now! Plus check out our Hot Deals page for more steals. Free shipping kicks in above ₹50,000 too!" },
+      { keys:["jordan","aj1","jordan 1","chicago bulls","air jordan"],
+        reply:"The Air Jordan 1 Retro High Chicago Bulls is one of our most 🔥 pieces — a certified grail. Prices start at ₹21,500 and vary by size. Grab it before it's gone!" },
+      { keys:["yeezy","700","azael","adidas yeezy"],
+        reply:"The Yeezy 700 V3 Azael is pure fire 🧲 — that alien aesthetic is unmatched. Prices range ₹12,400–₹20,500 depending on size. Yeezys run small so go half a size up!" },
+      { keys:["travis","fragment","travis scott"],
+        reply:"The Travis Scott x Fragment High is the rarest drop we carry 👁️ — prices go from ₹94,000 to ₹3,06,000 depending on size. A true collector piece." },
+      { keys:["nike","uptempo","slide","bulls"],
+        reply:"The Nike Uptempo Slide Bulls is a bold statement piece 🏀 — prices range ₹21,500–₹47,000 by size. Perfect for the culture." },
+      { keys:["size","sizing","fit","small","large","run"],
+        reply:"📏 <strong>Heat Haven Size Guide</strong> — getting your fit right is everything:\n\n👟 <strong>Air Jordans / Nike</strong> → Go half a size up. Jordan lasts tend to run narrow and slightly short, especially in leather models like the AJ1.\n🟡 <strong>Yeezys</strong> → Go a full size up. Yeezy Boosts and 700s run notoriously small — most people need at least +1.\n⚖️ <strong>New Balance</strong> → True to size across most models (990, 550, 574).\n👟 <strong>Adidas</strong> → Generally true to size, though Campus and Stan Smith can run slightly long.\n🔴 <strong>Travis Scott collabs</strong> → Same as Jordans — half size up.\n\nStill unsure? DM us on Instagram @heatheaven.23_ with your usual size and the shoe you want — we'll give you a personal recommendation! 🙌" },
+      { keys:["shipping","delivery","ship","how long","when"],
+        reply:"🚚 <strong>Heat Haven Shipping Info</strong> — here's everything you need to know:\n\n📦 <strong>Free Shipping</strong> — on all orders above ₹50,000\n💸 <strong>Standard Shipping</strong> — ₹1,000 flat for orders below ₹50,000\n⏱️ <strong>Delivery Time</strong> — 3 to 7 business days across India\n🇮🇳 <strong>Coverage</strong> — we ship pan-India, from Kashmir to Kanyakumari!\n\nOnce your order ships, you'll get a tracking link. For urgent orders or bulk inquiries, DM us on Instagram @heatheaven.23_ and we'll sort you out fast! 👟" },
+      { keys:["return","exchange","refund","policy","unworn"],
+        reply:"↩️ <strong>Heat Haven Returns Policy</strong> — here's how it works:\n\n✅ <strong>Timeframe</strong> — returns accepted within 7 days of delivery\n👟 <strong>Condition</strong> — shoes must be unworn, with original box and all accessories intact\n❌ <strong>Not eligible</strong> — worn pairs, missing box/laces, or items bought during special flash sales\n💸 <strong>Refund</strong> — processed within 5–7 business days to your original payment method\n🔄 <strong>Exchange</strong> — want a different size? We'll do our best to swap it if stock is available!\n\nTo start a return or exchange:\n📸 DM us on Instagram @heatheaven.23_ with your order details and photos\n📧 Or email info@heathaven.in\n📱 WhatsApp: +91 9205443488\n\nWe want you to be happy with your purchase! 🙏" },
+      { keys:["pay","payment","upi","cod","cash","card"],
+        reply:"💳 <strong>Payment Options at Heat Haven</strong> — we keep it flexible:\n\n📱 <strong>UPI</strong> — GPay, PhonePe, Paytm, any UPI app works\n💳 <strong>Cards</strong> — Visa, Mastercard, RuPay, Amex — credit & debit both accepted\n🏠 <strong>Cash on Delivery (COD)</strong> — available on select orders\n🔒 <strong>Security</strong> — all transactions are encrypted and 100% secure\n\nNo hidden charges, no surprises at checkout. What you see is what you pay! 😌" },
+      { keys:["authentic","real","legit","fake","original"],
+        reply:"💯 Every pair at Heat Haven is 100% authentic and carefully verified by our team. We take legit checks seriously — no replicas, ever." },
+      { keys:["contact","reach","call","whatsapp","instagram","email"],
+        reply:"📞 Reach us anytime!\n• Instagram: @heatheaven.23_\n• WhatsApp: +91 9205443488 or +91 9311577552\n• Email: info@heathaven.in\nWe usually reply within hours!" },
+      { keys:["price","cost","how much","₹","rs"],
+        reply:"💰 Our prices vary by sneaker and size:\n• AJ1 Chicago: ₹21,500–₹25,500\n• Yeezy 700 V3: ₹12,400–₹20,500\n• Nike Uptempo Slide: ₹21,500–₹47,000\n• Travis x Fragment: ₹94,000–₹3,06,000\nSelect your size on the product card to see the exact price!" },
+      { keys:["ar","try on","tryon","camera","virtual"],
+        reply:"📸 Yes! We have an AR Try-On feature — tap the camera button on any product or hit the orange 🔴 button at the bottom right. Try before you buy, virtually!" },
+      { keys:["stock","available","in stock","availability"],
+        reply:"📦 Stock changes fast — if you see a size on the site, it's available! We recommend adding to cart ASAP. For specific availability questions, DM us on Instagram." },
+      { keys:["hello","hi","hey","sup","yo","hola","namaste"],
+        reply:"Hey! 👋 Welcome to Heat Haven — your go-to spot for premium kicks in India. What can I help you with today? 👟" },
+      { keys:["thanks","thank you","thx","appreciate"],
+        reply:"Anytime! 🙏 Happy to help. Stay fresh and keep it 🔥 — if you need anything else, just ask!" },
+    ];
+
+    function getReply(text) {
+      const q = text.toLowerCase();
+      for (const entry of KB) {
+        if (entry.keys.some(k => q.includes(k))) return entry.reply;
+      }
+      return "Hmm, I'm not sure about that one! 🤔 DM us on Instagram <strong>@heatheaven.23_</strong> or WhatsApp <strong>+91 9205443488</strong> and our team will sort you out ASAP! 👟";
+    }
+
+    chatToggle.addEventListener("click",()=>{
+      chatWidget.classList.toggle("open");
+      if(!hasOpened){
+        hasOpened=true;notifDot.style.display="none";
+        setTimeout(()=>{
+          addBot("Hey! 👟 Welcome to <strong>Heat Haven</strong>. I'm your personal sneaker assistant.");
+          setTimeout(()=>{addBot("Ask me about products, sizing, shipping, or anything sneaker-related!");showChips();},800);
+        },300);
+      }
+    });
+
     function showChips(chips=QUICK_REPLIES){chipsEl.innerHTML="";chips.forEach(t=>{const b=document.createElement("button");b.className="hh-chip";b.textContent=t;b.onclick=()=>{chipsEl.innerHTML="";sendMsg(t);};chipsEl.appendChild(b);});}
-    function addBot(text){const d=document.createElement("div");d.className="hh-msg bot";d.innerHTML=`<div class="hh-bot-avatar">HH</div><div class="hh-bubble">${text.replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>").replace(/\n/g,"<br>")}</div>`;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;}
-    function addUser(text){const d=document.createElement("div");d.className="hh-msg user";d.innerHTML=`<div class="hh-bubble">${text.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>`;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;}
+    function addBot(html){const d=document.createElement("div");d.className="hh-msg bot";d.innerHTML=`<div class="hh-bot-avatar">HH</div><div class="hh-bubble">${html.replace(/\n/g,"<br>")}</div>`;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;}
+    function addUser(text){const d=document.createElement("div");d.className="hh-msg user";d.innerHTML=`<div class="hh-bubble">${escH(text)}</div>`;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;}
     function showTyping(){const d=document.createElement("div");d.className="hh-msg bot";d.id="hh-typing-indicator";d.innerHTML=`<div class="hh-bot-avatar">HH</div><div class="hh-bubble" style="padding:10px 16px"><div class="hh-typing"><span></span><span></span><span></span></div></div>`;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;}
     function hideTyping(){const e=document.getElementById("hh-typing-indicator");if(e)e.remove();}
-    async function sendMsg(text){
-      text=text.trim();if(!text||isTyping)return;
-      chipsEl.innerHTML="";addUser(text);input.value="";isTyping=true;sendBtn.style.opacity="0.5";
-      chatHistory.push({role:"user",content:text});showTyping();
-      try{const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:SYSTEM_PROMPT,messages:chatHistory})});const data=await res.json();const reply=data.content?.[0]?.text||"Sorry, couldn't get a response. Try again!";chatHistory.push({role:"assistant",content:reply});hideTyping();addBot(reply);showChips(["Tell me more","What's on sale?","Shipping","Contact support"]);}
-      catch(err){hideTyping();addBot("Connectivity issue! DM us on Instagram **@heatheaven.23_** 🙏");}
-      isTyping=false;sendBtn.style.opacity="1";
+
+    function sendMsg(text){
+      text=text.trim(); if(!text)return;
+      chipsEl.innerHTML=""; addUser(text); input.value="";
+      showTyping();
+      // Simulate a short thinking delay for realism
+      setTimeout(()=>{
+        hideTyping();
+        addBot(getReply(text));
+        showChips(["Tell me more","Shipping info","Size guide","Contact us"]);
+      }, 600 + Math.random()*400);
     }
+
     sendBtn.addEventListener("click",()=>sendMsg(input.value));
     input.addEventListener("keydown",e=>{if(e.key==="Enter")sendMsg(input.value);});
     setTimeout(()=>{if(!hasOpened)notifDot.style.display="block";},3000);
   </script>
 
-  <!-- Cursor glow -->
   <div id="cursor-glow"></div>
 
   <script>
@@ -920,14 +937,14 @@
     });
   </script>
 
-  <!-- ── DYNAMIC SIZE PRICING ── -->
+  <!-- DYNAMIC SIZE PRICING -->
   <script>
   (function () {
     var PRICES = {
-      "Air Jordan 1 Retro High":      { "UK 6":5200,"UK 7":5350,"UK 8":5559,"UK 9":5700,"UK 10":5900,"UK 11":6100,"UK 12":6350 },
-      "Yeezy 700 V3":                 { "UK 6":4400,"UK 7":4559,"UK 8":4759,"UK 9":4900,"UK 10":5100,"UK 11":5300,"UK 12":5500 },
-      "Nike Uptempo Slide Bulls":     { "UK 6":3200,"UK 7":3350,"UK 8":3559,"UK 9":3700,"UK 10":3900,"UK 11":4100,"UK 12":4300 },
-      "Travis Scott x Fragment High": { "UK 6":5000,"UK 7":5200,"UK 8":5400,"UK 9":5559,"UK 10":5800,"UK 11":6000,"UK 12":6300 },
+      "Air Jordan 1 Retro High":      { "UK 6":22000,"UK 7":23000,"UK 8":21500,"UK 9":24000,"UK 10":24500,"UK 11":25000,"UK 12":25500 },
+      "Yeezy 700 V3":                 { "UK 6":12400,"UK 7":13000,"UK 8":18000,"UK 9":19000,"UK 10":17000,"UK 11":20500,"UK 12":20500 },
+      "Nike Uptempo Slide Bulls":     { "UK 6":26000,"UK 7":21500,"UK 8":28000,"UK 9":28000,"UK 10":36000,"UK 11":47000,"UK 12":33000 },
+      "Travis Scott x Fragment High": { "UK 6":94000,"UK 7":295000,"UK 8":306000,"UK 9":218000,"UK 10":222000,"UK 11":205000,"UK 12":127000 },
     };
     function rupees(n) { return '\u20b9' + Number(n).toLocaleString('en-IN'); }
     function findPriceEl(card) {
@@ -950,10 +967,6 @@
       if (!select) return;
       var priceEl = findPriceEl(card);
       if (!priceEl) return;
-      if (!card.dataset.basePrice) card.dataset.basePrice = card.dataset.price || '0';
-      Array.from(select.options).forEach(function(opt) {
-        if (opt.value && pricing[opt.value]) opt.textContent = opt.value + '  \u00b7  ' + rupees(pricing[opt.value]);
-      });
       select.addEventListener('change', function () {
         var price = pricing[this.value];
         if (!price) return;
@@ -967,6 +980,29 @@
     function init() { document.querySelectorAll('.shoe-card').forEach(function(card) { initCard(card); }); }
     document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', init) : init();
   })();
+
+  // ── BACKEND API CONFIG ────────────────────────────────────────
+const API = 'http://localhost:5000/api';
+
+function getToken() { return localStorage.getItem('hh_token'); }
+function authHeaders() {
+  return {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${getToken()}`
+  };
+}
+
+async function apiCall(endpoint, options = {}) {
+  try {
+    const res  = await fetch(API + endpoint, options);
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Something went wrong');
+    return data;
+  } catch (err) {
+    showToast(err.message, true);
+    throw err;
+  }
+}
   </script>
 
 </body>

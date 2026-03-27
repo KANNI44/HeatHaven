@@ -34,7 +34,6 @@
     .dark .moon-icon { display:block; }
     nav { background:#fff; }
     .dark nav { background:#000; border-bottom:1px solid #1a1a1a; }
-    /* Search pill */
     #search-pill { display:flex; align-items:center; gap:8px; background:#f3f4f6; border:1px solid #e5e7eb; border-radius:999px; padding:6px 14px 6px 7px; cursor:pointer; min-width:190px; transition:background 0.2s,box-shadow 0.2s; }
     #search-pill:hover { background:#ebebeb; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
     .dark #search-pill { background:#1a1a1a; border-color:#2e2e2e; }
@@ -44,7 +43,6 @@
     .pill-text { font-size:13px; color:#9ca3af; font-family:"Poppins",sans-serif; flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .dark .pill-text { color:#6b7280; }
     .pill-emoji { font-size:14px; flex-shrink:0; }
-    /* Search overlay */
     #search-overlay { position:fixed; inset:0; z-index:99999; background:rgba(0,0,0,0.55); backdrop-filter:blur(6px); display:flex; flex-direction:column; align-items:center; padding-top:80px; opacity:0; pointer-events:none; transition:opacity 0.22s ease; }
     #search-overlay.open { opacity:1; pointer-events:all; }
     #search-box { width:100%; max-width:600px; margin:0 16px; background:#fff; border-radius:20px; box-shadow:0 24px 64px rgba(0,0,0,0.25); overflow:hidden; transform:translateY(-16px) scale(0.97); transition:transform 0.25s cubic-bezier(0.34,1.56,0.64,1); }
@@ -79,7 +77,6 @@
     #search-empty { padding:32px; text-align:center; color:#9ca3af; font-size:14px; }
     #search-hint { padding:8px 18px 12px; font-size:11px; color:#bbb; text-align:center; }
     .dark #search-hint { color:#444; }
-    /* Filter panel */
     #filterPanel { position:fixed; z-index:9990; width:300px; background:#fff; border-radius:16px; padding:24px; box-shadow:0 12px 48px rgba(0,0,0,0.16); opacity:0; pointer-events:none; transform:translateY(-12px) scale(0.97); transition:opacity 0.22s ease,transform 0.22s ease; }
     #filterPanel.open { opacity:1; pointer-events:all; transform:translateY(0) scale(1); }
     .dark #filterPanel { background:#111; }
@@ -91,7 +88,6 @@
     .cart-item { animation:item-in 0.3s ease both; }
     @keyframes item-in { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
     #empty-cart { display:none; text-align:center; padding:80px 20px; }
-    /* AI Chat */
     #hh-chat-widget { position:fixed; bottom:24px; left:24px; z-index:9999; font-family:"Poppins",sans-serif; }
     #hh-chat-toggle { width:60px; height:60px; border-radius:50%; background:#000; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 8px 32px rgba(0,0,0,0.25); transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.3s ease; position:relative; }
     .dark #hh-chat-toggle { background:#f0f0f0; }
@@ -232,8 +228,6 @@
 <nav class="bg-white dark:bg-amoled shadow-md sticky top-0 z-40">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between h-16">
-
-      <!-- LEFT: Logo + nav links + Wishlist pill -->
       <div class="flex items-center">
         <div class="brand text-2xl font-bold">
           <a href="index.html" class="text-black dark:text-white">HEAT HAVEN</a>
@@ -245,15 +239,10 @@
           <a href="owners.html"  class="text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Owners</a>
         </div>
       </div>
-
-      <!-- RIGHT: search · cart · filter · profile · login -->
       <div class="hidden md:flex items-center gap-2 flex-shrink-0">
-        <!-- Wishlist icon — sits right before search pill -->
         <a href="wishlist.html" id="nav-wishlist-btn" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark transition-colors relative" aria-label="Wishlist">
           <i class="fas fa-heart text-red-600 dark:text-red-600"></i>
         </a>
-
-        <!-- Search pill -->
         <button id="search-pill" aria-label="Search" onclick="openSearch()">
           <div class="pill-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -263,24 +252,18 @@
           <span class="pill-text">Search sneakers...</span>
           <span class="pill-emoji">👟</span>
         </button>
-        <!-- Cart (single, no duplicate) -->
         <a href="cart.html" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark relative">
           <i class="fas fa-shopping-cart text-gray-600 dark:text-gray-300"></i>
           <span id="cart-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
         </a>
-        <!-- Filter -->
         <button id="filterBtn" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark transition" aria-label="Filter">
           <i class="fas fa-filter text-gray-600 dark:text-gray-300"></i>
         </button>
-        <!-- Profile -->
         <a href="profile.html" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark transition">
           <i class="fas fa-user text-gray-600 dark:text-gray-300"></i>
         </a>
-        <!-- Login -->
         <a href="profile login.html" class="px-5 py-1.5 rounded-full text-sm font-medium border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all">Login</a>
       </div>
-
-      <!-- Mobile hamburger -->
       <div class="md:hidden ml-auto">
         <button class="p-2" id="mobile-menu-button">
           <i class="fas fa-bars text-black dark:text-white text-lg"></i>
@@ -288,8 +271,6 @@
       </div>
     </div>
   </div>
-
-  <!-- Mobile menu -->
   <div class="mobile-menu fixed inset-y-0 right-0 w-64 bg-white dark:bg-cardDark shadow-xl z-50 p-5" id="mobile-menu">
     <div class="flex justify-between items-center mb-8">
       <div class="brand text-xl dark:text-white">HEAT HAVEN</div>
@@ -339,6 +320,7 @@
       </div>
     </div>
     <p id="empty-filter-msg" class="lg:col-span-3 text-gray-400 text-sm hidden">No items match this filter.</p>
+
     <!-- Order Summary fixed card -->
     <div class="spring-card rounded-xl p-6 h-fit lg:fixed lg:top-24 lg:right-6 lg:w-80 xl:w-96" id="order-summary-card">
       <h2 class="text-xl font-semibold mb-5">Order Summary</h2>
@@ -346,7 +328,7 @@
         <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">Subtotal</span><span id="summary-subtotal">Rs.0.00</span></div>
         <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">Items</span><span id="summary-count">0</span></div>
         <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">Shipping</span><span id="summary-shipping" class="text-green-500 font-medium">Free</span></div>
-        <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">Tax</span><span class="text-green-500 font-medium">Included</span></div>
+        <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">Tax (10%)</span><span id="summary-tax">Rs.0.00</span></div>
       </div>
       <hr class="my-5 border-gray-200 dark:border-gray-700">
       <div class="flex justify-between font-semibold text-lg mb-5"><span>Total</span><span id="summary-total">Rs.0.00</span></div>
@@ -482,16 +464,29 @@ function attachListeners() {
 }
 
 function updateSummary() {
+  const TAX_RATE = 0.10; // 10% tax
   const items = [...document.querySelectorAll(".cart-item")].filter(c=>c.style.display!=="none");
-  let total=0, count=0;
-  items.forEach(c=>{ const q=parseInt(c.querySelector(".qty-value")?.textContent)||1; total+=(parseFloat(c.dataset.price)||0)*q; count+=q; });
-  const fmt = v => "Rs."+v.toLocaleString("en-IN",{minimumFractionDigits:2});
-  document.getElementById("summary-subtotal").textContent = fmt(total);
-  document.getElementById("summary-total").textContent    = fmt(total);
+  let subtotal = 0, count = 0;
+  items.forEach(c => {
+    const q = parseInt(c.querySelector(".qty-value")?.textContent) || 1;
+    subtotal += (parseFloat(c.dataset.price) || 0) * q;
+    count += q;
+  });
+
+  const shipping = subtotal >= 50000 ? 0 : 1000;
+  const tax      = subtotal * TAX_RATE;
+  const total    = subtotal + shipping + tax;
+
+  const fmt = v => "Rs." + v.toLocaleString("en-IN", { minimumFractionDigits: 2 });
+
+  document.getElementById("summary-subtotal").textContent = fmt(subtotal);
   document.getElementById("summary-count").textContent    = count;
+  document.getElementById("summary-tax").textContent      = fmt(tax);
+  document.getElementById("summary-total").textContent    = fmt(total);
+
   const s = document.getElementById("summary-shipping");
-  s.textContent = total>=5000?"Free":"Rs.99";
-  s.className   = total>=5000?"text-green-500 font-medium":"text-gray-700 dark:text-gray-300 font-medium";
+  s.textContent = subtotal >= 50000 ? "Free" : fmt(1000);
+  s.className   = subtotal >= 50000 ? "text-green-500 font-medium" : "text-gray-700 dark:text-gray-300 font-medium";
 }
 
 function updateCartBadge() {
