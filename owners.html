@@ -11,8 +11,10 @@
       theme: {
         extend: {
           colors: {
-            amoled:  '#000000',
-            navdark: '#0d0d0d',
+            amoled:    '#000000',
+            cardDark:  '#0a0a0a',
+            hoverDark: '#111111',
+            navdark:   '#0d0d0d',
           }
         }
       }
@@ -24,13 +26,15 @@
     body { font-family:'Poppins',sans-serif; overflow-x:hidden; }
     h1,h2,h3,h4,.brand { font-family:'Archivo Black',sans-serif; letter-spacing:-0.5px; }
 
+    /* ── MOBILE MENU ── */
     .mobile-menu { transform:translateX(100%); transition:transform 0.3s ease-in-out; }
     .mobile-menu.open { transform:translateX(0); }
 
+    /* ── SPRING BUTTON ── */
     .spring-btn { transition:transform 0.15s cubic-bezier(0.22,0.61,0.36,1); }
     .spring-btn:active { transform:scale(0.92); }
 
-    /* Dark mode theme toggle */
+    /* ── THEME TOGGLE ── (from index) */
     #theme-toggle .sun-icon,
     #theme-toggle .moon-icon { position:absolute; width:1.4rem; height:1.4rem; transition:transform 0.4s ease,opacity 0.4s ease; }
     #theme-toggle .sun-icon  { opacity:1; transform:rotate(0deg) scale(1); }
@@ -38,26 +42,108 @@
     .dark #theme-toggle .sun-icon  { opacity:0; transform:rotate(-90deg) scale(0.4); }
     .dark #theme-toggle .moon-icon { opacity:1; transform:rotate(0deg) scale(1); }
 
-    /* AMOLED scrollbar */
+    /* ── AMOLED SCROLLBAR ── */
     .dark ::-webkit-scrollbar { width:5px; }
     .dark ::-webkit-scrollbar-track { background:#000; }
     .dark ::-webkit-scrollbar-thumb { background:#222; border-radius:3px; }
 
-    /* WhatsApp pulse */
-    .whatsapp-btn { animation:wa-pulse 2.5s infinite; }
-    @keyframes wa-pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.06)} }
+    /* ── NAV DROP ANIMATION ── (from index) */
+    @keyframes nav-drop { from{transform:translateY(-100%);opacity:0;} to{transform:translateY(0);opacity:1;} }
+    nav { animation:nav-drop 0.6s cubic-bezier(0.16,1,0.3,1) both; }
 
-    /* Deal card hover */
-    .deal-card { transition:transform 0.25s ease, box-shadow 0.25s ease; }
-    .deal-card:hover { transform:translateY(-6px) scale(1.02); box-shadow:0 20px 40px rgba(0,0,0,0.15); }
-    .dark .deal-card:hover { box-shadow:0 20px 40px rgba(0,0,0,0.6); }
+    /* ── BRAND SHIMMER ── (from index) */
+    @keyframes brand-shimmer { 0%{background-position:-200% center;} 100%{background-position:200% center;} }
+    .brand a {
+      background:linear-gradient(90deg, currentColor 40%, #ff4500 50%, currentColor 60%);
+      background-size:200% auto;
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      background-clip:text;
+      animation:brand-shimmer 3.5s ease 0.5s 1 forwards;
+    }
 
-    /* Owner card */
-    .owner-card { transition:transform 0.25s ease, box-shadow 0.25s ease; }
-    .owner-card:hover { transform:translateY(-4px); box-shadow:0 16px 36px rgba(0,0,0,0.12); }
-    .dark .owner-card:hover { box-shadow:0 16px 36px rgba(0,0,0,0.6); }
+    /* ── NAV LINK UNDERLINE ── (from index) */
+    .nav-link { position:relative; }
+    .nav-link::after {
+      content:''; position:absolute; bottom:-2px; left:0;
+      width:0; height:2px; background:#ff4500; border-radius:2px;
+      transition:width 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+    .nav-link:hover::after { width:100%; }
 
-    /* ── Nav Search Pill ── */
+    /* ── CURSOR GLOW ── (from index) */
+    #cursor-glow {
+      position:fixed; width:320px; height:320px; border-radius:50%;
+      background:radial-gradient(circle, rgba(255,69,0,0.07) 0%, transparent 70%);
+      pointer-events:none; z-index:0; transform:translate(-50%,-50%);
+      transition:opacity 0.4s ease; opacity:0;
+    }
+    body:hover #cursor-glow { opacity:1; }
+
+    /* ── SCROLL REVEAL ── (from index) */
+    .reveal {
+      opacity:0; transform:translateY(32px);
+      transition:opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+
+    .reveal-left  { opacity:0; transform:translateX(-40px); transition:opacity 0.7s cubic-bezier(0.16,1,0.3,1),transform 0.7s cubic-bezier(0.16,1,0.3,1); }
+    .reveal-right { opacity:0; transform:translateX(40px);  transition:opacity 0.7s cubic-bezier(0.16,1,0.3,1),transform 0.7s cubic-bezier(0.16,1,0.3,1); }
+    .reveal-left.visible, .reveal-right.visible { opacity:1; transform:translateX(0); }
+
+    /* ── SECTION HEADING UNDERLINE ── (from index) */
+    .section-heading { position:relative; display:inline-block; }
+    .section-heading::after {
+      content:''; position:absolute; bottom:-6px; left:0;
+      width:0; height:3px; background:#ff4500; border-radius:2px;
+      transition:width 0.5s cubic-bezier(0.4,0,0.2,1) 0.1s;
+    }
+    .section-heading.visible::after { width:100%; }
+
+    /* ── DEAL / PARTNER CARD 3D TILT ── (from index) */
+    .deal-card {
+      transition:transform 0.3s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s ease;
+      transform-style:preserve-3d; will-change:transform;
+    }
+    .deal-card:hover { transform:perspective(800px) rotateX(-4deg) rotateY(4deg) translateY(-6px) scale(1.03); box-shadow:0 24px 48px rgba(0,0,0,0.16); }
+    .dark .deal-card:hover { box-shadow:0 24px 48px rgba(0,0,0,0.6); }
+
+    /* ── OWNER CARD REVEAL + HOVER ── */
+    .owner-card {
+      opacity:0; transform:translateY(28px) scale(0.97);
+      transition:opacity 0.65s cubic-bezier(0.16,1,0.3,1), transform 0.65s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s ease;
+    }
+    .owner-card.visible { opacity:1; transform:translateY(0) scale(1); }
+    .owner-card:hover { box-shadow:0 20px 48px rgba(0,0,0,0.18); }
+    .dark .owner-card:hover { box-shadow:0 20px 48px rgba(0,0,0,0.7); }
+
+    /* ── OWNER CARD IMAGE SHIMMER ── (like shoe-card shine sweep) */
+    .owner-img-wrap { position:relative; overflow:hidden; }
+    .owner-img-wrap::after {
+      content:''; position:absolute; inset:0;
+      background:linear-gradient(115deg, transparent 40%, rgba(255,255,255,0.12) 50%, transparent 60%);
+      transform:translateX(-100%);
+      transition:transform 0.6s ease;
+      pointer-events:none; z-index:5;
+    }
+    .owner-card:hover .owner-img-wrap::after { transform:translateX(100%); }
+
+    /* ── FOOTER SWEEP LINE ── (from index) */
+    footer { position:relative; overflow:hidden; }
+    footer::before {
+      content:''; position:absolute; top:0; left:-100%; width:60%; height:1px;
+      background:linear-gradient(90deg,transparent,#ff4500,transparent);
+      animation:footer-line 3s ease 1.5s infinite;
+    }
+    @keyframes footer-line { 0%{left:-60%} 100%{left:140%} }
+
+    /* ── PARTNER CARD STAGGER REVEAL ── */
+    .partner-card {
+      opacity:0; transform:translateY(28px) scale(0.97);
+      transition:opacity 0.55s cubic-bezier(0.16,1,0.3,1), transform 0.55s cubic-bezier(0.16,1,0.3,1), box-shadow 0.25s ease;
+    }
+    .partner-card.visible { opacity:1; transform:translateY(0) scale(1); }
+
+    /* ── NAV SEARCH PILL ── */
     .nav-search-pill {
       display:flex; align-items:center; min-width:220px; padding:0;
       border-radius:999px; border:none; cursor:pointer;
@@ -105,7 +191,7 @@
       0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%}
     }
 
-    /* ══ SEARCH OVERLAY ══ */
+    /* ── SEARCH OVERLAY ── */
     #search-overlay {
       position:fixed; inset:0; z-index:9998;
       background:rgba(255,255,255,0.85); backdrop-filter:blur(20px);
@@ -153,7 +239,7 @@
     }
     .dark #search-close-hint kbd { background:rgba(255,255,255,0.1); color:#9aa0a6; }
 
-    /* ══ AI CHAT WIDGET ══ */
+    /* ── AI CHAT WIDGET ── */
     #hh-chat-widget { position:fixed; bottom:24px; left:24px; z-index:9999; font-family:'Poppins',sans-serif; }
     #hh-chat-toggle {
       width:60px; height:60px; border-radius:50%; background:#000; border:none; cursor:pointer;
@@ -231,6 +317,9 @@
 
 <body class="bg-white dark:bg-amoled text-black dark:text-white transition-colors duration-300">
 
+  <!-- Cursor Glow -->
+  <div id="cursor-glow"></div>
+
   <!-- ══ SEARCH OVERLAY ══ -->
   <div id="search-overlay" role="dialog" aria-label="Search">
     <div id="search-box-wrap">
@@ -245,20 +334,11 @@
     <p id="search-close-hint">Press <kbd>Esc</kbd> to close</p>
   </div>
 
-  <!-- WhatsApp Floating Button -->
-  <!-- <div class="fixed bottom-28 right-6 z-50">
-    <a href="https://wa.me/1234567890?text=I%20want%20to%20place%20an%20order"
-       class="whatsapp-btn flex items-center justify-center w-14 h-14 rounded-full bg-green-500 shadow-xl">
-      <i class="fab fa-whatsapp text-white text-3xl"></i>
-    </a>
-  </div> -->
-
   <!-- Dark Mode Toggle -->
   <div class="fixed bottom-10 right-6 z-50">
     <button id="theme-toggle"
-      class="relative flex items-center justify-center w-14 h-14 rounded-full shadow-2xl
-             bg-gray-200 dark:bg-zinc-900 border-2 border-transparent dark:border-zinc-800
-             transition-all duration-300 hover:scale-110"
+      class="relative flex items-center justify-center w-12 h-12 rounded-full shadow-xl
+             bg-gray-200 dark:bg-cardDark transition-all duration-300 hover:scale-110"
       aria-label="Toggle dark mode">
       <svg class="sun-icon text-yellow-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
         <circle cx="12" cy="12" r="4" fill="currentColor" stroke="none"/>
@@ -279,10 +359,10 @@
             <a href="index.html" class="text-black dark:text-white">HEAT HAVEN</a>
           </div>
           <div class="hidden md:flex items-center ml-10 space-x-8">
-            <a href="index.html"   class="text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Home</a>
-            <a href="product.html" class="text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Products</a>
-            <a href="deals.html"   class="text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Hot Deals</a>
-            <a href="owners.html"  class="text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors font-semibold">Owners</a>
+            <a href="index.html"   class="nav-link text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Home</a>
+            <a href="product.html" class="nav-link text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Products</a>
+            <a href="deals.html"   class="nav-link text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Hot Deals</a>
+            <a href="owners.html"  class="nav-link text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors font-semibold" style="color:#ff4500;">Owners</a>
           </div>
         </div>
 
@@ -304,15 +384,15 @@
             </button>
 
             <!-- Cart -->
-            <a href="cart.html" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-zinc-900 transition-colors relative">
+            <a href="cart.html" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark transition-colors relative">
               <i class="fas fa-shopping-cart text-gray-600 dark:text-zinc-500"></i>
               <span id="cart-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
             </a>
 
-            <a href="profile.html" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-zinc-900 transition-colors">
+            <a href="profile.html" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark transition-colors">
               <i class="fas fa-user text-gray-600 dark:text-zinc-500"></i>
             </a>
-            <a href="profile login.html"
+            <a href="profile login.html" id="login-link"
                class="ml-2 px-4 py-1.5 rounded-full text-sm font-medium border border-gray-300 dark:border-zinc-800
                       text-gray-800 dark:text-zinc-400 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition">
               Login
@@ -332,10 +412,10 @@
         <button id="close-menu"><i class="fas fa-times text-xl dark:text-zinc-400"></i></button>
       </div>
       <div class="flex flex-col space-y-4">
-        <a href="index.html"   class="text-black dark:text-zinc-400 hover:dark:text-white">Home</a>
-        <a href="product.html" class="text-black dark:text-zinc-400 hover:dark:text-white">Products</a>
-        <a href="deals.html"   class="text-black dark:text-zinc-400 hover:dark:text-white">Hot Deals</a>
-        <a href="owners.html"  class="text-black dark:text-zinc-400 hover:dark:text-white">Owners</a>
+        <a href="index.html"   class="nav-link text-black dark:text-zinc-400 hover:dark:text-white">Home</a>
+        <a href="product.html" class="nav-link text-black dark:text-zinc-400 hover:dark:text-white">Products</a>
+        <a href="deals.html"   class="nav-link text-black dark:text-zinc-400 hover:dark:text-white">Hot Deals</a>
+        <a href="owners.html"  class="nav-link text-black dark:text-zinc-400 hover:dark:text-white">Owners</a>
       </div>
       <div class="mt-8 pt-4 border-t border-gray-200 dark:border-zinc-900">
         <div class="flex items-center space-x-3">
@@ -357,23 +437,24 @@
   <!-- ══ OWNER 1 — Jaishree Parashar ══ -->
   <section class="py-20 bg-white dark:bg-amoled">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold mb-10 dark:text-white section-heading reveal">Meet the Team</h2>
       <div class="owner-card bg-white dark:bg-zinc-950 rounded-3xl overflow-hidden shadow-sm dark:shadow-none border border-gray-100 dark:border-zinc-900">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-0 items-stretch">
           <!-- Image -->
-          <div class="relative overflow-hidden">
+          <div class="owner-img-wrap">
             <img src="images.fade/jp.jpg" alt="Jaishree Parashar"
                  class="w-full h-full object-cover min-h-80 md:min-h-full" />
             <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent md:bg-gradient-to-r md:from-transparent md:to-black/10"></div>
           </div>
           <!-- Content -->
-          <div class="p-10 md:p-14 flex flex-col justify-center bg-black dark:bg-zinc-950">
+          <div class="p-10 md:p-14 flex flex-col justify-center bg-black dark:bg-zinc-950 reveal-right">
             <span class="text-xs font-semibold tracking-widest text-pink-500 uppercase mb-3">Co-Founder & Business Development Executive</span>
             <h2 class="text-3xl md:text-4xl font-bold text-white mb-2">Jaishree Parashar 🎀</h2>
             <div class="w-12 h-1 bg-pink-500 rounded-full mb-6"></div>
-            <p class="text-zinc-400 mb-4 leading-relaxed">
-             <p class="text-zinc-400 mb-3 leading-relaxed">
+            <p class="text-zinc-400 mb-3 leading-relaxed">
               📍 Student · Aspiring Software Engineer · Tech Innovator
-            
+            </p>
+            <p class="text-zinc-400 mb-3 leading-relaxed">
               Founded in 2015, Heat Haven has become the premier destination for sneaker enthusiasts and collectors alike.
               We specialize in limited edition releases, vintage gems, and the latest drops from the hottest brands.
             </p>
@@ -389,7 +470,7 @@
                <a href="https://www.instagram.com/" target="_blank"
                   class="spring-btn flex items-center gap-2 px-5 py-2.5 rounded-full bg-pink-500/20 hover:bg-pink-500/30 text-pink-400 text-sm transition">
                   <i class="fab fa-instagram"></i> Instagram
-             </a>
+               </a>
                <a href="https://www.linkedin.com/in/jaishree-parashar-35685224b/" target="_blank"
                  class="spring-btn flex items-center gap-2 px-5 py-2.5 rounded-full bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 text-sm transition">
                 <i class="fab fa-linkedin"></i> LinkedIn
@@ -411,7 +492,7 @@
       <div class="owner-card bg-white dark:bg-zinc-950 rounded-3xl overflow-hidden shadow-sm dark:shadow-none border border-gray-100 dark:border-zinc-900">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-0 items-stretch">
           <!-- Content (left on desktop) -->
-          <div class="p-10 md:p-14 flex flex-col justify-center bg-zinc-950 order-2 md:order-1">
+          <div class="p-10 md:p-14 flex flex-col justify-center bg-zinc-950 order-2 md:order-1 reveal-left">
             <span class="text-xs font-semibold tracking-widest text-cyan-500 uppercase mb-3">Co-Founder & Tech Lead</span>
             <h2 class="text-3xl md:text-4xl font-bold text-white mb-2">Kanishak Choudhary 🎮</h2>
             <div class="w-12 h-1 bg-cyan-500 rounded-full mb-6"></div>
@@ -429,22 +510,22 @@
               to discipline and performance.
             </p>
             <div class="flex gap-4 mt-8">
-             <a href="https://www.instagram.com/" target="_blank"
+              <a href="https://www.instagram.com/" target="_blank"
                   class="spring-btn flex items-center gap-2 px-5 py-2.5 rounded-full bg-pink-500/20 hover:bg-pink-500/30 text-pink-400 text-sm transition">
                   <i class="fab fa-instagram"></i> Instagram
-             </a>
+              </a>
               <a href="https://www.linkedin.com/in/kanishak-choudhary-588284297/" target="_blank"
                  class="spring-btn flex items-center gap-2 px-5 py-2.5 rounded-full bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 text-sm transition">
                 <i class="fab fa-linkedin"></i> LinkedIn
+              </a>
               <a href="https://github.com/KANNI44" target="_blank"
                   class="spring-btn flex items-center gap-2 px-5 py-2.5 rounded-full bg-gray-500/20 hover:bg-gray-500/30 text-gray-300 text-sm transition">
                 <i class="fab fa-github"></i> GitHub
-               </a>  
-              </a>
+               </a>
             </div>
           </div>
           <!-- Image (right on desktop) -->
-          <div class="relative overflow-hidden order-1 md:order-2">
+          <div class="owner-img-wrap order-1 md:order-2">
             <img src="images.fade/kanni.jpg" alt="Kanishak Choudhary"
                  class="w-full h-full object-cover min-h-80" />
             <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
@@ -459,15 +540,14 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center mb-10">
         <div>
-          <h2 class="text-3xl font-bold dark:text-white">Our Partners 🤝🏻</h2>
+          <h2 class="text-3xl font-bold dark:text-white section-heading reveal">Our Partners 🤝🏻</h2>
           <p class="text-gray-500 dark:text-zinc-600 mt-1 text-sm">Brands we're proud to work with</p>
         </div>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
-        <!-- Partner 1 -->
-        <div class="deal-card bg-white dark:bg-zinc-950 rounded-2xl overflow-hidden border border-gray-100 dark:border-zinc-900 shadow-sm dark:shadow-none">
+        <div class="deal-card partner-card bg-white dark:bg-zinc-950 rounded-2xl overflow-hidden border border-gray-100 dark:border-zinc-900 shadow-sm dark:shadow-none">
           <div class="h-48 overflow-hidden">
             <img src="images/asis logo new.jpeg" alt="Asics" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
           </div>
@@ -477,8 +557,7 @@
           </div>
         </div>
 
-        <!-- Partner 2 -->
-        <div class="deal-card bg-white dark:bg-zinc-950 rounded-2xl overflow-hidden border border-gray-100 dark:border-zinc-900 shadow-sm dark:shadow-none">
+        <div class="deal-card partner-card bg-white dark:bg-zinc-950 rounded-2xl overflow-hidden border border-gray-100 dark:border-zinc-900 shadow-sm dark:shadow-none">
           <div class="h-48 overflow-hidden">
             <img src="images top brands/seiko logo.jpeg" alt="Seiko" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
           </div>
@@ -488,8 +567,7 @@
           </div>
         </div>
 
-        <!-- Partner 3 -->
-        <div class="deal-card bg-white dark:bg-zinc-950 rounded-2xl overflow-hidden border border-gray-100 dark:border-zinc-900 shadow-sm dark:shadow-none">
+        <div class="deal-card partner-card bg-white dark:bg-zinc-950 rounded-2xl overflow-hidden border border-gray-100 dark:border-zinc-900 shadow-sm dark:shadow-none">
           <div class="h-48 overflow-hidden">
             <img src="images top brands/gucci.jpeg" alt="Gucci" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
           </div>
@@ -499,8 +577,7 @@
           </div>
         </div>
 
-        <!-- Partner 4 -->
-        <div class="deal-card bg-white dark:bg-zinc-950 rounded-2xl overflow-hidden border border-gray-100 dark:border-zinc-900 shadow-sm dark:shadow-none">
+        <div class="deal-card partner-card bg-white dark:bg-zinc-950 rounded-2xl overflow-hidden border border-gray-100 dark:border-zinc-900 shadow-sm dark:shadow-none">
           <div class="h-48 overflow-hidden">
             <img src="images top brands/armani lojo.jpeg" alt="Armani" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
           </div>
@@ -611,18 +688,70 @@
   </div>
 
   <script>
-    // ══ DARK MODE ══
+    // ── THEME ──────────────────────────────────────────────────────
     if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark');
     document.getElementById('theme-toggle').addEventListener('click', () => {
       const isDark = document.documentElement.classList.toggle('dark');
       localStorage.setItem('theme', isDark ? 'dark' : 'light');
     });
 
-    // ══ MOBILE MENU ══
+    // ── MOBILE MENU ────────────────────────────────────────────────
     document.getElementById('mobile-menu-button').addEventListener('click', () => document.getElementById('mobile-menu').classList.add('open'));
     document.getElementById('close-menu').addEventListener('click', () => document.getElementById('mobile-menu').classList.remove('open'));
 
-    // ══ SEARCH ══
+    // ── CURSOR GLOW ────────────────────────────────────────────────
+    const glow = document.getElementById('cursor-glow');
+    document.addEventListener('mousemove', e => {
+      glow.style.left = e.clientX + 'px';
+      glow.style.top  = e.clientY + 'px';
+    });
+
+    // ── SCROLL REVEAL (IntersectionObserver) ──────────────────────
+    // Covers: .reveal, .reveal-left, .reveal-right, .section-heading, .owner-card, .partner-card
+    const revealEls   = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .section-heading');
+    const ownerCards  = document.querySelectorAll('.owner-card');
+    const partnerCards = document.querySelectorAll('.partner-card');
+
+    // Stagger partner cards
+    partnerCards.forEach((card, i) => { card.style.transitionDelay = (i * 0.08) + 's'; });
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    revealEls.forEach(el   => io.observe(el));
+    ownerCards.forEach(el  => io.observe(el));
+    partnerCards.forEach(el => io.observe(el));
+
+    // ── PARTNER CARD 3D TILT ───────────────────────────────────────
+    document.querySelectorAll('.deal-card').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const r = card.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width  - 0.5;
+        const y = (e.clientY - r.top)  / r.height - 0.5;
+        card.style.transform = `perspective(800px) rotateX(${-y * 10}deg) rotateY(${x * 10}deg) translateY(-6px) scale(1.03)`;
+      });
+      card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+    });
+
+    // ── ACTIVE NAV LINK ───────────────────────────────────────────
+    const currentPage = location.pathname.split('/').pop() || 'index.html';
+    document.querySelectorAll('.nav-link').forEach(link => {
+      if (link.getAttribute('href') === currentPage) {
+        link.classList.add('font-semibold');
+        link.style.color = '#ff4500';
+      }
+    });
+
+    // ── CART BADGE ────────────────────────────────────────────────
+    try {
+      const cart  = JSON.parse(localStorage.getItem('hh_cart') || '[]');
+      const total = cart.reduce((s, i) => s + i.qty, 0);
+      const badge = document.getElementById('cart-count');
+      if (badge) badge.textContent = total;
+    } catch (_) {}
+
+    // ── SEARCH ────────────────────────────────────────────────────
     const overlay     = document.getElementById('search-overlay');
     const searchInput = document.getElementById('search-input');
     const clearBtn    = document.getElementById('search-clear-btn');
@@ -642,7 +771,7 @@
     clearBtn.addEventListener('click', () => { searchInput.value = ''; clearBtn.classList.remove('visible'); searchInput.focus(); });
     searchInput.addEventListener('input', () => clearBtn.classList.toggle('visible', searchInput.value.length > 0));
 
-    // ══ AI CHAT ══
+    // ── AI CHAT ───────────────────────────────────────────────────
     const SYSTEM_PROMPT = `You are a friendly assistant for Heat Haven, a premium sneaker and streetwear store in India.
 You are on the Owners page.
 
@@ -672,7 +801,7 @@ PERSONALITY: Warm, casual, hype-culture savvy. Short 2-3 sentence replies.`;
 
     function showWelcome() {
       setTimeout(() => {
-        addBot("Hey! 👋 Welcome to the **Heat Haven** Owners page. Meet the team behind the brand!");
+        addBot("Hey! 👋 Welcome to the <strong>Heat Haven</strong> Owners page. Meet the team behind the brand!");
         setTimeout(() => showChips(), 700);
       }, 300);
     }
@@ -725,7 +854,7 @@ PERSONALITY: Warm, casual, hype-culture savvy. Short 2-3 sentence replies.`;
         hideTyping(); addBot(reply);
         showChips(["Tell me more","Shop now","Hot Deals","Contact us"]);
       } catch(err) {
-        hideTyping(); addBot("Connectivity issue! Find us on Instagram **@heatheaven.23_** 🙏");
+        hideTyping(); addBot("Connectivity issue! Find us on Instagram <strong>@heatheaven.23_</strong> 🙏");
       }
       isTyping = false; sendBtn.style.opacity = '1';
     }
