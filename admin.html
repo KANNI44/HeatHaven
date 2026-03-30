@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -537,4 +538,545 @@ let dbt;
 si.addEventListener('input',()=>{clearTimeout(dbt);dbt=setTimeout(()=>runSearch(si.value),140);});
 </script>
 </body>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Heat Haven – Admin Login</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: { colors: { amoled:'#000000', cardDark:'#0a0a0a', hoverDark:'#111111' } } }
+    }
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body { font-family:"Poppins",sans-serif; overflow-x:hidden; }
+    html { scrollbar-gutter:stable; }
+    h1,h2,h3,h4,.brand { font-family:"Archivo Black",sans-serif; letter-spacing:-0.5px; }
+
+    .mobile-menu { transform:translateX(100%); transition:transform 0.3s ease-in-out; }
+    .mobile-menu.open { transform:translateX(0); }
+
+    /* ── Dark mode icons ── */
+    .sun-icon  { display:block; width:20px; height:20px; }
+    .moon-icon { display:none;  width:20px; height:20px; }
+    .dark .sun-icon  { display:none; }
+    .dark .moon-icon { display:block; }
+
+    nav { background:#fff; }
+    .dark nav { background:#000; border-bottom:1px solid #1a1a1a; }
+
+    /* ── Spring card ── */
+    .spring-card {
+      transition: transform 0.25s cubic-bezier(0.175,0.885,0.32,1.275),
+                  box-shadow 0.25s ease, border-color 0.25s ease;
+      will-change: transform, box-shadow;
+    }
+    .spring-card:hover {
+      transform: translateY(-6px) scale(1.02);
+      box-shadow: 0 18px 36px rgba(0,0,0,0.45);
+    }
+
+    /* ── Rise enter ── */
+    .rise-enter { animation: riseEnter 0.55s cubic-bezier(0.34,1.56,0.64,1) both; }
+    @keyframes riseEnter {
+      from { opacity:0; transform:translateY(22px) scale(0.97); }
+      to   { opacity:1; transform:translateY(0) scale(1); }
+    }
+
+    /* ── Rise click ── */
+    .rise-click { animation: riseUp 0.32s cubic-bezier(0.175,0.885,0.32,1.275); }
+    @keyframes riseUp {
+      0%   { transform:translateY(0) scale(1); }
+      40%  { transform:translateY(-10px) scale(1.01); }
+      100% { transform:translateY(0) scale(1); }
+    }
+
+    /* ── Hero bg parallax feel ── */
+    .hero-bg {
+      background-size:cover; background-position:center;
+      transition:transform 8s ease;
+    }
+
+    /* ── Input ── */
+    .login-inp {
+      width:100%; border:1.5px solid #e5e7eb; border-radius:10px;
+      padding:12px 16px; font-size:14px; font-family:"Poppins",sans-serif;
+      outline:none; background:#fff; color:#111;
+      transition:border-color 0.2s, box-shadow 0.2s;
+    }
+    .login-inp:focus { border-color:#ef4444; box-shadow:0 0 0 3px rgba(239,68,68,0.1); }
+    .login-inp::placeholder { color:#aaa; }
+    .dark .login-inp { background:#111; border-color:#2a2a2a; color:#f0f0f0; }
+    .dark .login-inp:focus { border-color:#ef4444; box-shadow:0 0 0 3px rgba(239,68,68,0.08); }
+    .dark .login-inp::placeholder { color:#555; }
+
+    /* ── Social btn ── */
+    .social-btn {
+      width:100%; border:1.5px solid #e5e7eb; border-radius:10px;
+      padding:11px 16px; font-size:14px; font-family:"Poppins",sans-serif;
+      font-weight:500; cursor:pointer; display:flex; align-items:center;
+      justify-content:center; gap:10px; transition:all 0.2s; background:#fff; color:#111;
+    }
+    .social-btn:hover { border-color:#111; background:#f9fafb; }
+    .dark .social-btn { background:#111; border-color:#2a2a2a; color:#f0f0f0; }
+    .dark .social-btn:hover { border-color:#555; background:#1a1a1a; }
+
+    /* ── Submit btn ── */
+    .submit-btn {
+      width:100%; padding:13px; border-radius:10px; border:none; cursor:pointer;
+      font-family:"Poppins",sans-serif; font-size:14px; font-weight:700;
+      background:#ef4444; color:#fff;
+      transition:background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow:0 4px 16px rgba(239,68,68,0.3);
+    }
+    .submit-btn:hover { background:#dc2626; transform:translateY(-2px); box-shadow:0 8px 24px rgba(239,68,68,0.4); }
+    .submit-btn:active { transform:scale(0.97); }
+
+    /* ── Nav search pill ── */
+    .nav-search-pill { display:flex; align-items:center; min-width:190px; padding:0; border-radius:999px; border:none; cursor:pointer; background:transparent; font-family:"Poppins",sans-serif; font-size:13px; font-weight:500; transition:transform 0.15s; position:relative; white-space:nowrap; }
+    .nav-search-pill:hover { transform:scale(1.02); }
+    .nav-search-pill .pill-border { position:absolute; inset:0; border-radius:999px; padding:2px; background:linear-gradient(100deg,#4285f4,#ea4335,#fbbc04,#34a853,#4285f4); background-size:250% 250%; animation:pill-gradient 3s ease infinite; -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0); -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none; }
+    .nav-search-pill .pill-inner { display:flex; align-items:center; gap:10px; width:100%; padding:8px 18px 8px 14px; border-radius:999px; background:#f8f9fa; position:relative; z-index:1; transition:background 0.2s; }
+    .nav-search-pill:hover .pill-inner { background:#fff; box-shadow:0 2px 16px rgba(66,133,244,0.18); }
+    .pill-search-icon { width:28px; height:28px; flex-shrink:0; background:linear-gradient(135deg,#4285f4,#34a853); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .pill-search-icon svg { width:13px; height:13px; }
+    .pill-label { flex:1; text-align:left; color:#5f6368; font-size:13px; }
+    .pill-kbd { display:inline-flex; align-items:center; background:rgba(0,0,0,0.07); border-radius:6px; padding:2px 7px; font-size:11px; font-family:monospace; color:#999; }
+    .dark .nav-search-pill .pill-inner { background:#1a1a1a; }
+    .dark .nav-search-pill:hover .pill-inner { background:#222; }
+    .dark .pill-label { color:#9aa0a6; }
+    .dark .pill-kbd { background:rgba(255,255,255,0.07); color:#666; }
+    @keyframes pill-gradient { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+
+    /* ── Search overlay ── */
+    #search-overlay { position:fixed; inset:0; z-index:99999; background:rgba(255,255,255,0.85); backdrop-filter:blur(20px); display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding-top:120px; opacity:0; pointer-events:none; transition:opacity 0.3s ease; }
+    .dark #search-overlay { background:rgba(0,0,0,0.88); }
+    #search-overlay.open { opacity:1; pointer-events:all; }
+    #search-box-wrap { width:100%; max-width:620px; padding:0 20px; }
+    .search-border-wrap { position:relative; border-radius:999px; padding:3px; background:linear-gradient(135deg,#4285f4,#ea4335,#fbbc04,#34a853,#4285f4); background-size:300% 300%; animation:gradient-shift 4s ease infinite; box-shadow:0 8px 40px rgba(66,133,244,0.25); }
+    @keyframes gradient-shift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+    .search-inner { display:flex; align-items:center; background:#fff; border-radius:999px; padding:14px 20px 14px 22px; gap:14px; }
+    .dark .search-inner { background:#111; }
+    .search-icon-wrap { color:#5f6368; flex-shrink:0; font-size:18px; }
+    #search-input { flex:1; border:none; outline:none; background:transparent; font-family:"Poppins",sans-serif; font-size:18px; color:#202124; }
+    .dark #search-input { color:#e8eaed; }
+    #search-input::placeholder { color:#9aa0a6; }
+    #search-clear-btn { background:none; border:none; cursor:pointer; color:#9aa0a6; font-size:16px; display:none; padding:4px; flex-shrink:0; }
+    #search-clear-btn.visible { display:flex; align-items:center; }
+    #search-results-panel { width:100%; max-width:620px; padding:0 20px; margin-top:16px; max-height:calc(100vh-280px); overflow-y:auto; display:none; }
+    #search-results-panel.has-results { display:block; }
+    .search-result-item { display:flex; align-items:center; gap:14px; padding:12px 18px; background:#fff; border-radius:14px; margin-bottom:8px; cursor:pointer; transition:background 0.15s; animation:result-in 0.2s ease; box-shadow:0 1px 6px rgba(0,0,0,0.08); }
+    @keyframes result-in { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+    .dark .search-result-item { background:#1c1c1e; box-shadow:none; }
+    .search-result-item:hover { background:#f8f9fa; }
+    .dark .search-result-item:hover { background:#2c2c2e; }
+    .sri-img { width:52px; height:52px; object-fit:contain; border-radius:10px; background:#f1f3f4; flex-shrink:0; }
+    .dark .sri-img { background:#2c2c2e; }
+    .sri-name { font-weight:600; font-size:14px; color:#202124; }
+    .dark .sri-name { color:#e8eaed; }
+    .sri-sub { font-size:12px; color:#5f6368; margin-top:2px; }
+    .sri-price { font-weight:700; font-size:14px; color:#202124; flex-shrink:0; }
+    .dark .sri-price { color:#e8eaed; }
+    .search-highlight { color:#1a73e8; font-weight:700; }
+    .dark .search-highlight { color:#8ab4f8; }
+    .search-no-results { text-align:center; padding:40px 16px; background:#fff; border-radius:14px; color:#5f6368; }
+    .dark .search-no-results { background:#1c1c1e; color:#9aa0a6; }
+    #search-close-hint { margin-top:16px; font-size:12px; color:#9aa0a6; }
+    #search-close-hint kbd { background:rgba(0,0,0,0.08); color:#5f6368; padding:2px 8px; border-radius:4px; font-family:monospace; }
+    .dark #search-close-hint kbd { background:rgba(255,255,255,0.1); color:#9aa0a6; }
+
+    /* ── Toast ── */
+    #toast { position:fixed; bottom:80px; left:50%; transform:translateX(-50%) translateY(20px); background:#111; color:#fff; padding:10px 22px; border-radius:999px; font-size:13px; z-index:9999; opacity:0; transition:opacity 0.3s,transform 0.3s; pointer-events:none; display:flex; align-items:center; gap:8px; white-space:nowrap; }
+    #toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+    /* ── Hero overlay gradient ── */
+    .hero-gradient {
+      background: linear-gradient(to right, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 60%, rgba(0,0,0,0.1) 100%);
+    }
+    .dark .hero-gradient {
+      background: linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.5) 60%, rgba(0,0,0,0.2) 100%);
+    }
+
+    /* ── Animated logo shimmer ── */
+    @keyframes shimmer { 0%{opacity:0.7} 50%{opacity:1} 100%{opacity:0.7} }
+    .logo-shimmer { animation:shimmer 2.5s ease-in-out infinite; }
+
+    /* ── Tabs (Login / Sign Up) ── */
+    .auth-tab { flex:1; padding:10px; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; transition:all 0.2s; border:none; font-family:"Poppins",sans-serif; background:transparent; color:#9ca3af; }
+    .auth-tab.active { background:#ef4444; color:#fff; box-shadow:0 4px 12px rgba(239,68,68,0.25); }
+    .dark .auth-tab { color:#555; }
+    .dark .auth-tab.active { background:#ef4444; color:#fff; }
+
+    /* ── Password toggle ── */
+    .pass-wrap { position:relative; }
+    .pass-toggle { position:absolute; right:14px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; color:#aaa; font-size:14px; padding:4px; }
+    .pass-toggle:hover { color:#555; }
+
+    /* ── Divider ── */
+    .divider { display:flex; align-items:center; gap:12px; }
+    .divider-line { flex:1; height:1px; background:#e5e7eb; }
+    .dark .divider-line { background:#2a2a2a; }
+
+    /* Card shake for wrong password */
+    @keyframes shake-card { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 40%{transform:translateX(8px)} 60%{transform:translateX(-6px)} 80%{transform:translateX(6px)} }
+
+    /* Floating card stagger */
+    .rise-enter:nth-child(1) { animation-delay:0ms; }
+    .rise-enter:nth-child(2) { animation-delay:80ms; }
+
+    .dark ::-webkit-scrollbar { width:5px; }
+    .dark ::-webkit-scrollbar-track { background:#000; }
+    .dark ::-webkit-scrollbar-thumb { background:#222; border-radius:3px; }
+  </style>
+</head>
+
+<body class="bg-white dark:bg-amoled text-black dark:text-white transition-colors duration-300">
+
+<!-- SEARCH OVERLAY -->
+<div id="search-overlay" role="dialog" aria-label="Search">
+  <div id="search-box-wrap">
+    <div class="search-border-wrap">
+      <div class="search-inner">
+        <div class="search-icon-wrap"><i class="fas fa-search"></i></div>
+        <input id="search-input" type="text" placeholder="Search sneakers, brands, colorways…" autocomplete="off"/>
+        <button id="search-clear-btn" aria-label="Clear">✕</button>
+      </div>
+    </div>
+  </div>
+  <div id="search-results-panel" role="listbox"></div>
+  <p id="search-close-hint">Press <kbd>Esc</kbd> to close</p>
+</div>
+
+<!-- Dark Mode Toggle -->
+<div class="fixed bottom-10 right-6 z-50">
+  <button id="theme-toggle" class="flex items-center justify-center w-12 h-12 rounded-full shadow-xl bg-gray-200 dark:bg-cardDark transition-all duration-300 hover:scale-110" aria-label="Toggle dark mode">
+    <svg class="sun-icon text-yellow-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="4" fill="currentColor" stroke="none"/>
+      <path stroke-linecap="round" d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+    </svg>
+    <svg class="moon-icon text-yellow-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/>
+    </svg>
+  </button>
+</div>
+
+<!-- NAV -->
+<nav class="shadow-md sticky top-0 z-40 border-b border-transparent dark:border-zinc-900">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-16">
+      <div class="flex items-center">
+        <div class="brand text-2xl font-bold">
+          <a href="index.html" class="text-black dark:text-white">HEAT HAVEN</a>
+        </div>
+        <div class="hidden md:flex items-center ml-10 space-x-6">
+          <a href="index.html"   class="text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Home</a>
+          <a href="product.html" class="text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Products</a>
+          <a href="deals.html"   class="text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Hot Deals</a>
+          <a href="owners.html"  class="text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Owners</a>
+        </div>
+      </div>
+      <div class="hidden md:flex items-center gap-2 flex-shrink-0">
+        <a href="wishlist.html" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark transition-colors" aria-label="Wishlist">
+          <i class="fas fa-heart text-red-600"></i>
+        </a>
+        <button id="search-open-btn" class="nav-search-pill" aria-label="Open search">
+          <div class="pill-border"></div>
+          <span class="pill-inner">
+            <span class="pill-search-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </span>
+            <span class="pill-label">Search sneakers…</span>
+            <span class="pill-kbd">👟</span>
+          </span>
+        </button>
+        <a href="cart.html" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark relative">
+          <i class="fas fa-shopping-cart text-gray-600 dark:text-gray-300"></i>
+          <span id="cart-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+        </a>
+        <a href="profile.html" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark">
+          <i class="fas fa-user text-gray-600 dark:text-gray-300"></i>
+        </a>
+      </div>
+      <div class="md:hidden ml-auto flex items-center">
+        <button class="p-2" id="mobile-menu-button">
+          <i class="fas fa-bars text-black dark:text-white text-lg"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="mobile-menu fixed inset-y-0 right-0 w-64 bg-white dark:bg-cardDark shadow-xl z-50 p-5" id="mobile-menu">
+    <div class="flex justify-between items-center mb-8">
+      <div class="brand text-xl dark:text-white">HEAT HAVEN</div>
+      <button id="close-menu"><i class="fas fa-times text-xl dark:text-white"></i></button>
+    </div>
+    <div class="flex flex-col space-y-5">
+      <a href="index.html"    class="text-black dark:text-gray-200 font-medium">Home</a>
+      <a href="product.html"  class="text-black dark:text-gray-200 font-medium">Products</a>
+      <a href="deals.html"    class="text-black dark:text-gray-200 font-medium">Hot Deals</a>
+      <a href="owners.html"   class="text-black dark:text-gray-200 font-medium">Owners</a>
+      <a href="wishlist.html" class="flex items-center gap-2 text-red-500 font-medium"><i class="fas fa-heart text-sm"></i> Wishlist</a>
+    </div>
+    <div class="mt-6 pt-5 border-t border-gray-200 dark:border-gray-700 flex items-center gap-3 flex-wrap">
+      <a href="cart.html" class="relative p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark">
+        <i class="fas fa-shopping-cart text-gray-600 dark:text-gray-300"></i>
+        <span id="cart-count-mobile" class="absolute -top-0.5 -right-0.5 bg-red-500 text-white text-[10px] rounded-full h-5 w-5 flex items-center justify-center">0</span>
+      </a>
+      <a href="profile.html" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark">
+        <i class="fas fa-user text-gray-600 dark:text-gray-300"></i>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN: split-screen -->
+<div class="grid grid-cols-1 lg:grid-cols-2" style="min-height:calc(100vh - 64px)">
+
+  <!-- ── LEFT: Hero panel ── -->
+  <div class="relative hidden lg:flex items-end p-14 overflow-hidden">
+    <!-- Background image -->
+    <img src="images/heat haven lgog new.png"
+         class="absolute inset-0 w-full h-full object-cover hero-bg"
+         id="hero-bg-img"
+         onerror="this.style.display='none'" />
+    <!-- Gradient overlay -->
+    <div class="absolute inset-0 hero-gradient"></div>
+    <!-- Dark accent overlay -->
+    <div class="absolute inset-0 bg-black/20 dark:bg-black/50"></div>
+
+    <!-- Floating info chips -->
+    <div class="absolute top-10 right-10 flex flex-col gap-3 z-10">
+      <div class="rise-enter bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-4 py-2.5 text-white" style="animation-delay:200ms">
+        <p class="text-xs text-white/60 uppercase tracking-wider font-semibold">Orders</p>
+        <p class="text-sm font-bold">Manage & Track 📦</p>
+      </div>
+      <div class="rise-enter bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-4 py-2.5 text-white" style="animation-delay:320ms">
+        <p class="text-xs text-white/60 uppercase tracking-wider font-semibold">Products</p>
+        <p class="text-sm font-bold">Edit Catalog 👟</p>
+      </div>
+      <div class="rise-enter bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-4 py-2.5 text-white" style="animation-delay:440ms">
+        <p class="text-xs text-white/60 uppercase tracking-wider font-semibold">Analytics</p>
+        <p class="text-sm font-bold">Revenue & Sales 📊</p>
+      </div>
+    </div>
+
+    <!-- Hero text card -->
+    <div id="heroCard"
+         class="spring-card rise-enter relative z-10 px-7 py-6 rounded-2xl bg-black/40 border border-white/20 backdrop-blur-md max-w-md"
+         style="animation-delay:0ms">
+      <p class="text-xs font-bold text-red-400 uppercase tracking-widest mb-2 flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse inline-block"></span>
+        Premium Sneaker Store
+      </p>
+      <h1 class="text-5xl font-bold text-white mb-3 leading-tight">HEAT<br>HAVEN 🔥</h1>
+      <p class="text-gray-300 text-sm leading-relaxed">
+        Manage orders, products, customers and analytics from one powerful dashboard.
+      </p>
+      <div class="flex gap-3 mt-5">
+        <a href="admin.html" class="px-5 py-2 rounded-full bg-red-500 text-white text-sm font-semibold hover:bg-red-600 transition">Dashboard →</a>
+        <a href="orders.html" class="px-5 py-2 rounded-full bg-white/10 border border-white/30 text-white text-sm font-semibold hover:bg-white/20 transition">Orders</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── RIGHT: Auth panel ── -->
+  <div class="flex items-center justify-center px-6 py-10 bg-gray-50 dark:bg-amoled">
+    <div id="loginCard"
+         class="spring-card rise-enter w-full max-w-md bg-white dark:bg-cardDark rounded-2xl p-8 shadow-2xl border border-gray-100 dark:border-zinc-900"
+         style="animation-delay:80ms">
+
+      <!-- Logo (mobile) -->
+      <div class="lg:hidden text-center mb-6">
+        <div class="brand text-2xl dark:text-white">HEAT HAVEN 🔐</div>
+        <p class="text-xs text-gray-400 mt-1">Admin Console</p>
+      </div>
+
+      <!-- Admin badge -->
+      <div class="flex items-center justify-center gap-2 mb-6 px-3 py-2 rounded-xl" style="background:#fef2f2">
+        <i class="fas fa-shield-halved text-red-500 text-sm"></i>
+        <span class="text-xs font-bold text-red-600 uppercase tracking-wider">Administrator Access Only</span>
+      </div>
+
+      <!-- ── LOGIN FORM ── -->
+      <div id="form-login">
+        <h2 class="text-2xl font-bold mb-1 dark:text-white">Admin Console 🔐</h2>
+        <p class="text-gray-400 dark:text-zinc-500 text-sm mb-6">Sign in to manage Heat Haven's store, orders, and products.</p>
+
+        <form id="loginForm" class="flex flex-col gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-gray-500 dark:text-zinc-500 mb-1.5 uppercase tracking-wide">Username</label>
+            <input class="login-inp" type="text" id="login-email" placeholder="admin" autocomplete="username"/>
+          </div>
+          <div class="pass-wrap">
+            <label class="block text-xs font-semibold text-gray-500 dark:text-zinc-500 mb-1.5 uppercase tracking-wide">Password</label>
+            <input class="login-inp" type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password"/>
+            <button type="button" class="pass-toggle" onclick="togglePass('login-pass',this)"><i class="fas fa-eye-slash"></i></button>
+          </div>
+          <div class="flex justify-end">
+            <a href="#" class="text-xs text-red-500 hover:underline font-medium">Forgot password?</a>
+          </div>
+          <button type="submit" class="submit-btn mt-1">
+            <i class="fas fa-shield-halved text-xs mr-2"></i>Sign In to Console
+          </button>
+        </form>
+
+        <div class="mt-4 p-3 rounded-xl text-xs text-gray-400 dark:text-zinc-600 text-center" style="border:1px dashed #e5e7eb">
+          <i class="fas fa-info-circle text-xs mr-1"></i>
+          Demo credentials: <span class="font-mono font-semibold text-gray-600 dark:text-zinc-400">admin</span> / <span class="font-mono font-semibold text-gray-600 dark:text-zinc-400">admin123</span>
+        </div>
+      </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast"><i class="fas fa-check-circle" style="color:#22c55e"></i><span></span></div>
+
+<script>
+// ── DARK MODE ──────────────────────────────────────────────
+if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark');
+document.getElementById('theme-toggle').addEventListener('click', () => {
+  const d = document.documentElement.classList.toggle('dark');
+  localStorage.setItem('theme', d ? 'dark' : 'light');
+});
+
+// ── MOBILE MENU ───────────────────────────────────────────
+document.getElementById('mobile-menu-button').addEventListener('click', () => document.getElementById('mobile-menu').classList.add('open'));
+document.getElementById('close-menu').addEventListener('click', () => document.getElementById('mobile-menu').classList.remove('open'));
+
+// ── CART BADGE ────────────────────────────────────────────
+function getCart() { try { return JSON.parse(localStorage.getItem('hh_cart') || '[]'); } catch(e) { return []; } }
+function updateCartBadge() {
+  const t = getCart().reduce((s,i) => s + i.qty, 0);
+  document.querySelectorAll('#cart-count,#cart-count-mobile').forEach(el => el.textContent = t);
+}
+updateCartBadge();
+
+// ── TOAST ─────────────────────────────────────────────────
+function showToast(msg, err) {
+  const t = document.getElementById('toast');
+  t.querySelector('i').className = err ? 'fas fa-exclamation-circle' : 'fas fa-check-circle';
+  t.querySelector('i').style.color = err ? '#f59e0b' : '#22c55e';
+  t.querySelector('span').textContent = msg;
+  t.classList.add('show');
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+// ── RISE EFFECT ───────────────────────────────────────────
+function triggerRise(el) {
+  if (!el) return;
+  el.classList.remove('rise-click');
+  void el.offsetWidth;
+  el.classList.add('rise-click');
+}
+
+
+
+// ── PASSWORD VISIBILITY ───────────────────────────────────
+function togglePass(inputId, btn) {
+  const inp = document.getElementById(inputId);
+  const icon = btn.querySelector('i');
+  if (inp.type === 'password') {
+    inp.type = 'text';
+    icon.className = 'fas fa-eye';
+  } else {
+    inp.type = 'password';
+    icon.className = 'fas fa-eye-slash';
+  }
+}
+
+// ── PASSWORD STRENGTH ─────────────────────────────────────
+document.getElementById('signup-pass').addEventListener('input', function() {
+  const v = this.value;
+  document.getElementById('pass-strength').classList.toggle('hidden', v.length === 0);
+  const bars = [document.getElementById('s1'),document.getElementById('s2'),document.getElementById('s3'),document.getElementById('s4')];
+  let score = 0;
+  if (v.length >= 8) score++;
+  if (/[A-Z]/.test(v)) score++;
+  if (/[0-9]/.test(v)) score++;
+  if (/[^A-Za-z0-9]/.test(v)) score++;
+  const colors = ['#ef4444','#f59e0b','#3b82f6','#22c55e'];
+  const labels = ['Weak','Fair','Good','Strong'];
+  bars.forEach((b,i) => b.style.background = i < score ? colors[score-1] : '');
+  document.getElementById('pass-strength-label').textContent = score > 0 ? labels[score-1] + ' password' : '';
+  document.getElementById('pass-strength-label').style.color = score > 0 ? colors[score-1] : '';
+});
+
+// ── LOGIN FORM ────────────────────────────────────────────
+document.getElementById('loginForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  triggerRise(document.getElementById('loginCard'));
+  triggerRise(document.getElementById('heroCard'));
+
+  const ADMIN_USER = 'admin', ADMIN_PASS = 'admin123';
+  const username = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-pass').value;
+
+  if (!username || !password) { showToast('Please fill in all fields', true); return; }
+
+  if (username === ADMIN_USER && password === ADMIN_PASS) {
+    showToast('Access granted. Welcome, Admin 🔐', false);
+    sessionStorage.setItem('hh_admin', '1');
+    setTimeout(() => { window.location.href = 'admin.html'; }, 1000);
+  } else {
+    showToast('Invalid credentials ✕', true);
+    const card = document.getElementById('loginCard');
+    card.style.animation = 'none';
+    void card.offsetWidth;
+    card.style.animation = 'shake-card 0.4s ease';
+  }
+});
+
+// ── SEARCH ────────────────────────────────────────────────
+const PRODUCTS = [
+  { name:'Air Jordan 1 Retro High',   colorway:'Chicago Bulls',  brand:'Jordan',     price:5559, img:'images/aj 1 chichgo.png' },
+  { name:'Nike Uptempo Slide',         colorway:'Chicago Bulls',  brand:'Nike',       price:5559, img:'images/uptempo slide bulls.png' },
+  { name:'Nike SB Dunk Low',           colorway:'Gulf',           brand:'Nike',       price:5559, img:'images/sb gulf.png' },
+  { name:'Adidas Campus',             colorway:'Clear Sky Gum',  brand:'Adidas',     price:5559, img:'images/adidas campus clear sky gum.png' },
+  { name:'Air Force 1 Low',           colorway:'Lakers Home',    brand:'Nike',       price:5559, img:'images/af1 kobe yellow.png' },
+  { name:'Yeezy Boost 350 V2',        colorway:'Zebra',          brand:'Yeezy',      price:5559, img:'images/yeezy zebra.png' },
+  { name:'Yeezy 700 V3',              colorway:'Azael',          brand:'Yeezy',      price:5559, img:'images/yzy 700 v3 azael.png' },
+  { name:'Travis x Fragment High',    colorway:'Fragment',       brand:'Jordan',     price:5559, img:'images/travis x fragment high.png' },
+  { name:'New Balance 990v5',         colorway:'Grey',           brand:'New Balance',price:5559, img:'images/nb 990v5.png' },
+  { name:'Air Jordan 4 Retro',        colorway:'Breds',          brand:'Jordan',     price:5559, img:'images/aj4 bred.png' },
+  { name:'Salehe Bembury x Crocs',    colorway:'Horchata',       brand:'Crocs',      price:5559, img:'images/crocs horchata.png' },
+];
+const so=document.getElementById('search-overlay'),si=document.getElementById('search-input'),sc=document.getElementById('search-clear-btn'),rp=document.getElementById('search-results-panel');
+function openSearch(){so.classList.add('open');setTimeout(()=>si.focus(),50);}
+function closeSearch(){so.classList.remove('open');si.value='';sc.classList.remove('visible');rp.innerHTML='';rp.classList.remove('has-results');}
+document.getElementById('search-open-btn').addEventListener('click',openSearch);
+so.addEventListener('click',e=>{if(e.target===so)closeSearch();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSearch();if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();openSearch();}});
+sc.addEventListener('click',()=>{si.value='';sc.classList.remove('visible');rp.innerHTML='';rp.classList.remove('has-results');si.focus();});
+function escH(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function escR(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
+function hl(t,q){if(!q)return escH(t);return escH(t).replace(new RegExp('('+escR(q)+')','gi'),'<span class="search-highlight">$1</span>');}
+function runSearch(q){
+  sc.classList.toggle('visible',q.length>0);
+  if(!q.trim()){rp.innerHTML='';rp.classList.remove('has-results');return;}
+  const hits=PRODUCTS.filter(p=>[p.name,p.colorway,p.brand].join(' ').toLowerCase().includes(q.toLowerCase()));
+  rp.classList.add('has-results');
+  if(!hits.length){rp.innerHTML=`<div class="search-no-results">😕 No sneakers found for "<strong>${escH(q)}</strong>"</div>`;return;}
+  rp.innerHTML=hits.map((p,i)=>`<div class="search-result-item" data-i="${i}" tabindex="0" style="animation-delay:${i*35}ms"><img class="sri-img" src="${escH(p.img)}" onerror="this.src='https://via.placeholder.com/52'"><div style="flex:1;min-width:0"><div class="sri-name">${hl(p.name,q)}</div><div class="sri-sub">${hl(p.colorway,q)} · ${hl(p.brand,q)}</div></div><div class="sri-price">₹${p.price.toLocaleString('en-IN')}</div></div>`).join('');
+  rp.querySelectorAll('.search-result-item').forEach((row,i)=>{
+    row.addEventListener('click',()=>{closeSearch();window.location.href='product.html';});
+    row.addEventListener('keydown',e=>{if(e.key==='Enter')row.click();});
+  });
+}
+let dbt;
+si.addEventListener('input',()=>{clearTimeout(dbt);dbt=setTimeout(()=>runSearch(si.value),140);});
+</script>
+</body>
+>>>>>>> 37dd7005f1780c91e50cc78801b90bfd12d1ca68
 </html>
