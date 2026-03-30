@@ -5,6 +5,8 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const session = require('express-session');
+const passport = require('passport');
 
 const { connectDB } = require('./config/db');
 const { seedAll } = require('./utils/seed');
@@ -15,6 +17,7 @@ const productsRoutes = require('./routes/products');
 const cartRoutes = require('./routes/cart');
 const ordersRoutes = require('./routes/orders');
 const adminRoutes = require('./routes/admin');
+require('./config/passport');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -29,6 +32,18 @@ app.use(
 app.use(morgan('dev'));
 
 app.use(express.json({ limit: '1mb' }));
+
+// Required for OAuth handshake (Passport uses session to track login state).
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || 'heathaven_session_secret',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { httpOnly: true, secure: false },
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Serve the existing frontend files (HTML + images) from the repo root.
 app.use(express.static(path.join(__dirname)));
