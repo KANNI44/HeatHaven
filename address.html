@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Heat Haven – Saved Addresses</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: { colors: { amoled:'#000000', cardDark:'#0a0a0a', hoverDark:'#111111' } } }
+    }
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body { font-family:"Poppins",sans-serif; overflow-x:hidden; }
+    html { scrollbar-gutter:stable; }
+    h1,h2,h3,h4,.brand { font-family:"Archivo Black",sans-serif; letter-spacing:-0.5px; }
+
+    .mobile-menu { transform:translateX(100%); transition:transform 0.3s ease-in-out; }
+    .mobile-menu.open { transform:translateX(0); }
+
+    .page-transition { animation:fadeIn 0.5s ease; }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+
+    /* Address card spring */
+    .address-card {
+      transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1),
+                  box-shadow 0.35s ease, border-color 0.25s ease;
+    }
+    .address-card:hover { transform:translateY(-5px) scale(1.01); box-shadow:0 18px 36px rgba(0,0,0,0.1); border-color:#111 !important; }
+    .dark .address-card:hover { box-shadow:0 18px 36px rgba(0,0,0,0.6); border-color:#444 !important; }
+
+    /* Dark mode icons */
+    .sun-icon  { display:block; width:20px; height:20px; }
+    .moon-icon { display:none;  width:20px; height:20px; }
+    .dark .sun-icon  { display:none; }
+    .dark .moon-icon { display:block; }
+
+    nav { background:#fff; }
+    .dark nav { background:#000; border-bottom:1px solid #1a1a1a; }
+
+    /* Toast */
+    #toast {
+      position:fixed; bottom:80px; left:50%; transform:translateX(-50%) translateY(20px);
+      background:#111; color:#fff; padding:10px 22px; border-radius:999px;
+      font-size:13px; z-index:9999; opacity:0; transition:opacity 0.3s,transform 0.3s;
+      pointer-events:none; display:flex; align-items:center; gap:8px;
+    }
+    #toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+    /* Nav search pill */
+    .nav-search-pill { display:flex; align-items:center; min-width:190px; padding:0; border-radius:999px; border:none; cursor:pointer; background:transparent; font-family:"Poppins",sans-serif; font-size:13px; font-weight:500; transition:transform 0.15s; position:relative; white-space:nowrap; }
+    .nav-search-pill:hover { transform:scale(1.02); }
+    .nav-search-pill:active { transform:scale(0.97); }
+    .nav-search-pill .pill-border { position:absolute; inset:0; border-radius:999px; padding:2px; background:linear-gradient(100deg,#4285f4,#ea4335,#fbbc04,#34a853,#4285f4); background-size:250% 250%; animation:pill-gradient 3s ease infinite; -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0); -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none; }
+    .nav-search-pill .pill-inner { display:flex; align-items:center; gap:10px; width:100%; padding:8px 18px 8px 14px; border-radius:999px; background:#f8f9fa; position:relative; z-index:1; transition:background 0.2s,box-shadow 0.2s; }
+    .nav-search-pill:hover .pill-inner { background:#fff; box-shadow:0 2px 16px rgba(66,133,244,0.18),0 1px 6px rgba(234,67,53,0.1); }
+    .pill-search-icon { width:28px; height:28px; flex-shrink:0; background:linear-gradient(135deg,#4285f4,#34a853); border-radius:50%; display:flex; align-items:center; justify-content:center; transition:transform 0.2s; }
+    .nav-search-pill:hover .pill-search-icon { transform:rotate(-10deg) scale(1.1); }
+    .pill-search-icon svg { width:13px; height:13px; }
+    .pill-label { flex:1; text-align:left; color:#5f6368; font-size:13px; }
+    .pill-kbd { display:inline-flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.07); border-radius:6px; padding:2px 7px; font-size:11px; font-family:monospace; color:#999; line-height:1.5; flex-shrink:0; }
+    .dark .nav-search-pill .pill-inner { background:#1a1a1a; }
+    .dark .nav-search-pill:hover .pill-inner { background:#222; }
+    .dark .pill-label { color:#9aa0a6; }
+    .dark .pill-kbd { background:rgba(255,255,255,0.07); color:#666; }
+    @keyframes pill-gradient { 0%{background-position:0% 50%;} 50%{background-position:100% 50%;} 100%{background-position:0% 50%;} }
+
+    /* Search overlay */
+    #search-overlay { position:fixed; inset:0; z-index:99999; background:rgba(255,255,255,0.85); backdrop-filter:blur(20px); display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding-top:120px; opacity:0; pointer-events:none; transition:opacity 0.3s ease; }
+    .dark #search-overlay { background:rgba(0,0,0,0.88); }
+    #search-overlay.open { opacity:1; pointer-events:all; }
+    #search-box-wrap { width:100%; max-width:620px; padding:0 20px; }
+    .search-border-wrap { position:relative; border-radius:999px; padding:3px; background:linear-gradient(135deg,#4285f4,#ea4335,#fbbc04,#34a853,#4285f4); background-size:300% 300%; animation:gradient-shift 4s ease infinite; box-shadow:0 8px 40px rgba(66,133,244,0.25); }
+    @keyframes gradient-shift { 0%{background-position:0% 50%;} 50%{background-position:100% 50%;} 100%{background-position:0% 50%;} }
+    .search-inner { display:flex; align-items:center; background:#fff; border-radius:999px; padding:14px 20px 14px 22px; gap:14px; }
+    .dark .search-inner { background:#111; }
+    .search-icon-wrap { color:#5f6368; flex-shrink:0; font-size:18px; }
+    #search-input { flex:1; border:none; outline:none; background:transparent; font-family:"Poppins",sans-serif; font-size:18px; color:#202124; }
+    .dark #search-input { color:#e8eaed; }
+    #search-input::placeholder { color:#9aa0a6; }
+    #search-clear-btn { background:none; border:none; cursor:pointer; color:#9aa0a6; font-size:16px; display:none; padding:4px; border-radius:50%; flex-shrink:0; }
+    #search-clear-btn.visible { display:flex; align-items:center; justify-content:center; }
+    #search-results-panel { width:100%; max-width:620px; padding:0 20px; margin-top:16px; max-height:calc(100vh - 280px); overflow-y:auto; display:none; }
+    #search-results-panel.has-results { display:block; }
+    .search-result-item { display:flex; align-items:center; gap:14px; padding:12px 18px; background:#fff; border-radius:14px; margin-bottom:8px; cursor:pointer; transition:background 0.15s,transform 0.15s; animation:result-in 0.2s ease; box-shadow:0 1px 6px rgba(0,0,0,0.08); }
+    @keyframes result-in { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+    .dark .search-result-item { background:#1c1c1e; box-shadow:none; }
+    .search-result-item:hover { background:#f8f9fa; transform:translateY(-1px); }
+    .dark .search-result-item:hover { background:#2c2c2e; }
+    .sri-img { width:52px; height:52px; object-fit:contain; border-radius:10px; background:#f1f3f4; flex-shrink:0; }
+    .dark .sri-img { background:#2c2c2e; }
+    .sri-name { font-weight:600; font-size:14px; color:#202124; }
+    .dark .sri-name { color:#e8eaed; }
+    .sri-sub { font-size:12px; color:#5f6368; margin-top:2px; }
+    .sri-price { font-weight:700; font-size:14px; color:#202124; flex-shrink:0; }
+    .dark .sri-price { color:#e8eaed; }
+    .search-highlight { color:#1a73e8; font-weight:700; }
+    .dark .search-highlight { color:#8ab4f8; }
+    .search-no-results { text-align:center; padding:40px 16px; background:#fff; border-radius:14px; font-size:14px; color:#5f6368; }
+    .dark .search-no-results { background:#1c1c1e; color:#9aa0a6; }
+    #search-close-hint { margin-top:16px; font-size:12px; color:#9aa0a6; }
+    #search-close-hint kbd { background:rgba(0,0,0,0.08); color:#5f6368; padding:2px 8px; border-radius:4px; font-family:monospace; }
+    .dark #search-close-hint kbd { background:rgba(255,255,255,0.1); color:#9aa0a6; }
+
+    /* AI Chat Widget */
+    #hh-chat-widget { position:fixed; bottom:24px; left:24px; z-index:9999; font-family:"Poppins",sans-serif; }
+    #hh-chat-toggle { width:60px; height:60px; border-radius:50%; background:#000; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 8px 32px rgba(0,0,0,0.25); transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.3s ease; position:relative; }
+    .dark #hh-chat-toggle { background:#f0f0f0; }
+    .dark #hh-chat-toggle .icon-chat svg, .dark #hh-chat-toggle .icon-close svg { stroke:#000; }
+    #hh-chat-toggle:hover { transform:scale(1.1); }
+    #hh-chat-toggle .toggle-icon { position:absolute; transition:opacity 0.2s ease,transform 0.2s ease; }
+    #hh-chat-toggle .icon-chat  { opacity:1; transform:scale(1) rotate(0deg); }
+    #hh-chat-toggle .icon-close { opacity:0; transform:scale(0.5) rotate(-90deg); }
+    #hh-chat-widget.open #hh-chat-toggle .icon-chat  { opacity:0; transform:scale(0.5) rotate(90deg); }
+    #hh-chat-widget.open #hh-chat-toggle .icon-close { opacity:1; transform:scale(1) rotate(0deg); }
+    #hh-chat-toggle .notif-dot { position:absolute; top:2px; right:2px; width:14px; height:14px; background:#ef4444; border-radius:50%; border:2px solid white; display:none; animation:pulse-dot 2s infinite; }
+    @keyframes pulse-dot { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.3);opacity:0.7} }
+    #hh-chat-panel { position:absolute; bottom:76px; left:0; width:360px; height:520px; background:#fff; border-radius:20px; box-shadow:0 20px 60px rgba(0,0,0,0.18),0 0 0 1px rgba(0,0,0,0.06); display:flex; flex-direction:column; overflow:hidden; transform:scale(0.85) translateY(20px); transform-origin:bottom left; opacity:0; pointer-events:none; transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1),opacity 0.25s ease; }
+    #hh-chat-widget.open #hh-chat-panel { transform:scale(1) translateY(0); opacity:1; pointer-events:all; }
+    #hh-chat-header { background:#000; padding:16px 18px; display:flex; align-items:center; gap:12px; flex-shrink:0; }
+    .hh-avatar { width:40px; height:40px; background:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:"Archivo Black",sans-serif; font-size:13px; color:#000; flex-shrink:0; }
+    .hh-header-name { color:#fff; font-weight:600; font-size:14px; }
+    .hh-header-status { color:#a3a3a3; font-size:11px; display:flex; align-items:center; gap:5px; margin-top:2px; }
+    .hh-status-dot { width:7px; height:7px; background:#22c55e; border-radius:50%; animation:pulse-dot 2s infinite; }
+    #hh-messages { flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:10px; background:#fafafa; scroll-behavior:smooth; }
+    #hh-messages::-webkit-scrollbar { width:4px; }
+    #hh-messages::-webkit-scrollbar-thumb { background:#ddd; border-radius:2px; }
+    .hh-msg { display:flex; gap:8px; align-items:flex-end; animation:msg-in 0.3s ease; }
+    @keyframes msg-in { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+    .hh-msg.bot  { justify-content:flex-start; }
+    .hh-msg.user { justify-content:flex-end; }
+    .hh-bot-avatar { width:28px; height:28px; background:#000; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; color:#fff; font-family:"Archivo Black",sans-serif; flex-shrink:0; }
+    .hh-bubble { max-width:78%; padding:10px 14px; border-radius:18px; font-size:13px; line-height:1.5; word-wrap:break-word; }
+    .hh-msg.bot  .hh-bubble { background:#fff; color:#111; border-radius:18px 18px 18px 4px; box-shadow:0 1px 4px rgba(0,0,0,0.08); }
+    .hh-msg.user .hh-bubble { background:#000; color:#fff; border-radius:18px 18px 4px 18px; }
+    .hh-chips { display:flex; flex-wrap:wrap; gap:6px; padding:0 16px 10px; background:#fafafa; }
+    .hh-chip { padding:6px 14px; background:#fff; border:1.5px solid #e5e5e5; border-radius:999px; font-size:12px; cursor:pointer; color:#333; font-family:"Poppins",sans-serif; font-weight:500; transition:all 0.2s ease; white-space:nowrap; }
+    .hh-chip:hover { background:#000; color:#fff; border-color:#000; }
+    .hh-typing { display:flex; gap:4px; align-items:center; }
+    .hh-typing span { width:7px; height:7px; background:#bbb; border-radius:50%; animation:typing 1.2s infinite ease-in-out; }
+    .hh-typing span:nth-child(2) { animation-delay:0.2s; }
+    .hh-typing span:nth-child(3) { animation-delay:0.4s; }
+    @keyframes typing { 0%,60%,100%{transform:translateY(0);opacity:0.4} 30%{transform:translateY(-5px);opacity:1} }
+    #hh-input-area { padding:12px 14px; background:#fff; border-top:1px solid #f0f0f0; display:flex; align-items:center; gap:8px; flex-shrink:0; }
+    #hh-input { flex:1; border:1.5px solid #e5e5e5; border-radius:999px; padding:9px 16px; font-size:13px; font-family:"Poppins",sans-serif; outline:none; background:#fafafa; color:#111; transition:border-color 0.2s; }
+    #hh-input:focus { border-color:#000; background:#fff; }
+    #hh-input::placeholder { color:#bbb; }
+    #hh-send { width:38px; height:38px; background:#000; border:none; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:transform 0.2s ease; flex-shrink:0; }
+    #hh-send:hover { transform:scale(1.1); }
+    .hh-powered { text-align:center; padding:6px; font-size:10px; color:#ccc; background:#fff; flex-shrink:0; }
+    .dark #hh-chat-panel { background:#0a0a0a; }
+    .dark #hh-messages { background:#000; }
+    .dark .hh-chips { background:#000; }
+    .dark .hh-msg.bot .hh-bubble { background:#111; color:#f0f0f0; box-shadow:none; }
+    .dark #hh-input-area { background:#0a0a0a; border-top-color:#1a1a1a; }
+    .dark #hh-input { background:#111; border-color:#222; color:#fff; }
+    .dark #hh-input:focus { border-color:#555; background:#1a1a1a; }
+    .dark .hh-chip { background:#111; border-color:#333; color:#ccc; }
+    .dark .hh-chip:hover { background:#fff; color:#000; border-color:#fff; }
+    .dark .hh-powered { background:#0a0a0a; color:#333; }
+    @media (max-width:420px) { #hh-chat-panel { width:calc(100vw - 48px); } }
+
+    /* AMOLED scrollbar */
+    .dark ::-webkit-scrollbar { width:5px; }
+    .dark ::-webkit-scrollbar-track { background:#000; }
+    .dark ::-webkit-scrollbar-thumb { background:#222; border-radius:3px; }
+  </style>
+</head>
+
+<body class="bg-white dark:bg-amoled text-black dark:text-white transition-colors duration-300">
+
+<!-- SEARCH OVERLAY -->
+<div id="search-overlay" role="dialog" aria-label="Search">
+  <div id="search-box-wrap">
+    <div class="search-border-wrap">
+      <div class="search-inner">
+        <div class="search-icon-wrap"><i class="fas fa-search"></i></div>
+        <input id="search-input" type="text" placeholder="Search sneakers, brands, colorways…" autocomplete="off" />
+        <button id="search-clear-btn" aria-label="Clear">✕</button>
+      </div>
+    </div>
+  </div>
+  <div id="search-results-panel" role="listbox"></div>
+  <p id="search-close-hint">Press <kbd>Esc</kbd> to close</p>
+</div>
+
+<!-- Dark Mode Toggle -->
+<div class="fixed bottom-10 right-6 z-50">
+  <button id="theme-toggle" class="flex items-center justify-center w-12 h-12 rounded-full shadow-xl bg-gray-200 dark:bg-cardDark transition-all duration-300 hover:scale-110" aria-label="Toggle dark mode">
+    <svg class="sun-icon text-yellow-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="4" fill="currentColor" stroke="none"/>
+      <path stroke-linecap="round" d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+    </svg>
+    <svg class="moon-icon text-yellow-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/>
+    </svg>
+  </button>
+</div>
+
+<!-- NAV -->
+<nav class="shadow-md sticky top-0 z-40 border-b border-transparent dark:border-zinc-900">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-16">
+      <div class="flex items-center">
+        <div class="brand text-2xl font-bold">
+          <a href="index.html" class="text-black dark:text-white">HEAT HAVEN</a>
+        </div>
+        <div class="hidden md:flex items-center ml-10 space-x-6">
+          <a href="index.html"   class="text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Home</a>
+          <a href="product.html" class="text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Products</a>
+          <a href="deals.html"   class="text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Hot Deals</a>
+          <a href="owners.html"  class="text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Owners</a>
+        </div>
+      </div>
+      <div class="hidden md:flex items-center gap-2 flex-shrink-0">
+        <a href="wishlist.html" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark transition-colors" aria-label="Wishlist">
+          <i class="fas fa-heart text-red-600"></i>
+        </a>
+        <button id="search-open-btn" class="nav-search-pill" aria-label="Open search">
+          <div class="pill-border"></div>
+          <span class="pill-inner">
+            <span class="pill-search-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </span>
+            <span class="pill-label">Search sneakers…</span>
+            <span class="pill-kbd">👟</span>
+          </span>
+        </button>
+        <a href="cart.html" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark relative">
+          <i class="fas fa-shopping-cart text-gray-600 dark:text-gray-300"></i>
+          <span id="cart-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+        </a>
+        <a href="profile.html" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark">
+          <i class="fas fa-user text-gray-600 dark:text-gray-300"></i>
+        </a>
+        <a href="profile login.html" class="px-5 py-1.5 rounded-full text-sm font-medium border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all">Login</a>
+      </div>
+      <div class="md:hidden ml-auto flex items-center">
+        <button class="p-2" id="mobile-menu-button">
+          <i class="fas fa-bars text-black dark:text-white text-lg"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- Mobile menu -->
+  <div class="mobile-menu fixed inset-y-0 right-0 w-64 bg-white dark:bg-cardDark shadow-xl z-50 p-5" id="mobile-menu">
+    <div class="flex justify-between items-center mb-8">
+      <div class="brand text-xl dark:text-white">HEAT HAVEN</div>
+      <button id="close-menu"><i class="fas fa-times text-xl dark:text-white"></i></button>
+    </div>
+    <div class="flex flex-col space-y-5">
+      <a href="index.html"    class="text-black dark:text-gray-200 font-medium">Home</a>
+      <a href="product.html"  class="text-black dark:text-gray-200 font-medium">Products</a>
+      <a href="deals.html"    class="text-black dark:text-gray-200 font-medium">Hot Deals</a>
+      <a href="owners.html"   class="text-black dark:text-gray-200 font-medium">Owners</a>
+      <a href="wishlist.html" class="flex items-center gap-2 text-red-500 font-medium"><i class="fas fa-heart text-sm"></i> Wishlist</a>
+    </div>
+    <div class="mt-6 pt-5 border-t border-gray-200 dark:border-gray-700 flex items-center gap-3 flex-wrap">
+      <a href="cart.html" class="relative p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark">
+        <i class="fas fa-shopping-cart text-gray-600 dark:text-gray-300"></i>
+        <span id="cart-count-mobile" class="absolute -top-0.5 -right-0.5 bg-red-500 text-white text-[10px] rounded-full h-5 w-5 flex items-center justify-center">0</span>
+      </a>
+      <a href="profile.html" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark">
+        <i class="fas fa-user text-gray-600 dark:text-gray-300"></i>
+      </a>
+      <a href="profile login.html" class="px-4 py-1.5 rounded-full text-sm font-medium border border-gray-300 dark:border-gray-600 hover:bg-black hover:text-white transition">Login</a>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE CONTENT -->
+<div class="max-w-6xl mx-auto px-4 sm:px-6 py-10 page-transition">
+
+  <!-- Header -->
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+    <div>
+      <h1 class="text-3xl font-bold dark:text-white">Saved Addresses</h1>
+      <p class="text-gray-500 dark:text-zinc-500 mt-1 text-sm">Choose where you want your order delivered</p>
+    </div>
+    <button class="bg-black dark:bg-white text-white dark:text-black px-5 py-2.5 rounded-lg text-sm font-semibold hover:opacity-80 transition">
+      + Add New Address
+    </button>
+  </div>
+
+  <!-- Address Cards -->
+  <div class="space-y-5">
+
+    <!-- Home -->
+    <div class="address-card bg-white dark:bg-cardDark border border-gray-200 dark:border-zinc-800 rounded-2xl p-6">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="px-3 py-1 text-xs rounded-full bg-green-100 dark:bg-green-950 text-green-700 dark:text-green-400 font-semibold">Default</span>
+        <h2 class="text-lg font-bold dark:text-white">Home</h2>
+      </div>
+      <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
+        <div class="flex gap-5">
+          <div class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 dark:bg-zinc-800 flex-shrink-0">
+            <i class="fas fa-house text-gray-600 dark:text-zinc-400"></i>
+          </div>
+          <div>
+            <p class="font-semibold dark:text-white">Kanishak Choudhary</p>
+            <p class="text-gray-500 dark:text-zinc-400 text-sm leading-relaxed mt-1">
+              238, First Floor<br />
+              Gali No.8, Mohan Garden<br />
+              New Delhi – 110058, India
+            </p>
+            <p class="text-sm mt-2 text-gray-700 dark:text-zinc-300 font-medium">+91 92054 43488</p>
+          </div>
+        </div>
+        <div class="flex gap-2 flex-shrink-0">
+          <button class="bg-black dark:bg-white text-white dark:text-black px-4 py-2 rounded-lg text-sm font-medium hover:opacity-80 transition">Deliver Here</button>
+          <button class="border border-gray-200 dark:border-zinc-700 px-4 py-2 rounded-lg text-sm text-gray-600 dark:text-zinc-300 hover:bg-gray-50 dark:hover:bg-zinc-800 transition">Edit</button>
+          <button class="text-red-500 px-4 py-2 rounded-lg text-sm hover:bg-red-50 dark:hover:bg-red-950 transition">Delete</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Work -->
+    <div class="address-card bg-white dark:bg-cardDark border border-gray-200 dark:border-zinc-800 rounded-2xl p-6">
+      <div class="flex items-center gap-3 mb-4">
+        <h2 class="text-lg font-bold dark:text-white">Work</h2>
+      </div>
+      <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
+        <div class="flex gap-5">
+          <div class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 dark:bg-zinc-800 flex-shrink-0">
+            <i class="fas fa-briefcase text-gray-600 dark:text-zinc-400"></i>
+          </div>
+          <div>
+            <p class="font-semibold dark:text-white">Kanishak Choudhary</p>
+            <p class="text-gray-500 dark:text-zinc-400 text-sm leading-relaxed mt-1">
+              Office 12, Tech Park<br />
+              Sector 44, Gurugram – 122003, India
+            </p>
+            <p class="text-sm mt-2 text-gray-700 dark:text-zinc-300 font-medium">+91 92054 43488</p>
+          </div>
+        </div>
+        <div class="flex gap-2 flex-shrink-0">
+          <button class="bg-black dark:bg-white text-white dark:text-black px-4 py-2 rounded-lg text-sm font-medium hover:opacity-80 transition">Deliver Here</button>
+          <button class="border border-gray-200 dark:border-zinc-700 px-4 py-2 rounded-lg text-sm text-gray-600 dark:text-zinc-300 hover:bg-gray-50 dark:hover:bg-zinc-800 transition">Edit</button>
+          <button class="text-red-500 px-4 py-2 rounded-lg text-sm hover:bg-red-50 dark:hover:bg-red-950 transition">Delete</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Other -->
+    <div class="address-card bg-white dark:bg-cardDark border border-gray-200 dark:border-zinc-800 rounded-2xl p-6">
+      <div class="flex items-center gap-3 mb-4">
+        <h2 class="text-lg font-bold dark:text-white">Other</h2>
+      </div>
+      <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
+        <div class="flex gap-5">
+          <div class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 dark:bg-zinc-800 flex-shrink-0">
+            <i class="fas fa-location-dot text-gray-600 dark:text-zinc-400"></i>
+          </div>
+          <div>
+            <p class="font-semibold dark:text-white">Kanishak Choudhary</p>
+            <p class="text-gray-500 dark:text-zinc-400 text-sm leading-relaxed mt-1">
+              House 20, Palam Vihar<br />
+              Sector 1, Delhi – 110045, India
+            </p>
+            <p class="text-sm mt-2 text-gray-700 dark:text-zinc-300 font-medium">+91 92054 43488</p>
+          </div>
+        </div>
+        <div class="flex gap-2 flex-shrink-0">
+          <button class="bg-black dark:bg-white text-white dark:text-black px-4 py-2 rounded-lg text-sm font-medium hover:opacity-80 transition">Deliver Here</button>
+          <button class="border border-gray-200 dark:border-zinc-700 px-4 py-2 rounded-lg text-sm text-gray-600 dark:text-zinc-300 hover:bg-gray-50 dark:hover:bg-zinc-800 transition">Edit</button>
+          <button class="text-red-500 px-4 py-2 rounded-lg text-sm hover:bg-red-50 dark:hover:bg-red-950 transition">Delete</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast"><i class="fas fa-check-circle" style="color:#22c55e"></i><span></span></div>
+
+<!-- AI Chat Widget -->
+<div id="hh-chat-widget">
+  <div id="hh-chat-panel">
+    <div id="hh-chat-header">
+      <div class="hh-avatar">HH</div>
+      <div>
+        <div class="hh-header-name">Heat Haven Support</div>
+        <div class="hh-header-status"><span class="hh-status-dot"></span> Online · AI Assistant</div>
+      </div>
+      <button onclick="document.getElementById('hh-chat-widget').classList.remove('open')" style="background:none;border:none;color:#666;cursor:pointer;font-size:18px;padding:4px;margin-left:auto;"><i class="fas fa-chevron-down"></i></button>
+    </div>
+    <div id="hh-messages"></div>
+    <div class="hh-chips" id="hh-chips"></div>
+    <div id="hh-input-area">
+      <input id="hh-input" type="text" placeholder="Ask anything about sneakers…" autocomplete="off"/>
+      <button id="hh-send">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+        </svg>
+      </button>
+    </div>
+    <div class="hh-powered">Powered by Heat Haven AI ✦</div>
+  </div>
+  <button id="hh-chat-toggle" aria-label="Open chat">
+    <span class="notif-dot" id="hh-notif-dot"></span>
+    <span class="toggle-icon icon-chat">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+    </span>
+    <span class="toggle-icon icon-close">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </span>
+  </button>
+</div>
+
+<script>
+// ── DARK MODE ──────────────────────────────────────────────────
+if (localStorage.getItem("theme") === "dark") document.documentElement.classList.add("dark");
+document.getElementById("theme-toggle").addEventListener("click", () => {
+  const d = document.documentElement.classList.toggle("dark");
+  localStorage.setItem("theme", d ? "dark" : "light");
+});
+
+// ── MOBILE MENU ───────────────────────────────────────────────
+document.getElementById("mobile-menu-button").addEventListener("click", () => document.getElementById("mobile-menu").classList.add("open"));
+document.getElementById("close-menu").addEventListener("click", () => document.getElementById("mobile-menu").classList.remove("open"));
+
+// ── CART BADGE ────────────────────────────────────────────────
+function getCart() { try { return JSON.parse(localStorage.getItem("hh_cart") || "[]"); } catch(e) { return []; } }
+function updateCartBadge() {
+  const t = getCart().reduce((s,i) => s + i.qty, 0);
+  document.querySelectorAll("#cart-count,#cart-count-mobile").forEach(el => el.textContent = t);
+}
+updateCartBadge();
+
+// ── TOAST ─────────────────────────────────────────────────────
+function showToast(msg, err) {
+  const t = document.getElementById("toast");
+  t.querySelector("i").className = err ? "fas fa-exclamation-circle" : "fas fa-check-circle";
+  t.querySelector("i").style.color = err ? "#facc15" : "#22c55e";
+  t.querySelector("span").textContent = msg;
+  t.classList.add("show");
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(() => t.classList.remove("show"), 2400);
+}
+
+// ── SEARCH ────────────────────────────────────────────────────
+const PRODUCTS = [
+  { name:"Air Jordan 1 Retro High",   colorway:"Chicago Bulls",  brand:"Jordan",    price:5559, img:"images/aj 1 chichgo.png" },
+  { name:"Nike Uptempo Slide",         colorway:"Chicago Bulls",  brand:"Nike",      price:5559, img:"images/uptempo slide bulls.png" },
+  { name:"Nike SB Dunk Low",           colorway:"Gulf",           brand:"Nike",      price:5559, img:"images/sb gulf.png" },
+  { name:"Adidas Campus",             colorway:"Clear Sky Gum",  brand:"Adidas",    price:5559, img:"images/adidas campus clear sky gum.png" },
+  { name:"Air Force 1 Low",           colorway:"Lakers",         brand:"Nike",      price:5559, img:"images/af1 kobe yellow.png" },
+  { name:"Yeezy Boost 350 V2",        colorway:"Zebra",          brand:"Yeezy",     price:5559, img:"images/yeezy zebra.png" },
+  { name:"Yeezy 700 V3",              colorway:"Azael",          brand:"Yeezy",     price:5559, img:"images/yzy 700 v3 azael.png" },
+  { name:"Rick Owens Hollywood High", colorway:"Black Milk",     brand:"Rick Owens",price:5559, img:"images/rick owens hollywood high black milk.png" },
+  { name:"Puma Melns",                colorway:"La France",      brand:"Puma",      price:5559, img:"images/puma melons lafrance.png" },
+  { name:"Travis x Fragment High",    colorway:"Fragment",       brand:"Jordan",    price:5559, img:"images/travis x fragment high.png" },
+  { name:"New Balance 990v5",         colorway:"Grey",           brand:"New Balance",price:5559,img:"images/nb 990v5.png" },
+  { name:"Air Jordan 4 Retro",        colorway:"Breds",          brand:"Jordan",    price:5559, img:"images/aj4 bred.png" },
+  { name:"Salehe Bembury x Crocs",    colorway:"Horchata",       brand:"Crocs",     price:5559, img:"images/crocs horchata.png" },
+];
+
+const so=document.getElementById("search-overlay"),si=document.getElementById("search-input"),sc=document.getElementById("search-clear-btn"),rp=document.getElementById("search-results-panel");
+function openSearch(){ so.classList.add("open"); setTimeout(()=>si.focus(),50); }
+function closeSearch(){ so.classList.remove("open"); si.value=""; sc.classList.remove("visible"); rp.innerHTML=""; rp.classList.remove("has-results"); }
+document.getElementById("search-open-btn").addEventListener("click", openSearch);
+so.addEventListener("click", e=>{ if(e.target===so) closeSearch(); });
+document.addEventListener("keydown", e=>{ if(e.key==="Escape") closeSearch(); if((e.metaKey||e.ctrlKey)&&e.key==="k"){e.preventDefault();openSearch();} });
+sc.addEventListener("click",()=>{ si.value=""; sc.classList.remove("visible"); rp.innerHTML=""; rp.classList.remove("has-results"); si.focus(); });
+function escH(s){ return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function hl(t,q){ if(!q) return escH(t); return escH(t).replace(new RegExp("("+q.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+")","gi"),'<span class="search-highlight">$1</span>'); }
+function runSearch(q){
+  sc.classList.toggle("visible",q.length>0);
+  if(!q.trim()){ rp.innerHTML=""; rp.classList.remove("has-results"); return; }
+  const hits=PRODUCTS.filter(p=>[p.name,p.colorway,p.brand].join(" ").toLowerCase().includes(q.toLowerCase()));
+  rp.classList.add("has-results");
+  if(!hits.length){ rp.innerHTML=`<div class="search-no-results"><span style="font-size:36px;display:block;margin-bottom:10px">👟</span>No results for "<strong>${escH(q)}</strong>"</div>`; return; }
+  rp.innerHTML=hits.map((p,i)=>`<div class="search-result-item" data-i="${i}" tabindex="0" style="animation-delay:${i*40}ms"><img class="sri-img" src="${escH(p.img)}" onerror="this.src='https://via.placeholder.com/52'"><div style="flex:1;min-width:0"><div class="sri-name">${hl(p.name,q)}</div><div class="sri-sub">${hl(p.colorway,q)} · ${hl(p.brand,q)}</div></div><div class="sri-price">₹${p.price.toLocaleString("en-IN")}</div></div>`).join("");
+  rp.querySelectorAll(".search-result-item").forEach((row,i)=>{
+    row.addEventListener("click",()=>{ closeSearch(); window.location.href="product.html"; });
+    row.addEventListener("keydown",e=>{ if(e.key==="Enter") row.click(); });
+  });
+}
+let dbt; si.addEventListener("input",()=>{ clearTimeout(dbt); dbt=setTimeout(()=>runSearch(si.value),160); });
+
+// ── AI CHAT ────────────────────────────────────────────────────
+const SP="You are a friendly sneaker assistant for Heat Haven, a premium sneaker store in India. Currency: ₹. Sizes: UK 6-12. Keep replies 2-3 sentences, casual and helpful.";
+const QC=["What's on sale? 🔥","Size guide","Shipping info","Best Jordans","Returns"];
+const cw=document.getElementById("hh-chat-widget"),ct=document.getElementById("hh-chat-toggle"),me=document.getElementById("hh-messages"),ie=document.getElementById("hh-input"),sb=document.getElementById("hh-send"),ce=document.getElementById("hh-chips"),nd=document.getElementById("hh-notif-dot");
+let ch=[],iT=false,hO=false;
+ct.addEventListener("click",()=>{ cw.classList.toggle("open"); if(!hO){hO=true;nd.style.display="none";setTimeout(()=>{aBot("Hey! 👟 Welcome to <strong>Heat Haven</strong>. I'm your sneaker assistant.");setTimeout(()=>{aBot("Ask me anything — sizing, shipping, stock, or just good cop recommendations!");showC();},900);},300); } });
+function showC(c=QC){ce.innerHTML="";c.forEach(t=>{const b=document.createElement("button");b.className="hh-chip";b.textContent=t;b.onclick=()=>{ce.innerHTML="";sM(t);};ce.appendChild(b);});}
+function aBot(h){const d=document.createElement("div");d.className="hh-msg bot";d.innerHTML=`<div class="hh-bot-avatar">HH</div><div class="hh-bubble">${h}</div>`;me.appendChild(d);me.scrollTop=me.scrollHeight;}
+function aUser(t){const d=document.createElement("div");d.className="hh-msg user";d.innerHTML=`<div class="hh-bubble">${escH(t)}</div>`;me.appendChild(d);me.scrollTop=me.scrollHeight;}
+function shT(){const d=document.createElement("div");d.className="hh-msg bot";d.id="hh-ti";d.innerHTML=`<div class="hh-bot-avatar">HH</div><div class="hh-bubble" style="padding:10px 16px"><div class="hh-typing"><span></span><span></span><span></span></div></div>`;me.appendChild(d);me.scrollTop=me.scrollHeight;}
+function hiT(){const e=document.getElementById("hh-ti");if(e)e.remove();}
+async function sM(t){t=t.trim();if(!t||iT)return;ce.innerHTML="";aUser(t);ie.value="";iT=true;sb.style.opacity="0.5";ch.push({role:"user",content:t});shT();
+try{const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:SP,messages:ch})});const d=await r.json();const rp=d.content?.[0]?.text||"Sorry, try again!";ch.push({role:"assistant",content:rp});hiT();aBot(rp.replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>").replace(/\n/g,"<br>"));showC(["Tell me more","What's on sale?","Shipping","Contact support"]);}
+catch(e){hiT();aBot("Connectivity issue! DM us on Instagram <strong>@heatheaven.23_</strong> 🙏");}
+iT=false;sb.style.opacity="1";}
+sb.addEventListener("click",()=>sM(ie.value));
+ie.addEventListener("keydown",e=>{if(e.key==="Enter")sM(ie.value);});
+setTimeout(()=>{if(!hO)nd.style.display="block";},3000);
+</script>
+</body>
+</html>

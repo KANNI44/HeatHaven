@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heat Haven - Premium Sneaker Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --primary: #000000;
+            --secondary: #ffffff;
+            --accent: #ff4500;
+            --light: #f8f8f8;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--primary);
+            background-color: var(--secondary);
+            overflow-x: hidden;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        .brand {
+            font-family: 'Archivo Black', sans-serif;
+            letter-spacing: -0.5px;
+        }
+
+        .hero-video {
+            width: 100%;
+            height: 80vh;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .brand-filter button.active {
+            background-color: var(--primary);
+            color: var(--secondary);
+        }
+
+        .shoe-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .whatsapp-banner {
+            background-color: #25D366;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.03);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .page-transition {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .mobile-menu.open {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add to Cart Functionality</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .cart-animation {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .cart-animation:active {
+            transform: scale(0.95);
+        }
+
+        @keyframes bounce {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateY(0);
+            }
+
+            40% {
+                transform: translateY(-10px);
+            }
+
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .bounce {
+            animation: bounce 0.5s;
+        }
+    </style>
+</head>
+
+
+<body>
+    <!-- WhatsApp Floating Button -->
+    <div class="fixed bottom-10 right-6 z-50">
+        <a href="https://wa.me/1234567890?text=I%20want%20to%20place%20an%20order"
+            class="whatsapp-banner flex items-center justify-center rounded-full p-4 shadow-xl">
+            <i class="fab fa-whatsapp text-white text-3xl"></i>
+        </a>
+    </div>
+
+    <!-- Navigation -->
+<nav class="bg-white shadow-md sticky top-0 z-40">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-16">
+      <div class="flex items-center">
+        <div class="brand text-2xl font-bold">
+          <a href="#" class="text-black">HEAT HAVEN</a>
+        </div>
+        <div class="hidden md:flex items-center ml-10 space-x-8">
+          <a href="index.html" class="nav-link text-black hover:text-gray-600 px-2">Home</a>
+          <a href="product.html" class="nav-link text-black hover:text-gray-600 px-2">Products</a>
+          <a href="deals.html" class="nav-link text-black hover:text-gray-600 px-2">Hot Deals</a>
+          <!-- <a href="#about" class="nav-link text-black hover:text-gray-600 px-2">About Us</a> -->
+          <a href="owners.html" class="nav-link text-black hover:text-gray-600 px-2">Owners</a>
+          <a href="apparels.html" class="nav-link text-black hover:text-gray-600 px-2">Appareals</a>
+          <a href="products_apparels.html" class="nav-link text-black hover:text-gray-600 px-2">Products_Apparels</a>
+        </div>
+      </div>
+
+      <div class="flex items-center">
+        <div class="hidden md:flex items-center space-x-2">
+          <a href="#search" class="p-2 rounded-full hover:bg-gray-100">
+            <i class="fas fa-search text-gray-600"></i>
+          </a>
+          <a href="cart.html" class="p-2 rounded-full hover:bg-gray-100">
+            <i class="fas fa-shopping-cart text-gray-600"></i>
+            <span class="bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center -mt-8 ml-4">3</span>
+          </a>
+
+          <a href="profile.html" class="p-2 rounded-full hover:bg-gray-100">
+            <i class="fas fa-user text-gray-600"></i>
+          </a>
+
+          <!-- NEW Login button (desktop) -->
+          <a
+            href="profile login.html"
+            class="ml-2 px-4 py-1.5 rounded-full text-sm font-medium border border-gray-300 text-gray-800 hover:bg-black hover:text-white transition"
+          >
+            Login
+          </a>
+        </div>
+        <button class="md:hidden p-2 rounded-md focus:outline-none" id="mobile-menu-button">
+          <i class="fas fa-bars text-black"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cart Sidebar -->
+  <div id="cartSidebar"
+       class="fixed top-0 right-0 h-full w-80 bg-white shadow-lg transform translate-x-full transition-transform duration-300 z-40">
+    <!-- ...cart content unchanged... -->
+  </div>
+  <div id="cartOverlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-30"></div>
+
+  <!-- Mobile menu -->
+  <div class="mobile-menu fixed inset-y-0 right-0 w-64 bg-white shadow-lg z-50 p-4" id="mobile-menu">
+    <div class="flex justify-between items-center mb-8">
+      <div class="brand text-xl font-bold">HEAT HAVEN</div>
+      <button id="close-menu">
+        <i class="fas fa-times text-xl"></i>
+      </button>
+    </div>
+    <div class="flex flex-col space-y-4">
+      <a href="#home" class="nav-link text-black hover:text-gray-600">Home</a>
+      <a href="#products" class="nav-link text-black hover:text-gray-600">Products</a>
+      <a href="#deals" class="nav-link text-black hover:text-gray-600">Heat Haven Deals</a>
+      <a href="#about" class="nav-link text-black hover:text-gray-600">About Us</a>
+      <a href="owners.html" class="nav-link text-black hover:text-gray-600">Owners</a>
+      <a href="#apparels" class="nav-link text-black hover:text-gray-600">Appareals</a>
+      <a href="#search" class="nav-link text-black hover:text-gray-600">Products.apparels</a>
+    </div>
+    <div class="mt-8 pt-4 border-t border-gray-200">
+      <div class="flex items-center space-x-4">
+        <a href="#search" class="p-2 rounded-full hover:bg-gray-100">
+          <i class="fas fa-search text-gray-600"></i>
+        </a>
+        <a href="cart.html" class="p-2 rounded-full hover:bg-gray-100">
+          <i class="fas fa-shopping-cart text-gray-600"></i>
+          <span
+            class="bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center -mt-8 ml-4">3</span>
+        </a>
+        <a href="profile.html" class="p-2 rounded-full hover:bg-gray-100">
+          <i class="fas fa-user text-gray-600"></i>
+        </a>
+        <!-- NEW Login button (mobile) -->
+        <a
+          href="profile login.html"
+          class="px-4 py-1.5 rounded-full text-sm font-medium border border-gray-300 text-gray-800 hover:bg-black hover:text-white transition"
+        >
+          Login
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+    <!-- Main Content -->
+    <div id="app" class="page-transition">
+        <!-- Home Section -->
+        <section id="home" class="relative">
+            <div class="relative">
+                <video autoplay muted loop class="hero-video w-">
+                    <source src="images/Streetwear clothing brand commercial for www.deadbeat.in(720P_HD).mp4"
+                        type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                    <div class="text-center text-white px-4">
+                        <h1 class="text-4xl md:text-6xl font-bold mb-4">FADE CULTURE</h1>
+                        <p class="text-xl md:text-2xl mb-8">"Where Trends Fade, Style Stays."</p>
+                        <a href="products_apparels.html"
+                            class="bg-cyan-500 text-white px-8 py-3 rounded-full text-lg font-medium hover:bg-gray-800 transition duration-300 inline-block">
+                            Shop Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+ <!-- Brand Filter -->
+        <!-- <section id="brand-filter" class="py-8 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-2xl font-bold mb-6">Shop by Category</h2>
+                <div class="brand-filter flex space-x-4 overflow-x-auto pb-2">
+                    <button class="filter-btn px-6 py-2 border border-black rounded-full whitespace-nowrap active" data-brand="all">All Brands</button>
+                    <button class="filter-btn px-6 py-2 border border-black rounded-full whitespace-nowrap" data-brand="men">Mens</button>
+                    <button class="filter-btn px-6 py-2 border border-black rounded-full whitespace-nowrap" data-brand="adidas">Adidas</button>
+                    <button class="filter-btn px-6 py-2 border border-black rounded-full whitespace-nowrap" data-brand="jordan">Jordan</button>
+                    <button class="filter-btn px-6 py-2 border border-black rounded-full whitespace-nowrap" data-brand="jumpman jack">Jupman Jack</button>
+                    <button class="filter-btn px-6 py-2 border border-black rounded-full whitespace-nowrap" data-brand="newbalance">New Balance</button>
+                    <button class="filter-btn px-6 py-2 border border-black rounded-full whitespace-nowrap" data-brand="yeezy">Yeezy</button>
+                   <button class="filter-btn px-6 py-2 border border-black rounded-full whitespace-nowrap" data-brand="asics">Asics</button>
+                   <button class="filter-btn px-6 py-2 border border-black rounded-full whitespace-nowrap" data-brand="puma">Puma</button>
+                   <button class="filter-btn px-6 py-2 border border-black rounded-full whitespace-nowrap" data-brand="crocs">Crocs</button>
+                   <button class="filter-btn px-6 py-2 border border-black rounded-full whitespace-nowrap" data-brand="onitsuka">Asics Onitsuka</button>
+                   <button class="filter-btn px-6 py-2 border border-black rounded-full whitespace-nowrap" data-brand="slides">Slides</button>
+                   <button class="filter-btn px-6 py-2 border border-black rounded-full whitespace-nowrap" data-brand="foam runner">Foam Runner</button>
+                   <button class="filter-btn px-6 py-2 border border-black rounded-full whitespace-nowrap" data-brand="under armour">Under Armour</button>
+                   <button class="filter-btn px-6 py-2 border border-black rounded-full whitespace-nowrap" data-brand="converse">Converse</button>
+                   <button class="filter-btn px-6 py-2 border border-black rounded-full whitespace-nowrap" data-brand="rick owens">Rick Owens</button>
+ 
+ 
+                  </div>
+            </div>
+        </section> -->
+
+
+
+        <!-- Products Section -->
+        <section id="products" class="py-12 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl font-bold mb-8">Featured Clothing</h2>
+                <a href="products_apparels.html" class="text-black  font-medium hover:underline">View All</a>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 ">
+
+
+
+
+
+  <!-- Product 1 -->
+                    <div id="cartMessage"
+                        class="hidden bottom-500 z-30  absolute  bg-green-100 border-l-4 border-green-500 text-green-700 p-4 text-sm mb-4"
+                        role="alert">
+                        <p>Item added to your cart successfully!</p>
+                    </div>
+
+                    <div class="shoe-card bg-white rounded-lg   shadow-md transition duration-00" data-brand="men">
+                        <div class="relative">
+                            <img src="images.fade/alpine shirt.png" alt="Alpine F1 T-Shirt"
+                                class="w-full h-64 object-cover">
+                            <div
+                                class="absolute top-2 right-2 bg-cyan-500 text-white text-xs font-bold px-2 py-1 rounded">
+                                SALE !
+                            </div>
+                        </div>
+                        <div class="p-4 relative">
+
+                            <h3 class="text-lg font-bold mb-1">Alpine F1 T-Shirt</h3>
+                            <p class="text-gray-600 text-sm mb-2">Unisex</p>
+                            <div class="flex justify-between items-center border-12 relative ">
+                                <div>
+                                    
+                                    <span class="font-bold">₹23,429.52</span>
+                                </div>
+
+                                <div class="flex items-center space-x-4 relative">
+                                    <button id="addToCartBtn"
+                                        class="bg-black kanni text-white px-4 py-2 rounded text-sm hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-black focus:ring-opacity-50 cart-animation"
+                                        aria-label="Add to cart">
+                                        Add to Cart
+                                    </button>
+                                    <div id="cartCount" class="text-sm text-gray-700 hidden">
+                                        <span id="count">0</span> in cart
+                                    </div>
+                                </div>
+                                <!-- <div id="cartMessage"
+                                    class="hidden bottom-500  absolute bg-green-100 border-l-4 border-green-500 text-green-700 p-4 text-sm mb-4"
+                                    role="alert">
+                                    <p>Item added to your cart successfully!</p>
+                                </div> -->
+
+                                <script>
+                                    document.addEventListener('DOMContentLoaded', function () {
+                                        const addToCartBtn = document.getElementById('addToCartBtn');
+                                        const cartCount = document.getElementById('cartCount');
+                                        const countSpan = document.getElementById('count');
+                                        const cartMessage = document.getElementById('cartMessage');
+
+                                        let itemsInCart = 0;
+
+                                        addToCartBtn.addEventListener('click', function () {
+                                            // Add bounce animation
+                                            this.classList.add('bounce');
+
+                                            // Increment cart count
+                                            itemsInCart++;
+                                            countSpan.textContent = itemsInCart;
+
+                                            // Show cart count if not shown
+                                            cartCount.classList.remove('hidden');
+
+                                            // Show success message
+                                            cartMessage.classList.remove('hidden');
+
+                                            // Remove animation class after animation ends
+                                            this.addEventListener('animationend', function () {
+                                                this.classList.remove('bounce');
+                                            }, { once: true });
+
+                                            // Hide message after 3 seconds
+                                            setTimeout(() => {
+                                                cartMessage.classList.add('hidden');
+                                            }, 3000);
+
+                                            // Optional: Here you would normally send data to your backend
+                                            console.log('Item added to cart. Total:', itemsInCart);
+                                        });
+                                    });
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product 13 -->
+                    <div id="cartMessage"
+                        class="hidden bottom-500 z-30  absolute  bg-green-100 border-l-4 border-green-500 text-green-700 p-4 text-sm mb-4"
+                        role="alert">
+                        <p>Item added to your cart successfully!</p>
+                    </div>               
+                    <div class="shoe-card bg-white rounded-lg   shadow-md transition duration-00" data-brand="yeezy">
+                        <div class="relative">
+                            <img src="images.fade/omega mission to moonphase.png" alt="Yeezy 700 V3 Azael"
+                                class="w-full h-64 object-cover">
+                        </div>
+                        <div class="p-4 relative">
+
+                            <h3 class="text-lg font-bold mb-1">Omega x Swatch </h3>
+                            <p class="text-gray-600 text-sm mb-2">Snoopy</p>
+                            <div class="flex justify-between items-center border-12 relative ">
+                                <div>
+
+                                    <span class="font-bold">₹37,998.65</span>
+                                </div>
+
+                                <div class="flex items-center space-x-4 relative">
+                                    <button id="addToCartBtn"
+                                        class="bg-black text-white px-4 py-2 rounded text-sm hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-black focus:ring-opacity-50 cart-animation"
+                                        aria-label="Add to cart">
+                                        Add to Cart
+                                    </button>
+                                    <div id="cartCount" class="text-sm text-gray-700 hidden">
+                                        <span id="count">0</span> in cart
+                                    </div>
+                                </div>
+                                <!-- <div id="cartMessage"
+                                    class="hidden bottom-500  absolute bg-green-100 border-l-4 border-green-500 text-green-700 p-4 text-sm mb-4"
+                                    role="alert">
+                                    <p>Item added to your cart successfully!</p>
+                                </div> -->
+
+                                <script>
+                                    document.addEventListener('DOMContentLoaded', function () {
+                                        const addToCartBtn = document.getElementById('addToCartBtn');
+                                        const cartCount = document.getElementById('cartCount');
+                                        const countSpan = document.getElementById('count');
+                                        const cartMessage = document.getElementById('cartMessage');
+
+                                        let itemsInCart = 0;
+
+                                        addToCartBtn.addEventListener('click', function () {
+                                            // Add bounce animation
+                                            this.classList.add('bounce');
+
+                                            // Increment cart count
+                                            itemsInCart++;
+                                            countSpan.textContent = itemsInCart;
+
+                                            // Show cart count if not shown
+                                            cartCount.classList.remove('hidden');
+
+                                            // Show success message
+                                            cartMessage.classList.remove('hidden');
+
+                                            // Remove animation class after animation ends
+                                            this.addEventListener('animationend', function () {
+                                                this.classList.remove('bounce');
+                                            }, { once: true });
+
+                                            // Hide message after 3 seconds
+                                            setTimeout(() => {
+                                                cartMessage.classList.add('hidden');
+                                            }, 3000);
+
+                                            // Optional: Here you would normally send data to your backend
+                                            console.log('Item added to cart. Total:', itemsInCart);
+                                        });
+                                    });
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product 23 -->
+                    <div id="cartMessage"
+                        class="hidden bottom-500 z-30  absolute  bg-green-100 border-l-4 border-green-500 text-green-700 p-4 text-sm mb-4"
+                        role="alert">
+                        <p>Item added to your cart successfully!</p>
+                    </div>
+
+                    <div class="shoe-card bg-white rounded-lg   shadow-md transition duration-00" data-brand="men">
+                        <div class="relative">
+                            <img src="images.fade/cupid by cerise tee.png" alt="Nike Air Uptempo Slides "
+                                class="w-full h-64 object-cover">
+                            <div
+                                class="absolute top-2 right-2 bg-cyan-500 text-white text-xs font-bold px-2 py-1 rounded">
+                                Price Drop ⬇️
+                            </div>
+                        </div>
+                        <div class="p-4 relative">
+
+                            <h3 class="text-lg font-bold mb-1">Cupid by Cerise Tee</h3>
+                            <p class="text-gray-600 text-sm mb-2">Black</p>
+                            <div class="flex justify-between items-center border-12 relative ">
+                                <div>
+                                    <span class="text-gray-500 line-through mr-2">₹26,048.88</span>
+                                    <span class="font-bold">₹23,429.52</span>
+                                </div>
+
+                                <div class="flex items-center space-x-4 relative">
+                                    <button id="addToCartBtn"
+                                        class="bg-black kanni text-white px-4 py-2 rounded text-sm hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-black focus:ring-opacity-50 cart-animation"
+                                        aria-label="Add to cart">
+                                        Add to Cart
+                                    </button>
+                                    <div id="cartCount" class="text-sm text-gray-700 hidden">
+                                        <span id="count">0</span> in cart
+                                    </div>
+                                </div>
+                                <!-- <div id="cartMessage"
+                                    class="hidden bottom-500  absolute bg-green-100 border-l-4 border-green-500 text-green-700 p-4 text-sm mb-4"
+                                    role="alert">
+                                    <p>Item added to your cart successfully!</p>
+                                </div> -->
+
+                                <script>
+                                    document.addEventListener('DOMContentLoaded', function () {
+                                        const addToCartBtn = document.getElementById('addToCartBtn');
+                                        const cartCount = document.getElementById('cartCount');
+                                        const countSpan = document.getElementById('count');
+                                        const cartMessage = document.getElementById('cartMessage');
+
+                                        let itemsInCart = 0;
+
+                                        addToCartBtn.addEventListener('click', function () {
+                                            // Add bounce animation
+                                            this.classList.add('bounce');
+
+                                            // Increment cart count
+                                            itemsInCart++;
+                                            countSpan.textContent = itemsInCart;
+
+                                            // Show cart count if not shown
+                                            cartCount.classList.remove('hidden');
+
+                                            // Show success message
+                                            cartMessage.classList.remove('hidden');
+
+                                            // Remove animation class after animation ends
+                                            this.addEventListener('animationend', function () {
+                                                this.classList.remove('bounce');
+                                            }, { once: true });
+
+                                            // Hide message after 3 seconds
+                                            setTimeout(() => {
+                                                cartMessage.classList.add('hidden');
+                                            }, 3000);
+
+                                            // Optional: Here you would normally send data to your backend
+                                            console.log('Item added to cart. Total:', itemsInCart);
+                                        });
+                                    });
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product 8 -->
+                    <div id="cartMessage"
+                        class="hidden bottom-500 z-30  absolute  bg-green-100 border-l-4 border-green-500 text-green-700 p-4 text-sm mb-4"
+                        role="alert">
+                        <p>Item added to your cart successfully!</p>
+                    </div>
+
+                    <div class="shoe-card bg-white rounded-lg   shadow-md transition duration-00" data-brand="jordan">
+                        <div class="relative">
+                            <img src="images.fade/Playful peek.png" alt="Fragment x Travis Scott "
+                                class="w-full h-64 object-cover">
+                        </div>
+                        <div class="p-4 relative">
+
+                            <h3 class="text-lg font-bold mb-1">Jordan 1 Retro High OG SP</h3>
+                            <p class="text-gray-600 text-sm mb-2">Fragment x Travis Scott</p>
+                            <div class="flex justify-between items-center border-12 relative ">
+                                <div>
+                                    <span class="font-bold">₹2,41,186</span>
+                                </div>
+
+                                <div class="flex items-center space-x-4 relative">
+                                    <button id="addToCartBtn"
+                                        class="bg-black kanni text-white px-4 py-2 rounded text-sm hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-black focus:ring-opacity-50 cart-animation"
+                                        aria-label="Add to cart">
+                                        Add to Cart
+                                    </button>
+                                    <div id="cartCount" class="text-sm text-gray-700 hidden">
+                                        <span id="count">0</span> in cart
+                                    </div>
+                                </div>
+                                <!-- <div id="cartMessage"
+                                    class="hidden bottom-500  absolute bg-green-100 border-l-4 border-green-500 text-green-700 p-4 text-sm mb-4"
+                                    role="alert">
+                                    <p>Item added to your cart successfully!</p>
+                                </div> -->
+
+                                <script>
+                                    document.addEventListener('DOMContentLoaded', function () {
+                                        const addToCartBtn = document.getElementById('addToCartBtn');
+                                        const cartCount = document.getElementById('cartCount');
+                                        const countSpan = document.getElementById('count');
+                                        const cartMessage = document.getElementById('cartMessage');
+
+                                        let itemsInCart = 0;
+
+                                        addToCartBtn.addEventListener('click', function () {
+                                            // Add bounce animation
+                                            this.classList.add('bounce');
+
+                                            // Increment cart count
+                                            itemsInCart++;
+                                            countSpan.textContent = itemsInCart;
+
+                                            // Show cart count if not shown
+                                            cartCount.classList.remove('hidden');
+
+                                            // Show success message
+                                            cartMessage.classList.remove('hidden');
+
+                                            // Remove animation class after animation ends
+                                            this.addEventListener('animationend', function () {
+                                                this.classList.remove('bounce');
+                                            }, { once: true });
+
+                                            // Hide message after 3 seconds
+                                            setTimeout(() => {
+                                                cartMessage.classList.add('hidden');
+                                            }, 3000);
+
+                                            // Optional: Here you would normally send data to your backend
+                                            console.log('Item added to cart. Total:', itemsInCart);
+                                        });
+                                    });
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Heat Haven Deals Section -->
+        <section id="deals" class="py-12 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-3xl font-bold">Brands 🏷️</h2>
+
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 ">
+
+                    <!-- Deal 1 -->
+                    <div class="deal-card bg-white rounded-lg overflow-hidden shadow-md relative">
+                        <img src="images.fade/ralph lauren.jpeg"
+                            alt="Flash sale banner featuring multiple Nike sneakers with red discount tags"
+                            class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2">Ralph Lauren</h3>
+                            <p class="text-gray-600 mb-4">“I don’t design clothes, I design dreams.” </p>
+                        </div>
+
+                    </div>
+
+                    <!-- Deal 2 -->
+                    <div class="deal-card bg-white rounded-lg overflow-hidden shadow-md relative">
+                        <img src="images top brands/th.jpeg"
+                            alt="Adidas originals collection featuring classic sneakers with a retro vibe"
+                            class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2">Tommy Hilfiger</h3>
+                            <p class="text-gray-600 mb-4">“Fashion is fleeting; style is forever”</p>
+
+                        </div>
+                    </div>
+
+                    <!-- Deal 3 -->
+                    <div class="deal-card bg-white rounded-lg overflow-hidden shadow-md relative">
+                        <img src="images top brands/lv.jpeg"
+                            alt="Adidas originals collection featuring classic sneakers with a retro vibe"
+                            class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2">Louis Vuitton</h3>
+                            <p class="text-gray-600 mb-4">“Fashion is fleeting; style is forever”</p>
+
+                        </div>
+                    </div>
+
+                    <!-- Deal 4 -->
+                    <div class="deal-card bg-white rounded-lg overflow-hidden shadow-md relative">
+                        <img src="images.fade/omega logo.jpeg"
+                            alt="Adidas originals collection featuring classic sneakers with a retro vibe"
+                            class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2">Omega</h3>
+                            <p class="text-gray-600 mb-4">“Exact time for life”</p>
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+         
+        <section id="about" class="py-16 bg-black text-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h2 class="text-3xl font-bold mb-6">About Heat Haven</h2>
+                        <p class="text-gray-300 mb-4">
+                            Founded in 2015, Heat Haven has become the premier destination for sneaker enthusiasts and
+                            collectors alike.
+                            We specialize in limited edition releases, vintage gems, and the latest drops from the
+                            hottest brands.
+                        </p>
+                        <p class="text-gray-300 mb-4">
+                            Our team of experts carefully curates each item in our collection to ensure authenticity,
+                            quality,
+                            and style that our customers expect from a premium sneaker retailer.
+                        </p>
+                        <p class="text-gray-300">
+                            Beyond just selling shoes, we're passionate about sneaker culture. From in-store events to
+                            online
+                            communities, we're building more than a store - we're building a movement.
+                        </p>
+                    </div>
+                     <div class="relative">
+                        <img src="images.fade/Fade culture (1).png"
+                            alt="Interior of Heat Haven retail store with sneaker displays and customers browsing"
+                            class="w-full rounded-lg">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-16 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl font-bold mb-8 text-center">Contact Us ☎️</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div>
+                        <h3 class="text-xl font-medium mb-4">Get in Touch</h3>
+                        <p class="text-gray-600 mb-6">
+                            Have questions about our products, need sizing advice, or want to check availability?
+                            Contact us through any of these channels:
+                        </p>
+
+                        <div class="space-y-4">
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 h-5 w-5 text-black mt-1 mr-3">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <p class="text-gray-600">123 Sneaker Street, Cityville, ST 12345</p>
+                            </div>
+
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 h-5 w-5 text-black mt-1 mr-3">
+                                    <i class="fas fa-phone"></i>
+                                </div>
+                                <p class="text-gray-600">(+91) 9205443488<br>
+                                    (+91) 9311577552</p>
+                            </div>
+
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 h-5 w-5 text-black mt-1 mr-3">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <p class="text-gray-600">heavenheat278@gmail.com</p>
+                            </div>
+
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 h-5 w-5 text-black mt-1 mr-3">
+                                    <i class="fab fa-whatsapp"></i>
+                                </div>
+                                <p class="text-gray-600">
+                                    <a href="https://wa.me/9205443488" class="text-black font-medium">Message us on
+                                        WhatsApp</a>
+                                    <a href="https://wa.me/9311577552" class="text-black font-medium">Message us on
+                                        WhatsApp</a>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="mt-8">
+                            <h4 class="font-medium mb-3">Follow Us</h4>
+                            <div class="flex space-x-4">
+                                <a href="https://www.instagram.com/heatheaven.23_/" target="_blank"
+                                    class="text-cyan hover:text-gray-600">
+                                    <i class="fab fa-instagram text-xl"></i>
+                                    <a href="https://web.whatsapp.com/" target="_blank"
+                                        class="text-black hover:text-gray-600">
+                                        <i class="fab fa-whatsapp text-xl"></i>
+                                    </a>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-xl font-medium mb-4">Send Us a Message</h3>
+                        <form class="space-y-4">
+                            <div>
+                                <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                                <input type="text" id="name" name="name"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-black focus:border-black">
+                            </div>
+
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                <input type="email" id="email" name="email"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-black focus:border-black">
+                            </div>
+
+                            <div>
+                                <label for="subject"
+                                    class="block text-sm font-medium text-gray-700 mb-1">Subject</label>
+                                <input type="text" id="subject" name="subject"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-black focus:border-black">
+                            </div>
+
+                            <div>
+                                <label for="message"
+                                    class="block text-sm font-medium text-gray-700 mb-1">Message</label>
+                                <textarea id="message" name="message" rows="4"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-black focus:border-black"></textarea>
+                            </div>
+
+                            <button type="submit"
+                                class="bg-black text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition duration-300">
+                                Send Message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-black text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-lg font-bold mb-4">HEAT HAVEN</h3>
+                    <p class="text-gray-400 text-sm">
+                        Premium sneakers, exceptional service. Your ultimate destination for the hottest kicks on the
+                        market.
+                    </p>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Shop</h3>
+                    <ul class="space-y-2">
+                        <li><a href="products_apparels.html" class="text-gray-400 hover:text-white text-sm">All Products</a></li>
+                        <li><a href="newarrivals.html" class="text-gray-400 hover:text-white text-sm">New Arrivals</a></li>
+                        <li><a href="Bestsellerrs.html" class="text-gray-400 hover:text-white text-sm">Best Sellers</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white text-sm">Sale Items</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white text-sm">Gift Cards</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Customer Service</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white text-sm">Contact Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white text-sm">FAQs</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white text-sm">Shipping & Returns</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white text-sm">Size Guide</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white text-sm">Privacy Policy</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Newsletter</h3>
+                    <p class="text-gray-400 text-sm mb-3">
+                        Subscribe to get updates on new releases, exclusive deals, and sneaker culture news.
+                    </p>
+                    <form class="flex">
+                        <input type="email" placeholder="Your email"
+                            class="px-4 py-2 rounded-l focus:outline-none text-gray-800 w-full">
+                        <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-r hover:bg-red-600">
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm mb-4 md:mb-0">
+                    &copy; 2025 Heat Haven. All rights reserved.
+                </p>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white">
+                        <i class="fab fa-cc-visa"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white">
+                        <i class="fab fa-cc-mastercard"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white">
+                        <i class="fab fa-cc-amex"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white">
+                        <i class="fab fa-cc-paypal"></i>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const closeMenuButton = document.getElementById('close-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.add('open');
+        });
+
+        closeMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.remove('open');
+        });
+
+        // Filter functionality
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const shoeCards = document.querySelectorAll('.shoe-card');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+
+                // Add active class to clicked button
+                button.classList.add('active');
+
+                const brand = button.dataset.brand;
+
+                // Filter shoes
+                shoeCards.forEach(card => {
+                    if (brand === 'all' || card.dataset.brand === brand) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+
+                    // Close mobile menu if open
+                    if (mobileMenu.classList.contains('open')) {
+                        mobileMenu.classList.remove('open');
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

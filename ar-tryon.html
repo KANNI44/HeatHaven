@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AR Try-On — Heat Haven</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+  /* ── HEAT HAVEN DESIGN TOKENS ── */
+  :root {
+    --black:   #000000;
+    --white:   #ffffff;
+    --red:     #ff4500;
+    --red-dim: rgba(255,69,0,0.12);
+    --bg:      #000000;
+    --card:    #0a0a0a;
+    --hover:   #111111;
+    --border:  #1a1a1a;
+    --muted:   #555;
+    --text:    #ffffff;
+    --sub:     #888;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Poppins', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, .brand { font-family: 'Archivo Black', sans-serif; letter-spacing: -0.5px; }
+
+  /* ── NAV — exact copy of index.html nav ── */
+  nav {
+    background: var(--black);
+    box-shadow: 0 1px 0 var(--border);
+    position: sticky; top: 0; z-index: 40;
+  }
+  .nav-inner {
+    max-width: 1280px; margin: 0 auto;
+    padding: 0 24px;
+    height: 64px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-brand {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 1.4rem; letter-spacing: -0.5px;
+    color: var(--white); text-decoration: none;
+  }
+  .nav-tag {
+    font-size: 0.65rem; letter-spacing: 2px;
+    color: var(--red); text-transform: uppercase;
+    border: 1px solid var(--red);
+    padding: 4px 12px; border-radius: 999px;
+    font-family: 'Poppins', sans-serif;
+  }
+  .nav-back {
+    font-size: 0.8rem; color: var(--sub);
+    text-decoration: none;
+    display: flex; align-items: center; gap: 6px;
+    transition: color 0.2s;
+    font-family: 'Poppins', sans-serif;
+  }
+  .nav-back:hover { color: var(--white); }
+  .nav-left { display: flex; align-items: center; gap: 20px; }
+
+  /* ── HERO ── */
+  .hero {
+    text-align: center;
+    padding: 52px 24px 28px;
+    position: relative;
+  }
+  .hero-label {
+    font-size: 0.62rem; letter-spacing: 4px;
+    color: var(--red); text-transform: uppercase;
+    margin-bottom: 14px;
+    font-family: 'Poppins', sans-serif; font-weight: 500;
+  }
+  .hero h1 {
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    line-height: 1; margin-bottom: 6px;
+    color: var(--white);
+  }
+  .hero-line {
+    display: block; height: 3px;
+    background: var(--red); border-radius: 2px;
+    width: 80px; margin: 14px auto 18px;
+    animation: line-grow 0.6s ease both;
+  }
+  @keyframes line-grow { from{width:0} to{width:80px} }
+  .hero p { color: var(--sub); font-size: 0.9rem; max-width: 380px; margin: 0 auto; line-height: 1.7; }
+
+  /* ── PRODUCT BANNER ── */
+  #product-banner { display:none; max-width:1100px; margin:0 auto; padding:0 24px 20px; }
+  .product-banner-inner {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--red);
+    border-radius: 12px; padding: 14px 20px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .pb-img { width:60px; height:44px; object-fit:contain; border-radius:8px; background:var(--hover); flex-shrink:0; }
+  .pb-name { font-size:0.9rem; font-weight:600; margin-bottom:2px; font-family:'Archivo Black',sans-serif; }
+  .pb-sub { font-size:0.72rem; color:var(--sub); }
+  .pb-badge {
+    font-size:0.62rem; letter-spacing:1.5px; text-transform:uppercase;
+    color: var(--red); background: var(--red-dim);
+    border: 1px solid rgba(255,69,0,0.3);
+    padding:4px 10px; border-radius:999px; white-space:nowrap;
+    font-family:'Poppins',sans-serif;
+  }
+
+  /* ── MAIN LAYOUT ── */
+  .ar-layout { display:grid; grid-template-columns:1fr 290px; gap:20px; max-width:1100px; margin:0 auto; padding:0 24px 60px; }
+
+  /* ── CAMERA ── */
+  .camera-wrap {
+    position:relative; background:var(--card);
+    border-radius:16px; overflow:hidden;
+    border:1px solid var(--border);
+    aspect-ratio:4/3;
+    display:flex; align-items:center; justify-content:center;
+  }
+  #videoEl { width:100%; height:100%; object-fit:cover; display:none; transform:scaleX(-1); }
+  #overlayCanvas { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; transform:scaleX(-1); }
+
+  .cam-placeholder { display:flex; flex-direction:column; align-items:center; gap:14px; color:var(--muted); text-align:center; padding:40px; }
+  .cam-placeholder i { font-size:2.5rem; opacity:0.25; }
+  .cam-placeholder p { font-size:0.88rem; line-height:1.6; }
+  .cam-placeholder strong { color:var(--red); }
+
+  /* Controls */
+  .cam-controls { position:absolute; bottom:16px; left:50%; transform:translateX(-50%); display:flex; gap:8px; z-index:10; }
+  .cam-btn {
+    background: rgba(0,0,0,0.8); border:1px solid #222;
+    color: var(--white); padding:8px 16px; border-radius:999px;
+    font-family:'Poppins',sans-serif; font-size:0.75rem; font-weight:500;
+    cursor:pointer; transition:all 0.2s; backdrop-filter:blur(10px);
+    display:flex; align-items:center; gap:6px; white-space:nowrap;
+  }
+  .cam-btn:hover { border-color:var(--red); color:var(--red); }
+  .cam-btn.primary { background:var(--red); border-color:var(--red); color:#fff; }
+  .cam-btn.primary:hover { background:#cc3700; }
+
+  .overlay-controls { position:absolute; top:14px; right:14px; display:flex; flex-direction:column; gap:6px; z-index:10; }
+  .ov-btn {
+    background:rgba(0,0,0,0.8); border:1px solid #222; color:var(--white);
+    width:34px; height:34px; border-radius:50%; font-size:1rem;
+    cursor:pointer; display:flex; align-items:center; justify-content:center;
+    transition:all 0.2s; backdrop-filter:blur(10px);
+  }
+  .ov-btn:hover { border-color:var(--red); color:var(--red); }
+
+  /* Status */
+  .status-badge {
+    position:absolute; top:14px; left:14px;
+    padding:4px 12px; border-radius:999px;
+    font-size:0.62rem; letter-spacing:2px; text-transform:uppercase; font-weight:600;
+    background:rgba(0,0,0,0.8); border:1px solid #222;
+    backdrop-filter:blur(10px); display:flex; align-items:center; gap:6px;
+    font-family:'Poppins',sans-serif;
+  }
+  .status-dot { width:6px; height:6px; border-radius:50%; background:var(--muted); transition:background 0.3s; }
+  .status-dot.live { background:#22c55e; box-shadow:0 0 6px #22c55e; animation:blink 1.5s infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  #dragHint {
+    position:absolute; bottom:58px; left:50%; transform:translateX(-50%);
+    background:rgba(0,0,0,0.8); color:var(--red);
+    font-size:0.68rem; letter-spacing:2px; text-transform:uppercase;
+    padding:5px 14px; border-radius:999px; border:1px solid rgba(255,69,0,0.3);
+    backdrop-filter:blur(10px); pointer-events:none; opacity:0; transition:opacity 0.4s;
+    white-space:nowrap; font-family:'Poppins',sans-serif; font-weight:500;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar { display:flex; flex-direction:column; gap:14px; }
+  .sidebar-section {
+    background: var(--card); border:1px solid var(--border);
+    border-radius:12px; padding:16px;
+  }
+  .sidebar-title {
+    font-size:0.6rem; letter-spacing:3px; text-transform:uppercase;
+    color:var(--red); margin-bottom:12px;
+    font-family:'Poppins',sans-serif; font-weight:600;
+  }
+
+  /* Sneaker cards */
+  .sneaker-grid { display:flex; flex-direction:column; gap:8px; }
+  .sneaker-card {
+    display:flex; align-items:center; gap:10px; padding:9px;
+    border-radius:10px; border:1px solid transparent;
+    cursor:pointer; transition:all 0.2s; background:var(--bg);
+  }
+  .sneaker-card:hover { border-color:var(--border); background:var(--hover); }
+  .sneaker-card.selected { border-color:var(--red); background:var(--red-dim); }
+  .sneaker-thumb {
+    width:52px; height:38px; border-radius:8px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.3rem; flex-shrink:0; overflow:hidden; background:var(--hover);
+  }
+  .sneaker-thumb img { width:100%; height:100%; object-fit:contain; }
+  .sneaker-info { flex:1; }
+  .sneaker-name { font-size:0.8rem; font-weight:600; margin-bottom:1px; font-family:'Archivo Black',sans-serif; letter-spacing:-0.3px; }
+  .sneaker-brand { font-size:0.68rem; color:var(--sub); }
+  .sneaker-check {
+    width:16px; height:16px; border-radius:50%;
+    border:1.5px solid var(--border);
+    display:flex; align-items:center; justify-content:center;
+    font-size:0.55rem; flex-shrink:0; transition:all 0.2s;
+  }
+  .sneaker-card.selected .sneaker-check { background:var(--red); border-color:var(--red); color:#fff; }
+
+  /* Size grid */
+  .size-grid { display:flex; flex-wrap:wrap; gap:7px; }
+  .size-btn {
+    width:40px; height:34px; border-radius:8px;
+    border:1px solid var(--border); background:var(--bg);
+    color:var(--text); font-size:0.75rem; cursor:pointer;
+    transition:all 0.2s; font-family:'Poppins',sans-serif;
+  }
+  .size-btn:hover { border-color:var(--red); color:var(--red); }
+  .size-btn.selected { background:var(--red); border-color:var(--red); color:#fff; font-weight:700; }
+
+  /* Hint */
+  .hint-box {
+    background: var(--hover); border:1px solid var(--border);
+    border-left: 2px solid var(--red);
+    border-radius:10px; padding:13px;
+    font-size:0.78rem; line-height:1.8; color:var(--sub);
+  }
+  .hint-box strong { color:var(--white); }
+
+  /* Add to Cart — matches index.html button exactly */
+  .add-btn {
+    width:100%; padding:13px;
+    border-radius:999px;
+    background: var(--black);
+    border: 2px solid var(--white);
+    color: var(--white);
+    font-family:'Poppins',sans-serif; font-size:0.85rem; font-weight:700;
+    letter-spacing:0.5px; cursor:pointer; transition:all 0.25s;
+    text-transform: uppercase;
+  }
+  .add-btn:hover {
+    background: var(--white); color: var(--black);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(255,255,255,0.15);
+  }
+
+  /* Toast */
+  #ar-toast {
+    position:fixed; bottom:24px; left:50%; transform:translateX(-50%);
+    background:#111827; color:#fff; padding:10px 22px; border-radius:999px;
+    font-size:0.82rem; display:none; align-items:center; gap:8px;
+    z-index:9999; font-family:'Poppins',sans-serif;
+  }
+  #ar-toast.show { display:flex; animation:toast-fade 2.4s ease-out forwards; }
+  @keyframes toast-fade { 0%{opacity:0;transform:translate(-50%,10px)} 10%,80%{opacity:1;transform:translate(-50%,0)} 100%{opacity:0;transform:translate(-50%,10px)} }
+
+  /* Page fade in */
+  @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+  .ar-layout, .hero, #product-banner { animation: fadeIn 0.5s ease both; }
+
+  @media (max-width:768px) {
+    .ar-layout { grid-template-columns:1fr; }
+    .sidebar { flex-direction:row; flex-wrap:wrap; }
+    .sidebar-section { flex:1; min-width:240px; }
+    nav { padding:0 16px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="nav-left">
+      <a href="index.html" class="nav-back">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Back
+      </a>
+      <a href="index.html" class="nav-brand">HEAT HAVEN</a>
+    </div>
+    <span class="nav-tag">AR Try-On</span>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-label">Virtual Fitting Room</div>
+  <h1>TRY BEFORE<br>YOU <span style="color:var(--red)">BUY</span></h1>
+  <span class="hero-line"></span>
+  <p>Point your camera at your feet and see how any sneaker looks — live, in real time.</p>
+</div>
+
+<div id="product-banner">
+  <div class="product-banner-inner">
+    <img id="pb-img" class="pb-img" src="" alt="" />
+    <div class="pb-info">
+      <div class="pb-name" id="pb-name"></div>
+      <div class="pb-sub" id="pb-sub"></div>
+    </div>
+    <span class="pb-badge">Currently Trying On</span>
+  </div>
+</div>
+
+<div class="ar-layout">
+  <div class="camera-wrap" id="cameraWrap">
+    <div class="cam-placeholder" id="placeholder">
+      <i class="fas fa-camera"></i>
+      <p>Tap <strong>Start Camera</strong> below<br>then point at your feet</p>
+    </div>
+    <video id="videoEl" autoplay playsinline muted></video>
+    <canvas id="overlayCanvas"></canvas>
+    <div class="status-badge">
+      <div class="status-dot" id="statusDot"></div>
+      <span id="statusText">Camera Off</span>
+    </div>
+    <div class="overlay-controls" id="overlayControls" style="display:none">
+      <button class="ov-btn" id="biggerBtn" title="Bigger">＋</button>
+      <button class="ov-btn" id="smallerBtn" title="Smaller">－</button>
+      <button class="ov-btn" id="rotateBtn" title="Rotate">↻</button>
+      <button class="ov-btn" id="flipBtn" title="Flip" style="font-size:0.75rem;font-weight:700;">⇄</button>
+    </div>
+    <div class="cam-controls">
+      <button class="cam-btn primary" id="startBtn">
+        <i class="fas fa-play" style="font-size:0.7rem"></i>
+        Start Camera
+      </button>
+      <button class="cam-btn" id="switchBtn" style="display:none">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4v6h6"/><path d="M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+        Flip Cam
+      </button>
+      <button class="cam-btn" id="stopBtn" style="display:none">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+        Stop
+      </button>
+    </div>
+    <div id="dragHint">DRAG TO REPOSITION</div>
+  </div>
+
+  <div class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">Choose Sneaker</div>
+      <div class="sneaker-grid" id="sneakerGrid"></div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">Size (UK)</div>
+      <div class="size-grid" id="sizeGrid"></div>
+    </div>
+    <div class="sidebar-section">
+      <div class="hint-box">
+        <strong>Tips:</strong><br>
+        • Point camera at feet<br>
+        • <strong>+/−</strong> to scale the overlay<br>
+        • <strong>Drag</strong> to reposition<br>
+        • <strong>↻</strong> rotate · <strong>⇄</strong> flip<br>
+        • Good lighting helps a lot
+      </div>
+    </div>
+    <button class="add-btn" id="addBtn">Add to Cart</button>
+  </div>
+</div>
+
+<div id="ar-toast"><span id="ar-toast-msg"></span></div>
+
+<script>
+// ─── PRODUCT DATA (mirrors index.html exactly) ───────────────────────────────
+const SNEAKERS = [
+  { id:'jordan1-chicago',  name:'Air Jordan 1 Retro High', brand:'Air Jordan',     colorway:'Chicago Bulls', price:'5559', img:'images/aj 1 chichgo.png',            color:'#b80000', sole:'#111',    accent:'#ffffff', lace:'#ffffff' },
+  { id:'yeezy700-azael',   name:'Yeezy 700 V3',            brand:'Adidas / Yeezy', colorway:'Azael',         price:'4759', img:'images/yzy 700 v3 azael.png',        color:'#1a1a2e', sole:'#2a2a3e', accent:'#4a90d9', lace:'#aaaaaa' },
+  { id:'uptempo-bulls',    name:'Nike Uptempo Slide',       brand:'Nike',           colorway:'Bulls',         price:'3559', img:'images/uptempo slide bulls.png',     color:'#cc0000', sole:'#111',    accent:'#000000', lace:'#ffffff' },
+  { id:'travis-fragment',  name:'Travis Scott × Fragment',  brand:'Air Jordan',     colorway:'Fragment',      price:'5559', img:'images/travis x fragment high.png',  color:'#1c2a4a', sole:'#111',    accent:'#c0a060', lace:'#dddddd' }
+];
+
+const SIZES = ['UK 6','UK 6.5','UK 7','UK 7.5','UK 8','UK 8.5','UK 9','UK 9.5','UK 10','UK 10.5','UK 11','UK 12'];
+
+// ─── READ URL PARAMS ─────────────────────────────────────────────────────────
+const params      = new URLSearchParams(location.search);
+const urlId       = params.get('id');
+const urlName     = params.get('name')     ? decodeURIComponent(params.get('name'))     : null;
+const urlColorway = params.get('colorway') ? decodeURIComponent(params.get('colorway')) : null;
+const urlBrand    = params.get('brand')    ? decodeURIComponent(params.get('brand'))    : null;
+const urlPrice    = params.get('price')    ? decodeURIComponent(params.get('price'))    : null;
+const urlImg      = params.get('img')      ? decodeURIComponent(params.get('img'))      : null;
+
+// Merge: if URL id matches a known sneaker, use it; else prepend a custom entry
+let allSneakers = [...SNEAKERS];
+if (urlId && !SNEAKERS.find(s => s.id === urlId)) {
+  allSneakers.unshift({
+    id: urlId,
+    name: urlName || 'Custom Sneaker',
+    brand: urlBrand || '',
+    colorway: urlColorway || '',
+    price: urlPrice || '0',
+    img: urlImg || '',
+    color: '#333', sole: '#111', accent: '#888', lace: '#ccc'
+  });
+}
+
+let selectedSneaker = urlId ? (allSneakers.find(s => s.id === urlId) || allSneakers[0]) : allSneakers[0];
+let selectedSize    = 'UK 9';
+
+// Preload all shoe images immediately so they're ready when camera opens
+allSneakers.forEach(s => { if (s.img) { const i = new Image(); i.src = s.img; } });
+let stream = null;
+let facingMode = 'user';
+let ovX = 0.5, ovY = 0.75, ovScale = 1, ovRotation = 0, ovFlipped = false;
+let dragging = false, dragStartX, dragStartY, dragStartOvX, dragStartOvY;
+let animFrame;
+
+// ─── PRODUCT BANNER ──────────────────────────────────────────────────────────
+if (urlId) {
+  document.getElementById('product-banner').style.display = 'block';
+  document.getElementById('pb-name').textContent = urlName || selectedSneaker.name;
+  document.getElementById('pb-sub').textContent  =
+    (urlColorway || selectedSneaker.colorway) + ' · ' +
+    (urlBrand    || selectedSneaker.brand)    +
+    (urlPrice    ? ' · ₹' + urlPrice          : '');
+  const pbImg = document.getElementById('pb-img');
+  pbImg.src = urlImg || selectedSneaker.img;
+  pbImg.onerror = () => pbImg.style.display = 'none';
+}
+
+// ─── BUILD SNEAKER CARDS ──────────────────────────────────────────────────────
+const gridEl = document.getElementById('sneakerGrid');
+allSneakers.forEach(s => {
+  const card = document.createElement('div');
+  card.className = 'sneaker-card' + (s.id === selectedSneaker.id ? ' selected' : '');
+  card.innerHTML = `
+    <div class="sneaker-thumb" style="background:${s.color}22">
+      ${s.img ? `<img src="${s.img}" alt="${s.name}" onerror="this.style.display='none';this.parentElement.textContent='👟'">` : '👟'}
+    </div>
+    <div class="sneaker-info">
+      <div class="sneaker-name">${s.name}</div>
+      <div class="sneaker-brand">${s.colorway}</div>
+    </div>
+    <div class="sneaker-check">${s.id === selectedSneaker.id ? '✓' : ''}</div>`;
+  card.addEventListener('click', () => {
+    selectedSneaker = s;
+    gridEl.querySelectorAll('.sneaker-card').forEach(c => { c.classList.remove('selected'); c.querySelector('.sneaker-check').textContent = ''; });
+    card.classList.add('selected');
+    card.querySelector('.sneaker-check').textContent = '✓';
+    showToast('Switched to ' + s.name);
+  });
+  gridEl.appendChild(card);
+});
+
+// ─── BUILD SIZE BUTTONS ───────────────────────────────────────────────────────
+const sizeEl = document.getElementById('sizeGrid');
+SIZES.forEach(sz => {
+  const btn = document.createElement('button');
+  btn.className = 'size-btn' + (sz === selectedSize ? ' selected' : '');
+  btn.textContent = sz.replace('UK ','');
+  btn.title = sz;
+  btn.addEventListener('click', () => {
+    selectedSize = sz;
+    sizeEl.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+  });
+  sizeEl.appendChild(btn);
+});
+
+// ─── CAMERA ───────────────────────────────────────────────────────────────────
+const video     = document.getElementById('videoEl');
+const canvas    = document.getElementById('overlayCanvas');
+const ctx       = canvas.getContext('2d');
+const startBtn  = document.getElementById('startBtn');
+const stopBtn   = document.getElementById('stopBtn');
+const switchBtn = document.getElementById('switchBtn');
+const statusDot = document.getElementById('statusDot');
+const statusTxt = document.getElementById('statusText');
+const placeholder   = document.getElementById('placeholder');
+const ovControls    = document.getElementById('overlayControls');
+const dragHintEl    = document.getElementById('dragHint');
+
+async function startCamera() {
+  try {
+    if (stream) stream.getTracks().forEach(t => t.stop());
+    stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode, width:{ ideal:1280 }, height:{ ideal:720 } }, audio: false
+    });
+    video.srcObject = stream;
+    video.style.display = 'block';
+    placeholder.style.display = 'none';
+    ovControls.style.display = 'flex';
+    startBtn.style.display   = 'none';
+    stopBtn.style.display    = 'flex';
+    switchBtn.style.display  = 'flex';
+    statusDot.classList.add('live');
+    statusTxt.textContent = 'LIVE';
+    dragHintEl.style.opacity = '1';
+    setTimeout(() => dragHintEl.style.opacity = '0', 2800);
+    if (animFrame) cancelAnimationFrame(animFrame);
+    drawLoop();
+  } catch(e) { showToast('Camera blocked — please allow camera permissions'); }
+}
+
+function stopCamera() {
+  if (stream) stream.getTracks().forEach(t => t.stop());
+  stream = null;
+  if (animFrame) cancelAnimationFrame(animFrame);
+  video.style.display = 'none';
+  placeholder.style.display = 'flex';
+  ovControls.style.display  = 'none';
+  startBtn.style.display    = 'flex';
+  stopBtn.style.display     = 'none';
+  switchBtn.style.display   = 'none';
+  statusDot.classList.remove('live');
+  statusTxt.textContent = 'Camera Off';
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+startBtn.addEventListener('click', startCamera);
+stopBtn.addEventListener('click', stopCamera);
+switchBtn.addEventListener('click', () => { facingMode = facingMode === 'user' ? 'environment' : 'user'; startCamera(); });
+
+// ─── IMAGE CACHE ─────────────────────────────────────────────────────────────
+const imgCache = {};
+function getShoeImage(src) {
+  if (!src) return null;
+  if (imgCache[src]) return imgCache[src].complete && !imgCache[src]._failed ? imgCache[src] : null;
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.src = src;
+  img.onerror = () => { img._failed = true; };
+  imgCache[src] = img;
+  return null;
+}
+
+// Offscreen canvas for hologram processing
+const offscreen = document.createElement('canvas');
+const offCtx    = offscreen.getContext('2d');
+
+let frameCount = 0;
+
+// ─── DRAW LOOP ────────────────────────────────────────────────────────────────
+function drawLoop() {
+  if (!stream) return;
+  animFrame = requestAnimationFrame(drawLoop);
+  frameCount++;
+
+  const wrap = document.getElementById('cameraWrap');
+  canvas.width  = wrap.clientWidth;
+  canvas.height = wrap.clientHeight;
+
+  const cx    = ovX * canvas.width;
+  const cy    = ovY * canvas.height;
+  const baseW = canvas.width * 0.46 * ovScale;
+  const baseH = baseW * 0.58;
+  const s     = selectedSneaker;
+  const t     = frameCount / 60; // time in seconds at ~60fps
+
+  const shoeImg = s.img ? getShoeImage(s.img) : null;
+
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.rotate(ovRotation * Math.PI / 180);
+  if (ovFlipped) ctx.scale(-1, 1);
+
+  // Gentle floating bob
+  const bob = Math.sin(t * 1.8) * 6;
+  ctx.translate(0, bob);
+
+  if (shoeImg && !shoeImg._failed) {
+    drawHologram(shoeImg, baseW, baseH, t);
+  } else {
+    // Fallback pulsing glow circle while image loads
+    const pulse = 0.55 + Math.sin(t * 3) * 0.15;
+    ctx.globalAlpha = pulse;
+    ctx.font = `${baseW * 0.52}px serif`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText('👟', 0, 0);
+    ctx.globalAlpha = 1;
+  }
+
+  // ── Size label pill ──────────────────────────────────────────────
+  const pillW = 90, pillH = 26, pillY = baseH / 2 + 16;
+  ctx.save();
+  ctx.globalAlpha = 0.85 + Math.sin(t * 2) * 0.1;
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.75)';
+  ctx.strokeStyle = '#ff4500';
+  ctx.lineWidth = 1.2;
+  ctx.beginPath();
+  ctx.roundRect(-pillW/2, pillY, pillW, pillH, 13);
+  ctx.fill(); ctx.stroke();
+  ctx.fillStyle = '#ff4500';
+  ctx.font = `bold 13px 'Poppins', monospace`;
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText(selectedSize + '  ·  ' + s.brand.toUpperCase(), 0, pillY + pillH/2);
+  ctx.restore();
+
+  ctx.restore();
+}
+
+function drawHologram(img, W, H, t) {
+  // Step 1: render shoe to offscreen canvas
+  offscreen.width  = Math.ceil(W);
+  offscreen.height = Math.ceil(H);
+  offCtx.clearRect(0, 0, W, H);
+  offCtx.drawImage(img, 0, 0, W, H);
+
+  // Step 2: extract pixel data and apply cyan tint + edge glow
+  let imageData;
+  try { imageData = offCtx.getImageData(0, 0, W, H); } catch(e) {
+    // CORS fallback — draw raw with hologram alpha only
+    drawHologramFallback(img, W, H, t);
+    return;
+  }
+
+  const data = imageData.data;
+  for (let i = 0; i < data.length; i += 4) {
+    const a = data[i+3];
+    if (a < 10) continue; // fully transparent pixel — skip
+    const r = data[i], g = data[i+1], b = data[i+2];
+    const lum = 0.299*r + 0.587*g + 0.114*b; // brightness
+    // Shift all colours toward hologram cyan-teal
+    data[i]   = Math.min(255, lum * 0.15 + 0);    // R — dim
+    data[i+1] = Math.min(255, lum * 0.85 + 50);   // G — boost
+    data[i+2] = Math.min(255, lum * 0.75 + 120);  // B — boost
+    data[i+3] = Math.min(220, a * 0.78);           // semi-transparent
+  }
+  offCtx.putImageData(imageData, 0, 0);
+
+  // Step 3: composite hologram layers onto main canvas
+  ctx.save();
+
+  // Outer glow bloom (multiple passes at different sizes/alphas)
+  const glows = [
+    { scale: 1.10, alpha: 0.10, blur: 22 },
+    { scale: 1.05, alpha: 0.18, blur: 12 },
+    { scale: 1.02, alpha: 0.25, blur:  6 },
+  ];
+  for (const gl of glows) {
+    ctx.save();
+    ctx.globalAlpha = gl.alpha * (0.85 + Math.sin(t * 2.5) * 0.15);
+    ctx.filter = `blur(${gl.blur}px)`;
+    ctx.drawImage(offscreen, -W*gl.scale/2, -H*gl.scale/2, W*gl.scale, H*gl.scale);
+    ctx.filter = 'none';
+    ctx.restore();
+  }
+
+  // Core hologram image
+  ctx.globalAlpha = 0.82 + Math.sin(t * 1.4) * 0.08;
+  ctx.drawImage(offscreen, -W/2, -H/2, W, H);
+
+  // Step 4: scanlines overlay
+  ctx.globalAlpha = 0.12 + Math.sin(t * 0.9) * 0.04;
+  ctx.fillStyle = '#000';
+  const lineSpacing = 4;
+  const scanOffset  = (frameCount * 0.8) % lineSpacing;
+  for (let y = -H/2 - lineSpacing; y < H/2 + lineSpacing; y += lineSpacing) {
+    ctx.fillRect(-W/2, y + scanOffset, W, 1.5);
+  }
+
+  // Step 5: chromatic aberration — red and blue ghost copies offset slightly
+  const aberrAmt = 2 + Math.sin(t * 3) * 1;
+  ctx.globalAlpha = 0.18;
+  ctx.globalCompositeOperation = 'screen';
+
+  // Red channel ghost
+  offCtx.clearRect(0, 0, W, H);
+  offCtx.drawImage(img, 0, 0, W, H);
+  const rdData = offCtx.getImageData(0, 0, W, H);
+  for (let i = 0; i < rdData.data.length; i += 4) {
+    rdData.data[i+1] = 0; rdData.data[i+2] = 0; // keep only red
+    rdData.data[i+3] = Math.min(200, rdData.data[i+3]);
+  }
+  offCtx.putImageData(rdData, 0, 0);
+  ctx.drawImage(offscreen, -W/2 - aberrAmt, -H/2, W, H);
+
+  // Blue channel ghost
+  offCtx.clearRect(0, 0, W, H);
+  offCtx.drawImage(img, 0, 0, W, H);
+  const blData = offCtx.getImageData(0, 0, W, H);
+  for (let i = 0; i < blData.data.length; i += 4) {
+    blData.data[i] = 0; blData.data[i+1] = 0; // keep only blue
+    blData.data[i+3] = Math.min(200, blData.data[i+3]);
+  }
+  offCtx.putImageData(blData, 0, 0);
+  ctx.drawImage(offscreen, -W/2 + aberrAmt, -H/2, W, H);
+
+  ctx.globalCompositeOperation = 'source-over';
+
+  // Step 6: edge rim light — thin teal outline glow
+  ctx.globalAlpha = 0.45 + Math.sin(t * 2.2) * 0.2;
+  ctx.filter = 'blur(3px)';
+  ctx.globalCompositeOperation = 'screen';
+  offCtx.clearRect(0, 0, W, H);
+  offCtx.drawImage(img, 0, 0, W, H);
+  const edgeData = offCtx.getImageData(0, 0, W, H);
+  for (let i = 0; i < edgeData.data.length; i += 4) {
+    const a = edgeData.data[i+3];
+    edgeData.data[i]   = 0;
+    edgeData.data[i+1] = a > 20 ? 210 : 0;
+    edgeData.data[i+2] = a > 20 ? 180 : 0;
+    edgeData.data[i+3] = a > 20 ? 255 : 0;
+  }
+  offCtx.putImageData(edgeData, 0, 0);
+  ctx.drawImage(offscreen, -W/2, -H/2, W, H);
+
+  ctx.filter = 'none';
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.globalAlpha = 1;
+  ctx.restore();
+
+  // Step 7: hologram flicker — random brief dimming
+  if (Math.random() < 0.012) {
+    ctx.save();
+    ctx.globalAlpha = 0.25 + Math.random() * 0.3;
+    ctx.fillStyle = 'rgba(0,201,177,0.08)';
+    ctx.fillRect(-W/2, -H/2, W, H);
+    ctx.restore();
+  }
+
+  // Step 8: projection base — glowing ellipse under shoe
+  ctx.save();
+  ctx.globalAlpha = 0.25 + Math.sin(t * 1.8) * 0.08;
+  const baseGrad = ctx.createRadialGradient(0, H/2+4, 0, 0, H/2+4, W*0.38);
+  baseGrad.addColorStop(0, 'rgba(255,69,0,0.55)');
+  baseGrad.addColorStop(1, 'rgba(255,69,0,0)');
+  ctx.fillStyle = baseGrad;
+  ctx.beginPath();
+  ctx.ellipse(0, H/2+4, W*0.38, 12, 0, 0, Math.PI*2);
+  ctx.fill();
+  ctx.restore();
+}
+
+// Fallback when getImageData is blocked (e.g. local file CORS)
+function drawHologramFallback(img, W, H, t) {
+  ctx.save();
+
+  // Glow layers
+  ctx.filter = 'blur(14px) saturate(2)';
+  ctx.globalAlpha = 0.22;
+  ctx.drawImage(img, -W*0.54, -H*0.54, W*1.08, H*1.08);
+  ctx.filter = 'blur(6px) saturate(3)';
+  ctx.globalAlpha = 0.3;
+  ctx.drawImage(img, -W*0.51, -H*0.51, W*1.02, H*1.02);
+  ctx.filter = 'none';
+
+  // Core image tinted cyan via composite
+  ctx.globalAlpha = 0.78 + Math.sin(t*1.4)*0.1;
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.drawImage(img, -W/2, -H/2, W, H);
+
+  // Cyan screen tint
+  ctx.globalCompositeOperation = 'screen';
+  ctx.globalAlpha = 0.35;
+  ctx.fillStyle = '#00c9b1';
+  ctx.fillRect(-W/2, -H/2, W, H);
+
+  // Scanlines
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.globalAlpha = 0.1;
+  ctx.fillStyle = '#000';
+  for (let y = -H/2; y < H/2; y += 4) ctx.fillRect(-W/2, y, W, 1.5);
+
+  // Projection base
+  ctx.globalAlpha = 0.22 + Math.sin(t*1.8)*0.08;
+  const g = ctx.createRadialGradient(0, H/2, 0, 0, H/2, W*0.4);
+  g.addColorStop(0,'rgba(255,69,0,0.6)'); g.addColorStop(1,'rgba(255,69,0,0)');
+  ctx.fillStyle = g;
+  ctx.beginPath(); ctx.ellipse(0, H/2+4, W*0.38, 12, 0, 0, Math.PI*2); ctx.fill();
+
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.globalAlpha = 1;
+  ctx.restore();
+}
+
+// ─── OVERLAY BUTTONS ─────────────────────────────────────────────────────────
+document.getElementById('biggerBtn').addEventListener('click',  () => ovScale = Math.min(2.8, ovScale+0.12));
+document.getElementById('smallerBtn').addEventListener('click', () => ovScale = Math.max(0.3, ovScale-0.12));
+document.getElementById('rotateBtn').addEventListener('click',  () => ovRotation = (ovRotation+15)%360);
+document.getElementById('flipBtn').addEventListener('click',    () => { ovFlipped = !ovFlipped; });
+
+// ─── DRAG ────────────────────────────────────────────────────────────────────
+const wrapEl = document.getElementById('cameraWrap');
+function getPos(e) {
+  const r = wrapEl.getBoundingClientRect(), c = e.touches ? e.touches[0] : e;
+  return { x:(c.clientX-r.left)/r.width, y:(c.clientY-r.top)/r.height };
+}
+wrapEl.addEventListener('mousedown', e => {
+  if (!stream) return; dragging=true; const p=getPos(e);
+  dragStartX=p.x; dragStartY=p.y; dragStartOvX=ovX; dragStartOvY=ovY; wrapEl.style.cursor='grabbing';
+});
+wrapEl.addEventListener('touchstart', e => {
+  if (!stream) return; dragging=true; const p=getPos(e);
+  dragStartX=p.x; dragStartY=p.y; dragStartOvX=ovX; dragStartOvY=ovY;
+}, {passive:true});
+window.addEventListener('mousemove', e => {
+  if (!dragging) return; const p=getPos(e);
+  ovX=Math.max(0.05,Math.min(0.95,dragStartOvX+(p.x-dragStartX)));
+  ovY=Math.max(0.05,Math.min(0.95,dragStartOvY+(p.y-dragStartY)));
+});
+window.addEventListener('touchmove', e => {
+  if (!dragging) return; const p=getPos(e);
+  ovX=Math.max(0.05,Math.min(0.95,dragStartOvX+(p.x-dragStartX)));
+  ovY=Math.max(0.05,Math.min(0.95,dragStartOvY+(p.y-dragStartY)));
+}, {passive:true});
+window.addEventListener('mouseup',  () => { dragging=false; wrapEl.style.cursor='default'; });
+window.addEventListener('touchend', () => { dragging=false; });
+
+// ─── ADD TO CART ──────────────────────────────────────────────────────────────
+document.getElementById('addBtn').addEventListener('click', () => {
+  try {
+    const cart = JSON.parse(localStorage.getItem('hh_cart') || '[]');
+    const id   = selectedSneaker.id + '-' + selectedSize;
+    const ex   = cart.find(i => i.id === id);
+    if (ex) { ex.qty++; } else {
+      cart.push({ id, name:selectedSneaker.name, colorway:selectedSneaker.colorway, brand:selectedSneaker.brand,
+        price:parseFloat(selectedSneaker.price)||0, img:selectedSneaker.img, size:selectedSize, qty:1 });
+    }
+    localStorage.setItem('hh_cart', JSON.stringify(cart));
+  } catch(e) {}
+  const btn = document.getElementById('addBtn');
+  btn.textContent = `✓ Added — ${selectedSneaker.name} ${selectedSize}`;
+  btn.style.cssText = 'background:#1a1a1a;color:var(--teal);border:1px solid var(--teal);';
+  showToast(`Added ${selectedSneaker.name} (${selectedSize}) to cart! 🛒`);
+  setTimeout(() => { btn.textContent='Add to Cart'; btn.style.cssText=''; }, 2500);
+});
+
+// ─── TOAST ────────────────────────────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('ar-toast');
+  document.getElementById('ar-toast-msg').textContent = msg;
+  t.classList.remove('show'); void t.offsetWidth; t.classList.add('show');
+}
+</script>
+</body>
+</html>
