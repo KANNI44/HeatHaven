@@ -494,6 +494,17 @@
             </div>
           </div>
 
+          <div id="netbanking-bank-wrap" class="px-2 hidden">
+            <label class="block text-xs font-semibold text-gray-500 dark:text-zinc-500 mb-1 uppercase tracking-wide">Bank selection</label>
+            <select id="nb-bank" class="inp">
+              <option value="HDFC Bank">HDFC Bank</option>
+              <option value="ICICI Bank">ICICI Bank</option>
+              <option value="SBI">SBI</option>
+              <option value="Axis Bank">Axis Bank</option>
+              <option value="Kotak Bank">Kotak Bank</option>
+            </select>
+          </div>
+
         </div>
 
         <!-- Promo code -->
@@ -828,6 +839,23 @@ function renderOrderItems() {
 }
 
 function updateTotals() {
+  if (isLoggedIn() && backendTotals) {
+    const itemCount = backendTotals.count || 0;
+    const subtotal = backendTotals.subtotal || 0;
+    const shipping = backendTotals.shipping || 0;
+    const total = backendTotals.total || 0;
+
+    document.getElementById("item-count").textContent = itemCount;
+    document.getElementById("subtotal-val").textContent = "₹" + subtotal.toLocaleString("en-IN");
+    document.getElementById("shipping-val").textContent = shipping === 0 ? "Free" : "₹" + shipping;
+    document.getElementById("shipping-val").className = shipping === 0 ? "text-green-500 font-medium" : "text-gray-600 dark:text-zinc-400";
+    document.getElementById("total-val").textContent = "₹" + total.toLocaleString("en-IN");
+
+    document.getElementById("cod-row").classList.add("hidden");
+    document.getElementById("discount-row").classList.add("hidden");
+    return;
+  }
+
   const cart = getCart();
   const subtotal = cart.reduce((s, i) => s + (i.price * i.qty), 0);
   const itemCount = cart.reduce((s, i) => s + i.qty, 0);
@@ -860,6 +888,8 @@ function selectPay(el) {
   const method = el.dataset.pay;
   document.getElementById("upi-input-wrap").style.display = method === "upi" ? "block" : "none";
   document.getElementById("card-fields-wrap").classList.toggle("hidden", method !== "card");
+  const nbWrap = document.getElementById("netbanking-bank-wrap");
+  if (nbWrap) nbWrap.classList.toggle("hidden", method !== "netbanking");
   updateTotals();
 }
 // Init UPI visible
@@ -888,14 +918,66 @@ function applyPromo() {
 document.getElementById("promo-input").addEventListener("keydown", e => { if(e.key === "Enter") applyPromo(); });
 
 // ── PLACE ORDER ───────────────────────────────────────────
-function placeOrder() {
+async function placeOrder() {
+  if (isLoggedIn()) await ensureCartLoaded();
+
   const cart = getCart();
   if (!cart.length) { showToast("Your cart is empty!", true); return; }
 
   const btn = document.getElementById("place-order-btn");
+  const originalBtnHtml = btn.innerHTML;
   btn.disabled = true;
   btn.innerHTML = '<i class="fas fa-spinner fa-spin text-sm mr-2"></i> Processing…';
 
+  // Logged-in flow: create order in MongoDB, then simulate Net Banking payment.
+  if (isLoggedIn()) {
+    const selAddrData = ADDRESSES.find(a => a.id === selectedAddr) || ADDRESSES[0];
+    const payMethod = document.querySelector(".pay-card.selected")?.dataset.pay || "upi";
+    const bank = payMethod === "netbanking" ? (document.getElementById("nb-bank")?.value || "Net Banking") : "";
+
+    try {
+      const payload = {
+        shippingAddress: {
+          fullName: selAddrData.name || "",
+          phone: selAddrData.phone || "",
+          line1: selAddrData.line1 || "",
+          line2: selAddrData.line2 || "",
+          city: "",
+          state: "",
+          pincode: "",
+          country: "India",
+        },
+        notes: "",
+        payment: { method: payMethod, bank },
+      };
+
+      const data = await apiCall('/orders', {
+        method: 'POST',
+        headers: authHeaders(),
+        body: JSON.stringify(payload),
+      });
+
+      const status = data?.data?.status;
+      const orderNumber = data?.data?.orderNumber;
+
+      if (status === 'confirmed') {
+        document.getElementById("order-id").textContent = "#" + orderNumber;
+        document.getElementById("success-overlay").classList.add("show");
+        return;
+      }
+
+      // Payment failed / order not confirmed.
+      showToast('Net Banking payment failed. Your order is not confirmed.', true);
+    } catch (err) {
+      showToast(err.message || 'Order failed', true);
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = originalBtnHtml;
+    }
+    return;
+  }
+
+  // Guest flow: keep the existing localStorage demo order behavior.
   setTimeout(() => {
     const orderId = "HH" + Date.now().toString().slice(-8).toUpperCase();
 
@@ -933,6 +1015,8 @@ function placeOrder() {
     // Show success
     document.getElementById("order-id").textContent = "#" + orderId;
     document.getElementById("success-overlay").classList.add("show");
+    btn.disabled = false;
+    btn.innerHTML = originalBtnHtml;
   }, 1800);
 }
 

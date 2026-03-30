@@ -450,6 +450,56 @@ function getOrders() {
   ];
 }
 
+const API = 'http://localhost:5000/api';
+function getToken() { return localStorage.getItem('hh_token'); }
+function isLoggedIn() { return !!getToken(); }
+function authHeaders() { return { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getToken()}` }; }
+
+async function fetchOrdersFromBackend() {
+  const res = await fetch(API + '/orders', { headers: authHeaders() });
+  const json = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(json.message || 'Failed to fetch orders');
+
+  const list = json?.data || [];
+  return list.map(o => {
+    let status = o.status;
+    let cancelable;
+
+    // UI uses: processing | in transit | delivered | cancelled
+    // Backend cancel rule:
+    // - cancellable: pending_payment
+    // - not cancellable: confirmed | shipped | delivered
+    if (status === 'confirmed') { status = 'processing'; cancelable = false; }
+    else if (status === 'pending_payment') { status = 'processing'; cancelable = true; }
+    else if (status === 'shipped') { status = 'in transit'; cancelable = false; }
+    else if (status === 'delivered') { status = 'delivered'; cancelable = false; }
+    else if (status === 'payment_failed') { status = 'cancelled'; cancelable = false; }
+
+    const paymentLabel = o.payment?.method ? String(o.payment.method).toUpperCase() : '';
+    const address = o.shippingAddress
+      ? [o.shippingAddress.line1, o.shippingAddress.line2].filter(Boolean).join(', ')
+      : '';
+
+    return {
+      id: String(o._id),
+      date: o.createdAt ? new Date(o.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '',
+      status,
+      cancelable,
+      total: o.total || 0,
+      address,
+      payment: paymentLabel || '',
+      items: (o.items || []).map(i => ({
+        name: i.name,
+        colorway: i.colorway || '',
+        size: i.size,
+        price: i.unitPrice || 0,
+        qty: i.qty || 1,
+        img: i.imageMain || '',
+      })),
+    };
+  });
+}
+
 let allOrders = getOrders();
 
 // ── RENDER ────────────────────────────────────────────────
@@ -497,9 +547,15 @@ function renderOrders(orders) {
         <button class="spring-btn reorder-btn px-4 py-2 rounded-xl text-sm font-bold bg-black dark:bg-white text-white dark:text-black hover:opacity-80 transition" data-id="${order.id}">Reorder</button>`;
       if (order.status === 'in transit') return `
         <button class="spring-btn px-4 py-2 rounded-xl text-sm font-medium border border-gray-200 dark:border-zinc-700 text-gray-600 dark:text-zinc-400 hover:bg-gray-50 dark:hover:bg-zinc-800 transition">Track Order</button>`;
-      if (order.status === 'processing') return `
-        <button class="spring-btn cancel-btn px-4 py-2 rounded-xl text-sm font-medium border border-red-200 dark:border-red-900/40 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 transition" data-id="${order.id}">Cancel</button>
-        <button class="spring-btn px-4 py-2 rounded-xl text-sm font-medium border border-gray-200 dark:border-zinc-700 text-gray-600 dark:text-zinc-400 hover:bg-gray-50 dark:hover:bg-zinc-800 transition">View Details</button>`;
+      if (order.status === 'processing') {
+        // For backend orders, `cancelable` is set based on backend status rules.
+        // For legacy/demo local orders, `cancelable` is undefined so we allow cancel.
+        const showCancel = order.cancelable === undefined ? true : !!order.cancelable;
+        return showCancel ? `
+          <button class="spring-btn cancel-btn px-4 py-2 rounded-xl text-sm font-medium border border-red-200 dark:border-red-900/40 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 transition" data-id="${order.id}">Cancel</button>
+          <button class="spring-btn px-4 py-2 rounded-xl text-sm font-medium border border-gray-200 dark:border-zinc-700 text-gray-600 dark:text-zinc-400 hover:bg-gray-50 dark:hover:bg-zinc-800 transition">View Details</button>` : `
+          <button class="spring-btn px-4 py-2 rounded-xl text-sm font-medium border border-gray-200 dark:border-zinc-700 text-gray-600 dark:text-zinc-400 hover:bg-gray-50 dark:hover:bg-zinc-800 transition">View Details</button>`;
+      }
       return `<button class="spring-btn px-4 py-2 rounded-xl text-sm font-medium border border-gray-200 dark:border-zinc-700 text-gray-600 dark:text-zinc-400 transition">View Details</button>`;
     })();
 
@@ -567,9 +623,22 @@ function attachCardListeners() {
 
   // Cancel
   document.querySelectorAll('.cancel-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', async () => {
       if (!confirm('Cancel this order?')) return;
       const orderId = btn.dataset.id;
+
+      if (isLoggedIn()) {
+        try {
+          await fetch(API + `/orders/${orderId}/cancel`, { method: 'PUT', headers: authHeaders() });
+          allOrders = await fetchOrdersFromBackend();
+          renderOrders(applyFilters(allOrders));
+          showToast('Order cancelled', false);
+        } catch (e) {
+          showToast(e.message || 'Cancellation failed', true);
+        }
+        return;
+      }
+
       const orders = getOrders();
       const order = orders.find(o => o.id === orderId);
       if (order) {
@@ -653,6 +722,15 @@ searchInput.addEventListener('input', () => clearBtn.classList.toggle('visible',
 
 // ── INITIAL RENDER ────────────────────────────────────────
 renderOrders(allOrders);
+
+// If logged in, replace local/demo orders with real MongoDB orders.
+(async () => {
+  if (!isLoggedIn()) return;
+  try {
+    allOrders = await fetchOrdersFromBackend();
+    renderOrders(applyFilters(allOrders));
+  } catch (_) {}
+})();
 
 // ── AI CHAT ────────────────────────────────────────────────
 function buildSystemPrompt() {
