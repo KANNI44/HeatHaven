@@ -223,7 +223,7 @@
 </div>
 
   <script>
-    const form = document.getElementById("loginForm");
+    const form = document.getElementById("signupForm");
     const loginCard = document.getElementById("loginCard");
     const heroCard = document.getElementById("heroCard");
 
@@ -239,22 +239,30 @@
       triggerRise(loginCard);
       triggerRise(heroCard);
 
-      const email = form.querySelector("input[type='text']").value;
-      const password = form.querySelector("input[type='password']").value;
+      const name = form.querySelector("input[type='text']").value;
+      const email = form.querySelector("input[type='email']").value;
+      const password = document.getElementById("password").value;
+      const confirmPassword = document.getElementById("confirmPassword").value;
+
+      if (password !== confirmPassword) {
+        alert("Passwords do not match");
+        return;
+      }
 
       try {
-        const res = await fetch("http://localhost:5000/api/login", {
+        const res = await fetch("http://localhost:5000/api/auth/register", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password })
+          body: JSON.stringify({ name, email, password })
         });
         const data = await res.json();
         if (!res.ok) {
           alert(data.message || "Invalid login");
           return;
         }
-        localStorage.setItem("token", data.token);
-        window.location.href = "dashboard.html";
+        localStorage.setItem("hh_token", data.token);
+        localStorage.setItem("hh_user", JSON.stringify(data.user));
+        window.location.href = "profile.html";
       } catch {
         alert("Server not reachable");
       }

@@ -849,14 +849,18 @@
         if (isLoggedIn()) {
           // ── API path ──────────────────────────────────────────
           try {
-            const productName = card.dataset.name;
-            const variantId   = VARIANT_IDS[productName]?.[size];
-            if (!variantId) { showToast("Size not found", true); btn.textContent = orig; btn.disabled = false; return; }
+            const productLegacyId = parseInt(card?.dataset?.productId, 10);
+            if (!Number.isFinite(productLegacyId)) {
+              showToast("Product not found", true);
+              btn.textContent = orig;
+              btn.disabled = false;
+              return;
+            }
 
             await apiCall('/cart', {
               method:  'POST',
               headers: authHeaders(),
-              body:    JSON.stringify({ variant_id: variantId, qty: 1 })
+              body:    JSON.stringify({ productLegacyId, size, qty: 1 })
             });
 
             btn.textContent = "✓ Added!";
@@ -919,7 +923,7 @@
         const icon      = btn.querySelector("i");
         icon.style.animation = "none"; void icon.offsetWidth; icon.style.animation = "heart-spring 0.25s ease-out";
 
-        if (isLoggedIn()) {
+        if (false && isLoggedIn()) {
           // ── API path ──────────────────────────────────────────
           try {
             const data = await apiCall(`/wishlist/${productId}`, { method: 'POST', headers: authHeaders() });

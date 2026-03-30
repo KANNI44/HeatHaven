@@ -410,56 +410,230 @@ function showToast(msg, isError) {
 
 function escH(s) { return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
 
-// CART
-function getCart() { try { return JSON.parse(localStorage.getItem("hh_cart") || "[]"); } catch(e) { return []; } }
-function saveCart(c) { localStorage.setItem("hh_cart", JSON.stringify(c)); }
+// CART (localStorage for guests; MongoDB for logged-in users)
+const API = 'http://localhost:5000/api';
+function getToken() { return localStorage.getItem('hh_token'); }
+function isLoggedIn() { return !!getToken(); }
+function authHeaders() { return { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getToken()}` }; }
 
-function renderCart() {
-  const cart = getCart();
-  const col  = document.getElementById("cart-items-column");
-  const emp  = document.getElementById("empty-cart");
-  col.innerHTML = "";
-  if (!cart.length) {
-    emp.style.display = "block";
-    document.getElementById("order-summary-card").style.display = "none";
-    updateSummary(); return;
+let currentCartItems = [];
+const LEGACY_IDS_BY_NAME = {
+  "Air Jordan 1 Retro High": 1,
+  "Nike Uptempo Slide": 3,
+  "Nike Uptempo Slide Bulls": 3,
+  "Nike SB Dunk Low": 5,
+  "Adidas Campus": 6,
+  "Air Force 1 Low": 7,
+  "Yeezy Boost 350 V2": 8,
+  "Yeezy 700 V3": 2,
+  "Rick Owens Hollywood High": 9,
+  "Puma Melns": 10,
+  "Travis x Fragment High": 4,
+  "Travis Scott x Fragment High": 4,
+  "New Balance 990v5": 11,
+  "Air Jordan 4 Retro": 12,
+  "Salehe Bembury x Crocs": 13,
+};
+
+function getLocalCart() {
+  try { return JSON.parse(localStorage.getItem("hh_cart") || "[]"); } catch (e) { return []; }
+}
+function saveLocalCart(c) { localStorage.setItem("hh_cart", JSON.stringify(c)); }
+
+async function apiCall(endpoint, options = {}) {
+  const res = await fetch(API + endpoint, options);
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.message || 'Something went wrong');
+  return data;
+}
+
+async function syncLocalCartToBackendIfNeeded() {
+  if (!isLoggedIn()) return;
+  if (sessionStorage.getItem('hh_cart_synced') === '1') return;
+
+  const local = getLocalCart();
+  if (!local.length) {
+    sessionStorage.setItem('hh_cart_synced', '1');
+    return;
   }
-  emp.style.display = "none";
-  document.getElementById("order-summary-card").style.display = "";
-  cart.forEach((item, idx) => {
-    const d = document.createElement("div");
-    d.className = "spring-card rounded-xl p-5 flex items-center justify-between gap-4 cart-item";
-    d.dataset.brand = item.brand; d.dataset.price = item.price; d.dataset.idx = idx;
-    d.style.animationDelay = (idx * 60) + "ms";
-    d.innerHTML = `
-      <div class="flex items-center gap-4 flex-1 min-w-0">
-        <img src="${escH(item.img||'')}" alt="${escH(item.name)}" class="w-20 h-20 object-contain rounded-lg bg-gray-50 dark:bg-zinc-900 flex-shrink-0" onerror="this.src='https://via.placeholder.com/80x80/f3f4f6/111111?text=shoe'">
-        <div class="min-w-0">
-          <h3 class="font-semibold text-base truncate dark:text-white">${escH(item.name)}</h3>
-          <p class="text-sm text-gray-500 dark:text-gray-400">${escH(item.colorway)}</p>
-          <p class="text-xs text-gray-400 dark:text-gray-600 mt-0.5">Size: ${escH(item.size)}</p>
-          <p class="font-semibold mt-1 dark:text-white">Rs.${item.price.toLocaleString("en-IN")}</p>
+
+  for (const item of local) {
+    const legacyId = LEGACY_IDS_BY_NAME[item.name] || LEGACY_IDS_BY_NAME[(item.name || '').trim()];
+    if (!legacyId) continue;
+    if (!item.size) continue;
+    try {
+      await apiCall('/cart', {
+        method: 'POST',
+        headers: authHeaders(),
+        body: JSON.stringify({ productLegacyId: legacyId, size: item.size, qty: item.qty || 1 }),
+      });
+    } catch (_) {}
+  }
+
+  saveLocalCart([]);
+  sessionStorage.setItem('hh_cart_synced', '1');
+}
+
+async function fetchBackendCart() {
+  const data = await apiCall('/cart', { headers: authHeaders() });
+  const items = (data?.data?.items || []).map(i => ({
+    productLegacyId: i.product?.legacyId,
+    name: i.name || i.product?.name || '',
+    brand: i.brand || i.product?.brand || '',
+    colorway: i.colorway || i.product?.colorway || '',
+    img: i.imageMain || i.product?.imageMain || '',
+    size: i.size,
+    qty: i.qty,
+    price: i.unitPrice,
+  }));
+  currentCartItems = items;
+  return data?.data;
+}
+
+function renderLocalCartItems() {
+  currentCartItems = getLocalCart();
+}
+
+async function renderCart() {
+  try {
+    await syncLocalCartToBackendIfNeeded();
+
+    const col = document.getElementById("cart-items-column");
+    const emp = document.getElementById("empty-cart");
+    col.innerHTML = "";
+
+    if (isLoggedIn()) {
+      await fetchBackendCart();
+    } else {
+      renderLocalCartItems();
+    }
+
+    const cart = currentCartItems;
+    if (!cart.length) {
+      emp.style.display = "block";
+      document.getElementById("order-summary-card").style.display = "none";
+      updateSummary();
+      updateCartBadge();
+      return;
+    }
+
+    emp.style.display = "none";
+    document.getElementById("order-summary-card").style.display = "";
+
+    cart.forEach((item, idx) => {
+      const d = document.createElement("div");
+      d.className = "spring-card rounded-xl p-5 flex items-center justify-between gap-4 cart-item";
+      d.dataset.brand = item.brand;
+      d.dataset.price = item.price;
+      d.dataset.idx = idx;
+      d.dataset.productLegacyId = item.productLegacyId || '';
+      d.dataset.size = item.size || '';
+      d.style.animationDelay = (idx * 60) + "ms";
+
+      d.innerHTML = `
+        <div class="flex items-center gap-4 flex-1 min-w-0">
+          <img src="${escH(item.img || '')}" alt="${escH(item.name)}" class="w-20 h-20 object-contain rounded-lg bg-gray-50 dark:bg-zinc-900 flex-shrink-0" onerror="this.src='https://via.placeholder.com/80x80/f3f4f6/111111?text=shoe'">
+          <div class="min-w-0">
+            <h3 class="font-semibold text-base truncate dark:text-white">${escH(item.name)}</h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400">${escH(item.colorway)}</p>
+            <p class="text-xs text-gray-400 dark:text-gray-600 mt-0.5">Size: ${escH(item.size)}</p>
+            <p class="font-semibold mt-1 dark:text-white">Rs.${Number(item.price || 0).toLocaleString("en-IN")}</p>
+          </div>
         </div>
-      </div>
-      <div class="flex items-center gap-3 flex-shrink-0">
-        <div class="flex border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden">
-          <button class="qty-minus px-3 py-1 hover:bg-gray-100 dark:hover:bg-gray-800 dark:text-white text-base font-medium">-</button>
-          <span class="qty-value px-4 py-1 border-x border-gray-300 dark:border-gray-600 dark:bg-black dark:text-white text-center min-w-[2.5rem]">${item.qty}</span>
-          <button class="qty-plus px-3 py-1 hover:bg-gray-100 dark:hover:bg-gray-800 dark:text-white text-base font-medium">+</button>
-        </div>
-        <button class="remove-item text-gray-400 hover:text-red-500 text-xl leading-none transition-colors" title="Remove">x</button>
-      </div>`;
-    col.appendChild(d);
-  });
-  updateSummary(); updateCartBadge(); attachListeners();
+        <div class="flex items-center gap-3 flex-shrink-0">
+          <div class="flex border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden">
+            <button class="qty-minus px-3 py-1 hover:bg-gray-100 dark:hover:bg-gray-800 dark:text-white text-base font-medium">-</button>
+            <span class="qty-value px-4 py-1 border-x border-gray-300 dark:border-gray-600 dark:bg-black dark:text-white text-center min-w-[2.5rem]">${item.qty}</span>
+            <button class="qty-plus px-3 py-1 hover:bg-gray-100 dark:hover:bg-gray-800 dark:text-white text-base font-medium">+</button>
+          </div>
+          <button class="remove-item text-gray-400 hover:text-red-500 text-xl leading-none transition-colors" title="Remove">x</button>
+        </div>`;
+      col.appendChild(d);
+    });
+
+    updateSummary();
+    updateCartBadge();
+    attachListeners();
+  } catch (err) {
+    showToast(err.message || 'Failed to load cart', true);
+  }
 }
 
 function attachListeners() {
   document.querySelectorAll(".cart-item").forEach(card => {
     const idx = parseInt(card.dataset.idx);
-    card.querySelector(".qty-plus").addEventListener("click", () => { const c=getCart(); if(c[idx]){c[idx].qty++;saveCart(c);renderCart();} });
-    card.querySelector(".qty-minus").addEventListener("click", () => { const c=getCart(); if(c[idx]){c[idx].qty--;if(c[idx].qty<=0)c.splice(idx,1);saveCart(c);renderCart();} });
-    card.querySelector(".remove-item").addEventListener("click", () => { const c=getCart(); const n=c[idx]?c[idx].name:"Item"; c.splice(idx,1); saveCart(c); renderCart(); showToast(n+" removed",false); });
+    const productLegacyId = card.dataset.productLegacyId;
+    const size = card.dataset.size;
+
+    card.querySelector(".qty-plus").addEventListener("click", async () => {
+      if (isLoggedIn()) {
+        const currentQty = parseInt(card.querySelector(".qty-value")?.textContent) || 1;
+        const nextQty = currentQty + 1;
+        try {
+          await apiCall('/cart', {
+            method: 'PUT',
+            headers: authHeaders(),
+            body: JSON.stringify({ productLegacyId: Number(productLegacyId), size, qty: nextQty }),
+          });
+          await renderCart();
+        } catch (e) {
+          showToast(e.message || 'Update failed', true);
+        }
+      } else {
+        const c = getLocalCart();
+        if (c[idx]) { c[idx].qty++; saveLocalCart(c); await renderCart(); }
+      }
+    });
+
+    card.querySelector(".qty-minus").addEventListener("click", async () => {
+      if (isLoggedIn()) {
+        const currentQty = parseInt(card.querySelector(".qty-value")?.textContent) || 1;
+        const nextQty = currentQty - 1;
+        try {
+          if (nextQty <= 0) {
+            await apiCall('/cart', {
+              method: 'DELETE',
+              headers: authHeaders(),
+              body: JSON.stringify({ productLegacyId: Number(productLegacyId), size }),
+            });
+          } else {
+            await apiCall('/cart', {
+              method: 'PUT',
+              headers: authHeaders(),
+              body: JSON.stringify({ productLegacyId: Number(productLegacyId), size, qty: nextQty }),
+            });
+          }
+          await renderCart();
+        } catch (e) {
+          showToast(e.message || 'Update failed', true);
+        }
+      } else {
+        const c = getLocalCart();
+        if (c[idx]) { c[idx].qty--; if (c[idx].qty <= 0) c.splice(idx, 1); saveLocalCart(c); await renderCart(); }
+      }
+    });
+
+    card.querySelector(".remove-item").addEventListener("click", async () => {
+      if (isLoggedIn()) {
+        try {
+          await apiCall('/cart', {
+            method: 'DELETE',
+            headers: authHeaders(),
+            body: JSON.stringify({ productLegacyId: Number(productLegacyId), size }),
+          });
+          await renderCart();
+        } catch (e) {
+          showToast(e.message || 'Remove failed', true);
+        }
+      } else {
+        const c = getLocalCart();
+        const n = c[idx] ? c[idx].name : "Item";
+        c.splice(idx, 1);
+        saveLocalCart(c);
+        await renderCart();
+        showToast(n + " removed", false);
+      }
+    });
   });
 }
 
@@ -490,8 +664,8 @@ function updateSummary() {
 }
 
 function updateCartBadge() {
-  const t = getCart().reduce((s,i)=>s+i.qty,0);
-  document.querySelectorAll("#cart-count,#cart-count-mobile").forEach(el=>el.textContent=t);
+  const t = currentCartItems.reduce((s, i) => s + (i.qty || 0), 0);
+  document.querySelectorAll("#cart-count,#cart-count-mobile").forEach(el => el.textContent = t);
 }
 
 // FILTER
