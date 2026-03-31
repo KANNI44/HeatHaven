@@ -1,15 +1,14 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Heat Haven - Shopping Cart</title>
+  <title>Heat Haven – Wishlist</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       darkMode: 'class',
-      theme: { extend: { colors: { amoled:'#000000', cardDark:'#0a0a0a', hoverDark:'#111111' } } }
+      theme: { extend: { colors: { amoled:'#000000', cardDark:'#0a0a0a', hoverDark:'#111111', navdark:'#0d0d0d' } } }
     }
   </script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -18,102 +17,101 @@
     body  { font-family:"Poppins",sans-serif; overflow-x:hidden; }
     html  { scrollbar-gutter:stable; }
     h1,h2,h3,h4,.brand { font-family:"Archivo Black",sans-serif; letter-spacing:-0.5px; }
-
-    /* ── MOBILE MENU ── */
     .mobile-menu { transform:translateX(100%); transition:transform 0.3s ease-in-out; }
     .mobile-menu.open { transform:translateX(0); }
 
-    /* ── NAV DROP ── (from index) */
-    @keyframes nav-drop { from{transform:translateY(-100%);opacity:0;} to{transform:translateY(0);opacity:1;} }
-    nav { animation:nav-drop 0.6s cubic-bezier(0.16,1,0.3,1) both; }
-
-    /* ── BRAND SHIMMER ── (from index) */
-    @keyframes brand-shimmer { 0%{background-position:-200% center;} 100%{background-position:200% center;} }
-    .brand a {
-      background:linear-gradient(90deg, currentColor 40%, #ff4500 50%, currentColor 60%);
-      background-size:200% auto;
-      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-      background-clip:text;
-      animation:brand-shimmer 3.5s ease 0.5s 1 forwards;
+    /* ── Wish Row Card ── */
+    .wish-row {
+      background:#fff; border:1px solid #e5e7eb; border-radius:16px;
+      transition:transform 0.25s cubic-bezier(0.175,0.885,0.32,1.275),
+                 box-shadow 0.25s ease, border-color 0.25s ease, opacity 0.25s ease;
+      box-shadow:0 2px 10px rgba(0,0,0,0.05);
+      animation:row-in 0.35s ease both;
     }
+    .wish-row:hover { transform:translateY(-3px); box-shadow:0 14px 32px rgba(0,0,0,0.1); border-color:#111827; }
+    .dark .wish-row { background:#0f0f0f; border-color:#1f1f1f; }
+    .dark .wish-row:hover { border-color:#3f3f3f; box-shadow:0 14px 32px rgba(0,0,0,0.55); }
+    .wish-row.removing { transform:scale(0.94); opacity:0; pointer-events:none; }
+    @keyframes row-in { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
 
-    /* ── NAV LINK UNDERLINE ── (from index) */
-    .nav-link { position:relative; }
-    .nav-link::after {
-      content:''; position:absolute; bottom:-2px; left:0;
-      width:0; height:2px; background:#ff4500; border-radius:2px;
-      transition:width 0.3s cubic-bezier(0.4,0,0.2,1);
+    /* ── Buttons ── */
+    .atc-btn {
+      display:inline-flex; align-items:center; gap:7px;
+      padding:9px 20px; border-radius:999px; border:none; cursor:pointer;
+      font-family:"Poppins",sans-serif; font-size:13px; font-weight:600;
+      background:#000; color:#fff;
+      transition:background 0.2s, transform 0.15s cubic-bezier(0.22,0.61,0.36,1), box-shadow 0.2s;
+      box-shadow:0 4px 12px rgba(0,0,0,0.18);
     }
-    .nav-link:hover::after { width:100%; }
+    .atc-btn:hover  { background:#222; transform:translateY(-2px); box-shadow:0 8px 20px rgba(0,0,0,0.25); }
+    .atc-btn:active { transform:scale(0.95); }
+    .dark .atc-btn  { background:#fff; color:#000; box-shadow:0 4px 12px rgba(255,255,255,0.08); }
+    .dark .atc-btn:hover { background:#e5e5e5; }
 
-    /* ── CURSOR GLOW ── (from index) */
-    #cursor-glow {
-      position:fixed; width:320px; height:320px; border-radius:50%;
-      background:radial-gradient(circle, rgba(255,69,0,0.07) 0%, transparent 70%);
-      pointer-events:none; z-index:0; transform:translate(-50%,-50%);
-      transition:opacity 0.4s ease; opacity:0;
+    .del-btn {
+      display:inline-flex; align-items:center; gap:7px;
+      padding:9px 20px; border-radius:999px; cursor:pointer;
+      font-family:"Poppins",sans-serif; font-size:13px; font-weight:500;
+      background:transparent; color:#6b7280; border:1.5px solid #e5e7eb;
+      transition:all 0.2s;
     }
-    body:hover #cursor-glow { opacity:1; }
+    .del-btn:hover { border-color:#ef4444; color:#ef4444; background:#fff1f1; }
+    .del-btn:active { transform:scale(0.95); }
+    .dark .del-btn { border-color:#2a2a2a; color:#6b7280; }
+    .dark .del-btn:hover { background:#1a0000; border-color:#ef4444; color:#ef4444; }
 
-    /* ── THEME TOGGLE ── (from index) */
-    #theme-toggle .sun-icon,
-    #theme-toggle .moon-icon { position:absolute; width:1.4rem; height:1.4rem; transition:transform 0.4s ease,opacity 0.4s ease; }
-    #theme-toggle .sun-icon  { opacity:1; transform:rotate(0deg) scale(1); }
-    #theme-toggle .moon-icon { opacity:0; transform:rotate(90deg) scale(0.4); }
-    .dark #theme-toggle .sun-icon  { opacity:0; transform:rotate(-90deg) scale(0.4); }
-    .dark #theme-toggle .moon-icon { opacity:1; transform:rotate(0deg) scale(1); }
-
-    /* ── SCROLL REVEAL ── (from index) */
-    .reveal {
-      opacity:0; transform:translateY(32px);
-      transition:opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
+    /* ── Size select ── */
+    .size-select {
+      background:#f9fafb; border:1.5px solid #e5e7eb; border-radius:999px;
+      padding:7px 14px; font-size:13px; font-family:"Poppins",sans-serif;
+      outline:none; cursor:pointer; color:#374151;
+      transition:border-color 0.2s, box-shadow 0.2s;
+      appearance:none; -webkit-appearance:none;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat:no-repeat; background-position:right 12px center; padding-right:32px;
     }
-    .reveal.visible { opacity:1; transform:translateY(0); }
+    .size-select:focus { border-color:#000; box-shadow:0 0 0 3px rgba(0,0,0,0.06); }
+    .dark .size-select { background:#111; border-color:#2a2a2a; color:#d1d5db; }
+    .dark .size-select:focus { border-color:#555; }
 
-    /* ── CART ITEM CARDS ── (spring + reveal + shine sweep) */
-    .spring-card {
-      border:1px solid #e5e7eb;
-      transition:transform 0.25s cubic-bezier(0.175,0.885,0.32,1.275), box-shadow 0.25s ease, border-color 0.25s ease;
-      box-shadow:0 2px 10px rgba(0,0,0,0.06); background:#fff;
-      position:relative; overflow:hidden;
-    }
-    .spring-card::after {
-      content:''; position:absolute; inset:0;
-      background:linear-gradient(115deg, transparent 40%, rgba(255,255,255,0.18) 50%, transparent 60%);
-      transform:translateX(-100%); transition:transform 0.5s ease;
-      pointer-events:none; z-index:5;
-    }
-    .spring-card:hover::after { transform:translateX(100%); }
-    .spring-card:hover { transform:translateY(-4px) scale(1.01); box-shadow:0 14px 30px rgba(0,0,0,0.12); border-color:#111827; }
-    .dark .spring-card { background:#0f0f0f; border-color:#1f1f1f; }
-    .dark .spring-card:hover { border-color:#444; box-shadow:0 14px 30px rgba(0,0,0,0.5); }
-    .dark .spring-card:hover::after { background:linear-gradient(115deg, transparent 40%, rgba(255,255,255,0.06) 50%, transparent 60%); }
+    /* ── Badge shake ── */
+    @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)} }
+    .select-shake { animation:shake 0.35s ease; border-color:#ef4444 !important; }
 
-    /* ── CHECKOUT BUTTON ── */
-    .checkout-spring {
-      transition:transform 0.22s cubic-bezier(0.175,0.885,0.32,1.275), box-shadow 0.22s ease;
-      box-shadow:0 8px 18px rgba(0,0,0,0.25);
-    }
-    .checkout-spring:hover  { transform:translateY(-3px) scale(1.02); box-shadow:0 14px 28px rgba(0,0,0,0.35); }
-    .checkout-spring:active { transform:translateY(0) scale(0.98); }
+    /* ── Cart badge bump ── */
+    .cart-bump { animation:cart-bump 0.4s ease-out; }
+    @keyframes cart-bump { 0%{transform:scale(1)} 30%{transform:translateY(-4px) scale(1.25)} 60%{transform:scale(0.93)} 100%{transform:scale(1)} }
 
-    /* ── TOAST ── */
-    #toast { position:fixed; bottom:80px; left:50%; transform:translateX(-50%) translateY(20px); background:#111; color:#fff; padding:10px 22px; border-radius:999px; font-size:13px; z-index:9999; opacity:0; transition:opacity 0.3s,transform 0.3s; pointer-events:none; display:flex; align-items:center; gap:8px; }
+    /* ── Toast ── */
+    #toast {
+      position:fixed; bottom:80px; left:50%; transform:translateX(-50%) translateY(20px);
+      background:#111; color:#fff; padding:10px 22px; border-radius:999px;
+      font-size:13px; z-index:9999; opacity:0; transition:opacity 0.3s,transform 0.3s;
+      pointer-events:none; display:flex; align-items:center; gap:8px; white-space:nowrap;
+    }
     #toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
 
-    /* ── SEARCH PILL ── */
+    /* ── Dark mode icons ── */
+    .sun-icon  { display:block; width:20px; height:20px; }
+    .moon-icon { display:none;  width:20px; height:20px; }
+    .dark .sun-icon  { display:none; }
+    .dark .moon-icon { display:block; }
+
+    nav { background:#fff; }
+    .dark nav { background:#000; border-bottom:1px solid #1a1a1a; }
+
+    /* ── Search pill ── */
     #search-pill { display:flex; align-items:center; gap:8px; background:#f3f4f6; border:1px solid #e5e7eb; border-radius:999px; padding:6px 14px 6px 7px; cursor:pointer; min-width:190px; transition:background 0.2s,box-shadow 0.2s; }
     #search-pill:hover { background:#ebebeb; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
     .dark #search-pill { background:#1a1a1a; border-color:#2e2e2e; }
     .dark #search-pill:hover { background:#222; }
-    .pill-icon { width:28px; height:28px; border-radius:50%; background:linear-gradient(135deg,#0d9488,#14b8a6); display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:transform 0.2s; }
-    #search-pill:hover .pill-icon { transform:rotate(-10deg) scale(1.1); }
+    .pill-icon { width:28px; height:28px; border-radius:50%; background:linear-gradient(135deg,#0d9488,#14b8a6); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
     .pill-icon svg { width:13px; height:13px; }
     .pill-text { font-size:13px; color:#9ca3af; font-family:"Poppins",sans-serif; flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .dark .pill-text { color:#6b7280; }
     .pill-emoji { font-size:14px; flex-shrink:0; }
 
-    /* ── SEARCH OVERLAY ── */
+    /* ── Search overlay ── */
     #search-overlay { position:fixed; inset:0; z-index:99999; background:rgba(0,0,0,0.55); backdrop-filter:blur(6px); display:flex; flex-direction:column; align-items:center; padding-top:80px; opacity:0; pointer-events:none; transition:opacity 0.22s ease; }
     #search-overlay.open { opacity:1; pointer-events:all; }
     #search-box { width:100%; max-width:600px; margin:0 16px; background:#fff; border-radius:20px; box-shadow:0 24px 64px rgba(0,0,0,0.25); overflow:hidden; transform:translateY(-16px) scale(0.97); transition:transform 0.25s cubic-bezier(0.34,1.56,0.64,1); }
@@ -126,13 +124,9 @@
     #search-input { flex:1; border:none; outline:none; font-size:15px; font-family:"Poppins",sans-serif; background:transparent; color:#111; }
     .dark #search-input { color:#f0f0f0; }
     #search-input::placeholder { color:#bbb; }
-    .dark #search-input::placeholder { color:#555; }
     #search-clear { background:none; border:none; cursor:pointer; color:#aaa; font-size:18px; padding:0 4px; display:none; line-height:1; }
     #search-clear.visible { display:block; }
-    #search-clear:hover { color:#555; }
     #search-results { max-height:360px; overflow-y:auto; }
-    #search-results::-webkit-scrollbar { width:4px; }
-    #search-results::-webkit-scrollbar-thumb { background:#e5e5e5; border-radius:2px; }
     .sri { display:flex; align-items:center; gap:14px; padding:12px 18px; cursor:pointer; transition:background 0.15s; animation:sri-in 0.2s ease both; }
     @keyframes sri-in { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
     .sri:hover { background:#f9fafb; }
@@ -146,50 +140,39 @@
     .sri-highlight { background:#fef08a; border-radius:3px; padding:0 2px; }
     .dark .sri-highlight { background:#713f12; }
     #search-empty { padding:32px; text-align:center; color:#9ca3af; font-size:14px; }
-    #search-hint { padding:8px 18px 12px; font-size:11px; color:#bbb; text-align:center; }
+    #search-hint  { padding:8px 18px 12px; font-size:11px; color:#bbb; text-align:center; }
     .dark #search-hint { color:#444; }
 
-    /* ── FILTER PANEL ── */
-    #filterPanel { position:fixed; z-index:9990; width:300px; background:#fff; border-radius:16px; padding:24px; box-shadow:0 12px 48px rgba(0,0,0,0.16); opacity:0; pointer-events:none; transform:translateY(-12px) scale(0.97); transition:opacity 0.22s ease,transform 0.22s ease; }
-    #filterPanel.open { opacity:1; pointer-events:all; transform:translateY(0) scale(1); }
-    .dark #filterPanel { background:#111; }
-    .dark #filterPanel select { background:#1a1a1a; color:#eee; border-color:#333; }
-    .fp-slider { position:absolute; width:100%; height:4px; appearance:none; -webkit-appearance:none; background:transparent; pointer-events:none; outline:none; }
-    .fp-slider::-webkit-slider-thumb { -webkit-appearance:none; width:20px; height:20px; background:#ef4444; border:3px solid #fff; border-radius:50%; cursor:pointer; pointer-events:all; box-shadow:0 1px 6px rgba(0,0,0,0.2); transition:transform 0.15s; }
-    .fp-slider::-webkit-slider-thumb:hover { transform:scale(1.15); }
-    .fp-slider::-moz-range-thumb { width:20px; height:20px; background:#ef4444; border:3px solid #fff; border-radius:50%; cursor:pointer; pointer-events:all; }
+    /* ── Sort pills ── */
+    .sort-pill { padding:6px 16px; border-radius:999px; font-size:12px; font-weight:500; border:1.5px solid #e5e7eb; cursor:pointer; transition:all 0.2s; background:#fff; color:#374151; white-space:nowrap; }
+    .sort-pill:hover { border-color:#111; background:#111; color:#fff; }
+    .sort-pill.active { background:#000; color:#fff; border-color:#000; }
+    .dark .sort-pill { background:transparent; border-color:#2a2a2a; color:#d1d5db; }
+    .dark .sort-pill:hover,.dark .sort-pill.active { background:#fff; color:#000; border-color:#fff; }
 
-    /* ── CART ITEM ANIMATION ── */
-    .cart-item { animation:item-in 0.35s cubic-bezier(0.16,1,0.3,1) both; }
-    @keyframes item-in { from{opacity:0;transform:translateY(16px) scale(0.97)} to{opacity:1;transform:translateY(0) scale(1)} }
+    /* ── Action pills ── */
+    .action-pill { padding:6px 14px; border-radius:999px; font-size:12px; font-weight:500; border:1.5px solid #e5e7eb; cursor:pointer; transition:all 0.2s; background:#fff; color:#374151; display:inline-flex; align-items:center; gap:5px; }
+    .action-pill:hover { border-color:#111; background:#111; color:#fff; }
+    .action-pill.danger { border-color:#fecaca; color:#ef4444; }
+    .action-pill.danger:hover { background:#ef4444; color:#fff; border-color:#ef4444; }
+    .dark .action-pill { background:transparent; border-color:#2a2a2a; color:#d1d5db; }
+    .dark .action-pill:hover { background:#fff; color:#000; border-color:#fff; }
+    .dark .action-pill.danger { border-color:#7f1d1d; color:#f87171; }
+    .dark .action-pill.danger:hover { background:#ef4444; color:#fff; border-color:#ef4444; }
 
-    /* ── EMPTY CART ── */
-    #empty-cart { display:none; text-align:center; padding:80px 20px; }
+    /* ── Heart pulse ── */
+    @keyframes heart-pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.15)} }
+    .heart-pulse { animation:heart-pulse 2.2s ease-in-out infinite; }
 
-    /* ── PAGE HEADING REVEAL ── */
-    .page-heading {
-      opacity:0; transform:translateY(20px);
-      animation:heading-in 0.7s cubic-bezier(0.16,1,0.3,1) 0.1s both;
-    }
-    @keyframes heading-in { to{opacity:1;transform:translateY(0);} }
+    /* ── Empty state ── */
+    #empty-state { display:none; }
 
-    /* ── ORDER SUMMARY CARD SLIDE IN ── */
-    #order-summary-card {
-      opacity:0; transform:translateX(24px);
-      animation:summary-in 0.65s cubic-bezier(0.16,1,0.3,1) 0.2s both;
-    }
-    @keyframes summary-in { to{opacity:1;transform:translateX(0);} }
+    /* ── AMOLED scrollbar ── */
+    .dark ::-webkit-scrollbar { width:5px; }
+    .dark ::-webkit-scrollbar-track { background:#000; }
+    .dark ::-webkit-scrollbar-thumb { background:#222; border-radius:3px; }
 
-    /* ── FOOTER SWEEP LINE ── (from index) */
-    footer { position:relative; overflow:hidden; }
-    footer::before {
-      content:''; position:absolute; top:0; left:-100%; width:60%; height:1px;
-      background:linear-gradient(90deg,transparent,#ff4500,transparent);
-      animation:footer-line 3s ease 1.5s infinite;
-    }
-    @keyframes footer-line { 0%{left:-60%} 100%{left:140%} }
-
-    /* ── AI CHAT WIDGET ── */
+    /* ── AI Chat ── */
     #hh-chat-widget { position:fixed; bottom:24px; left:24px; z-index:9999; font-family:"Poppins",sans-serif; }
     #hh-chat-toggle { width:60px; height:60px; border-radius:50%; background:#000; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 8px 32px rgba(0,0,0,0.25); transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.3s ease; position:relative; }
     .dark #hh-chat-toggle { background:#f0f0f0; }
@@ -216,7 +199,7 @@
     @keyframes msg-in { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
     .hh-msg.bot  { justify-content:flex-start; }
     .hh-msg.user { justify-content:flex-end; }
-    .hh-bot-avatar { width:28px; height:28px; background:#000; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; color:#fff; font-family:"Archivo Black",sans-serif; flex-shrink:0; margin-bottom:2px; }
+    .hh-bot-avatar { width:28px; height:28px; background:#000; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; color:#fff; font-family:"Archivo Black",sans-serif; flex-shrink:0; }
     .hh-bubble { max-width:78%; padding:10px 14px; border-radius:18px; font-size:13px; line-height:1.5; word-wrap:break-word; }
     .hh-msg.bot  .hh-bubble { background:#fff; color:#111; border-radius:18px 18px 18px 4px; box-shadow:0 1px 4px rgba(0,0,0,0.08); }
     .hh-msg.user .hh-bubble { background:#000; color:#fff; border-radius:18px 18px 4px 18px; }
@@ -235,24 +218,21 @@
     #hh-send { width:38px; height:38px; background:#000; border:none; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:transform 0.2s ease; flex-shrink:0; }
     #hh-send:hover { transform:scale(1.1); }
     .hh-powered { text-align:center; padding:6px; font-size:10px; color:#ccc; background:#fff; flex-shrink:0; }
-    .dark #hh-chat-panel   { background:#0a0a0a; }
-    .dark #hh-messages     { background:#000; }
-    .dark .hh-chips        { background:#000; }
+    .dark #hh-chat-panel { background:#0a0a0a; }
+    .dark #hh-messages { background:#000; }
+    .dark .hh-chips { background:#000; }
     .dark .hh-msg.bot .hh-bubble { background:#111; color:#f0f0f0; box-shadow:none; }
-    .dark #hh-input-area   { background:#0a0a0a; border-top-color:#1a1a1a; }
-    .dark #hh-input        { background:#111; border-color:#222; color:#fff; }
-    .dark #hh-input:focus  { border-color:#555; background:#1a1a1a; }
-    .dark .hh-chip         { background:#111; border-color:#333; color:#ccc; }
-    .dark .hh-chip:hover   { background:#fff; color:#000; border-color:#fff; }
-    .dark .hh-powered      { background:#0a0a0a; color:#333; }
+    .dark #hh-input-area { background:#0a0a0a; border-top-color:#1a1a1a; }
+    .dark #hh-input { background:#111; border-color:#222; color:#fff; }
+    .dark #hh-input:focus { border-color:#555; background:#1a1a1a; }
+    .dark .hh-chip { background:#111; border-color:#333; color:#ccc; }
+    .dark .hh-chip:hover { background:#fff; color:#000; border-color:#fff; }
+    .dark .hh-powered { background:#0a0a0a; color:#333; }
     @media (max-width:420px) { #hh-chat-panel { width:calc(100vw - 48px); } }
   </style>
 </head>
 
 <body class="bg-white dark:bg-amoled text-black dark:text-white transition-colors duration-300">
-
-<!-- Cursor Glow -->
-<div id="cursor-glow"></div>
 
 <!-- SEARCH OVERLAY -->
 <div id="search-overlay" role="dialog" aria-label="Search">
@@ -263,17 +243,17 @@
           <circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
         </svg>
       </div>
-      <input id="search-input" type="text" placeholder="Search sneakers, brands, colorways..." autocomplete="off" />
-      <button id="search-clear" aria-label="Clear">x</button>
+      <input id="search-input" type="text" placeholder="Search sneakers, brands, colorways…" autocomplete="off" />
+      <button id="search-clear" aria-label="Clear">✕</button>
     </div>
     <div id="search-results"></div>
-    <div id="search-hint">Press Esc to close</div>
+    <div id="search-hint">Press <kbd style="background:#f3f4f6;border:1px solid #e5e7eb;border-radius:4px;padding:1px 6px;font-size:11px;">Esc</kbd> to close</div>
   </div>
 </div>
 
 <!-- Dark Mode Toggle -->
 <div class="fixed bottom-10 right-6 z-50">
-  <button id="theme-toggle" class="relative flex items-center justify-center w-12 h-12 rounded-full shadow-xl bg-gray-200 dark:bg-cardDark transition-all duration-300 hover:scale-110" aria-label="Toggle dark mode">
+  <button id="theme-toggle" class="flex items-center justify-center w-12 h-12 rounded-full shadow-xl bg-gray-200 dark:bg-cardDark transition-all duration-300 hover:scale-110" aria-label="Toggle dark mode">
     <svg class="sun-icon text-yellow-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
       <circle cx="12" cy="12" r="4" fill="currentColor" stroke="none"/>
       <path stroke-linecap="round" d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
@@ -284,193 +264,204 @@
   </button>
 </div>
 
-<!-- Filter Overlay + Panel -->
-<div id="filterOverlay" class="hidden fixed inset-0 z-[9985]" onclick="closeFilter()"></div>
-<div id="filterPanel">
-  <h2 style="font-family:'Archivo Black',sans-serif;font-size:18px;font-weight:900;margin-bottom:20px;" class="text-black dark:text-white">Filter Cart</h2>
-  <div style="margin-bottom:22px;">
-    <label style="display:block;font-size:13px;font-weight:600;margin-bottom:8px;" class="text-gray-700 dark:text-gray-300">Brand</label>
-    <div style="position:relative;">
-      <select id="fpBrand" style="width:100%;appearance:none;-webkit-appearance:none;border:1.5px solid #e0e0e0;border-radius:10px;padding:10px 36px 10px 14px;font-size:14px;font-family:'Poppins',sans-serif;cursor:pointer;outline:none;" class="bg-white dark:bg-gray-900 text-gray-800 dark:text-white dark:border-gray-700">
-        <option value="all">All Brands</option>
-        <option value="jordan">Air Jordan</option>
-        <option value="travis">Travis Scott</option>
-        <option value="crocs">Crocs</option>
-        <option value="nike">Nike</option>
-        <option value="yeezy">Yeezy</option>
-        <option value="adidas">Adidas</option>
-        <option value="puma">Puma</option>
-        <option value="newbalance">New Balance</option>
-        <option value="rick owens">Rick Owens</option>
-        <option value="slides">Slides</option>
-      </select>
-      <div style="pointer-events:none;position:absolute;right:12px;top:50%;transform:translateY(-50%);"><i class="fas fa-chevron-down" style="font-size:11px;color:#999;"></i></div>
-    </div>
-  </div>
-  <div style="margin-bottom:26px;">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
-      <label style="font-size:13px;font-weight:600;" class="text-gray-700 dark:text-gray-300">Price Range</label>
-      <span id="fpPriceDisplay" style="font-size:13px;font-weight:700;color:#ef4444;">Rs.1,000 - Rs.7,00,000</span>
-    </div>
-    <div style="position:relative;height:24px;display:flex;align-items:center;">
-      <div style="position:absolute;left:0;right:0;height:4px;background:#f0f0f0;border-radius:4px;"></div>
-      <div id="fpFill" style="position:absolute;height:4px;background:#ef4444;border-radius:4px;left:0%;right:0%;"></div>
-      <input type="range" id="fpMin" class="fp-slider" min="1000" max="700000" value="1000"   step="500" oninput="fpUpdate()" />
-      <input type="range" id="fpMax" class="fp-slider" min="1000" max="700000" value="700000" step="500" oninput="fpUpdate()" />
-    </div>
-    <div style="display:flex;justify-content:space-between;margin-top:8px;">
-      <span style="font-size:12px;color:#aaa;">Rs.1,000</span>
-      <span style="font-size:12px;color:#aaa;">Rs.7,00,000</span>
-    </div>
-  </div>
-  <div style="display:flex;gap:12px;">
-    <button onclick="fpApply()" style="flex:1;background:#111;color:#fff;border:none;border-radius:12px;padding:12px 0;font-size:14px;font-family:'Poppins',sans-serif;font-weight:700;cursor:pointer;" onmouseover="this.style.background='#333'" onmouseout="this.style.background='#111'">Apply</button>
-    <button onclick="fpReset()" style="flex:1;background:#fff;color:#444;border:1.5px solid #e0e0e0;border-radius:12px;padding:12px 0;font-size:14px;font-family:'Poppins',sans-serif;font-weight:600;cursor:pointer;" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='#fff'">Reset</button>
-  </div>
-</div>
-
 <!-- NAV -->
-<nav class="bg-white dark:bg-amoled shadow-md sticky top-0 z-40">
+<nav class="shadow-md sticky top-0 z-40 border-b border-transparent dark:border-zinc-900">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between h-16">
+      <!-- Left: Brand + Links -->
       <div class="flex items-center">
         <div class="brand text-2xl font-bold">
           <a href="index.html" class="text-black dark:text-white">HEAT HAVEN</a>
         </div>
         <div class="hidden md:flex items-center ml-10 space-x-6">
-          <a href="index.html"   class="nav-link text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Home</a>
-          <a href="product.html" class="nav-link text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Products</a>
-          <a href="deals.html"   class="nav-link text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Hot Deals</a>
-          <a href="owners.html"  class="nav-link text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Owners</a>
+          <a href="index.html"   class="text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Home</a>
+          <a href="product.html" class="text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Products</a>
+          <a href="deals.html"   class="text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Hot Deals</a>
+          <a href="owners.html"  class="text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Owners</a>
         </div>
       </div>
+      <!-- Right: Icons -->
       <div class="hidden md:flex items-center gap-2 flex-shrink-0">
-        <a href="wishlist.html" id="nav-wishlist-btn" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark transition-colors relative" aria-label="Wishlist">
-          <i class="fas fa-heart text-red-600 dark:text-red-600"></i>
+        <!-- Wishlist (active) -->
+        <a href="wishlist.html" class="p-2 rounded-full bg-red-50 dark:bg-red-950 relative" aria-label="Wishlist">
+          <i class="fas fa-heart text-red-500 text-sm"></i>
+          <span id="wish-nav-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 items-center justify-center hidden">0</span>
         </a>
+        <!-- Search pill -->
         <button id="search-pill" aria-label="Search" onclick="openSearch()">
           <div class="pill-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
           </div>
-          <span class="pill-text">Search sneakers...</span>
+          <span class="pill-text">Search sneakers…</span>
           <span class="pill-emoji">👟</span>
         </button>
+        <!-- Cart -->
         <a href="cart.html" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark relative">
           <i class="fas fa-shopping-cart text-gray-600 dark:text-gray-300"></i>
           <span id="cart-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
         </a>
-        <button id="filterBtn" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark transition" aria-label="Filter">
-          <i class="fas fa-filter text-gray-600 dark:text-gray-300"></i>
-        </button>
-        <a href="profile.html" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark transition">
+        <a href="profile.html" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark">
           <i class="fas fa-user text-gray-600 dark:text-gray-300"></i>
         </a>
         <a href="profile login.html" class="px-5 py-1.5 rounded-full text-sm font-medium border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all">Login</a>
       </div>
-      <div class="md:hidden ml-auto">
+      <!-- Mobile hamburger -->
+      <div class="md:hidden ml-auto flex items-center">
         <button class="p-2" id="mobile-menu-button">
           <i class="fas fa-bars text-black dark:text-white text-lg"></i>
         </button>
       </div>
     </div>
   </div>
+  <!-- Mobile menu -->
   <div class="mobile-menu fixed inset-y-0 right-0 w-64 bg-white dark:bg-cardDark shadow-xl z-50 p-5" id="mobile-menu">
     <div class="flex justify-between items-center mb-8">
       <div class="brand text-xl dark:text-white">HEAT HAVEN</div>
       <button id="close-menu"><i class="fas fa-times text-xl dark:text-white"></i></button>
     </div>
     <div class="flex flex-col space-y-5">
-      <a href="index.html"   class="nav-link text-black dark:text-gray-200 font-medium">Home</a>
-      <a href="product.html" class="nav-link text-black dark:text-gray-200 font-medium">Products</a>
-      <a href="deals.html"   class="nav-link text-black dark:text-gray-200 font-medium">Hot Deals</a>
-      <a href="owners.html"  class="nav-link text-black dark:text-gray-200 font-medium">Owners</a>
-      <button id="nav-wishlist-btn-mobile" class="flex items-center gap-2 text-black dark:text-gray-200 font-medium text-left">
-        <i class="fas fa-heart text-red-500 text-sm"></i> Wishlist
-      </button>
+      <a href="index.html"    class="text-black dark:text-gray-200 font-medium">Home</a>
+      <a href="product.html"  class="text-black dark:text-gray-200 font-medium">Products</a>
+      <a href="deals.html"    class="text-black dark:text-gray-200 font-medium">Hot Deals</a>
+      <a href="owners.html"   class="text-black dark:text-gray-200 font-medium">Owners</a>
+      <a href="wishlist.html" class="flex items-center gap-2 text-red-500 font-medium"><i class="fas fa-heart text-sm"></i> Wishlist</a>
     </div>
-    <button onclick="openSearch()" class="mt-6 w-full flex items-center gap-3 bg-gray-100 dark:bg-gray-800 rounded-full px-4 py-2.5 text-sm text-gray-400">
-      <div class="pill-icon" style="width:24px;height:24px;">
-        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;">
-          <circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-        </svg>
-      </div>
-      Search sneakers...
-    </button>
     <div class="mt-6 pt-5 border-t border-gray-200 dark:border-gray-700 flex items-center gap-3 flex-wrap">
       <a href="cart.html" class="relative p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark">
         <i class="fas fa-shopping-cart text-gray-600 dark:text-gray-300"></i>
-        <span id="cart-count-mobile" class="absolute -top-0.5 -right-0.5 bg-red-500 text-white text-[10px] font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
+        <span id="cart-count-mobile" class="absolute -top-0.5 -right-0.5 bg-red-500 text-white text-[10px] rounded-full h-5 w-5 flex items-center justify-center">0</span>
       </a>
       <a href="profile.html" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark">
         <i class="fas fa-user text-gray-600 dark:text-gray-300"></i>
       </a>
-      <a href="profile login.html" class="px-4 py-1.5 rounded-full text-sm font-medium border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 hover:bg-black hover:text-white transition">Login</a>
+      <a href="profile login.html" class="px-4 py-1.5 rounded-full text-sm font-medium border border-gray-300 dark:border-gray-600 hover:bg-black hover:text-white transition">Login</a>
     </div>
   </div>
 </nav>
 
-<!-- CART SECTION -->
-<section class="max-w-7xl mx-auto px-6 py-12">
-  <h1 class="text-3xl font-bold mb-4 page-heading">Your Shopping Cart</h1>
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-10 lg:pr-[22rem] xl:pr-[26rem]">
-    <div class="lg:col-span-3 space-y-5" id="cart-items-column"></div>
-    <div id="empty-cart" class="lg:col-span-3">
-      <div class="text-center py-20">
-        <div class="text-6xl mb-4">🛒</div>
-        <h2 class="text-2xl font-bold mb-2 dark:text-white">Your cart is empty</h2>
-        <p class="text-gray-500 dark:text-gray-400 mb-6">Looks like you have not added anything yet.</p>
-        <a href="index.html" class="inline-block bg-black dark:bg-white text-white dark:text-black px-8 py-3 rounded-full font-semibold hover:opacity-80 transition">Shop Now</a>
+<!-- PAGE HEADER -->
+<div class="bg-gray-50 dark:bg-black border-b dark:border-zinc-900">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="flex items-center gap-4">
+      <div class="w-11 h-11 rounded-full bg-red-100 dark:bg-red-950 flex items-center justify-center flex-shrink-0">
+        <i class="fas fa-heart text-red-500 heart-pulse"></i>
       </div>
-    </div>
-    <p id="empty-filter-msg" class="lg:col-span-3 text-gray-400 text-sm hidden">No items match this filter.</p>
-
-    <!-- Order Summary fixed card -->
-    <div class="spring-card rounded-xl p-6 h-fit lg:fixed lg:top-24 lg:right-6 lg:w-80 xl:w-96" id="order-summary-card">
-      <h2 class="text-xl font-semibold mb-5">Order Summary</h2>
-      <div class="space-y-3 text-sm">
-        <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">Subtotal</span><span id="summary-subtotal">Rs.0.00</span></div>
-        <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">Items</span><span id="summary-count">0</span></div>
-        <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">Shipping</span><span id="summary-shipping" class="text-green-500 font-medium">Free</span></div>
-        <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">Tax (10%)</span><span id="summary-tax">Rs.0.00</span></div>
+      <div>
+        <h1 class="text-2xl font-bold dark:text-white">My Wishlist</h1>
+        <p class="text-sm text-gray-500 dark:text-zinc-500 mt-0.5"><span id="wish-count-label">0</span> saved items</p>
       </div>
-      <hr class="my-5 border-gray-200 dark:border-gray-700">
-      <div class="flex justify-between font-semibold text-lg mb-5"><span>Total</span><span id="summary-total">Rs.0.00</span></div>
-      <a href="checkout.html" class="block">
-        <button class="checkout-spring w-full bg-black dark:bg-white text-white dark:text-black py-3 rounded-lg font-semibold">
-          <i class="fas fa-lock text-xs mr-2"></i>Proceed to Checkout
-        </button>
-      </a>
-      <p class="text-xs text-center text-gray-400 mt-3">Secure checkout · Free returns</p>
     </div>
   </div>
+</div>
+
+<!-- MAIN -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+  <!-- Toolbar -->
+  <div id="toolbar" class="flex flex-wrap items-center justify-between gap-3 mb-6">
+    <div class="flex items-center gap-2 flex-wrap">
+      <span class="text-xs font-semibold text-gray-400 dark:text-zinc-600 uppercase tracking-widest">Sort</span>
+      <button class="sort-pill active" data-sort="default">Recently Added</button>
+      <button class="sort-pill" data-sort="price-asc">Price ↑</button>
+      <button class="sort-pill" data-sort="price-desc">Price ↓</button>
+      <button class="sort-pill" data-sort="name">Name A–Z</button>
+    </div>
+    <div class="flex items-center gap-2">
+      <button class="action-pill" id="share-btn"><i class="fas fa-share-nodes text-xs"></i> Share</button>
+      <button class="action-pill danger" id="clear-btn"><i class="fas fa-trash-alt text-xs"></i> Clear All</button>
+    </div>
+  </div>
+
+  <!-- Wish list -->
+  <div id="wish-list" class="flex flex-col gap-4"></div>
+
+  <!-- Empty state -->
+  <div id="empty-state" class="text-center py-24">
+    <div class="text-6xl mb-5">🤍</div>
+    <h2 class="text-2xl font-bold mb-3 dark:text-white">Your wishlist is empty</h2>
+    <p class="text-gray-500 dark:text-zinc-500 mb-8 max-w-xs mx-auto text-sm">Browse the store and tap the heart to save items you love.</p>
+    <a href="product.html" class="inline-block bg-black dark:bg-white text-white dark:text-black px-8 py-3 rounded-full font-semibold hover:opacity-80 transition text-sm">Browse Sneakers →</a>
+  </div>
+
 </section>
 
-<div id="toast"><i class="fas fa-check-circle" style="color:#22c55e;"></i><span></span></div>
+<!-- Footer -->
+<footer class="bg-black text-white py-12 mt-10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div>
+        <h3 class="text-lg font-bold mb-4">HEAT HAVEN</h3>
+        <p class="text-zinc-500 text-sm">Premium sneakers, exceptional service.</p>
+        <div class="flex space-x-3 mt-4">
+          <a href="https://www.instagram.com/heatheaven.23_/" target="_blank"><i class="fab fa-instagram text-xl text-red-500"></i></a>
+          <a href="https://web.whatsapp.com/" target="_blank"><i class="fab fa-whatsapp text-xl text-red-500"></i></a>
+        </div>
+      </div>
+      <div>
+        <h3 class="text-lg font-bold mb-4">Shop</h3>
+        <ul class="space-y-2">
+          <li><a href="product.html"  class="text-zinc-500 hover:text-white text-sm transition-colors">All Products</a></li>
+          <li><a href="deals.html"    class="text-zinc-500 hover:text-white text-sm transition-colors">Hot Deals</a></li>
+          <li><a href="wishlist.html" class="text-zinc-500 hover:text-white text-sm transition-colors">My Wishlist</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="text-lg font-bold mb-4">Customer Service</h3>
+        <ul class="space-y-2">
+          <li><a href="#" class="text-zinc-500 hover:text-white text-sm transition-colors">Contact Us</a></li>
+          <li><a href="#" class="text-zinc-500 hover:text-white text-sm transition-colors">FAQs</a></li>
+          <li><a href="#" class="text-zinc-500 hover:text-white text-sm transition-colors">Shipping & Returns</a></li>
+          <li><a href="#" class="text-zinc-500 hover:text-white text-sm transition-colors">Size Guide</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="text-lg font-bold mb-4">Newsletter</h3>
+        <p class="text-zinc-500 text-sm mb-3">Subscribe for drops and exclusive deals.</p>
+        <form class="flex">
+          <input type="email" placeholder="Your email" class="px-4 py-2 rounded-l focus:outline-none text-gray-800 w-full text-sm"/>
+          <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-r hover:bg-red-600"><i class="fas fa-arrow-right"></i></button>
+        </form>
+      </div>
+    </div>
+    <div class="border-t border-zinc-900 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+      <p class="text-zinc-700 text-sm mb-4 md:mb-0">&copy; 2025 Heat Haven. All rights reserved.</p>
+      <div class="flex space-x-4">
+        <i class="fab fa-cc-visa text-lg text-zinc-700"></i>
+        <i class="fab fa-cc-mastercard text-lg text-zinc-700"></i>
+        <i class="fab fa-cc-amex text-lg text-zinc-700"></i>
+        <i class="fab fa-cc-paypal text-lg text-zinc-700"></i>
+      </div>
+    </div>
+  </div>
+</footer>
 
-<!-- AI Chat Widget -->
+<!-- Toast -->
+<div id="toast"><i class="fas fa-check-circle" style="color:#22c55e"></i><span></span></div>
+
+<!-- AI Chat -->
 <div id="hh-chat-widget">
   <div id="hh-chat-panel">
     <div id="hh-chat-header">
       <div class="hh-avatar">HH</div>
-      <div class="hh-header-info">
+      <div>
         <div class="hh-header-name">Heat Haven Support</div>
         <div class="hh-header-status"><span class="hh-status-dot"></span> Online · AI Assistant</div>
       </div>
-      <button onclick="document.getElementById('hh-chat-widget').classList.remove('open')" style="background:none;border:none;color:#666;cursor:pointer;font-size:18px;padding:4px;"><i class="fas fa-chevron-down"></i></button>
+      <button onclick="document.getElementById('hh-chat-widget').classList.remove('open')" style="background:none;border:none;color:#666;cursor:pointer;font-size:18px;padding:4px;margin-left:auto;"><i class="fas fa-chevron-down"></i></button>
     </div>
     <div id="hh-messages"></div>
     <div class="hh-chips" id="hh-chips"></div>
     <div id="hh-input-area">
-      <input id="hh-input" type="text" placeholder="Ask anything about sneakers..." autocomplete="off" />
+      <input id="hh-input" type="text" placeholder="Ask anything about sneakers…" autocomplete="off"/>
       <button id="hh-send">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
         </svg>
       </button>
     </div>
-    <div class="hh-powered">Powered by Heat Haven AI</div>
+    <div class="hh-powered">Powered by Heat Haven AI ✦</div>
   </div>
   <button id="hh-chat-toggle" aria-label="Open chat">
     <span class="notif-dot" id="hh-notif-dot"></span>
@@ -484,900 +475,295 @@
 </div>
 
 <script>
-// ── DARK MODE ──────────────────────────────────────────────────
+// ── DARK MODE ──────────────────────────────────────────────────────────────
 if (localStorage.getItem("theme") === "dark") document.documentElement.classList.add("dark");
 document.getElementById("theme-toggle").addEventListener("click", () => {
-  const isDark = document.documentElement.classList.toggle("dark");
-  localStorage.setItem("theme", isDark ? "dark" : "light");
+  const d = document.documentElement.classList.toggle("dark");
+  localStorage.setItem("theme", d ? "dark" : "light");
 });
 
-// ── CURSOR GLOW ────────────────────────────────────────────────
-const glow = document.getElementById("cursor-glow");
-document.addEventListener("mousemove", e => {
-  glow.style.left = e.clientX + "px";
-  glow.style.top  = e.clientY + "px";
-});
-
-// ── MOBILE MENU ────────────────────────────────────────────────
+// ── MOBILE MENU ────────────────────────────────────────────────────────────
 document.getElementById("mobile-menu-button").addEventListener("click", () => document.getElementById("mobile-menu").classList.add("open"));
 document.getElementById("close-menu").addEventListener("click", () => document.getElementById("mobile-menu").classList.remove("open"));
 
-// ── ACTIVE NAV LINK ───────────────────────────────────────────
-const currentPage = location.pathname.split("/").pop() || "index.html";
-document.querySelectorAll(".nav-link").forEach(link => {
-  if (link.getAttribute("href") === currentPage) {
-    link.classList.add("font-semibold");
-    link.style.color = "#ff4500";
-  }
-});
-
-// ── WISHLIST BUTTONS ──────────────────────────────────────────
-document.getElementById("nav-wishlist-btn").addEventListener("click", () => showToast("Wishlist coming soon! 💛", false));
-document.getElementById("nav-wishlist-btn-mobile")?.addEventListener("click", () => {
-  document.getElementById("mobile-menu").classList.remove("open");
-  showToast("Wishlist coming soon! 💛", false);
-});
-
-// ── TOAST ──────────────────────────────────────────────────────
-function showToast(msg, isError) {
+// ── HELPERS ────────────────────────────────────────────────────────────────
+function escH(s) { return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function showToast(msg, err) {
   const t = document.getElementById("toast");
-  t.querySelector("i").className = isError ? "fas fa-exclamation-circle" : "fas fa-check-circle";
-  t.querySelector("i").style.color = isError ? "#facc15" : "#22c55e";
+  t.querySelector("i").className = err ? "fas fa-exclamation-circle" : "fas fa-check-circle";
+  t.querySelector("i").style.color = err ? "#facc15" : "#22c55e";
   t.querySelector("span").textContent = msg;
   t.classList.add("show");
   clearTimeout(showToast._t);
   showToast._t = setTimeout(() => t.classList.remove("show"), 2400);
 }
 
-function escH(s) { return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
-
-// ── CART ───────────────────────────────────────────────────────
+// ── STORAGE ────────────────────────────────────────────────────────────────
+// Wishlist schema: { id, name, colorway, brand, price, img, size? }
+function getWishlist() { try { return JSON.parse(localStorage.getItem("hh_wishlist") || "[]"); } catch(e) { return []; } }
+function saveWishlist(w) { localStorage.setItem("hh_wishlist", JSON.stringify(w)); }
 function getCart() { try { return JSON.parse(localStorage.getItem("hh_cart") || "[]"); } catch(e) { return []; } }
 function saveCart(c) { localStorage.setItem("hh_cart", JSON.stringify(c)); }
 
-function renderCart() {
-  const cart = getCart();
-  const col  = document.getElementById("cart-items-column");
-  const emp  = document.getElementById("empty-cart");
-  col.innerHTML = "";
-  if (!cart.length) {
-    emp.style.display = "block";
-    document.getElementById("order-summary-card").style.display = "none";
-    updateSummary(); return;
+function updateBadges() {
+  const ct = getCart().reduce((s, i) => s + i.qty, 0);
+  document.querySelectorAll("#cart-count,#cart-count-mobile").forEach(el => el.textContent = ct);
+  const wl = getWishlist().length;
+  const nb = document.getElementById("wish-nav-badge");
+  if (nb) { nb.textContent = wl; nb.style.display = wl > 0 ? "flex" : "none"; }
+}
+
+// ── SEED: demo items so page isn't blank out of the box ────────────────────
+// Only seeds if wishlist is completely empty (first visit)
+function maybeSeed() {
+  if (localStorage.getItem("hh_wishlist") !== null) return; // user already has data
+  const seed = [
+    { id:"aj1-chicago-wish", name:"Air Jordan 1 Retro High", colorway:"Chicago Bulls", brand:"Jordan", price:5559, img:"images/aj 1 chichgo.png" },
+    { id:"travis-frag-wish",  name:"Travis Scott × Fragment High", colorway:"Fragment", brand:"Jordan", price:5250, img:"images/travis x fragment high.png" },
+    { id:"puma-melns-wish",   name:"Puma Melns La France", colorway:"La France", brand:"Puma", price:5559, img:"images/puma melons lafrance.png" },
+  ];
+  saveWishlist(seed);
+}
+maybeSeed();
+
+// ── SORT ───────────────────────────────────────────────────────────────────
+let currentSort = "default";
+function sorted() {
+  const list = [...getWishlist()];
+  if (currentSort === "price-asc")  list.sort((a,b) => a.price - b.price);
+  if (currentSort === "price-desc") list.sort((a,b) => b.price - a.price);
+  if (currentSort === "name")       list.sort((a,b) => a.name.localeCompare(b.name));
+  return list;
+}
+
+// ── RENDER ─────────────────────────────────────────────────────────────────
+function render() {
+  const list     = sorted();
+  const wishList = document.getElementById("wish-list");
+  const empty    = document.getElementById("empty-state");
+  const toolbar  = document.getElementById("toolbar");
+
+  // update counts
+  document.getElementById("wish-count-label").textContent = list.length;
+  updateBadges();
+
+  wishList.innerHTML = "";
+
+  if (!list.length) {
+    empty.style.display = "block";
+    toolbar.style.display = "none";
+    return;
   }
-  emp.style.display = "none";
-  document.getElementById("order-summary-card").style.display = "";
-  cart.forEach((item, idx) => {
-    const d = document.createElement("div");
-    d.className = "spring-card rounded-xl p-5 flex items-center justify-between gap-4 cart-item";
-    d.dataset.brand = item.brand; d.dataset.price = item.price; d.dataset.idx = idx;
-    d.style.animationDelay = (idx * 70) + "ms";
-    d.innerHTML = `
-      <div class="flex items-center gap-4 flex-1 min-w-0">
-        <img src="${escH(item.img||'')}" alt="${escH(item.name)}" class="w-20 h-20 object-contain rounded-lg bg-gray-50 dark:bg-zinc-900 flex-shrink-0" onerror="this.src='https://via.placeholder.com/80x80/f3f4f6/111111?text=shoe'">
-        <div class="min-w-0">
-          <h3 class="font-semibold text-base truncate dark:text-white">${escH(item.name)}</h3>
-          <p class="text-sm text-gray-500 dark:text-gray-400">${escH(item.colorway)}</p>
-          <p class="text-xs text-gray-400 dark:text-gray-600 mt-0.5">Size: ${escH(item.size)}</p>
-          <p class="font-semibold mt-1 dark:text-white">Rs.${item.price.toLocaleString("en-IN")}</p>
+  empty.style.display = "none";
+  toolbar.style.display = "";
+
+  list.forEach((item, idx) => {
+    const isShoe = !item.size || item.size === "One Size";
+    const sizeHtml = isShoe
+      ? `<select class="size-select" aria-label="Choose size">
+           <option value="" disabled selected>Choose size</option>
+           <option>UK 6</option><option>UK 7</option><option>UK 8</option>
+           <option>UK 9</option><option>UK 10</option><option>UK 11</option><option>UK 12</option>
+         </select>`
+      : `<span class="text-xs text-gray-400 dark:text-zinc-600">One Size</span>`;
+
+    const row = document.createElement("div");
+    row.className = "wish-row";
+    row.dataset.id = item.id;
+    row.style.animationDelay = (idx * 60) + "ms";
+
+    row.innerHTML = `
+      <div class="flex items-center gap-4 p-4 sm:p-5">
+        <!-- Image -->
+        <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden bg-gray-50 dark:bg-zinc-950 flex-shrink-0">
+          <img src="${escH(item.img || '')}" alt="${escH(item.name)}"
+               class="w-full h-full object-contain p-2 transition-transform duration-500 hover:scale-110"
+               onerror="this.src='https://via.placeholder.com/112x112/f9fafb/111111?text=👟'">
         </div>
-      </div>
-      <div class="flex items-center gap-3 flex-shrink-0">
-        <div class="flex border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden">
-          <button class="qty-minus px-3 py-1 hover:bg-gray-100 dark:hover:bg-gray-800 dark:text-white text-base font-medium transition-colors">-</button>
-          <span class="qty-value px-4 py-1 border-x border-gray-300 dark:border-gray-600 dark:bg-black dark:text-white text-center min-w-[2.5rem]">${item.qty}</span>
-          <button class="qty-plus px-3 py-1 hover:bg-gray-100 dark:hover:bg-gray-800 dark:text-white text-base font-medium transition-colors">+</button>
-        </div>
-        <button class="remove-item text-gray-400 hover:text-red-500 text-xl leading-none transition-colors" title="Remove">×</button>
-      </div>`;
-    col.appendChild(d);
-  });
-
-  // ── Scroll reveal for cart items ─────────────────────────────
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add("visible"); });
-  }, { threshold: 0.08 });
-  document.querySelectorAll(".cart-item").forEach(el => {
-    el.classList.add("reveal");
-    io.observe(el);
-  });
-
-  updateSummary(); updateCartBadge(); attachListeners();
-}
-
-function attachListeners() {
-  document.querySelectorAll(".cart-item").forEach(card => {
-    const idx = parseInt(card.dataset.idx);
-    card.querySelector(".qty-plus").addEventListener("click", () => { const c=getCart(); if(c[idx]){c[idx].qty++;saveCart(c);renderCart();} });
-    card.querySelector(".qty-minus").addEventListener("click", () => { const c=getCart(); if(c[idx]){c[idx].qty--;if(c[idx].qty<=0)c.splice(idx,1);saveCart(c);renderCart();} });
-    card.querySelector(".remove-item").addEventListener("click", () => {
-      const c=getCart(); const n=c[idx]?c[idx].name:"Item";
-      // animate out
-      card.style.transition="opacity 0.25s ease,transform 0.25s ease";
-      card.style.opacity="0"; card.style.transform="translateX(20px) scale(0.97)";
-      setTimeout(()=>{ c.splice(idx,1); saveCart(c); renderCart(); showToast(n+" removed",false); },220);
-    });
-  });
-}
-
-function updateSummary() {
-  const TAX_RATE = 0.10;
-  const items = [...document.querySelectorAll(".cart-item")].filter(c=>c.style.display!=="none");
-  let subtotal = 0, count = 0;
-  items.forEach(c => {
-    const q = parseInt(c.querySelector(".qty-value")?.textContent) || 1;
-    subtotal += (parseFloat(c.dataset.price) || 0) * q;
-    count += q;
-  });
-  const shipping = subtotal >= 50000 ? 0 : 1000;
-  const tax      = subtotal * TAX_RATE;
-  const total    = subtotal + shipping + tax;
-  const fmt = v => "Rs." + v.toLocaleString("en-IN", { minimumFractionDigits: 2 });
-  document.getElementById("summary-subtotal").textContent = fmt(subtotal);
-  document.getElementById("summary-count").textContent    = count;
-  document.getElementById("summary-tax").textContent      = fmt(tax);
-  document.getElementById("summary-total").textContent    = fmt(total);
-  const s = document.getElementById("summary-shipping");
-  s.textContent = subtotal >= 50000 ? "Free" : fmt(1000);
-  s.className   = subtotal >= 50000 ? "text-green-500 font-medium" : "text-gray-700 dark:text-gray-300 font-medium";
-}
-
-function updateCartBadge() {
-  const t = getCart().reduce((s,i)=>s+i.qty,0);
-  document.querySelectorAll("#cart-count,#cart-count-mobile").forEach(el=>el.textContent=t);
-}
-
-// ── FILTER ─────────────────────────────────────────────────────
-const filterBtn=document.getElementById("filterBtn"), filterPanel=document.getElementById("filterPanel"), filterOverlay=document.getElementById("filterOverlay");
-function openFilter(){ const r=filterBtn.getBoundingClientRect(); filterPanel.style.top=(r.bottom+8+window.scrollY)+"px"; filterPanel.style.right=(window.innerWidth-r.right)+"px"; filterPanel.classList.add("open"); filterOverlay.classList.remove("hidden"); }
-function closeFilter(){ filterPanel.classList.remove("open"); filterOverlay.classList.add("hidden"); }
-window.closeFilter=closeFilter;
-filterBtn.addEventListener("click",e=>{e.stopPropagation();filterPanel.classList.contains("open")?closeFilter():openFilter();});
-function fpUpdate(){ const MIN=1000,MAX=700000; let lo=parseInt(document.getElementById("fpMin").value),hi=parseInt(document.getElementById("fpMax").value); if(lo>=hi){lo=hi-500;document.getElementById("fpMin").value=lo;} const lP=((lo-MIN)/(MAX-MIN))*100,rP=100-((hi-MIN)/(MAX-MIN))*100; document.getElementById("fpFill").style.left=lP+"%"; document.getElementById("fpFill").style.right=rP+"%"; document.getElementById("fpPriceDisplay").textContent="Rs."+lo.toLocaleString("en-IN")+" - Rs."+hi.toLocaleString("en-IN"); }
-function fpApply(){ const b=document.getElementById("fpBrand").value,lo=parseInt(document.getElementById("fpMin").value),hi=parseInt(document.getElementById("fpMax").value); let any=false; document.querySelectorAll(".cart-item").forEach(i=>{const p=parseInt(i.dataset.price)||0,s=(b==="all"||i.dataset.brand===b)&&p>=lo&&p<=hi;i.style.display=s?"":"none";if(s)any=true;}); document.getElementById("empty-filter-msg").classList.toggle("hidden",any); updateSummary();closeFilter();showToast("Filters applied!",false); }
-function fpReset(){ document.getElementById("fpBrand").value="all";document.getElementById("fpMin").value=1000;document.getElementById("fpMax").value=700000;fpUpdate();document.querySelectorAll(".cart-item").forEach(i=>i.style.display="");document.getElementById("empty-filter-msg").classList.add("hidden");updateSummary();closeFilter(); }
-window.fpUpdate=fpUpdate;window.fpApply=fpApply;window.fpReset=fpReset;
-fpUpdate();
-
-// ── SEARCH ─────────────────────────────────────────────────────
-const PRODUCTS=[
-  {name:"Air Jordan 1 Retro High",colorway:"Chicago Bulls",brand:"jordan",price:5559,img:"images/aj 1 chichgo.png"},
-  {name:"Nike Uptempo Slide",colorway:"Chicago Bulls",brand:"slides",price:5559,img:"images/uptempo slide bulls.png"},
-  {name:"Nike SB Dunk Low",colorway:"Golf",brand:"nike",price:5559,img:"images/sb gulf.png"},
-  {name:"Adidas Campus",colorway:"Clear Sky Gum",brand:"adidas",price:5559,img:"images/adidas campus clear sky gum.png"},
-  {name:"Air Force 1 Low",colorway:"Lakers Home",brand:"nike",price:5559,img:"images/af1 kobe yellow.png"},
-  {name:"Yeezy Boost 350 V2",colorway:"Zebra",brand:"yeezy",price:5559,img:"images/yeezy zebra.png"},
-  {name:"Yeezy 700 V3",colorway:"Azael",brand:"yeezy",price:5559,img:"images/yzy 700 v3 azael.png"},
-  {name:"Rick Owens Hollywood High",colorway:"Black Milk",brand:"rick owens",price:5559,img:"images/rick owens hollywood high black milk.png"},
-  {name:"Puma Melns",colorway:"La France",brand:"puma",price:5559,img:"images/puma melons lafrance.png"},
-  {name:"Travis x Fragment High",colorway:"Fragment",brand:"jordan",price:5559,img:"images/travis x fragment high.png"},
-  {name:"New Balance 990v5",colorway:"Grey",brand:"newbalance",price:5559,img:"images/nb 990v5.png"},
-  {name:"Air Jordan 4 Retro",colorway:"Breds",brand:"jordan",price:5559,img:"images/aj4 bred.png"},
-  {name:"Salehe Bembury x Crocs",colorway:"Horchata",brand:"crocs",price:5559,img:"images/crocs horchata.png"},
-];
-const so=document.getElementById("search-overlay"),si=document.getElementById("search-input"),sc=document.getElementById("search-clear"),sr=document.getElementById("search-results");
-function openSearch(){so.classList.add("open");setTimeout(()=>si.focus(),50);}
-function closeSearch(){so.classList.remove("open");si.value="";sc.classList.remove("visible");sr.innerHTML="";}
-window.openSearch=openSearch;
-so.addEventListener("click",e=>{if(e.target===so)closeSearch();});
-document.addEventListener("keydown",e=>{if(e.key==="Escape")closeSearch();if((e.metaKey||e.ctrlKey)&&e.key==="k"){e.preventDefault();openSearch();}});
-sc.addEventListener("click",()=>{si.value="";sc.classList.remove("visible");sr.innerHTML="";si.focus();});
-function hl(t,q){if(!q)return escH(t);return escH(t).replace(new RegExp("("+q.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+")","gi"),'<span class="sri-highlight">$1</span>');}
-function runSearch(q){
-  sc.classList.toggle("visible",q.length>0);
-  if(!q.trim()){sr.innerHTML="";return;}
-  const hits=PRODUCTS.filter(p=>p.name.toLowerCase().includes(q.toLowerCase())||p.colorway.toLowerCase().includes(q.toLowerCase())||p.brand.toLowerCase().includes(q.toLowerCase()));
-  if(!hits.length){sr.innerHTML=`<div id="search-empty">No sneakers found for "${escH(q)}"</div>`;return;}
-  sr.innerHTML=hits.map((p,i)=>`<div class="sri" data-idx="${i}" style="animation-delay:${i*35}ms" tabindex="0"><img class="sri-img" src="${escH(p.img)}" alt="${escH(p.name)}" onerror="this.src='https://via.placeholder.com/52x52'"><div style="flex:1;min-width:0;"><div class="sri-name">${hl(p.name,q)}</div><div class="sri-sub">${hl(p.colorway,q)} - ${hl(p.brand.toUpperCase(),q)}</div></div><div class="sri-price">Rs.${p.price.toLocaleString("en-IN")}</div></div>`).join("");
-  sr.querySelectorAll(".sri").forEach((row,i)=>{row.addEventListener("click",()=>{closeSearch();showToast(hits[i].name+" - visit store to add!",false);});row.addEventListener("keydown",e=>{if(e.key==="Enter")row.click();});});
-}
-let dbt;
-si.addEventListener("input",()=>{clearTimeout(dbt);dbt=setTimeout(()=>runSearch(si.value),140);});
-
-// ── AI CHAT ────────────────────────────────────────────────────
-const SP=`You are a friendly sneaker assistant for Heat Haven, a premium sneaker store in India. STORE: Heat Haven | Instagram: @heatheaven.23_ | Currency: Rs. | Sizes: UK 6-12. PRODUCTS: Air Jordan 1 Chicago Rs.5,559 | Travis Scott x Fragment Rs.5,559 | Crocs Horchata Rs.5,559 | AF1 Lakers Rs.5,559 | Yeezy 350 Zebra Rs.5,559 | AJ4 Breds Rs.5,559. POLICIES: Free shipping above Rs.5,000. Standard Rs.99. Returns: 7 days unworn. Payment: UPI/Card/COD. SIZE: Jordans/Nike half size up | Yeezys size up | NB true to size. Keep replies 2-3 sentences, casual, sneaker-culture savvy.`;
-const QC=["What's on sale?","Size guide","Shipping info","Best Jordans","Yeezy sizing","Returns"];
-const cw=document.getElementById("hh-chat-widget"),ct=document.getElementById("hh-chat-toggle"),me=document.getElementById("hh-messages"),ie=document.getElementById("hh-input"),sb=document.getElementById("hh-send"),ce=document.getElementById("hh-chips"),nd=document.getElementById("hh-notif-dot");
-let ch=[],iT=false,hO=false;
-ct.addEventListener("click",()=>{cw.classList.toggle("open");if(!hO){hO=true;nd.style.display="none";setTimeout(()=>{aBot("Hey! Welcome to Heat Haven. I'm your sneaker assistant.");setTimeout(()=>{aBot("Ask me about sizing, shipping, or anything kicks!");showC();},900);},300);}});
-function showC(c=QC){ce.innerHTML="";c.forEach(t=>{const b=document.createElement("button");b.className="hh-chip";b.textContent=t;b.onclick=()=>{ce.innerHTML="";sM(t);};ce.appendChild(b);});}
-function aBot(h){const d=document.createElement("div");d.className="hh-msg bot";d.innerHTML=`<div class="hh-bot-avatar">HH</div><div class="hh-bubble">${h}</div>`;me.appendChild(d);me.scrollTop=me.scrollHeight;}
-function aUser(t){const d=document.createElement("div");d.className="hh-msg user";d.innerHTML=`<div class="hh-bubble">${escH(t)}</div>`;me.appendChild(d);me.scrollTop=me.scrollHeight;}
-function shT(){const d=document.createElement("div");d.className="hh-msg bot";d.id="hh-ti";d.innerHTML=`<div class="hh-bot-avatar">HH</div><div class="hh-bubble" style="padding:10px 16px"><div class="hh-typing"><span></span><span></span><span></span></div></div>`;me.appendChild(d);me.scrollTop=me.scrollHeight;}
-function hiT(){const e=document.getElementById("hh-ti");if(e)e.remove();}
-async function sM(t){t=t.trim();if(!t||iT)return;ce.innerHTML="";aUser(t);ie.value="";iT=true;sb.style.opacity="0.5";ch.push({role:"user",content:t});shT();
-try{const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:SP,messages:ch})});const d=await r.json();const rp=d.content?.[0]?.text||"Sorry, try again!";ch.push({role:"assistant",content:rp});hiT();aBot(rp.replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>").replace(/\n/g,"<br>"));showC(["Tell me more","What's on sale?","Shipping","Contact support"]);}
-catch(e){hiT();aBot("Connectivity issue! DM us on Instagram @heatheaven.23_");}
-iT=false;sb.style.opacity="1";}
-sb.addEventListener("click",()=>sM(ie.value));
-ie.addEventListener("keydown",e=>{if(e.key==="Enter")sM(ie.value);});
-setTimeout(()=>{if(!hO)nd.style.display="block";},3000);
-
-renderCart();
-</script>
-</body>
-=======
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Heat Haven - Shopping Cart</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: { extend: { colors: { amoled:'#000000', cardDark:'#0a0a0a', hoverDark:'#111111' } } }
-    }
-  </script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    body  { font-family:"Poppins",sans-serif; overflow-x:hidden; }
-    html  { scrollbar-gutter:stable; }
-    h1,h2,h3,h4,.brand { font-family:"Archivo Black",sans-serif; letter-spacing:-0.5px; }
-
-    /* ── MOBILE MENU ── */
-    .mobile-menu { transform:translateX(100%); transition:transform 0.3s ease-in-out; }
-    .mobile-menu.open { transform:translateX(0); }
-
-    /* ── NAV DROP ── (from index) */
-    @keyframes nav-drop { from{transform:translateY(-100%);opacity:0;} to{transform:translateY(0);opacity:1;} }
-    nav { animation:nav-drop 0.6s cubic-bezier(0.16,1,0.3,1) both; }
-
-    /* ── BRAND SHIMMER ── (from index) */
-    @keyframes brand-shimmer { 0%{background-position:-200% center;} 100%{background-position:200% center;} }
-    .brand a {
-      background:linear-gradient(90deg, currentColor 40%, #ff4500 50%, currentColor 60%);
-      background-size:200% auto;
-      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-      background-clip:text;
-      animation:brand-shimmer 3.5s ease 0.5s 1 forwards;
-    }
-
-    /* ── NAV LINK UNDERLINE ── (from index) */
-    .nav-link { position:relative; }
-    .nav-link::after {
-      content:''; position:absolute; bottom:-2px; left:0;
-      width:0; height:2px; background:#ff4500; border-radius:2px;
-      transition:width 0.3s cubic-bezier(0.4,0,0.2,1);
-    }
-    .nav-link:hover::after { width:100%; }
-
-    /* ── CURSOR GLOW ── (from index) */
-    #cursor-glow {
-      position:fixed; width:320px; height:320px; border-radius:50%;
-      background:radial-gradient(circle, rgba(255,69,0,0.07) 0%, transparent 70%);
-      pointer-events:none; z-index:0; transform:translate(-50%,-50%);
-      transition:opacity 0.4s ease; opacity:0;
-    }
-    body:hover #cursor-glow { opacity:1; }
-
-    /* ── THEME TOGGLE ── (from index) */
-    #theme-toggle .sun-icon,
-    #theme-toggle .moon-icon { position:absolute; width:1.4rem; height:1.4rem; transition:transform 0.4s ease,opacity 0.4s ease; }
-    #theme-toggle .sun-icon  { opacity:1; transform:rotate(0deg) scale(1); }
-    #theme-toggle .moon-icon { opacity:0; transform:rotate(90deg) scale(0.4); }
-    .dark #theme-toggle .sun-icon  { opacity:0; transform:rotate(-90deg) scale(0.4); }
-    .dark #theme-toggle .moon-icon { opacity:1; transform:rotate(0deg) scale(1); }
-
-    /* ── SCROLL REVEAL ── (from index) */
-    .reveal {
-      opacity:0; transform:translateY(32px);
-      transition:opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
-    }
-    .reveal.visible { opacity:1; transform:translateY(0); }
-
-    /* ── CART ITEM CARDS ── (spring + reveal + shine sweep) */
-    .spring-card {
-      border:1px solid #e5e7eb;
-      transition:transform 0.25s cubic-bezier(0.175,0.885,0.32,1.275), box-shadow 0.25s ease, border-color 0.25s ease;
-      box-shadow:0 2px 10px rgba(0,0,0,0.06); background:#fff;
-      position:relative; overflow:hidden;
-    }
-    .spring-card::after {
-      content:''; position:absolute; inset:0;
-      background:linear-gradient(115deg, transparent 40%, rgba(255,255,255,0.18) 50%, transparent 60%);
-      transform:translateX(-100%); transition:transform 0.5s ease;
-      pointer-events:none; z-index:5;
-    }
-    .spring-card:hover::after { transform:translateX(100%); }
-    .spring-card:hover { transform:translateY(-4px) scale(1.01); box-shadow:0 14px 30px rgba(0,0,0,0.12); border-color:#111827; }
-    .dark .spring-card { background:#0f0f0f; border-color:#1f1f1f; }
-    .dark .spring-card:hover { border-color:#444; box-shadow:0 14px 30px rgba(0,0,0,0.5); }
-    .dark .spring-card:hover::after { background:linear-gradient(115deg, transparent 40%, rgba(255,255,255,0.06) 50%, transparent 60%); }
-
-    /* ── CHECKOUT BUTTON ── */
-    .checkout-spring {
-      transition:transform 0.22s cubic-bezier(0.175,0.885,0.32,1.275), box-shadow 0.22s ease;
-      box-shadow:0 8px 18px rgba(0,0,0,0.25);
-    }
-    .checkout-spring:hover  { transform:translateY(-3px) scale(1.02); box-shadow:0 14px 28px rgba(0,0,0,0.35); }
-    .checkout-spring:active { transform:translateY(0) scale(0.98); }
-
-    /* ── TOAST ── */
-    #toast { position:fixed; bottom:80px; left:50%; transform:translateX(-50%) translateY(20px); background:#111; color:#fff; padding:10px 22px; border-radius:999px; font-size:13px; z-index:9999; opacity:0; transition:opacity 0.3s,transform 0.3s; pointer-events:none; display:flex; align-items:center; gap:8px; }
-    #toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
-
-    /* ── SEARCH PILL ── */
-    #search-pill { display:flex; align-items:center; gap:8px; background:#f3f4f6; border:1px solid #e5e7eb; border-radius:999px; padding:6px 14px 6px 7px; cursor:pointer; min-width:190px; transition:background 0.2s,box-shadow 0.2s; }
-    #search-pill:hover { background:#ebebeb; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
-    .dark #search-pill { background:#1a1a1a; border-color:#2e2e2e; }
-    .dark #search-pill:hover { background:#222; }
-    .pill-icon { width:28px; height:28px; border-radius:50%; background:linear-gradient(135deg,#0d9488,#14b8a6); display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:transform 0.2s; }
-    #search-pill:hover .pill-icon { transform:rotate(-10deg) scale(1.1); }
-    .pill-icon svg { width:13px; height:13px; }
-    .pill-text { font-size:13px; color:#9ca3af; font-family:"Poppins",sans-serif; flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .dark .pill-text { color:#6b7280; }
-    .pill-emoji { font-size:14px; flex-shrink:0; }
-
-    /* ── SEARCH OVERLAY ── */
-    #search-overlay { position:fixed; inset:0; z-index:99999; background:rgba(0,0,0,0.55); backdrop-filter:blur(6px); display:flex; flex-direction:column; align-items:center; padding-top:80px; opacity:0; pointer-events:none; transition:opacity 0.22s ease; }
-    #search-overlay.open { opacity:1; pointer-events:all; }
-    #search-box { width:100%; max-width:600px; margin:0 16px; background:#fff; border-radius:20px; box-shadow:0 24px 64px rgba(0,0,0,0.25); overflow:hidden; transform:translateY(-16px) scale(0.97); transition:transform 0.25s cubic-bezier(0.34,1.56,0.64,1); }
-    #search-overlay.open #search-box { transform:translateY(0) scale(1); }
-    .dark #search-box { background:#111; }
-    #search-input-row { display:flex; align-items:center; gap:12px; padding:14px 18px; border-bottom:1px solid #f0f0f0; }
-    .dark #search-input-row { border-bottom-color:#222; }
-    .search-icon-circle { width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg,#0d9488,#14b8a6); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-    .search-icon-circle svg { width:14px; height:14px; }
-    #search-input { flex:1; border:none; outline:none; font-size:15px; font-family:"Poppins",sans-serif; background:transparent; color:#111; }
-    .dark #search-input { color:#f0f0f0; }
-    #search-input::placeholder { color:#bbb; }
-    .dark #search-input::placeholder { color:#555; }
-    #search-clear { background:none; border:none; cursor:pointer; color:#aaa; font-size:18px; padding:0 4px; display:none; line-height:1; }
-    #search-clear.visible { display:block; }
-    #search-clear:hover { color:#555; }
-    #search-results { max-height:360px; overflow-y:auto; }
-    #search-results::-webkit-scrollbar { width:4px; }
-    #search-results::-webkit-scrollbar-thumb { background:#e5e5e5; border-radius:2px; }
-    .sri { display:flex; align-items:center; gap:14px; padding:12px 18px; cursor:pointer; transition:background 0.15s; animation:sri-in 0.2s ease both; }
-    @keyframes sri-in { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
-    .sri:hover { background:#f9fafb; }
-    .dark .sri:hover { background:#1a1a1a; }
-    .sri-img { width:52px; height:52px; object-fit:contain; border-radius:10px; background:#f3f4f6; flex-shrink:0; }
-    .dark .sri-img { background:#1f1f1f; }
-    .sri-name { font-size:14px; font-weight:600; color:#111; }
-    .dark .sri-name { color:#f0f0f0; }
-    .sri-sub  { font-size:12px; color:#6b7280; margin-top:2px; }
-    .sri-price { font-size:13px; font-weight:700; color:#ef4444; margin-left:auto; white-space:nowrap; }
-    .sri-highlight { background:#fef08a; border-radius:3px; padding:0 2px; }
-    .dark .sri-highlight { background:#713f12; }
-    #search-empty { padding:32px; text-align:center; color:#9ca3af; font-size:14px; }
-    #search-hint { padding:8px 18px 12px; font-size:11px; color:#bbb; text-align:center; }
-    .dark #search-hint { color:#444; }
-
-    /* ── FILTER PANEL ── */
-    #filterPanel { position:fixed; z-index:9990; width:300px; background:#fff; border-radius:16px; padding:24px; box-shadow:0 12px 48px rgba(0,0,0,0.16); opacity:0; pointer-events:none; transform:translateY(-12px) scale(0.97); transition:opacity 0.22s ease,transform 0.22s ease; }
-    #filterPanel.open { opacity:1; pointer-events:all; transform:translateY(0) scale(1); }
-    .dark #filterPanel { background:#111; }
-    .dark #filterPanel select { background:#1a1a1a; color:#eee; border-color:#333; }
-    .fp-slider { position:absolute; width:100%; height:4px; appearance:none; -webkit-appearance:none; background:transparent; pointer-events:none; outline:none; }
-    .fp-slider::-webkit-slider-thumb { -webkit-appearance:none; width:20px; height:20px; background:#ef4444; border:3px solid #fff; border-radius:50%; cursor:pointer; pointer-events:all; box-shadow:0 1px 6px rgba(0,0,0,0.2); transition:transform 0.15s; }
-    .fp-slider::-webkit-slider-thumb:hover { transform:scale(1.15); }
-    .fp-slider::-moz-range-thumb { width:20px; height:20px; background:#ef4444; border:3px solid #fff; border-radius:50%; cursor:pointer; pointer-events:all; }
-
-    /* ── CART ITEM ANIMATION ── */
-    .cart-item { animation:item-in 0.35s cubic-bezier(0.16,1,0.3,1) both; }
-    @keyframes item-in { from{opacity:0;transform:translateY(16px) scale(0.97)} to{opacity:1;transform:translateY(0) scale(1)} }
-
-    /* ── EMPTY CART ── */
-    #empty-cart { display:none; text-align:center; padding:80px 20px; }
-
-    /* ── PAGE HEADING REVEAL ── */
-    .page-heading {
-      opacity:0; transform:translateY(20px);
-      animation:heading-in 0.7s cubic-bezier(0.16,1,0.3,1) 0.1s both;
-    }
-    @keyframes heading-in { to{opacity:1;transform:translateY(0);} }
-
-    /* ── ORDER SUMMARY CARD SLIDE IN ── */
-    #order-summary-card {
-      opacity:0; transform:translateX(24px);
-      animation:summary-in 0.65s cubic-bezier(0.16,1,0.3,1) 0.2s both;
-    }
-    @keyframes summary-in { to{opacity:1;transform:translateX(0);} }
-
-    /* ── FOOTER SWEEP LINE ── (from index) */
-    footer { position:relative; overflow:hidden; }
-    footer::before {
-      content:''; position:absolute; top:0; left:-100%; width:60%; height:1px;
-      background:linear-gradient(90deg,transparent,#ff4500,transparent);
-      animation:footer-line 3s ease 1.5s infinite;
-    }
-    @keyframes footer-line { 0%{left:-60%} 100%{left:140%} }
-
-    /* ── AI CHAT WIDGET ── */
-    #hh-chat-widget { position:fixed; bottom:24px; left:24px; z-index:9999; font-family:"Poppins",sans-serif; }
-    #hh-chat-toggle { width:60px; height:60px; border-radius:50%; background:#000; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 8px 32px rgba(0,0,0,0.25); transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.3s ease; position:relative; }
-    .dark #hh-chat-toggle { background:#f0f0f0; }
-    .dark #hh-chat-toggle .icon-chat svg,.dark #hh-chat-toggle .icon-close svg { stroke:#000; }
-    #hh-chat-toggle:hover { transform:scale(1.1); }
-    #hh-chat-toggle .toggle-icon { position:absolute; transition:opacity 0.2s ease,transform 0.2s ease; }
-    #hh-chat-toggle .icon-chat  { opacity:1; transform:scale(1) rotate(0deg); }
-    #hh-chat-toggle .icon-close { opacity:0; transform:scale(0.5) rotate(-90deg); }
-    #hh-chat-widget.open #hh-chat-toggle .icon-chat  { opacity:0; transform:scale(0.5) rotate(90deg); }
-    #hh-chat-widget.open #hh-chat-toggle .icon-close { opacity:1; transform:scale(1) rotate(0deg); }
-    #hh-chat-toggle .notif-dot { position:absolute; top:2px; right:2px; width:14px; height:14px; background:#ef4444; border-radius:50%; border:2px solid white; display:none; animation:pulse-dot 2s infinite; }
-    @keyframes pulse-dot { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.3);opacity:0.7} }
-    #hh-chat-panel { position:absolute; bottom:76px; left:0; width:360px; height:520px; background:#fff; border-radius:20px; box-shadow:0 20px 60px rgba(0,0,0,0.18),0 0 0 1px rgba(0,0,0,0.06); display:flex; flex-direction:column; overflow:hidden; transform:scale(0.85) translateY(20px); transform-origin:bottom left; opacity:0; pointer-events:none; transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1),opacity 0.25s ease; }
-    #hh-chat-widget.open #hh-chat-panel { transform:scale(1) translateY(0); opacity:1; pointer-events:all; }
-    #hh-chat-header { background:#000; padding:16px 18px; display:flex; align-items:center; gap:12px; flex-shrink:0; }
-    .hh-avatar { width:40px; height:40px; background:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:"Archivo Black",sans-serif; font-size:13px; color:#000; flex-shrink:0; }
-    .hh-header-name   { color:#fff; font-weight:600; font-size:14px; line-height:1.2; }
-    .hh-header-status { color:#a3a3a3; font-size:11px; display:flex; align-items:center; gap:5px; margin-top:2px; }
-    .hh-status-dot    { width:7px; height:7px; background:#22c55e; border-radius:50%; animation:pulse-dot 2s infinite; }
-    #hh-messages { flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:10px; background:#fafafa; scroll-behavior:smooth; }
-    #hh-messages::-webkit-scrollbar { width:4px; }
-    #hh-messages::-webkit-scrollbar-thumb { background:#ddd; border-radius:2px; }
-    .hh-msg { display:flex; gap:8px; align-items:flex-end; animation:msg-in 0.3s ease; }
-    @keyframes msg-in { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
-    .hh-msg.bot  { justify-content:flex-start; }
-    .hh-msg.user { justify-content:flex-end; }
-    .hh-bot-avatar { width:28px; height:28px; background:#000; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; color:#fff; font-family:"Archivo Black",sans-serif; flex-shrink:0; margin-bottom:2px; }
-    .hh-bubble { max-width:78%; padding:10px 14px; border-radius:18px; font-size:13px; line-height:1.5; word-wrap:break-word; }
-    .hh-msg.bot  .hh-bubble { background:#fff; color:#111; border-radius:18px 18px 18px 4px; box-shadow:0 1px 4px rgba(0,0,0,0.08); }
-    .hh-msg.user .hh-bubble { background:#000; color:#fff; border-radius:18px 18px 4px 18px; }
-    .hh-chips { display:flex; flex-wrap:wrap; gap:6px; padding:0 16px 10px; background:#fafafa; }
-    .hh-chip  { padding:6px 14px; background:#fff; border:1.5px solid #e5e5e5; border-radius:999px; font-size:12px; cursor:pointer; color:#333; font-family:"Poppins",sans-serif; font-weight:500; transition:all 0.2s ease; white-space:nowrap; }
-    .hh-chip:hover { background:#000; color:#fff; border-color:#000; }
-    .hh-typing { display:flex; gap:4px; align-items:center; }
-    .hh-typing span { width:7px; height:7px; background:#bbb; border-radius:50%; animation:typing 1.2s infinite ease-in-out; }
-    .hh-typing span:nth-child(2) { animation-delay:0.2s; }
-    .hh-typing span:nth-child(3) { animation-delay:0.4s; }
-    @keyframes typing { 0%,60%,100%{transform:translateY(0);opacity:0.4} 30%{transform:translateY(-5px);opacity:1} }
-    #hh-input-area { padding:12px 14px; background:#fff; border-top:1px solid #f0f0f0; display:flex; align-items:center; gap:8px; flex-shrink:0; }
-    #hh-input { flex:1; border:1.5px solid #e5e5e5; border-radius:999px; padding:9px 16px; font-size:13px; font-family:"Poppins",sans-serif; outline:none; background:#fafafa; color:#111; transition:border-color 0.2s; }
-    #hh-input:focus { border-color:#000; background:#fff; }
-    #hh-input::placeholder { color:#bbb; }
-    #hh-send { width:38px; height:38px; background:#000; border:none; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:transform 0.2s ease; flex-shrink:0; }
-    #hh-send:hover { transform:scale(1.1); }
-    .hh-powered { text-align:center; padding:6px; font-size:10px; color:#ccc; background:#fff; flex-shrink:0; }
-    .dark #hh-chat-panel   { background:#0a0a0a; }
-    .dark #hh-messages     { background:#000; }
-    .dark .hh-chips        { background:#000; }
-    .dark .hh-msg.bot .hh-bubble { background:#111; color:#f0f0f0; box-shadow:none; }
-    .dark #hh-input-area   { background:#0a0a0a; border-top-color:#1a1a1a; }
-    .dark #hh-input        { background:#111; border-color:#222; color:#fff; }
-    .dark #hh-input:focus  { border-color:#555; background:#1a1a1a; }
-    .dark .hh-chip         { background:#111; border-color:#333; color:#ccc; }
-    .dark .hh-chip:hover   { background:#fff; color:#000; border-color:#fff; }
-    .dark .hh-powered      { background:#0a0a0a; color:#333; }
-    @media (max-width:420px) { #hh-chat-panel { width:calc(100vw - 48px); } }
-  </style>
-</head>
-
-<body class="bg-white dark:bg-amoled text-black dark:text-white transition-colors duration-300">
-
-<!-- Cursor Glow -->
-<div id="cursor-glow"></div>
-
-<!-- SEARCH OVERLAY -->
-<div id="search-overlay" role="dialog" aria-label="Search">
-  <div id="search-box">
-    <div id="search-input-row">
-      <div class="search-icon-circle">
-        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-        </svg>
-      </div>
-      <input id="search-input" type="text" placeholder="Search sneakers, brands, colorways..." autocomplete="off" />
-      <button id="search-clear" aria-label="Clear">x</button>
-    </div>
-    <div id="search-results"></div>
-    <div id="search-hint">Press Esc to close</div>
-  </div>
-</div>
-
-<!-- Dark Mode Toggle -->
-<div class="fixed bottom-10 right-6 z-50">
-  <button id="theme-toggle" class="relative flex items-center justify-center w-12 h-12 rounded-full shadow-xl bg-gray-200 dark:bg-cardDark transition-all duration-300 hover:scale-110" aria-label="Toggle dark mode">
-    <svg class="sun-icon text-yellow-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <circle cx="12" cy="12" r="4" fill="currentColor" stroke="none"/>
-      <path stroke-linecap="round" d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
-    </svg>
-    <svg class="moon-icon text-yellow-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/>
-    </svg>
-  </button>
-</div>
-
-<!-- Filter Overlay + Panel -->
-<div id="filterOverlay" class="hidden fixed inset-0 z-[9985]" onclick="closeFilter()"></div>
-<div id="filterPanel">
-  <h2 style="font-family:'Archivo Black',sans-serif;font-size:18px;font-weight:900;margin-bottom:20px;" class="text-black dark:text-white">Filter Cart</h2>
-  <div style="margin-bottom:22px;">
-    <label style="display:block;font-size:13px;font-weight:600;margin-bottom:8px;" class="text-gray-700 dark:text-gray-300">Brand</label>
-    <div style="position:relative;">
-      <select id="fpBrand" style="width:100%;appearance:none;-webkit-appearance:none;border:1.5px solid #e0e0e0;border-radius:10px;padding:10px 36px 10px 14px;font-size:14px;font-family:'Poppins',sans-serif;cursor:pointer;outline:none;" class="bg-white dark:bg-gray-900 text-gray-800 dark:text-white dark:border-gray-700">
-        <option value="all">All Brands</option>
-        <option value="jordan">Air Jordan</option>
-        <option value="travis">Travis Scott</option>
-        <option value="crocs">Crocs</option>
-        <option value="nike">Nike</option>
-        <option value="yeezy">Yeezy</option>
-        <option value="adidas">Adidas</option>
-        <option value="puma">Puma</option>
-        <option value="newbalance">New Balance</option>
-        <option value="rick owens">Rick Owens</option>
-        <option value="slides">Slides</option>
-      </select>
-      <div style="pointer-events:none;position:absolute;right:12px;top:50%;transform:translateY(-50%);"><i class="fas fa-chevron-down" style="font-size:11px;color:#999;"></i></div>
-    </div>
-  </div>
-  <div style="margin-bottom:26px;">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
-      <label style="font-size:13px;font-weight:600;" class="text-gray-700 dark:text-gray-300">Price Range</label>
-      <span id="fpPriceDisplay" style="font-size:13px;font-weight:700;color:#ef4444;">Rs.1,000 - Rs.7,00,000</span>
-    </div>
-    <div style="position:relative;height:24px;display:flex;align-items:center;">
-      <div style="position:absolute;left:0;right:0;height:4px;background:#f0f0f0;border-radius:4px;"></div>
-      <div id="fpFill" style="position:absolute;height:4px;background:#ef4444;border-radius:4px;left:0%;right:0%;"></div>
-      <input type="range" id="fpMin" class="fp-slider" min="1000" max="700000" value="1000"   step="500" oninput="fpUpdate()" />
-      <input type="range" id="fpMax" class="fp-slider" min="1000" max="700000" value="700000" step="500" oninput="fpUpdate()" />
-    </div>
-    <div style="display:flex;justify-content:space-between;margin-top:8px;">
-      <span style="font-size:12px;color:#aaa;">Rs.1,000</span>
-      <span style="font-size:12px;color:#aaa;">Rs.7,00,000</span>
-    </div>
-  </div>
-  <div style="display:flex;gap:12px;">
-    <button onclick="fpApply()" style="flex:1;background:#111;color:#fff;border:none;border-radius:12px;padding:12px 0;font-size:14px;font-family:'Poppins',sans-serif;font-weight:700;cursor:pointer;" onmouseover="this.style.background='#333'" onmouseout="this.style.background='#111'">Apply</button>
-    <button onclick="fpReset()" style="flex:1;background:#fff;color:#444;border:1.5px solid #e0e0e0;border-radius:12px;padding:12px 0;font-size:14px;font-family:'Poppins',sans-serif;font-weight:600;cursor:pointer;" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='#fff'">Reset</button>
-  </div>
-</div>
-
-<!-- NAV -->
-<nav class="bg-white dark:bg-amoled shadow-md sticky top-0 z-40">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex justify-between h-16">
-      <div class="flex items-center">
-        <div class="brand text-2xl font-bold">
-          <a href="index.html" class="text-black dark:text-white">HEAT HAVEN</a>
-        </div>
-        <div class="hidden md:flex items-center ml-10 space-x-6">
-          <a href="index.html"   class="nav-link text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Home</a>
-          <a href="product.html" class="nav-link text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Products</a>
-          <a href="deals.html"   class="nav-link text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Hot Deals</a>
-          <a href="owners.html"  class="nav-link text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Owners</a>
-        </div>
-      </div>
-      <div class="hidden md:flex items-center gap-2 flex-shrink-0">
-        <a href="wishlist.html" id="nav-wishlist-btn" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark transition-colors relative" aria-label="Wishlist">
-          <i class="fas fa-heart text-red-600 dark:text-red-600"></i>
-        </a>
-        <button id="search-pill" aria-label="Search" onclick="openSearch()">
-          <div class="pill-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
+        <!-- Info -->
+        <div class="flex-1 min-w-0">
+          <h3 class="font-bold text-base truncate dark:text-white">${escH(item.name)}</h3>
+          <p class="text-sm text-gray-500 dark:text-zinc-500 mb-0.5">${escH(item.colorway)}</p>
+          <p class="font-bold text-base text-black dark:text-white mb-3">₹${item.price.toLocaleString("en-IN")}</p>
+          <!-- Size + Add -->
+          <div class="flex flex-wrap items-center gap-2">
+            ${sizeHtml}
+            <button class="atc-btn">
+              <i class="fas fa-shopping-cart text-xs"></i> Add to Cart
+            </button>
           </div>
-          <span class="pill-text">Search sneakers...</span>
-          <span class="pill-emoji">👟</span>
-        </button>
-        <a href="cart.html" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark relative">
-          <i class="fas fa-shopping-cart text-gray-600 dark:text-gray-300"></i>
-          <span id="cart-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
-        </a>
-        <button id="filterBtn" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark transition" aria-label="Filter">
-          <i class="fas fa-filter text-gray-600 dark:text-gray-300"></i>
-        </button>
-        <a href="profile.html" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark transition">
-          <i class="fas fa-user text-gray-600 dark:text-gray-300"></i>
-        </a>
-        <a href="profile login.html" class="px-5 py-1.5 rounded-full text-sm font-medium border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all">Login</a>
-      </div>
-      <div class="md:hidden ml-auto">
-        <button class="p-2" id="mobile-menu-button">
-          <i class="fas fa-bars text-black dark:text-white text-lg"></i>
-        </button>
-      </div>
-    </div>
-  </div>
-  <div class="mobile-menu fixed inset-y-0 right-0 w-64 bg-white dark:bg-cardDark shadow-xl z-50 p-5" id="mobile-menu">
-    <div class="flex justify-between items-center mb-8">
-      <div class="brand text-xl dark:text-white">HEAT HAVEN</div>
-      <button id="close-menu"><i class="fas fa-times text-xl dark:text-white"></i></button>
-    </div>
-    <div class="flex flex-col space-y-5">
-      <a href="index.html"   class="nav-link text-black dark:text-gray-200 font-medium">Home</a>
-      <a href="product.html" class="nav-link text-black dark:text-gray-200 font-medium">Products</a>
-      <a href="deals.html"   class="nav-link text-black dark:text-gray-200 font-medium">Hot Deals</a>
-      <a href="owners.html"  class="nav-link text-black dark:text-gray-200 font-medium">Owners</a>
-      <button id="nav-wishlist-btn-mobile" class="flex items-center gap-2 text-black dark:text-gray-200 font-medium text-left">
-        <i class="fas fa-heart text-red-500 text-sm"></i> Wishlist
-      </button>
-    </div>
-    <button onclick="openSearch()" class="mt-6 w-full flex items-center gap-3 bg-gray-100 dark:bg-gray-800 rounded-full px-4 py-2.5 text-sm text-gray-400">
-      <div class="pill-icon" style="width:24px;height:24px;">
-        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;">
-          <circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-        </svg>
-      </div>
-      Search sneakers...
-    </button>
-    <div class="mt-6 pt-5 border-t border-gray-200 dark:border-gray-700 flex items-center gap-3 flex-wrap">
-      <a href="cart.html" class="relative p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark">
-        <i class="fas fa-shopping-cart text-gray-600 dark:text-gray-300"></i>
-        <span id="cart-count-mobile" class="absolute -top-0.5 -right-0.5 bg-red-500 text-white text-[10px] font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
-      </a>
-      <a href="profile.html" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark">
-        <i class="fas fa-user text-gray-600 dark:text-gray-300"></i>
-      </a>
-      <a href="profile login.html" class="px-4 py-1.5 rounded-full text-sm font-medium border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 hover:bg-black hover:text-white transition">Login</a>
-    </div>
-  </div>
-</nav>
-
-<!-- CART SECTION -->
-<section class="max-w-7xl mx-auto px-6 py-12">
-  <h1 class="text-3xl font-bold mb-4 page-heading">Your Shopping Cart</h1>
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-10 lg:pr-[22rem] xl:pr-[26rem]">
-    <div class="lg:col-span-3 space-y-5" id="cart-items-column"></div>
-    <div id="empty-cart" class="lg:col-span-3">
-      <div class="text-center py-20">
-        <div class="text-6xl mb-4">🛒</div>
-        <h2 class="text-2xl font-bold mb-2 dark:text-white">Your cart is empty</h2>
-        <p class="text-gray-500 dark:text-gray-400 mb-6">Looks like you have not added anything yet.</p>
-        <a href="index.html" class="inline-block bg-black dark:bg-white text-white dark:text-black px-8 py-3 rounded-full font-semibold hover:opacity-80 transition">Shop Now</a>
-      </div>
-    </div>
-    <p id="empty-filter-msg" class="lg:col-span-3 text-gray-400 text-sm hidden">No items match this filter.</p>
-
-    <!-- Order Summary fixed card -->
-    <div class="spring-card rounded-xl p-6 h-fit lg:fixed lg:top-24 lg:right-6 lg:w-80 xl:w-96" id="order-summary-card">
-      <h2 class="text-xl font-semibold mb-5">Order Summary</h2>
-      <div class="space-y-3 text-sm">
-        <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">Subtotal</span><span id="summary-subtotal">Rs.0.00</span></div>
-        <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">Items</span><span id="summary-count">0</span></div>
-        <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">Shipping</span><span id="summary-shipping" class="text-green-500 font-medium">Free</span></div>
-        <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">Tax (10%)</span><span id="summary-tax">Rs.0.00</span></div>
-      </div>
-      <hr class="my-5 border-gray-200 dark:border-gray-700">
-      <div class="flex justify-between font-semibold text-lg mb-5"><span>Total</span><span id="summary-total">Rs.0.00</span></div>
-      <a href="checkout.html" class="block">
-        <button class="checkout-spring w-full bg-black dark:bg-white text-white dark:text-black py-3 rounded-lg font-semibold">
-          <i class="fas fa-lock text-xs mr-2"></i>Proceed to Checkout
-        </button>
-      </a>
-      <p class="text-xs text-center text-gray-400 mt-3">Secure checkout · Free returns</p>
-    </div>
-  </div>
-</section>
-
-<div id="toast"><i class="fas fa-check-circle" style="color:#22c55e;"></i><span></span></div>
-
-<!-- AI Chat Widget -->
-<div id="hh-chat-widget">
-  <div id="hh-chat-panel">
-    <div id="hh-chat-header">
-      <div class="hh-avatar">HH</div>
-      <div class="hh-header-info">
-        <div class="hh-header-name">Heat Haven Support</div>
-        <div class="hh-header-status"><span class="hh-status-dot"></span> Online · AI Assistant</div>
-      </div>
-      <button onclick="document.getElementById('hh-chat-widget').classList.remove('open')" style="background:none;border:none;color:#666;cursor:pointer;font-size:18px;padding:4px;"><i class="fas fa-chevron-down"></i></button>
-    </div>
-    <div id="hh-messages"></div>
-    <div class="hh-chips" id="hh-chips"></div>
-    <div id="hh-input-area">
-      <input id="hh-input" type="text" placeholder="Ask anything about sneakers..." autocomplete="off" />
-      <button id="hh-send">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-        </svg>
-      </button>
-    </div>
-    <div class="hh-powered">Powered by Heat Haven AI</div>
-  </div>
-  <button id="hh-chat-toggle" aria-label="Open chat">
-    <span class="notif-dot" id="hh-notif-dot"></span>
-    <span class="toggle-icon icon-chat">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-    </span>
-    <span class="toggle-icon icon-close">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-    </span>
-  </button>
-</div>
-
-<script>
-// ── DARK MODE ──────────────────────────────────────────────────
-if (localStorage.getItem("theme") === "dark") document.documentElement.classList.add("dark");
-document.getElementById("theme-toggle").addEventListener("click", () => {
-  const isDark = document.documentElement.classList.toggle("dark");
-  localStorage.setItem("theme", isDark ? "dark" : "light");
-});
-
-// ── CURSOR GLOW ────────────────────────────────────────────────
-const glow = document.getElementById("cursor-glow");
-document.addEventListener("mousemove", e => {
-  glow.style.left = e.clientX + "px";
-  glow.style.top  = e.clientY + "px";
-});
-
-// ── MOBILE MENU ────────────────────────────────────────────────
-document.getElementById("mobile-menu-button").addEventListener("click", () => document.getElementById("mobile-menu").classList.add("open"));
-document.getElementById("close-menu").addEventListener("click", () => document.getElementById("mobile-menu").classList.remove("open"));
-
-// ── ACTIVE NAV LINK ───────────────────────────────────────────
-const currentPage = location.pathname.split("/").pop() || "index.html";
-document.querySelectorAll(".nav-link").forEach(link => {
-  if (link.getAttribute("href") === currentPage) {
-    link.classList.add("font-semibold");
-    link.style.color = "#ff4500";
-  }
-});
-
-// ── WISHLIST BUTTONS ──────────────────────────────────────────
-document.getElementById("nav-wishlist-btn").addEventListener("click", () => showToast("Wishlist coming soon! 💛", false));
-document.getElementById("nav-wishlist-btn-mobile")?.addEventListener("click", () => {
-  document.getElementById("mobile-menu").classList.remove("open");
-  showToast("Wishlist coming soon! 💛", false);
-});
-
-// ── TOAST ──────────────────────────────────────────────────────
-function showToast(msg, isError) {
-  const t = document.getElementById("toast");
-  t.querySelector("i").className = isError ? "fas fa-exclamation-circle" : "fas fa-check-circle";
-  t.querySelector("i").style.color = isError ? "#facc15" : "#22c55e";
-  t.querySelector("span").textContent = msg;
-  t.classList.add("show");
-  clearTimeout(showToast._t);
-  showToast._t = setTimeout(() => t.classList.remove("show"), 2400);
-}
-
-function escH(s) { return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
-
-// ── CART ───────────────────────────────────────────────────────
-function getCart() { try { return JSON.parse(localStorage.getItem("hh_cart") || "[]"); } catch(e) { return []; } }
-function saveCart(c) { localStorage.setItem("hh_cart", JSON.stringify(c)); }
-
-function renderCart() {
-  const cart = getCart();
-  const col  = document.getElementById("cart-items-column");
-  const emp  = document.getElementById("empty-cart");
-  col.innerHTML = "";
-  if (!cart.length) {
-    emp.style.display = "block";
-    document.getElementById("order-summary-card").style.display = "none";
-    updateSummary(); return;
-  }
-  emp.style.display = "none";
-  document.getElementById("order-summary-card").style.display = "";
-  cart.forEach((item, idx) => {
-    const d = document.createElement("div");
-    d.className = "spring-card rounded-xl p-5 flex items-center justify-between gap-4 cart-item";
-    d.dataset.brand = item.brand; d.dataset.price = item.price; d.dataset.idx = idx;
-    d.style.animationDelay = (idx * 70) + "ms";
-    d.innerHTML = `
-      <div class="flex items-center gap-4 flex-1 min-w-0">
-        <img src="${escH(item.img||'')}" alt="${escH(item.name)}" class="w-20 h-20 object-contain rounded-lg bg-gray-50 dark:bg-zinc-900 flex-shrink-0" onerror="this.src='https://via.placeholder.com/80x80/f3f4f6/111111?text=shoe'">
-        <div class="min-w-0">
-          <h3 class="font-semibold text-base truncate dark:text-white">${escH(item.name)}</h3>
-          <p class="text-sm text-gray-500 dark:text-gray-400">${escH(item.colorway)}</p>
-          <p class="text-xs text-gray-400 dark:text-gray-600 mt-0.5">Size: ${escH(item.size)}</p>
-          <p class="font-semibold mt-1 dark:text-white">Rs.${item.price.toLocaleString("en-IN")}</p>
         </div>
-      </div>
-      <div class="flex items-center gap-3 flex-shrink-0">
-        <div class="flex border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden">
-          <button class="qty-minus px-3 py-1 hover:bg-gray-100 dark:hover:bg-gray-800 dark:text-white text-base font-medium transition-colors">-</button>
-          <span class="qty-value px-4 py-1 border-x border-gray-300 dark:border-gray-600 dark:bg-black dark:text-white text-center min-w-[2.5rem]">${item.qty}</span>
-          <button class="qty-plus px-3 py-1 hover:bg-gray-100 dark:hover:bg-gray-800 dark:text-white text-base font-medium transition-colors">+</button>
-        </div>
-        <button class="remove-item text-gray-400 hover:text-red-500 text-xl leading-none transition-colors" title="Remove">×</button>
+        <!-- Delete -->
+        <button class="del-btn flex-shrink-0 self-start ml-2" aria-label="Remove">
+          <i class="fas fa-trash text-xs"></i>
+          <span class="hidden sm:inline">Remove</span>
+        </button>
       </div>`;
-    col.appendChild(d);
+
+    wishList.appendChild(row);
   });
 
-  // ── Scroll reveal for cart items ─────────────────────────────
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add("visible"); });
-  }, { threshold: 0.08 });
-  document.querySelectorAll(".cart-item").forEach(el => {
-    el.classList.add("reveal");
-    io.observe(el);
-  });
-
-  updateSummary(); updateCartBadge(); attachListeners();
+  attachListeners();
 }
 
 function attachListeners() {
-  document.querySelectorAll(".cart-item").forEach(card => {
-    const idx = parseInt(card.dataset.idx);
-    card.querySelector(".qty-plus").addEventListener("click", () => { const c=getCart(); if(c[idx]){c[idx].qty++;saveCart(c);renderCart();} });
-    card.querySelector(".qty-minus").addEventListener("click", () => { const c=getCart(); if(c[idx]){c[idx].qty--;if(c[idx].qty<=0)c.splice(idx,1);saveCart(c);renderCart();} });
-    card.querySelector(".remove-item").addEventListener("click", () => {
-      const c=getCart(); const n=c[idx]?c[idx].name:"Item";
-      // animate out
-      card.style.transition="opacity 0.25s ease,transform 0.25s ease";
-      card.style.opacity="0"; card.style.transform="translateX(20px) scale(0.97)";
-      setTimeout(()=>{ c.splice(idx,1); saveCart(c); renderCart(); showToast(n+" removed",false); },220);
+  // Delete
+  document.querySelectorAll(".del-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const row = btn.closest(".wish-row");
+      const id  = row.dataset.id;
+      row.classList.add("removing");
+      setTimeout(() => {
+        const w = getWishlist().filter(i => i.id !== id);
+        saveWishlist(w);
+        render();
+        showToast("Removed from wishlist", false);
+      }, 270);
+    });
+  });
+
+  // Add to cart
+  document.querySelectorAll(".atc-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const row  = btn.closest(".wish-row");
+      const id   = row.dataset.id;
+      const item = getWishlist().find(i => i.id === id);
+      if (!item) return;
+
+      const sel  = row.querySelector(".size-select");
+      const size = sel ? sel.value : (item.size || "One Size");
+
+      if (sel && !size) {
+        sel.classList.add("select-shake");
+        setTimeout(() => sel.classList.remove("select-shake"), 400);
+        showToast("Pick a size first! 👟", true);
+        return;
+      }
+
+      const cartItem = {
+        id: item.name + "-" + size,
+        name: item.name, colorway: item.colorway, brand: item.brand,
+        price: item.price, img: item.img, size: size, qty: 1
+      };
+
+      const cart = getCart();
+      const existing = cart.find(c => c.id === cartItem.id);
+      if (existing) { existing.qty++; } else { cart.push(cartItem); }
+      saveCart(cart);
+      updateBadges();
+
+      // badge bump
+      const cc = document.getElementById("cart-count");
+      if (cc) { cc.classList.remove("cart-bump"); void cc.offsetWidth; cc.classList.add("cart-bump"); }
+
+      btn.innerHTML = '<i class="fas fa-check text-xs"></i> Added!';
+      btn.disabled = true; btn.style.opacity = "0.7";
+      setTimeout(() => {
+        btn.innerHTML = '<i class="fas fa-shopping-cart text-xs"></i> Add to Cart';
+        btn.disabled = false; btn.style.opacity = "";
+      }, 1600);
+
+      showToast(`${item.name} added to cart! 🛒`, false);
     });
   });
 }
 
-function updateSummary() {
-  const TAX_RATE = 0.10;
-  const items = [...document.querySelectorAll(".cart-item")].filter(c=>c.style.display!=="none");
-  let subtotal = 0, count = 0;
-  items.forEach(c => {
-    const q = parseInt(c.querySelector(".qty-value")?.textContent) || 1;
-    subtotal += (parseFloat(c.dataset.price) || 0) * q;
-    count += q;
+// ── SORT PILLS ─────────────────────────────────────────────────────────────
+document.querySelectorAll(".sort-pill").forEach(pill => {
+  pill.addEventListener("click", function() {
+    document.querySelectorAll(".sort-pill").forEach(p => p.classList.remove("active"));
+    this.classList.add("active");
+    currentSort = this.dataset.sort;
+    render();
   });
-  const shipping = subtotal >= 50000 ? 0 : 1000;
-  const tax      = subtotal * TAX_RATE;
-  const total    = subtotal + shipping + tax;
-  const fmt = v => "Rs." + v.toLocaleString("en-IN", { minimumFractionDigits: 2 });
-  document.getElementById("summary-subtotal").textContent = fmt(subtotal);
-  document.getElementById("summary-count").textContent    = count;
-  document.getElementById("summary-tax").textContent      = fmt(tax);
-  document.getElementById("summary-total").textContent    = fmt(total);
-  const s = document.getElementById("summary-shipping");
-  s.textContent = subtotal >= 50000 ? "Free" : fmt(1000);
-  s.className   = subtotal >= 50000 ? "text-green-500 font-medium" : "text-gray-700 dark:text-gray-300 font-medium";
-}
+});
 
-function updateCartBadge() {
-  const t = getCart().reduce((s,i)=>s+i.qty,0);
-  document.querySelectorAll("#cart-count,#cart-count-mobile").forEach(el=>el.textContent=t);
-}
+// ── CLEAR ALL ──────────────────────────────────────────────────────────────
+document.getElementById("clear-btn").addEventListener("click", () => {
+  if (!getWishlist().length) return;
+  if (!confirm("Remove all items from your wishlist?")) return;
+  saveWishlist([]);
+  render();
+  showToast("Wishlist cleared", false);
+});
 
-// ── FILTER ─────────────────────────────────────────────────────
-const filterBtn=document.getElementById("filterBtn"), filterPanel=document.getElementById("filterPanel"), filterOverlay=document.getElementById("filterOverlay");
-function openFilter(){ const r=filterBtn.getBoundingClientRect(); filterPanel.style.top=(r.bottom+8+window.scrollY)+"px"; filterPanel.style.right=(window.innerWidth-r.right)+"px"; filterPanel.classList.add("open"); filterOverlay.classList.remove("hidden"); }
-function closeFilter(){ filterPanel.classList.remove("open"); filterOverlay.classList.add("hidden"); }
-window.closeFilter=closeFilter;
-filterBtn.addEventListener("click",e=>{e.stopPropagation();filterPanel.classList.contains("open")?closeFilter():openFilter();});
-function fpUpdate(){ const MIN=1000,MAX=700000; let lo=parseInt(document.getElementById("fpMin").value),hi=parseInt(document.getElementById("fpMax").value); if(lo>=hi){lo=hi-500;document.getElementById("fpMin").value=lo;} const lP=((lo-MIN)/(MAX-MIN))*100,rP=100-((hi-MIN)/(MAX-MIN))*100; document.getElementById("fpFill").style.left=lP+"%"; document.getElementById("fpFill").style.right=rP+"%"; document.getElementById("fpPriceDisplay").textContent="Rs."+lo.toLocaleString("en-IN")+" - Rs."+hi.toLocaleString("en-IN"); }
-function fpApply(){ const b=document.getElementById("fpBrand").value,lo=parseInt(document.getElementById("fpMin").value),hi=parseInt(document.getElementById("fpMax").value); let any=false; document.querySelectorAll(".cart-item").forEach(i=>{const p=parseInt(i.dataset.price)||0,s=(b==="all"||i.dataset.brand===b)&&p>=lo&&p<=hi;i.style.display=s?"":"none";if(s)any=true;}); document.getElementById("empty-filter-msg").classList.toggle("hidden",any); updateSummary();closeFilter();showToast("Filters applied!",false); }
-function fpReset(){ document.getElementById("fpBrand").value="all";document.getElementById("fpMin").value=1000;document.getElementById("fpMax").value=700000;fpUpdate();document.querySelectorAll(".cart-item").forEach(i=>i.style.display="");document.getElementById("empty-filter-msg").classList.add("hidden");updateSummary();closeFilter(); }
-window.fpUpdate=fpUpdate;window.fpApply=fpApply;window.fpReset=fpReset;
-fpUpdate();
+// ── SHARE ──────────────────────────────────────────────────────────────────
+document.getElementById("share-btn").addEventListener("click", () => {
+  if (navigator.share) {
+    navigator.share({ title:"My Heat Haven Wishlist", url: window.location.href }).catch(() => {});
+  } else {
+    navigator.clipboard?.writeText(window.location.href).then(() => showToast("Link copied! 🔗", false));
+  }
+});
 
-// ── SEARCH ─────────────────────────────────────────────────────
-const PRODUCTS=[
-  {name:"Air Jordan 1 Retro High",colorway:"Chicago Bulls",brand:"jordan",price:5559,img:"images/aj 1 chichgo.png"},
-  {name:"Nike Uptempo Slide",colorway:"Chicago Bulls",brand:"slides",price:5559,img:"images/uptempo slide bulls.png"},
-  {name:"Nike SB Dunk Low",colorway:"Golf",brand:"nike",price:5559,img:"images/sb gulf.png"},
-  {name:"Adidas Campus",colorway:"Clear Sky Gum",brand:"adidas",price:5559,img:"images/adidas campus clear sky gum.png"},
-  {name:"Air Force 1 Low",colorway:"Lakers Home",brand:"nike",price:5559,img:"images/af1 kobe yellow.png"},
-  {name:"Yeezy Boost 350 V2",colorway:"Zebra",brand:"yeezy",price:5559,img:"images/yeezy zebra.png"},
-  {name:"Yeezy 700 V3",colorway:"Azael",brand:"yeezy",price:5559,img:"images/yzy 700 v3 azael.png"},
-  {name:"Rick Owens Hollywood High",colorway:"Black Milk",brand:"rick owens",price:5559,img:"images/rick owens hollywood high black milk.png"},
-  {name:"Puma Melns",colorway:"La France",brand:"puma",price:5559,img:"images/puma melons lafrance.png"},
-  {name:"Travis x Fragment High",colorway:"Fragment",brand:"jordan",price:5559,img:"images/travis x fragment high.png"},
-  {name:"New Balance 990v5",colorway:"Grey",brand:"newbalance",price:5559,img:"images/nb 990v5.png"},
-  {name:"Air Jordan 4 Retro",colorway:"Breds",brand:"jordan",price:5559,img:"images/aj4 bred.png"},
-  {name:"Salehe Bembury x Crocs",colorway:"Horchata",brand:"crocs",price:5559,img:"images/crocs horchata.png"},
+// ── SEARCH ─────────────────────────────────────────────────────────────────
+const PRODUCTS = [
+  { name:"Air Jordan 1 Retro High",   colorway:"Chicago Bulls",  brand:"Jordan",    price:5559, img:"images/aj 1 chichgo.png" },
+  { name:"Nike Uptempo Slide",         colorway:"Chicago Bulls",  brand:"Nike",      price:5559, img:"images/uptempo slide bulls.png" },
+  { name:"Nike SB Dunk Low",           colorway:"Gulf",           brand:"Nike",      price:5559, img:"images/sb gulf.png" },
+  { name:"Adidas Campus",             colorway:"Clear Sky Gum",  brand:"Adidas",    price:5559, img:"images/adidas campus clear sky gum.png" },
+  { name:"Air Force 1 Low",           colorway:"Lakers",         brand:"Nike",      price:5559, img:"images/af1 kobe yellow.png" },
+  { name:"Yeezy Boost 350 V2",        colorway:"Zebra",          brand:"Yeezy",     price:5559, img:"images/yeezy zebra.png" },
+  { name:"Yeezy 700 V3",              colorway:"Azael",          brand:"Yeezy",     price:5559, img:"images/yzy 700 v3 azael.png" },
+  { name:"Rick Owens Hollywood High", colorway:"Black Milk",     brand:"Rick Owens",price:5559, img:"images/rick owens hollywood high black milk.png" },
+  { name:"Puma Melns La France",      colorway:"La France",      brand:"Puma",      price:5559, img:"images/puma melons lafrance.png" },
+  { name:"Travis Scott × Fragment",  colorway:"Fragment",       brand:"Jordan",    price:5250, img:"images/travis x fragment high.png" },
+  { name:"New Balance 990v5",         colorway:"Grey",           brand:"New Balance",price:5559, img:"images/nb 990v5.png" },
+  { name:"Air Jordan 4 Retro",        colorway:"Breds",          brand:"Jordan",    price:5559, img:"images/aj4 bred.png" },
+  { name:"Crocs Salehe Bembury",      colorway:"Horchata",       brand:"Crocs",     price:5559, img:"images/crocs horchata.png" },
 ];
+
 const so=document.getElementById("search-overlay"),si=document.getElementById("search-input"),sc=document.getElementById("search-clear"),sr=document.getElementById("search-results");
-function openSearch(){so.classList.add("open");setTimeout(()=>si.focus(),50);}
-function closeSearch(){so.classList.remove("open");si.value="";sc.classList.remove("visible");sr.innerHTML="";}
-window.openSearch=openSearch;
-so.addEventListener("click",e=>{if(e.target===so)closeSearch();});
-document.addEventListener("keydown",e=>{if(e.key==="Escape")closeSearch();if((e.metaKey||e.ctrlKey)&&e.key==="k"){e.preventDefault();openSearch();}});
-sc.addEventListener("click",()=>{si.value="";sc.classList.remove("visible");sr.innerHTML="";si.focus();});
-function hl(t,q){if(!q)return escH(t);return escH(t).replace(new RegExp("("+q.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+")","gi"),'<span class="sri-highlight">$1</span>');}
-function runSearch(q){
-  sc.classList.toggle("visible",q.length>0);
-  if(!q.trim()){sr.innerHTML="";return;}
-  const hits=PRODUCTS.filter(p=>p.name.toLowerCase().includes(q.toLowerCase())||p.colorway.toLowerCase().includes(q.toLowerCase())||p.brand.toLowerCase().includes(q.toLowerCase()));
-  if(!hits.length){sr.innerHTML=`<div id="search-empty">No sneakers found for "${escH(q)}"</div>`;return;}
-  sr.innerHTML=hits.map((p,i)=>`<div class="sri" data-idx="${i}" style="animation-delay:${i*35}ms" tabindex="0"><img class="sri-img" src="${escH(p.img)}" alt="${escH(p.name)}" onerror="this.src='https://via.placeholder.com/52x52'"><div style="flex:1;min-width:0;"><div class="sri-name">${hl(p.name,q)}</div><div class="sri-sub">${hl(p.colorway,q)} - ${hl(p.brand.toUpperCase(),q)}</div></div><div class="sri-price">Rs.${p.price.toLocaleString("en-IN")}</div></div>`).join("");
-  sr.querySelectorAll(".sri").forEach((row,i)=>{row.addEventListener("click",()=>{closeSearch();showToast(hits[i].name+" - visit store to add!",false);});row.addEventListener("keydown",e=>{if(e.key==="Enter")row.click();});});
+window.openSearch = () => { so.classList.add("open"); setTimeout(() => si.focus(), 50); };
+function closeSearch() { so.classList.remove("open"); si.value=""; sc.classList.remove("visible"); sr.innerHTML=""; }
+so.addEventListener("click", e => { if(e.target===so) closeSearch(); });
+document.addEventListener("keydown", e => {
+  if(e.key==="Escape") closeSearch();
+  if((e.metaKey||e.ctrlKey)&&e.key==="k"){ e.preventDefault(); openSearch(); }
+});
+sc.addEventListener("click", () => { si.value=""; sc.classList.remove("visible"); sr.innerHTML=""; si.focus(); });
+function hl(t,q){ if(!q) return escH(t); return escH(t).replace(new RegExp("("+q.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+")","gi"),'<span class="sri-highlight">$1</span>'); }
+function runSearch(q) {
+  sc.classList.toggle("visible", q.length > 0);
+  if (!q.trim()) { sr.innerHTML=""; return; }
+  const hits = PRODUCTS.filter(p => [p.name,p.colorway,p.brand].join(" ").toLowerCase().includes(q.toLowerCase()));
+  if (!hits.length) { sr.innerHTML=`<div id="search-empty">😕 No results for "<strong>${escH(q)}</strong>"</div>`; return; }
+  sr.innerHTML = hits.map((p,i) => `
+    <div class="sri" data-idx="${i}" style="animation-delay:${i*35}ms" tabindex="0">
+      <img class="sri-img" src="${escH(p.img)}" alt="${escH(p.name)}" onerror="this.src='https://via.placeholder.com/52'">
+      <div style="flex:1;min-width:0">
+        <div class="sri-name">${hl(p.name,q)}</div>
+        <div class="sri-sub">${hl(p.colorway,q)} · ${hl(p.brand,q)}</div>
+      </div>
+      <div class="sri-price">₹${p.price.toLocaleString("en-IN")}</div>
+    </div>`).join("");
+  sr.querySelectorAll(".sri").forEach((row, i) => {
+    row.addEventListener("click", () => {
+      const p = hits[i];
+      const w = getWishlist();
+      const wid = p.name.replace(/\s+/g,"-").toLowerCase() + "-wish";
+      if (!w.find(x => x.id === wid)) {
+        w.push({ id:wid, name:p.name, colorway:p.colorway, brand:p.brand, price:p.price, img:p.img });
+        saveWishlist(w);
+        render();
+        showToast(`${p.name} added to wishlist! ❤️`, false);
+      } else {
+        showToast("Already in your wishlist", false);
+      }
+      closeSearch();
+    });
+    row.addEventListener("keydown", e => { if(e.key==="Enter") row.click(); });
+  });
 }
 let dbt;
-si.addEventListener("input",()=>{clearTimeout(dbt);dbt=setTimeout(()=>runSearch(si.value),140);});
+si.addEventListener("input", () => { clearTimeout(dbt); dbt = setTimeout(() => runSearch(si.value), 140); });
 
-// ── AI CHAT ────────────────────────────────────────────────────
-const SP=`You are a friendly sneaker assistant for Heat Haven, a premium sneaker store in India. STORE: Heat Haven | Instagram: @heatheaven.23_ | Currency: Rs. | Sizes: UK 6-12. PRODUCTS: Air Jordan 1 Chicago Rs.5,559 | Travis Scott x Fragment Rs.5,559 | Crocs Horchata Rs.5,559 | AF1 Lakers Rs.5,559 | Yeezy 350 Zebra Rs.5,559 | AJ4 Breds Rs.5,559. POLICIES: Free shipping above Rs.5,000. Standard Rs.99. Returns: 7 days unworn. Payment: UPI/Card/COD. SIZE: Jordans/Nike half size up | Yeezys size up | NB true to size. Keep replies 2-3 sentences, casual, sneaker-culture savvy.`;
-const QC=["What's on sale?","Size guide","Shipping info","Best Jordans","Yeezy sizing","Returns"];
+// ── AI CHAT ────────────────────────────────────────────────────────────────
+const SP="You are a friendly sneaker assistant for Heat Haven, a premium sneaker store in India. Currency: ₹. Sizes: UK 6-12. Keep replies 2-3 sentences, casual, sneaker-culture savvy.";
+const QC=["What's on sale? 🔥","Size guide","Shipping info","Best Jordans","Returns"];
 const cw=document.getElementById("hh-chat-widget"),ct=document.getElementById("hh-chat-toggle"),me=document.getElementById("hh-messages"),ie=document.getElementById("hh-input"),sb=document.getElementById("hh-send"),ce=document.getElementById("hh-chips"),nd=document.getElementById("hh-notif-dot");
 let ch=[],iT=false,hO=false;
-ct.addEventListener("click",()=>{cw.classList.toggle("open");if(!hO){hO=true;nd.style.display="none";setTimeout(()=>{aBot("Hey! Welcome to Heat Haven. I'm your sneaker assistant.");setTimeout(()=>{aBot("Ask me about sizing, shipping, or anything kicks!");showC();},900);},300);}});
+ct.addEventListener("click",()=>{cw.classList.toggle("open");if(!hO){hO=true;nd.style.display="none";setTimeout(()=>{aBot("Hey! 👟 Welcome to <strong>Heat Haven</strong>. I'm your sneaker assistant.");setTimeout(()=>{aBot("Ask me about sizing, shipping, or anything kicks! 🔥");showC();},900);},300);}});
 function showC(c=QC){ce.innerHTML="";c.forEach(t=>{const b=document.createElement("button");b.className="hh-chip";b.textContent=t;b.onclick=()=>{ce.innerHTML="";sM(t);};ce.appendChild(b);});}
 function aBot(h){const d=document.createElement("div");d.className="hh-msg bot";d.innerHTML=`<div class="hh-bot-avatar">HH</div><div class="hh-bubble">${h}</div>`;me.appendChild(d);me.scrollTop=me.scrollHeight;}
 function aUser(t){const d=document.createElement("div");d.className="hh-msg user";d.innerHTML=`<div class="hh-bubble">${escH(t)}</div>`;me.appendChild(d);me.scrollTop=me.scrollHeight;}
@@ -1385,14 +771,14 @@ function shT(){const d=document.createElement("div");d.className="hh-msg bot";d.
 function hiT(){const e=document.getElementById("hh-ti");if(e)e.remove();}
 async function sM(t){t=t.trim();if(!t||iT)return;ce.innerHTML="";aUser(t);ie.value="";iT=true;sb.style.opacity="0.5";ch.push({role:"user",content:t});shT();
 try{const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:SP,messages:ch})});const d=await r.json();const rp=d.content?.[0]?.text||"Sorry, try again!";ch.push({role:"assistant",content:rp});hiT();aBot(rp.replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>").replace(/\n/g,"<br>"));showC(["Tell me more","What's on sale?","Shipping","Contact support"]);}
-catch(e){hiT();aBot("Connectivity issue! DM us on Instagram @heatheaven.23_");}
+catch(e){hiT();aBot("Connectivity issue! DM us on Instagram <strong>@heatheaven.23_</strong> 🙏");}
 iT=false;sb.style.opacity="1";}
 sb.addEventListener("click",()=>sM(ie.value));
 ie.addEventListener("keydown",e=>{if(e.key==="Enter")sM(ie.value);});
 setTimeout(()=>{if(!hO)nd.style.display="block";},3000);
 
-renderCart();
+// ── INIT ───────────────────────────────────────────────────────────────────
+render();
 </script>
 </body>
->>>>>>> 37dd7005f1780c91e50cc78801b90bfd12d1ca68
 </html>
