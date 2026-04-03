@@ -14,27 +14,101 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    :root { --primary:#000000; --secondary:#ffffff; --accent:#ff4500; }
     body  { font-family:"Poppins",sans-serif; overflow-x:hidden; }
     html  { scrollbar-gutter:stable; }
     h1,h2,h3,h4,.brand { font-family:"Archivo Black",sans-serif; letter-spacing:-0.5px; }
     .mobile-menu { transform:translateX(100%); transition:transform 0.3s ease-in-out; }
     .mobile-menu.open { transform:translateX(0); }
 
-    /* ── Wish Row Card ── */
+    /* ══════════════════════════════════════════════
+       PORTED FROM INDEX.HTML – ANIMATIONS
+    ══════════════════════════════════════════════ */
+
+    /* ── Nav drop-in ─────────────────────────────── */
+    @keyframes nav-drop { from{transform:translateY(-100%);opacity:0;} to{transform:translateY(0);opacity:1;} }
+    nav { animation:nav-drop 0.6s cubic-bezier(0.16,1,0.3,1) both; }
+
+    /* ── Brand shimmer ───────────────────────────── */
+    @keyframes brand-shimmer { 0%{background-position:-200% center;} 100%{background-position:200% center;} }
+    .brand a {
+      background:linear-gradient(90deg, currentColor 40%, #ff4500 50%, currentColor 60%);
+      background-size:200% auto;
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+      animation:brand-shimmer 3.5s ease 0.5s 1 forwards;
+    }
+
+    /* ── Nav link underline hover ─────────────────── */
+    .nav-link { position:relative; }
+    .nav-link::after { content:''; position:absolute; bottom:-2px; left:0; width:0; height:2px; background:#ff4500; border-radius:2px; transition:width 0.3s cubic-bezier(0.4,0,0.2,1); }
+    .nav-link:hover::after { width:100%; }
+
+    /* ── Page transition (fadeIn) ────────────────── */
+    .page-transition { animation:fadeIn 0.5s ease-in-out; }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+
+    /* ── Hero-style header word entrance ─────────── */
+    @keyframes hero-word-in { from{opacity:0;transform:translateY(40px) skewY(3deg);filter:blur(4px);} to{opacity:1;transform:translateY(0) skewY(0deg);filter:blur(0);} }
+    .hero-title-word { display:inline-block; animation:hero-word-in 0.8s cubic-bezier(0.16,1,0.3,1) both; }
+    .hero-title-word:nth-child(1) { animation-delay:0.05s; }
+    .hero-title-word:nth-child(2) { animation-delay:0.18s; }
+    .hero-title-word:nth-child(3) { animation-delay:0.31s; }
+
+    @keyframes hero-sub-in { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
+    .hero-sub  { animation:hero-sub-in 0.7s ease 0.5s both; }
+
+    @keyframes line-grow { from{width:0} to{width:60px} }
+    .hero-accent-line { display:block; height:3px; background:#ff4500; border-radius:2px; margin:10px 0 0; animation:line-grow 0.6s ease 0.7s both; }
+
+    /* ── Scroll reveal ────────────────────────────── */
+    .reveal { opacity:0; transform:translateY(32px); transition:opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1); }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+    .reveal-left  { opacity:0; transform:translateX(-40px); transition:opacity 0.7s cubic-bezier(0.16,1,0.3,1),transform 0.7s cubic-bezier(0.16,1,0.3,1); }
+    .reveal-right { opacity:0; transform:translateX(40px);  transition:opacity 0.7s cubic-bezier(0.16,1,0.3,1),transform 0.7s cubic-bezier(0.16,1,0.3,1); }
+    .reveal-left.visible, .reveal-right.visible { opacity:1; transform:translateX(0); }
+
+    /* ── Section heading animated underline ─────── */
+    .section-heading { position:relative; display:inline-block; }
+    .section-heading::after { content:''; position:absolute; bottom:-6px; left:0; width:0; height:3px; background:#ff4500; border-radius:2px; transition:width 0.5s cubic-bezier(0.4,0,0.2,1) 0.1s; }
+    .section-heading.visible::after { width:100%; }
+
+    /* ── Wish-row card (same as shoe-card) ────────── */
     .wish-row {
       background:#fff; border:1px solid #e5e7eb; border-radius:16px;
-      transition:transform 0.25s cubic-bezier(0.175,0.885,0.32,1.275),
-                 box-shadow 0.25s ease, border-color 0.25s ease, opacity 0.25s ease;
+      opacity:0; transform:translateY(28px) scale(0.97);
+      transition:opacity 0.55s cubic-bezier(0.16,1,0.3,1),
+                 transform 0.55s cubic-bezier(0.16,1,0.3,1),
+                 box-shadow 0.25s ease, border-color 0.25s ease;
       box-shadow:0 2px 10px rgba(0,0,0,0.05);
-      animation:row-in 0.35s ease both;
+      position:relative; overflow:hidden;
     }
-    .wish-row:hover { transform:translateY(-3px); box-shadow:0 14px 32px rgba(0,0,0,0.1); border-color:#111827; }
+    /* shimmer sweep on hover – same as shoe-card */
+    .wish-row::after {
+      content:''; position:absolute; inset:0;
+      background:linear-gradient(115deg, transparent 40%, rgba(255,255,255,0.18) 50%, transparent 60%);
+      transform:translateX(-100%); transition:transform 0.5s ease;
+      pointer-events:none; z-index:5;
+    }
+    .wish-row:hover::after { transform:translateX(100%); }
+    .wish-row.visible { opacity:1; transform:translateY(0) scale(1); }
+    .wish-row:hover { transform:translateY(-6px) scale(1.01) !important; box-shadow:0 20px 40px rgba(0,0,0,0.14); border-color:#111827; }
     .dark .wish-row { background:#0f0f0f; border-color:#1f1f1f; }
-    .dark .wish-row:hover { border-color:#3f3f3f; box-shadow:0 14px 32px rgba(0,0,0,0.55); }
-    .wish-row.removing { transform:scale(0.94); opacity:0; pointer-events:none; }
-    @keyframes row-in { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+    .dark .wish-row:hover { border-color:#3f3f3f; box-shadow:0 0 0 1px rgba(255,69,0,0.18), 0 20px 40px rgba(0,0,0,0.6); }
+    .wish-row.removing { transform:scale(0.94) !important; opacity:0 !important; pointer-events:none; transition:transform 0.27s ease, opacity 0.27s ease !important; }
 
-    /* ── Buttons ── */
+    /* ── Cursor glow ──────────────────────────────── */
+    #cursor-glow { position:fixed; width:320px; height:320px; border-radius:50%; background:radial-gradient(circle, rgba(255,69,0,0.07) 0%, transparent 70%); pointer-events:none; z-index:0; transform:translate(-50%,-50%); transition:opacity 0.4s ease; opacity:0; }
+    body:hover #cursor-glow { opacity:1; }
+
+    /* ── Footer scanning line ─────────────────────── */
+    footer { position:relative; overflow:hidden; }
+    footer::before { content:''; position:absolute; top:0; left:-100%; width:60%; height:1px; background:linear-gradient(90deg,transparent,#ff4500,transparent); animation:footer-line 3s ease 1.5s infinite; }
+    @keyframes footer-line { 0%{left:-60%} 100%{left:140%} }
+
+    /* ── Section divider ─────────────────────────── */
+    .section-divider { height:1px; background:linear-gradient(90deg, transparent, #ff4500 30%, #ff4500 70%, transparent); opacity:0.15; margin:0; }
+
+    /* ── Buttons ──────────────────────────────────── */
     .atc-btn {
       display:inline-flex; align-items:center; gap:7px;
       padding:9px 20px; border-radius:999px; border:none; cursor:pointer;
@@ -42,7 +116,11 @@
       background:#000; color:#fff;
       transition:background 0.2s, transform 0.15s cubic-bezier(0.22,0.61,0.36,1), box-shadow 0.2s;
       box-shadow:0 4px 12px rgba(0,0,0,0.18);
+      position:relative; overflow:hidden;
     }
+    /* ripple on click – same as add-to-cart-btn */
+    .atc-btn::after { content:''; position:absolute; inset:0; background:rgba(255,255,255,0.25); border-radius:inherit; transform:scale(0); opacity:0; transition:transform 0.35s ease, opacity 0.35s ease; }
+    .atc-btn:active::after { transform:scale(2); opacity:0; transition:0s; }
     .atc-btn:hover  { background:#222; transform:translateY(-2px); box-shadow:0 8px 20px rgba(0,0,0,0.25); }
     .atc-btn:active { transform:scale(0.95); }
     .dark .atc-btn  { background:#fff; color:#000; box-shadow:0 4px 12px rgba(255,255,255,0.08); }
@@ -60,7 +138,7 @@
     .dark .del-btn { border-color:#2a2a2a; color:#6b7280; }
     .dark .del-btn:hover { background:#1a0000; border-color:#ef4444; color:#ef4444; }
 
-    /* ── Size select ── */
+    /* ── Size select ──────────────────────────────── */
     .size-select {
       background:#f9fafb; border:1.5px solid #e5e7eb; border-radius:999px;
       padding:7px 14px; font-size:13px; font-family:"Poppins",sans-serif;
@@ -74,83 +152,108 @@
     .dark .size-select { background:#111; border-color:#2a2a2a; color:#d1d5db; }
     .dark .size-select:focus { border-color:#555; }
 
-    /* ── Badge shake ── */
-    @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)} }
-    .select-shake { animation:shake 0.35s ease; border-color:#ef4444 !important; }
+    /* ── Shake (same as select-shake in index) ────── */
+    @keyframes select-shake { 0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(-4px)} 40%,80%{transform:translateX(4px)} }
+    .select-shake { animation:select-shake 0.4s ease-out; border-color:#ef4444 !important; }
 
-    /* ── Cart badge bump ── */
-    .cart-bump { animation:cart-bump 0.4s ease-out; }
-    @keyframes cart-bump { 0%{transform:scale(1)} 30%{transform:translateY(-4px) scale(1.25)} 60%{transform:scale(0.93)} 100%{transform:scale(1)} }
+    /* ── Cart badge bump ──────────────────────────── */
+    @keyframes cart-bump { 0%{transform:scale(1)} 40%{transform:scale(1.5)} 70%{transform:scale(0.85)} 100%{transform:scale(1)} }
+    .cart-bump { animation:cart-bump 0.35s ease-out; }
 
-    /* ── Toast ── */
-    #toast {
-      position:fixed; bottom:80px; left:50%; transform:translateX(-50%) translateY(20px);
-      background:#111; color:#fff; padding:10px 22px; border-radius:999px;
-      font-size:13px; z-index:9999; opacity:0; transition:opacity 0.3s,transform 0.3s;
-      pointer-events:none; display:flex; align-items:center; gap:8px; white-space:nowrap;
-    }
-    #toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+    /* ── Heart spring (wishlist) ─────────────────── */
+    @keyframes heart-spring { 0%{transform:scale(1)} 40%{transform:scale(1.3)} 70%{transform:scale(0.9)} 100%{transform:scale(1)} }
+    .heart-pulse { animation:heart-spring 2.2s ease-in-out infinite; }
 
-    /* ── Dark mode icons ── */
-    .sun-icon  { display:block; width:20px; height:20px; }
-    .moon-icon { display:none;  width:20px; height:20px; }
-    .dark .sun-icon  { display:none; }
-    .dark .moon-icon { display:block; }
+    /* ── Toast ────────────────────────────────────── */
+    #toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#111827; color:#fff; padding:.75rem 1.5rem; border-radius:9999px; font-size:.875rem; display:none; align-items:center; gap:.5rem; z-index:9999; }
+    #toast.show { display:flex; animation:toast-fade 2.2s ease-out forwards; }
+    @keyframes toast-fade { 0%{opacity:0;transform:translate(-50%,10px)} 10%,85%{opacity:1;transform:translate(-50%,0)} 100%{opacity:0;transform:translate(-50%,10px)} }
+
+    /* ── Dark mode icons ──────────────────────────── */
+    #theme-toggle .sun-icon,
+    #theme-toggle .moon-icon { position:absolute; width:1.4rem; height:1.4rem; transition:transform 0.4s ease,opacity 0.4s ease; }
+    #theme-toggle .sun-icon  { opacity:1; transform:rotate(0deg) scale(1); }
+    #theme-toggle .moon-icon { opacity:0; transform:rotate(90deg) scale(0.4); }
+    .dark #theme-toggle .sun-icon  { opacity:0; transform:rotate(-90deg) scale(0.4); }
+    .dark #theme-toggle .moon-icon { opacity:1; transform:rotate(0deg) scale(1); }
 
     nav { background:#fff; }
     .dark nav { background:#000; border-bottom:1px solid #1a1a1a; }
 
-    /* ── Search pill ── */
-    #search-pill { display:flex; align-items:center; gap:8px; background:#f3f4f6; border:1px solid #e5e7eb; border-radius:999px; padding:6px 14px 6px 7px; cursor:pointer; min-width:190px; transition:background 0.2s,box-shadow 0.2s; }
-    #search-pill:hover { background:#ebebeb; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
-    .dark #search-pill { background:#1a1a1a; border-color:#2e2e2e; }
-    .dark #search-pill:hover { background:#222; }
-    .pill-icon { width:28px; height:28px; border-radius:50%; background:linear-gradient(135deg,#0d9488,#14b8a6); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-    .pill-icon svg { width:13px; height:13px; }
-    .pill-text { font-size:13px; color:#9ca3af; font-family:"Poppins",sans-serif; flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .dark .pill-text { color:#6b7280; }
-    .pill-emoji { font-size:14px; flex-shrink:0; }
+    /* ── Search pill (same as index) ─────────────── */
+    #search-pill {
+      display:flex; align-items:center; min-width:200px; padding:0;
+      border-radius:999px; border:none; cursor:pointer; background:transparent;
+      font-family:"Poppins",sans-serif; font-size:13px; font-weight:500;
+      transition:transform 0.15s; position:relative; white-space:nowrap;
+    }
+    #search-pill:hover { transform:scale(1.02); }
+    #search-pill:active { transform:scale(0.97); }
+    #search-pill .pill-border { position:absolute; inset:0; border-radius:999px; padding:2px; background:linear-gradient(100deg,#4285f4,#ea4335,#fbbc04,#34a853,#4285f4); background-size:250% 250%; animation:pill-gradient 3s ease infinite; -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0); -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none; }
+    #search-pill .pill-inner { display:flex; align-items:center; gap:10px; width:100%; padding:8px 18px 8px 14px; border-radius:999px; background:#f8f9fa; position:relative; z-index:1; transition:background 0.2s,box-shadow 0.2s; }
+    #search-pill:hover .pill-inner { background:#fff; box-shadow:0 2px 16px rgba(66,133,244,0.18),0 1px 6px rgba(234,67,53,0.1); }
+    .pill-search-icon { width:28px; height:28px; flex-shrink:0; background:linear-gradient(135deg,#4285f4,#34a853); border-radius:50%; display:flex; align-items:center; justify-content:center; transition:transform 0.2s; }
+    #search-pill:hover .pill-search-icon { transform:rotate(-10deg) scale(1.1); }
+    .pill-search-icon svg { width:13px; height:13px; }
+    .pill-label { flex:1; text-align:left; color:#5f6368; font-size:13px; }
+    .pill-kbd { display:inline-flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.07); border-radius:6px; padding:2px 7px; font-size:11px; font-family:monospace; color:#999; line-height:1.5; flex-shrink:0; }
+    .dark #search-pill .pill-inner { background:#1a1a1a; }
+    .dark #search-pill:hover .pill-inner { background:#222; box-shadow:0 2px 16px rgba(66,133,244,0.12); }
+    .dark .pill-label { color:#9aa0a6; }
+    .dark .pill-kbd { background:rgba(255,255,255,0.07); color:#666; }
+    @keyframes pill-gradient { 0%{background-position:0% 50%;} 50%{background-position:100% 50%;} 100%{background-position:0% 50%;} }
 
-    /* ── Search overlay ── */
-    #search-overlay { position:fixed; inset:0; z-index:99999; background:rgba(0,0,0,0.55); backdrop-filter:blur(6px); display:flex; flex-direction:column; align-items:center; padding-top:80px; opacity:0; pointer-events:none; transition:opacity 0.22s ease; }
+    /* ── Search overlay (same as index) ─────────── */
+    #search-overlay { position:fixed; inset:0; z-index:9998; background:rgba(255,255,255,0.85); backdrop-filter:blur(20px); display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding-top:120px; opacity:0; pointer-events:none; transition:opacity 0.3s ease; }
+    .dark #search-overlay { background:rgba(0,0,0,0.88); }
     #search-overlay.open { opacity:1; pointer-events:all; }
-    #search-box { width:100%; max-width:600px; margin:0 16px; background:#fff; border-radius:20px; box-shadow:0 24px 64px rgba(0,0,0,0.25); overflow:hidden; transform:translateY(-16px) scale(0.97); transition:transform 0.25s cubic-bezier(0.34,1.56,0.64,1); }
-    #search-overlay.open #search-box { transform:translateY(0) scale(1); }
-    .dark #search-box { background:#111; }
-    #search-input-row { display:flex; align-items:center; gap:12px; padding:14px 18px; border-bottom:1px solid #f0f0f0; }
-    .dark #search-input-row { border-bottom-color:#222; }
-    .search-icon-circle { width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg,#0d9488,#14b8a6); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-    .search-icon-circle svg { width:14px; height:14px; }
-    #search-input { flex:1; border:none; outline:none; font-size:15px; font-family:"Poppins",sans-serif; background:transparent; color:#111; }
-    .dark #search-input { color:#f0f0f0; }
-    #search-input::placeholder { color:#bbb; }
-    #search-clear { background:none; border:none; cursor:pointer; color:#aaa; font-size:18px; padding:0 4px; display:none; line-height:1; }
-    #search-clear.visible { display:block; }
-    #search-results { max-height:360px; overflow-y:auto; }
-    .sri { display:flex; align-items:center; gap:14px; padding:12px 18px; cursor:pointer; transition:background 0.15s; animation:sri-in 0.2s ease both; }
-    @keyframes sri-in { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
-    .sri:hover { background:#f9fafb; }
-    .dark .sri:hover { background:#1a1a1a; }
-    .sri-img { width:52px; height:52px; object-fit:contain; border-radius:10px; background:#f3f4f6; flex-shrink:0; }
-    .dark .sri-img { background:#1f1f1f; }
-    .sri-name { font-size:14px; font-weight:600; color:#111; }
-    .dark .sri-name { color:#f0f0f0; }
-    .sri-sub  { font-size:12px; color:#6b7280; margin-top:2px; }
-    .sri-price { font-size:13px; font-weight:700; color:#ef4444; margin-left:auto; white-space:nowrap; }
-    .sri-highlight { background:#fef08a; border-radius:3px; padding:0 2px; }
-    .dark .sri-highlight { background:#713f12; }
-    #search-empty { padding:32px; text-align:center; color:#9ca3af; font-size:14px; }
-    #search-hint  { padding:8px 18px 12px; font-size:11px; color:#bbb; text-align:center; }
-    .dark #search-hint { color:#444; }
+    #search-box-wrap { width:100%; max-width:620px; padding:0 20px; position:relative; }
+    .search-border-wrap { position:relative; border-radius:999px; padding:3px; background:linear-gradient(135deg,#4285f4,#ea4335,#fbbc04,#34a853,#4285f4); background-size:300% 300%; animation:gradient-shift 4s ease infinite; box-shadow:0 8px 40px rgba(66,133,244,0.25),0 4px 20px rgba(234,67,53,0.15); }
+    @keyframes gradient-shift { 0%{background-position:0% 50%;} 50%{background-position:100% 50%;} 100%{background-position:0% 50%;} }
+    .search-inner { display:flex; align-items:center; background:#fff; border-radius:999px; padding:14px 20px 14px 22px; gap:14px; }
+    .dark .search-inner { background:#111; }
+    .search-icon-wrap { color:#5f6368; flex-shrink:0; font-size:18px; display:flex; align-items:center; }
+    .dark .search-icon-wrap { color:#9aa0a6; }
+    #search-input { flex:1; border:none; outline:none; background:transparent; font-family:"Poppins",sans-serif; font-size:18px; color:#202124; letter-spacing:0.01em; }
+    .dark #search-input { color:#e8eaed; }
+    #search-input::placeholder { color:#9aa0a6; }
+    #search-clear-btn { background:none; border:none; cursor:pointer; color:#9aa0a6; font-size:16px; display:none; padding:4px; border-radius:50%; transition:color 0.15s,background 0.15s; flex-shrink:0; }
+    #search-clear-btn:hover { background:#f1f3f4; color:#5f6368; }
+    .dark #search-clear-btn:hover { background:#303134; }
+    #search-clear-btn.visible { display:flex; align-items:center; justify-content:center; }
+    #search-results-panel { width:100%; max-width:620px; padding:0 20px; margin-top:16px; max-height:calc(100vh - 280px); overflow-y:auto; display:none; }
+    #search-results-panel.has-results { display:block; }
+    .search-result-item { display:flex; align-items:center; gap:14px; padding:12px 18px; background:#fff; border-radius:14px; margin-bottom:8px; cursor:pointer; transition:background 0.15s,transform 0.15s,box-shadow 0.15s; animation:result-in 0.2s ease; box-shadow:0 1px 6px rgba(0,0,0,0.08); }
+    @keyframes result-in { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+    .dark .search-result-item { background:#1c1c1e; box-shadow:none; }
+    .search-result-item:hover { background:#f8f9fa; transform:translateY(-1px); box-shadow:0 4px 16px rgba(0,0,0,0.1); }
+    .dark .search-result-item:hover { background:#2c2c2e; }
+    .sri-img { width:52px; height:52px; object-fit:cover; border-radius:10px; flex-shrink:0; background:#f1f3f4; }
+    .dark .sri-img { background:#2c2c2e; }
+    .sri-info { flex:1; min-width:0; }
+    .sri-name { font-weight:600; font-size:14px; color:#202124; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .dark .sri-name { color:#e8eaed; }
+    .sri-sub  { font-size:12px; color:#5f6368; margin-top:2px; }
+    .dark .sri-sub { color:#9aa0a6; }
+    .sri-price { font-weight:700; font-size:14px; color:#202124; flex-shrink:0; }
+    .dark .sri-price { color:#e8eaed; }
+    .search-highlight { color:#1a73e8; font-weight:700; }
+    .dark .search-highlight { color:#8ab4f8; }
+    .search-no-results { text-align:center; padding:40px 16px; background:#fff; border-radius:14px; font-size:14px; color:#5f6368; box-shadow:0 1px 6px rgba(0,0,0,0.08); }
+    .dark .search-no-results { background:#1c1c1e; color:#9aa0a6; }
+    .search-no-results .emoji { font-size:36px; display:block; margin-bottom:10px; }
+    #search-close-hint { margin-top:16px; font-size:12px; color:#9aa0a6; font-family:"Poppins",sans-serif; }
+    #search-close-hint kbd { background:rgba(0,0,0,0.08); color:#5f6368; padding:2px 8px; border-radius:4px; font-family:monospace; }
+    .dark #search-close-hint kbd { background:rgba(255,255,255,0.1); color:#9aa0a6; }
 
-    /* ── Sort pills ── */
+    /* ── Sort pills ───────────────────────────────── */
     .sort-pill { padding:6px 16px; border-radius:999px; font-size:12px; font-weight:500; border:1.5px solid #e5e7eb; cursor:pointer; transition:all 0.2s; background:#fff; color:#374151; white-space:nowrap; }
     .sort-pill:hover { border-color:#111; background:#111; color:#fff; }
     .sort-pill.active { background:#000; color:#fff; border-color:#000; }
     .dark .sort-pill { background:transparent; border-color:#2a2a2a; color:#d1d5db; }
     .dark .sort-pill:hover,.dark .sort-pill.active { background:#fff; color:#000; border-color:#fff; }
 
-    /* ── Action pills ── */
+    /* ── Action pills ─────────────────────────────── */
     .action-pill { padding:6px 14px; border-radius:999px; font-size:12px; font-weight:500; border:1.5px solid #e5e7eb; cursor:pointer; transition:all 0.2s; background:#fff; color:#374151; display:inline-flex; align-items:center; gap:5px; }
     .action-pill:hover { border-color:#111; background:#111; color:#fff; }
     .action-pill.danger { border-color:#fecaca; color:#ef4444; }
@@ -160,24 +263,13 @@
     .dark .action-pill.danger { border-color:#7f1d1d; color:#f87171; }
     .dark .action-pill.danger:hover { background:#ef4444; color:#fff; border-color:#ef4444; }
 
-    /* ── Heart pulse ── */
-    @keyframes heart-pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.15)} }
-    .heart-pulse { animation:heart-pulse 2.2s ease-in-out infinite; }
-
-    /* ── Empty state ── */
+    /* ── Empty state ──────────────────────────────── */
     #empty-state { display:none; }
 
-    /* ── AMOLED scrollbar ── */
-    .dark ::-webkit-scrollbar { width:5px; }
-    .dark ::-webkit-scrollbar-track { background:#000; }
-    .dark ::-webkit-scrollbar-thumb { background:#222; border-radius:3px; }
-
-    /* ── AI Chat ── */
+    /* ── AI Chat ──────────────────────────────────── */
     #hh-chat-widget { position:fixed; bottom:24px; left:24px; z-index:9999; font-family:"Poppins",sans-serif; }
     #hh-chat-toggle { width:60px; height:60px; border-radius:50%; background:#000; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 8px 32px rgba(0,0,0,0.25); transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.3s ease; position:relative; }
-    .dark #hh-chat-toggle { background:#f0f0f0; }
-    .dark #hh-chat-toggle .icon-chat svg,.dark #hh-chat-toggle .icon-close svg { stroke:#000; }
-    #hh-chat-toggle:hover { transform:scale(1.1); }
+    #hh-chat-toggle:hover { transform:scale(1.1); box-shadow:0 12px 40px rgba(0,0,0,0.35); }
     #hh-chat-toggle .toggle-icon { position:absolute; transition:opacity 0.2s ease,transform 0.2s ease; }
     #hh-chat-toggle .icon-chat  { opacity:1; transform:scale(1) rotate(0deg); }
     #hh-chat-toggle .icon-close { opacity:0; transform:scale(0.5) rotate(-90deg); }
@@ -193,8 +285,6 @@
     .hh-header-status { color:#a3a3a3; font-size:11px; display:flex; align-items:center; gap:5px; margin-top:2px; }
     .hh-status-dot    { width:7px; height:7px; background:#22c55e; border-radius:50%; animation:pulse-dot 2s infinite; }
     #hh-messages { flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:10px; background:#fafafa; scroll-behavior:smooth; }
-    #hh-messages::-webkit-scrollbar { width:4px; }
-    #hh-messages::-webkit-scrollbar-thumb { background:#ddd; border-radius:2px; }
     .hh-msg { display:flex; gap:8px; align-items:flex-end; animation:msg-in 0.3s ease; }
     @keyframes msg-in { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
     .hh-msg.bot  { justify-content:flex-start; }
@@ -206,7 +296,7 @@
     .hh-chips { display:flex; flex-wrap:wrap; gap:6px; padding:0 16px 10px; background:#fafafa; }
     .hh-chip  { padding:6px 14px; background:#fff; border:1.5px solid #e5e5e5; border-radius:999px; font-size:12px; cursor:pointer; color:#333; font-family:"Poppins",sans-serif; font-weight:500; transition:all 0.2s ease; white-space:nowrap; }
     .hh-chip:hover { background:#000; color:#fff; border-color:#000; }
-    .hh-typing { display:flex; gap:4px; align-items:center; }
+    .hh-typing { display:flex; gap:4px; align-items:center; padding:10px 14px; }
     .hh-typing span { width:7px; height:7px; background:#bbb; border-radius:50%; animation:typing 1.2s infinite ease-in-out; }
     .hh-typing span:nth-child(2) { animation-delay:0.2s; }
     .hh-typing span:nth-child(3) { animation-delay:0.4s; }
@@ -215,8 +305,9 @@
     #hh-input { flex:1; border:1.5px solid #e5e5e5; border-radius:999px; padding:9px 16px; font-size:13px; font-family:"Poppins",sans-serif; outline:none; background:#fafafa; color:#111; transition:border-color 0.2s; }
     #hh-input:focus { border-color:#000; background:#fff; }
     #hh-input::placeholder { color:#bbb; }
-    #hh-send { width:38px; height:38px; background:#000; border:none; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:transform 0.2s ease; flex-shrink:0; }
-    #hh-send:hover { transform:scale(1.1); }
+    #hh-send { width:38px; height:38px; background:#000; border:none; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:transform 0.2s ease,background 0.2s; flex-shrink:0; }
+    #hh-send:hover { transform:scale(1.1); background:#222; }
+    #hh-send:active { transform:scale(0.95); }
     .hh-powered { text-align:center; padding:6px; font-size:10px; color:#ccc; background:#fff; flex-shrink:0; }
     .dark #hh-chat-panel { background:#0a0a0a; }
     .dark #hh-messages { background:#000; }
@@ -229,31 +320,37 @@
     .dark .hh-chip:hover { background:#fff; color:#000; border-color:#fff; }
     .dark .hh-powered { background:#0a0a0a; color:#333; }
     @media (max-width:420px) { #hh-chat-panel { width:calc(100vw - 48px); } }
+
+    /* ── AMOLED scrollbar ── */
+    .dark ::-webkit-scrollbar { width:5px; }
+    .dark ::-webkit-scrollbar-track { background:#000; }
+    .dark ::-webkit-scrollbar-thumb { background:#222; border-radius:3px; }
   </style>
 </head>
 
 <body class="bg-white dark:bg-amoled text-black dark:text-white transition-colors duration-300">
 
-<!-- SEARCH OVERLAY -->
-<div id="search-overlay" role="dialog" aria-label="Search">
-  <div id="search-box">
-    <div id="search-input-row">
-      <div class="search-icon-circle">
-        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-        </svg>
+<!-- Cursor Glow (from index) -->
+<div id="cursor-glow"></div>
+
+<!-- SEARCH OVERLAY (same pill style as index) -->
+<div id="search-overlay" role="dialog" aria-label="Search products">
+  <div id="search-box-wrap">
+    <div class="search-border-wrap">
+      <div class="search-inner">
+        <div class="search-icon-wrap"><i class="fas fa-search"></i></div>
+        <input id="search-input" type="text" placeholder="Ask anything…" autocomplete="off" aria-label="Search" />
+        <button id="search-clear-btn" aria-label="Clear search">✕</button>
       </div>
-      <input id="search-input" type="text" placeholder="Search sneakers, brands, colorways…" autocomplete="off" />
-      <button id="search-clear" aria-label="Clear">✕</button>
     </div>
-    <div id="search-results"></div>
-    <div id="search-hint">Press <kbd style="background:#f3f4f6;border:1px solid #e5e7eb;border-radius:4px;padding:1px 6px;font-size:11px;">Esc</kbd> to close</div>
   </div>
+  <div id="search-results-panel" role="listbox"></div>
+  <p id="search-close-hint">Press <kbd>Esc</kbd> to close</p>
 </div>
 
-<!-- Dark Mode Toggle -->
+<!-- Theme Toggle (same as index) -->
 <div class="fixed bottom-10 right-6 z-50">
-  <button id="theme-toggle" class="flex items-center justify-center w-12 h-12 rounded-full shadow-xl bg-gray-200 dark:bg-cardDark transition-all duration-300 hover:scale-110" aria-label="Toggle dark mode">
+  <button id="theme-toggle" class="relative flex items-center justify-center w-12 h-12 rounded-full shadow-xl bg-gray-200 dark:bg-cardDark transition-all duration-300 hover:scale-110" aria-label="Toggle dark mode">
     <svg class="sun-icon text-yellow-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
       <circle cx="12" cy="12" r="4" fill="currentColor" stroke="none"/>
       <path stroke-linecap="round" d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
@@ -264,40 +361,40 @@
   </button>
 </div>
 
-<!-- NAV -->
+<!-- NAV (with nav-drop animation + brand-shimmer + nav-link underlines) -->
 <nav class="shadow-md sticky top-0 z-40 border-b border-transparent dark:border-zinc-900">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between h-16">
-      <!-- Left: Brand + Links -->
       <div class="flex items-center">
         <div class="brand text-2xl font-bold">
           <a href="index.html" class="text-black dark:text-white">HEAT HAVEN</a>
         </div>
         <div class="hidden md:flex items-center ml-10 space-x-6">
-          <a href="index.html"   class="text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Home</a>
-          <a href="product.html" class="text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Products</a>
-          <a href="deals.html"   class="text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Hot Deals</a>
-          <a href="owners.html"  class="text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Owners</a>
+          <a href="index.html"   class="nav-link text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Home</a>
+          <a href="product.html" class="nav-link text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Products</a>
+          <a href="deals.html"   class="nav-link text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Hot Deals</a>
+          <a href="owners.html"  class="nav-link text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Owners</a>
         </div>
       </div>
-      <!-- Right: Icons -->
       <div class="hidden md:flex items-center gap-2 flex-shrink-0">
-        <!-- Wishlist (active) -->
         <a href="wishlist.html" class="p-2 rounded-full bg-red-50 dark:bg-red-950 relative" aria-label="Wishlist">
           <i class="fas fa-heart text-red-500 text-sm"></i>
           <span id="wish-nav-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 items-center justify-center hidden">0</span>
         </a>
-        <!-- Search pill -->
-        <button id="search-pill" aria-label="Search" onclick="openSearch()">
-          <div class="pill-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-          </div>
-          <span class="pill-text">Search sneakers…</span>
-          <span class="pill-emoji">👟</span>
+        <!-- Search pill – same gradient-border style as index -->
+        <button id="search-open-btn" class="nav-search-pill" aria-label="Open search" style="display:flex;align-items:center;min-width:200px;padding:0;border-radius:999px;border:none;cursor:pointer;background:transparent;font-family:'Poppins',sans-serif;font-size:13px;font-weight:500;transition:transform 0.15s;position:relative;white-space:nowrap;">
+          <div class="pill-border"></div>
+          <span class="pill-inner" style="display:flex;align-items:center;gap:10px;width:100%;padding:8px 18px 8px 14px;border-radius:999px;background:#f8f9fa;position:relative;z-index:1;transition:background 0.2s,box-shadow 0.2s;">
+            <span class="pill-search-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </span>
+            <span class="pill-label">Search sneakers…</span>
+            <span class="pill-kbd">👟</span>
+          </span>
         </button>
-        <!-- Cart -->
+        <!-- nav-search-pill styles inlined via #search-pill from CSS -->
         <a href="cart.html" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark relative">
           <i class="fas fa-shopping-cart text-gray-600 dark:text-gray-300"></i>
           <span id="cart-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
@@ -307,7 +404,6 @@
         </a>
         <a href="profile login.html" class="px-5 py-1.5 rounded-full text-sm font-medium border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all">Login</a>
       </div>
-      <!-- Mobile hamburger -->
       <div class="md:hidden ml-auto flex items-center">
         <button class="p-2" id="mobile-menu-button">
           <i class="fas fa-bars text-black dark:text-white text-lg"></i>
@@ -322,13 +418,16 @@
       <button id="close-menu"><i class="fas fa-times text-xl dark:text-white"></i></button>
     </div>
     <div class="flex flex-col space-y-5">
-      <a href="index.html"    class="text-black dark:text-gray-200 font-medium">Home</a>
-      <a href="product.html"  class="text-black dark:text-gray-200 font-medium">Products</a>
-      <a href="deals.html"    class="text-black dark:text-gray-200 font-medium">Hot Deals</a>
-      <a href="owners.html"   class="text-black dark:text-gray-200 font-medium">Owners</a>
+      <a href="index.html"    class="nav-link text-black dark:text-gray-200 font-medium">Home</a>
+      <a href="product.html"  class="nav-link text-black dark:text-gray-200 font-medium">Products</a>
+      <a href="deals.html"    class="nav-link text-black dark:text-gray-200 font-medium">Hot Deals</a>
+      <a href="owners.html"   class="nav-link text-black dark:text-gray-200 font-medium">Owners</a>
       <a href="wishlist.html" class="flex items-center gap-2 text-red-500 font-medium"><i class="fas fa-heart text-sm"></i> Wishlist</a>
     </div>
     <div class="mt-6 pt-5 border-t border-gray-200 dark:border-gray-700 flex items-center gap-3 flex-wrap">
+      <button id="search-open-btn-mobile" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark" aria-label="Search">
+        <i class="fas fa-search text-gray-600 dark:text-gray-300"></i>
+      </button>
       <a href="cart.html" class="relative p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark">
         <i class="fas fa-shopping-cart text-gray-600 dark:text-gray-300"></i>
         <span id="cart-count-mobile" class="absolute -top-0.5 -right-0.5 bg-red-500 text-white text-[10px] rounded-full h-5 w-5 flex items-center justify-center">0</span>
@@ -341,26 +440,32 @@
   </div>
 </nav>
 
-<!-- PAGE HEADER -->
-<div class="bg-gray-50 dark:bg-black border-b dark:border-zinc-900">
+<!-- PAGE HEADER (hero-word-in entrance, accent line) -->
+<div class="bg-gray-50 dark:bg-black border-b dark:border-zinc-900 page-transition">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="flex items-center gap-4">
-      <div class="w-11 h-11 rounded-full bg-red-100 dark:bg-red-950 flex items-center justify-center flex-shrink-0">
+      <div class="w-11 h-11 rounded-full bg-red-100 dark:bg-red-950 flex items-center justify-center flex-shrink-0" style="animation:hero-word-in 0.7s cubic-bezier(0.16,1,0.3,1) 0.05s both;">
         <i class="fas fa-heart text-red-500 heart-pulse"></i>
       </div>
       <div>
-        <h1 class="text-2xl font-bold dark:text-white">My Wishlist</h1>
-        <p class="text-sm text-gray-500 dark:text-zinc-500 mt-0.5"><span id="wish-count-label">0</span> saved items</p>
+        <h1 class="text-2xl font-bold dark:text-white">
+          <span class="hero-title-word">My</span>
+          <span class="hero-title-word"> Wish</span><span class="hero-title-word">list</span>
+        </h1>
+        <span class="hero-accent-line"></span>
+        <p class="hero-sub text-sm text-gray-500 dark:text-zinc-500 mt-1"><span id="wish-count-label">0</span> saved items</p>
       </div>
     </div>
   </div>
 </div>
 
-<!-- MAIN -->
-<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<div class="section-divider"></div>
 
-  <!-- Toolbar -->
-  <div id="toolbar" class="flex flex-wrap items-center justify-between gap-3 mb-6">
+<!-- MAIN -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 page-transition">
+
+  <!-- Toolbar (reveal animation) -->
+  <div id="toolbar" class="flex flex-wrap items-center justify-between gap-3 mb-6 reveal">
     <div class="flex items-center gap-2 flex-wrap">
       <span class="text-xs font-semibold text-gray-400 dark:text-zinc-600 uppercase tracking-widest">Sort</span>
       <button class="sort-pill active" data-sort="default">Recently Added</button>
@@ -374,24 +479,26 @@
     </div>
   </div>
 
-  <!-- Wish list -->
+  <!-- Wish list (cards get .wish-row → staggered reveal via IntersectionObserver like shoe-card) -->
   <div id="wish-list" class="flex flex-col gap-4"></div>
 
-  <!-- Empty state -->
-  <div id="empty-state" class="text-center py-24">
-    <div class="text-6xl mb-5">🤍</div>
-    <h2 class="text-2xl font-bold mb-3 dark:text-white">Your wishlist is empty</h2>
-    <p class="text-gray-500 dark:text-zinc-500 mb-8 max-w-xs mx-auto text-sm">Browse the store and tap the heart to save items you love.</p>
-    <a href="product.html" class="inline-block bg-black dark:bg-white text-white dark:text-black px-8 py-3 rounded-full font-semibold hover:opacity-80 transition text-sm">Browse Sneakers →</a>
+  <!-- Empty state (reveal) -->
+  <div id="empty-state" class="text-center py-24 reveal">
+    <div class="text-6xl mb-5" style="animation:hero-word-in 0.8s cubic-bezier(0.16,1,0.3,1) 0.1s both;display:inline-block;">🤍</div>
+    <h2 class="text-2xl font-bold mb-3 dark:text-white reveal">Your wishlist is empty</h2>
+    <p class="text-gray-500 dark:text-zinc-500 mb-8 max-w-xs mx-auto text-sm reveal">Browse the store and tap the heart to save items you love.</p>
+    <a href="product.html" class="inline-block bg-black dark:bg-white text-white dark:text-black px-8 py-3 rounded-full font-semibold hover:opacity-80 transition text-sm reveal">Browse Sneakers →</a>
   </div>
 
 </section>
 
-<!-- Footer -->
-<footer class="bg-black text-white py-12 mt-10">
+<div class="section-divider"></div>
+
+<!-- Footer (with scanning line animation) -->
+<footer class="bg-black text-white py-12 mt-4">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-      <div>
+      <div class="reveal-left">
         <h3 class="text-lg font-bold mb-4">HEAT HAVEN</h3>
         <p class="text-zinc-500 text-sm">Premium sneakers, exceptional service.</p>
         <div class="flex space-x-3 mt-4">
@@ -399,7 +506,7 @@
           <a href="https://web.whatsapp.com/" target="_blank"><i class="fab fa-whatsapp text-xl text-red-500"></i></a>
         </div>
       </div>
-      <div>
+      <div class="reveal">
         <h3 class="text-lg font-bold mb-4">Shop</h3>
         <ul class="space-y-2">
           <li><a href="product.html"  class="text-zinc-500 hover:text-white text-sm transition-colors">All Products</a></li>
@@ -407,7 +514,7 @@
           <li><a href="wishlist.html" class="text-zinc-500 hover:text-white text-sm transition-colors">My Wishlist</a></li>
         </ul>
       </div>
-      <div>
+      <div class="reveal">
         <h3 class="text-lg font-bold mb-4">Customer Service</h3>
         <ul class="space-y-2">
           <li><a href="#" class="text-zinc-500 hover:text-white text-sm transition-colors">Contact Us</a></li>
@@ -416,7 +523,7 @@
           <li><a href="#" class="text-zinc-500 hover:text-white text-sm transition-colors">Size Guide</a></li>
         </ul>
       </div>
-      <div>
+      <div class="reveal-right">
         <h3 class="text-lg font-bold mb-4">Newsletter</h3>
         <p class="text-zinc-500 text-sm mb-3">Subscribe for drops and exclusive deals.</p>
         <form class="flex">
@@ -437,10 +544,13 @@
   </div>
 </footer>
 
-<!-- Toast -->
-<div id="toast"><i class="fas fa-check-circle" style="color:#22c55e"></i><span></span></div>
+<!-- Toast (same as index) -->
+<div id="toast">
+  <i class="fas fa-check-circle" style="color:#22c55e"></i>
+  <span></span>
+</div>
 
-<!-- AI Chat -->
+<!-- AI Chat (same as index) -->
 <div id="hh-chat-widget">
   <div id="hh-chat-panel">
     <div id="hh-chat-header">
@@ -474,311 +584,427 @@
   </button>
 </div>
 
+<!-- nav-search-pill style fix for the search button -->
+<style>
+  .nav-search-pill:hover .pill-inner { background:#fff !important; box-shadow:0 2px 16px rgba(66,133,244,0.18),0 1px 6px rgba(234,67,53,0.1) !important; }
+  .nav-search-pill .pill-border { position:absolute; inset:0; border-radius:999px; padding:2px; background:linear-gradient(100deg,#4285f4,#ea4335,#fbbc04,#34a853,#4285f4); background-size:250% 250%; animation:pill-gradient 3s ease infinite; -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0); -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none; }
+  .nav-search-pill .pill-inner { display:flex; align-items:center; gap:10px; width:100%; padding:8px 18px 8px 14px; border-radius:999px; background:#f8f9fa; position:relative; z-index:1; transition:background 0.2s,box-shadow 0.2s; }
+  .dark .nav-search-pill .pill-inner { background:#1a1a1a !important; }
+  .dark .nav-search-pill:hover .pill-inner { background:#222 !important; }
+</style>
+
 <script>
-// ── DARK MODE ──────────────────────────────────────────────────────────────
-if (localStorage.getItem("theme") === "dark") document.documentElement.classList.add("dark");
-document.getElementById("theme-toggle").addEventListener("click", () => {
-  const d = document.documentElement.classList.toggle("dark");
-  localStorage.setItem("theme", d ? "dark" : "light");
-});
+  // ── THEME ────────────────────────────────────────────────────────────────
+  if (localStorage.getItem("theme") === "dark") document.documentElement.classList.add("dark");
+  document.getElementById("theme-toggle").addEventListener("click", () => {
+    const d = document.documentElement.classList.toggle("dark");
+    localStorage.setItem("theme", d ? "dark" : "light");
+  });
 
-// ── MOBILE MENU ────────────────────────────────────────────────────────────
-document.getElementById("mobile-menu-button").addEventListener("click", () => document.getElementById("mobile-menu").classList.add("open"));
-document.getElementById("close-menu").addEventListener("click", () => document.getElementById("mobile-menu").classList.remove("open"));
+  // ── MOBILE MENU ──────────────────────────────────────────────────────────
+  document.getElementById("mobile-menu-button").addEventListener("click", () => document.getElementById("mobile-menu").classList.add("open"));
+  document.getElementById("close-menu").addEventListener("click", () => document.getElementById("mobile-menu").classList.remove("open"));
 
-// ── HELPERS ────────────────────────────────────────────────────────────────
-function escH(s) { return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
-function showToast(msg, err) {
-  const t = document.getElementById("toast");
-  t.querySelector("i").className = err ? "fas fa-exclamation-circle" : "fas fa-check-circle";
-  t.querySelector("i").style.color = err ? "#facc15" : "#22c55e";
-  t.querySelector("span").textContent = msg;
-  t.classList.add("show");
-  clearTimeout(showToast._t);
-  showToast._t = setTimeout(() => t.classList.remove("show"), 2400);
-}
+  // ── CURSOR GLOW (from index) ─────────────────────────────────────────────
+  const glow = document.getElementById('cursor-glow');
+  document.addEventListener('mousemove', e => { glow.style.left = e.clientX + 'px'; glow.style.top = e.clientY + 'px'; });
 
-// ── STORAGE ────────────────────────────────────────────────────────────────
-// Wishlist schema: { id, name, colorway, brand, price, img, size? }
-function getWishlist() { try { return JSON.parse(localStorage.getItem("hh_wishlist") || "[]"); } catch(e) { return []; } }
-function saveWishlist(w) { localStorage.setItem("hh_wishlist", JSON.stringify(w)); }
-function getCart() { try { return JSON.parse(localStorage.getItem("hh_cart") || "[]"); } catch(e) { return []; } }
-function saveCart(c) { localStorage.setItem("hh_cart", JSON.stringify(c)); }
+  // ── HELPERS ──────────────────────────────────────────────────────────────
+  function escH(s) { return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+  function escapeRegex(s) { return s.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"); }
 
-function updateBadges() {
-  const ct = getCart().reduce((s, i) => s + i.qty, 0);
-  document.querySelectorAll("#cart-count,#cart-count-mobile").forEach(el => el.textContent = ct);
-  const wl = getWishlist().length;
-  const nb = document.getElementById("wish-nav-badge");
-  if (nb) { nb.textContent = wl; nb.style.display = wl > 0 ? "flex" : "none"; }
-}
-
-// ── SEED: demo items so page isn't blank out of the box ────────────────────
-// Only seeds if wishlist is completely empty (first visit)
-function maybeSeed() {
-  if (localStorage.getItem("hh_wishlist") !== null) return; // user already has data
-  const seed = [
-    { id:"aj1-chicago-wish", name:"Air Jordan 1 Retro High", colorway:"Chicago Bulls", brand:"Jordan", price:5559, img:"images/aj 1 chichgo.png" },
-    { id:"travis-frag-wish",  name:"Travis Scott × Fragment High", colorway:"Fragment", brand:"Jordan", price:5250, img:"images/travis x fragment high.png" },
-    { id:"puma-melns-wish",   name:"Puma Melns La France", colorway:"La France", brand:"Puma", price:5559, img:"images/puma melons lafrance.png" },
-  ];
-  saveWishlist(seed);
-}
-maybeSeed();
-
-// ── SORT ───────────────────────────────────────────────────────────────────
-let currentSort = "default";
-function sorted() {
-  const list = [...getWishlist()];
-  if (currentSort === "price-asc")  list.sort((a,b) => a.price - b.price);
-  if (currentSort === "price-desc") list.sort((a,b) => b.price - a.price);
-  if (currentSort === "name")       list.sort((a,b) => a.name.localeCompare(b.name));
-  return list;
-}
-
-// ── RENDER ─────────────────────────────────────────────────────────────────
-function render() {
-  const list     = sorted();
-  const wishList = document.getElementById("wish-list");
-  const empty    = document.getElementById("empty-state");
-  const toolbar  = document.getElementById("toolbar");
-
-  // update counts
-  document.getElementById("wish-count-label").textContent = list.length;
-  updateBadges();
-
-  wishList.innerHTML = "";
-
-  if (!list.length) {
-    empty.style.display = "block";
-    toolbar.style.display = "none";
-    return;
+  function showToast(msg, err) {
+    const t = document.getElementById("toast");
+    t.querySelector("i").className = err ? "fas fa-exclamation-circle" : "fas fa-check-circle";
+    t.querySelector("i").style.color = err ? "#facc15" : "#22c55e";
+    t.querySelector("span").textContent = msg;
+    t.classList.remove("show"); void t.offsetWidth; t.classList.add("show");
   }
-  empty.style.display = "none";
-  toolbar.style.display = "";
 
-  list.forEach((item, idx) => {
-    const isShoe = !item.size || item.size === "One Size";
-    const sizeHtml = isShoe
-      ? `<select class="size-select" aria-label="Choose size">
-           <option value="" disabled selected>Choose size</option>
-           <option>UK 6</option><option>UK 7</option><option>UK 8</option>
-           <option>UK 9</option><option>UK 10</option><option>UK 11</option><option>UK 12</option>
-         </select>`
-      : `<span class="text-xs text-gray-400 dark:text-zinc-600">One Size</span>`;
+  // ── STORAGE ──────────────────────────────────────────────────────────────
+  function getWishlist() { try { return JSON.parse(localStorage.getItem("hh_wishlist") || "[]"); } catch(e) { return []; } }
+  function saveWishlist(w) { localStorage.setItem("hh_wishlist", JSON.stringify(w)); }
+  function getCart() { try { return JSON.parse(localStorage.getItem("hh_cart") || "[]"); } catch(e) { return []; } }
+  function saveCart(c) { localStorage.setItem("hh_cart", JSON.stringify(c)); }
 
-    const row = document.createElement("div");
-    row.className = "wish-row";
-    row.dataset.id = item.id;
-    row.style.animationDelay = (idx * 60) + "ms";
+  function updateBadges() {
+    const ct = getCart().reduce((s, i) => s + i.qty, 0);
+    document.querySelectorAll("#cart-count,#cart-count-mobile").forEach(el => el.textContent = ct);
+    const wl = getWishlist().length;
+    const nb = document.getElementById("wish-nav-badge");
+    if (nb) { nb.textContent = wl; nb.style.display = wl > 0 ? "flex" : "none"; }
+  }
 
-    row.innerHTML = `
-      <div class="flex items-center gap-4 p-4 sm:p-5">
-        <!-- Image -->
-        <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden bg-gray-50 dark:bg-zinc-950 flex-shrink-0">
-          <img src="${escH(item.img || '')}" alt="${escH(item.name)}"
-               class="w-full h-full object-contain p-2 transition-transform duration-500 hover:scale-110"
-               onerror="this.src='https://via.placeholder.com/112x112/f9fafb/111111?text=👟'">
-        </div>
-        <!-- Info -->
-        <div class="flex-1 min-w-0">
-          <h3 class="font-bold text-base truncate dark:text-white">${escH(item.name)}</h3>
-          <p class="text-sm text-gray-500 dark:text-zinc-500 mb-0.5">${escH(item.colorway)}</p>
-          <p class="font-bold text-base text-black dark:text-white mb-3">₹${item.price.toLocaleString("en-IN")}</p>
-          <!-- Size + Add -->
-          <div class="flex flex-wrap items-center gap-2">
-            ${sizeHtml}
-            <button class="atc-btn">
-              <i class="fas fa-shopping-cart text-xs"></i> Add to Cart
-            </button>
+  // ── SEED demo items ──────────────────────────────────────────────────────
+  function maybeSeed() {
+    if (localStorage.getItem("hh_wishlist") !== null) return;
+    const seed = [
+      { id:"aj1-chicago-wish", name:"Air Jordan 1 Retro High", colorway:"Chicago Bulls", brand:"Jordan", price:5559, img:"images/aj 1 chichgo.png" },
+      { id:"travis-frag-wish",  name:"Travis Scott × Fragment High", colorway:"Fragment", brand:"Jordan", price:5250, img:"images/travis x fragment high.png" },
+      { id:"puma-melns-wish",   name:"Puma Melns La France", colorway:"La France", brand:"Puma", price:5559, img:"images/puma melons lafrance.png" },
+    ];
+    saveWishlist(seed);
+  }
+  maybeSeed();
+
+  // ── SORT ─────────────────────────────────────────────────────────────────
+  let currentSort = "default";
+  function sorted() {
+    const list = [...getWishlist()];
+    if (currentSort === "price-asc")  list.sort((a,b) => a.price - b.price);
+    if (currentSort === "price-desc") list.sort((a,b) => b.price - a.price);
+    if (currentSort === "name")       list.sort((a,b) => a.name.localeCompare(b.name));
+    return list;
+  }
+
+  // ── IntersectionObserver for scroll reveals ──────────────────────────────
+  // (same as index.html – drives .reveal, .reveal-left, .reveal-right, .section-heading, .wish-row)
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  function observeRevealEls() {
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .section-heading, .wish-row').forEach(el => io.observe(el));
+  }
+
+  // ── RENDER ────────────────────────────────────────────────────────────────
+  function render() {
+    const list     = sorted();
+    const wishList = document.getElementById("wish-list");
+    const empty    = document.getElementById("empty-state");
+    const toolbar  = document.getElementById("toolbar");
+
+    document.getElementById("wish-count-label").textContent = list.length;
+    updateBadges();
+    wishList.innerHTML = "";
+
+    if (!list.length) {
+      empty.style.display = "block";
+      toolbar.style.display = "none";
+      observeRevealEls();
+      return;
+    }
+    empty.style.display = "none";
+    toolbar.style.display = "";
+
+    list.forEach((item, idx) => {
+      const isShoe = !item.size || item.size === "One Size";
+      const sizeHtml = isShoe
+        ? `<select class="size-select" aria-label="Choose size">
+             <option value="" disabled selected>Choose size</option>
+             <option>UK 6</option><option>UK 7</option><option>UK 8</option>
+             <option>UK 9</option><option>UK 10</option><option>UK 11</option><option>UK 12</option>
+           </select>`
+        : `<span class="text-xs text-gray-400 dark:text-zinc-600">One Size</span>`;
+
+      const row = document.createElement("div");
+      row.className = "wish-row";           // gets staggered reveal via IO
+      row.dataset.id = item.id;
+      // stagger delay same pattern as shoe-card on index
+      row.style.transitionDelay = (idx * 0.08) + 's';
+
+      row.innerHTML = `
+        <div class="flex items-center gap-4 p-4 sm:p-5">
+          <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden bg-gray-50 dark:bg-zinc-950 flex-shrink-0">
+            <img src="${escH(item.img || '')}" alt="${escH(item.name)}"
+                 class="w-full h-full object-contain p-2 transition-transform duration-500 hover:scale-110"
+                 onerror="this.src='https://via.placeholder.com/112x112/f9fafb/111111?text=👟'">
           </div>
-        </div>
-        <!-- Delete -->
-        <button class="del-btn flex-shrink-0 self-start ml-2" aria-label="Remove">
-          <i class="fas fa-trash text-xs"></i>
-          <span class="hidden sm:inline">Remove</span>
-        </button>
-      </div>`;
+          <div class="flex-1 min-w-0">
+            <h3 class="font-bold text-base truncate dark:text-white">${escH(item.name)}</h3>
+            <p class="text-sm text-gray-500 dark:text-zinc-500 mb-0.5">${escH(item.colorway)}</p>
+            <p class="font-bold text-base text-black dark:text-white mb-3">₹${item.price.toLocaleString("en-IN")}</p>
+            <div class="flex flex-wrap items-center gap-2">
+              ${sizeHtml}
+              <button class="atc-btn">
+                <i class="fas fa-shopping-cart text-xs"></i> Add to Cart
+              </button>
+            </div>
+          </div>
+          <button class="del-btn flex-shrink-0 self-start ml-2" aria-label="Remove">
+            <i class="fas fa-trash text-xs"></i>
+            <span class="hidden sm:inline">Remove</span>
+          </button>
+        </div>`;
 
-    wishList.appendChild(row);
-  });
-
-  attachListeners();
-}
-
-function attachListeners() {
-  // Delete
-  document.querySelectorAll(".del-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const row = btn.closest(".wish-row");
-      const id  = row.dataset.id;
-      row.classList.add("removing");
-      setTimeout(() => {
-        const w = getWishlist().filter(i => i.id !== id);
-        saveWishlist(w);
-        render();
-        showToast("Removed from wishlist", false);
-      }, 270);
+      wishList.appendChild(row);
     });
-  });
 
-  // Add to cart
-  document.querySelectorAll(".atc-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const row  = btn.closest(".wish-row");
-      const id   = row.dataset.id;
-      const item = getWishlist().find(i => i.id === id);
-      if (!item) return;
-
-      const sel  = row.querySelector(".size-select");
-      const size = sel ? sel.value : (item.size || "One Size");
-
-      if (sel && !size) {
-        sel.classList.add("select-shake");
-        setTimeout(() => sel.classList.remove("select-shake"), 400);
-        showToast("Pick a size first! 👟", true);
-        return;
-      }
-
-      const cartItem = {
-        id: item.name + "-" + size,
-        name: item.name, colorway: item.colorway, brand: item.brand,
-        price: item.price, img: item.img, size: size, qty: 1
-      };
-
-      const cart = getCart();
-      const existing = cart.find(c => c.id === cartItem.id);
-      if (existing) { existing.qty++; } else { cart.push(cartItem); }
-      saveCart(cart);
-      updateBadges();
-
-      // badge bump
-      const cc = document.getElementById("cart-count");
-      if (cc) { cc.classList.remove("cart-bump"); void cc.offsetWidth; cc.classList.add("cart-bump"); }
-
-      btn.innerHTML = '<i class="fas fa-check text-xs"></i> Added!';
-      btn.disabled = true; btn.style.opacity = "0.7";
-      setTimeout(() => {
-        btn.innerHTML = '<i class="fas fa-shopping-cart text-xs"></i> Add to Cart';
-        btn.disabled = false; btn.style.opacity = "";
-      }, 1600);
-
-      showToast(`${item.name} added to cart! 🛒`, false);
-    });
-  });
-}
-
-// ── SORT PILLS ─────────────────────────────────────────────────────────────
-document.querySelectorAll(".sort-pill").forEach(pill => {
-  pill.addEventListener("click", function() {
-    document.querySelectorAll(".sort-pill").forEach(p => p.classList.remove("active"));
-    this.classList.add("active");
-    currentSort = this.dataset.sort;
-    render();
-  });
-});
-
-// ── CLEAR ALL ──────────────────────────────────────────────────────────────
-document.getElementById("clear-btn").addEventListener("click", () => {
-  if (!getWishlist().length) return;
-  if (!confirm("Remove all items from your wishlist?")) return;
-  saveWishlist([]);
-  render();
-  showToast("Wishlist cleared", false);
-});
-
-// ── SHARE ──────────────────────────────────────────────────────────────────
-document.getElementById("share-btn").addEventListener("click", () => {
-  if (navigator.share) {
-    navigator.share({ title:"My Heat Haven Wishlist", url: window.location.href }).catch(() => {});
-  } else {
-    navigator.clipboard?.writeText(window.location.href).then(() => showToast("Link copied! 🔗", false));
+    // kick off IntersectionObserver on the newly rendered rows
+    observeRevealEls();
+    attachListeners();
   }
-});
 
-// ── SEARCH ─────────────────────────────────────────────────────────────────
-const PRODUCTS = [
-  { name:"Air Jordan 1 Retro High",   colorway:"Chicago Bulls",  brand:"Jordan",    price:5559, img:"images/aj 1 chichgo.png" },
-  { name:"Nike Uptempo Slide",         colorway:"Chicago Bulls",  brand:"Nike",      price:5559, img:"images/uptempo slide bulls.png" },
-  { name:"Nike SB Dunk Low",           colorway:"Gulf",           brand:"Nike",      price:5559, img:"images/sb gulf.png" },
-  { name:"Adidas Campus",             colorway:"Clear Sky Gum",  brand:"Adidas",    price:5559, img:"images/adidas campus clear sky gum.png" },
-  { name:"Air Force 1 Low",           colorway:"Lakers",         brand:"Nike",      price:5559, img:"images/af1 kobe yellow.png" },
-  { name:"Yeezy Boost 350 V2",        colorway:"Zebra",          brand:"Yeezy",     price:5559, img:"images/yeezy zebra.png" },
-  { name:"Yeezy 700 V3",              colorway:"Azael",          brand:"Yeezy",     price:5559, img:"images/yzy 700 v3 azael.png" },
-  { name:"Rick Owens Hollywood High", colorway:"Black Milk",     brand:"Rick Owens",price:5559, img:"images/rick owens hollywood high black milk.png" },
-  { name:"Puma Melns La France",      colorway:"La France",      brand:"Puma",      price:5559, img:"images/puma melons lafrance.png" },
-  { name:"Travis Scott × Fragment",  colorway:"Fragment",       brand:"Jordan",    price:5250, img:"images/travis x fragment high.png" },
-  { name:"New Balance 990v5",         colorway:"Grey",           brand:"New Balance",price:5559, img:"images/nb 990v5.png" },
-  { name:"Air Jordan 4 Retro",        colorway:"Breds",          brand:"Jordan",    price:5559, img:"images/aj4 bred.png" },
-  { name:"Crocs Salehe Bembury",      colorway:"Horchata",       brand:"Crocs",     price:5559, img:"images/crocs horchata.png" },
-];
-
-const so=document.getElementById("search-overlay"),si=document.getElementById("search-input"),sc=document.getElementById("search-clear"),sr=document.getElementById("search-results");
-window.openSearch = () => { so.classList.add("open"); setTimeout(() => si.focus(), 50); };
-function closeSearch() { so.classList.remove("open"); si.value=""; sc.classList.remove("visible"); sr.innerHTML=""; }
-so.addEventListener("click", e => { if(e.target===so) closeSearch(); });
-document.addEventListener("keydown", e => {
-  if(e.key==="Escape") closeSearch();
-  if((e.metaKey||e.ctrlKey)&&e.key==="k"){ e.preventDefault(); openSearch(); }
-});
-sc.addEventListener("click", () => { si.value=""; sc.classList.remove("visible"); sr.innerHTML=""; si.focus(); });
-function hl(t,q){ if(!q) return escH(t); return escH(t).replace(new RegExp("("+q.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+")","gi"),'<span class="sri-highlight">$1</span>'); }
-function runSearch(q) {
-  sc.classList.toggle("visible", q.length > 0);
-  if (!q.trim()) { sr.innerHTML=""; return; }
-  const hits = PRODUCTS.filter(p => [p.name,p.colorway,p.brand].join(" ").toLowerCase().includes(q.toLowerCase()));
-  if (!hits.length) { sr.innerHTML=`<div id="search-empty">😕 No results for "<strong>${escH(q)}</strong>"</div>`; return; }
-  sr.innerHTML = hits.map((p,i) => `
-    <div class="sri" data-idx="${i}" style="animation-delay:${i*35}ms" tabindex="0">
-      <img class="sri-img" src="${escH(p.img)}" alt="${escH(p.name)}" onerror="this.src='https://via.placeholder.com/52'">
-      <div style="flex:1;min-width:0">
-        <div class="sri-name">${hl(p.name,q)}</div>
-        <div class="sri-sub">${hl(p.colorway,q)} · ${hl(p.brand,q)}</div>
-      </div>
-      <div class="sri-price">₹${p.price.toLocaleString("en-IN")}</div>
-    </div>`).join("");
-  sr.querySelectorAll(".sri").forEach((row, i) => {
-    row.addEventListener("click", () => {
-      const p = hits[i];
-      const w = getWishlist();
-      const wid = p.name.replace(/\s+/g,"-").toLowerCase() + "-wish";
-      if (!w.find(x => x.id === wid)) {
-        w.push({ id:wid, name:p.name, colorway:p.colorway, brand:p.brand, price:p.price, img:p.img });
-        saveWishlist(w);
-        render();
-        showToast(`${p.name} added to wishlist! ❤️`, false);
-      } else {
-        showToast("Already in your wishlist", false);
-      }
-      closeSearch();
+  function attachListeners() {
+    // Delete
+    document.querySelectorAll(".del-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const row = btn.closest(".wish-row");
+        const id  = row.dataset.id;
+        row.classList.add("removing");
+        setTimeout(() => {
+          const w = getWishlist().filter(i => i.id !== id);
+          saveWishlist(w);
+          render();
+          showToast("Removed from wishlist", false);
+        }, 270);
+      });
     });
-    row.addEventListener("keydown", e => { if(e.key==="Enter") row.click(); });
+
+    // Add to cart (with cart-bump same as index)
+    document.querySelectorAll(".atc-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const row  = btn.closest(".wish-row");
+        const id   = row.dataset.id;
+        const item = getWishlist().find(i => i.id === id);
+        if (!item) return;
+
+        const sel  = row.querySelector(".size-select");
+        const size = sel ? sel.value : (item.size || "One Size");
+
+        if (sel && !size) {
+          sel.classList.add("select-shake");
+          sel.style.borderColor = "#ef4444";
+          sel.style.boxShadow   = "0 0 0 2px rgba(239,68,68,0.25)";
+          setTimeout(() => { sel.classList.remove("select-shake"); sel.style.borderColor = ""; sel.style.boxShadow = ""; }, 500);
+          showToast("Pick a size first! 👟", true);
+          return;
+        }
+
+        const cartItem = {
+          id: item.name + "-" + size, name: item.name, colorway: item.colorway,
+          brand: item.brand, price: item.price, img: item.img, size: size, qty: 1
+        };
+        const cart = getCart();
+        const existing = cart.find(c => c.id === cartItem.id);
+        if (existing) { existing.qty++; } else { cart.push(cartItem); }
+        saveCart(cart);
+        updateBadges();
+
+        // cart badge bump (same keyframe as index)
+        const cc = document.getElementById("cart-count");
+        if (cc) { cc.classList.remove("cart-bump"); void cc.offsetWidth; cc.classList.add("cart-bump"); }
+
+        btn.innerHTML = '<i class="fas fa-check text-xs"></i> Added!';
+        btn.disabled = true; btn.style.opacity = "0.7";
+        setTimeout(() => {
+          btn.innerHTML = '<i class="fas fa-shopping-cart text-xs"></i> Add to Cart';
+          btn.disabled = false; btn.style.opacity = "";
+        }, 1600);
+
+        showToast(`${item.name} added to cart! 🛒`, false);
+      });
+    });
+  }
+
+  // ── SORT PILLS ───────────────────────────────────────────────────────────
+  document.querySelectorAll(".sort-pill").forEach(pill => {
+    pill.addEventListener("click", function() {
+      document.querySelectorAll(".sort-pill").forEach(p => p.classList.remove("active"));
+      this.classList.add("active");
+      currentSort = this.dataset.sort;
+      render();
+    });
   });
-}
-let dbt;
-si.addEventListener("input", () => { clearTimeout(dbt); dbt = setTimeout(() => runSearch(si.value), 140); });
 
-// ── AI CHAT ────────────────────────────────────────────────────────────────
-const SP="You are a friendly sneaker assistant for Heat Haven, a premium sneaker store in India. Currency: ₹. Sizes: UK 6-12. Keep replies 2-3 sentences, casual, sneaker-culture savvy.";
-const QC=["What's on sale? 🔥","Size guide","Shipping info","Best Jordans","Returns"];
-const cw=document.getElementById("hh-chat-widget"),ct=document.getElementById("hh-chat-toggle"),me=document.getElementById("hh-messages"),ie=document.getElementById("hh-input"),sb=document.getElementById("hh-send"),ce=document.getElementById("hh-chips"),nd=document.getElementById("hh-notif-dot");
-let ch=[],iT=false,hO=false;
-ct.addEventListener("click",()=>{cw.classList.toggle("open");if(!hO){hO=true;nd.style.display="none";setTimeout(()=>{aBot("Hey! 👟 Welcome to <strong>Heat Haven</strong>. I'm your sneaker assistant.");setTimeout(()=>{aBot("Ask me about sizing, shipping, or anything kicks! 🔥");showC();},900);},300);}});
-function showC(c=QC){ce.innerHTML="";c.forEach(t=>{const b=document.createElement("button");b.className="hh-chip";b.textContent=t;b.onclick=()=>{ce.innerHTML="";sM(t);};ce.appendChild(b);});}
-function aBot(h){const d=document.createElement("div");d.className="hh-msg bot";d.innerHTML=`<div class="hh-bot-avatar">HH</div><div class="hh-bubble">${h}</div>`;me.appendChild(d);me.scrollTop=me.scrollHeight;}
-function aUser(t){const d=document.createElement("div");d.className="hh-msg user";d.innerHTML=`<div class="hh-bubble">${escH(t)}</div>`;me.appendChild(d);me.scrollTop=me.scrollHeight;}
-function shT(){const d=document.createElement("div");d.className="hh-msg bot";d.id="hh-ti";d.innerHTML=`<div class="hh-bot-avatar">HH</div><div class="hh-bubble" style="padding:10px 16px"><div class="hh-typing"><span></span><span></span><span></span></div></div>`;me.appendChild(d);me.scrollTop=me.scrollHeight;}
-function hiT(){const e=document.getElementById("hh-ti");if(e)e.remove();}
-async function sM(t){t=t.trim();if(!t||iT)return;ce.innerHTML="";aUser(t);ie.value="";iT=true;sb.style.opacity="0.5";ch.push({role:"user",content:t});shT();
-try{const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:SP,messages:ch})});const d=await r.json();const rp=d.content?.[0]?.text||"Sorry, try again!";ch.push({role:"assistant",content:rp});hiT();aBot(rp.replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>").replace(/\n/g,"<br>"));showC(["Tell me more","What's on sale?","Shipping","Contact support"]);}
-catch(e){hiT();aBot("Connectivity issue! DM us on Instagram <strong>@heatheaven.23_</strong> 🙏");}
-iT=false;sb.style.opacity="1";}
-sb.addEventListener("click",()=>sM(ie.value));
-ie.addEventListener("keydown",e=>{if(e.key==="Enter")sM(ie.value);});
-setTimeout(()=>{if(!hO)nd.style.display="block";},3000);
+  // ── CLEAR ALL ────────────────────────────────────────────────────────────
+  document.getElementById("clear-btn").addEventListener("click", () => {
+    if (!getWishlist().length) return;
+    if (!confirm("Remove all items from your wishlist?")) return;
+    saveWishlist([]);
+    render();
+    showToast("Wishlist cleared", false);
+  });
 
-// ── INIT ───────────────────────────────────────────────────────────────────
-render();
+  // ── SHARE ────────────────────────────────────────────────────────────────
+  document.getElementById("share-btn").addEventListener("click", () => {
+    if (navigator.share) {
+      navigator.share({ title:"My Heat Haven Wishlist", url: window.location.href }).catch(() => {});
+    } else {
+      navigator.clipboard?.writeText(window.location.href).then(() => showToast("Link copied! 🔗", false));
+    }
+  });
+
+  // ── SEARCH (same logic + same overlay as index) ──────────────────────────
+  const PRODUCTS = [
+    { name:"Air Jordan 1 Retro High",   colorway:"Chicago Bulls",  brand:"Jordan",     price:5559, img:"images/aj 1 chichgo.png" },
+    { name:"Nike Uptempo Slide",         colorway:"Chicago Bulls",  brand:"Nike",       price:5559, img:"images/uptempo slide bulls.png" },
+    { name:"Nike SB Dunk Low",           colorway:"Gulf",           brand:"Nike",       price:5559, img:"images/sb gulf.png" },
+    { name:"Adidas Campus",             colorway:"Clear Sky Gum",  brand:"Adidas",     price:5559, img:"images/adidas campus clear sky gum.png" },
+    { name:"Air Force 1 Low",           colorway:"Lakers",         brand:"Nike",       price:5559, img:"images/af1 kobe yellow.png" },
+    { name:"Yeezy Boost 350 V2",        colorway:"Zebra",          brand:"Yeezy",      price:5559, img:"images/yeezy zebra.png" },
+    { name:"Yeezy 700 V3",              colorway:"Azael",          brand:"Yeezy",      price:5559, img:"images/yzy 700 v3 azael.png" },
+    { name:"Travis Scott × Fragment",  colorway:"Fragment",       brand:"Jordan",     price:5250, img:"images/travis x fragment high.png" },
+    { name:"New Balance 990v5",         colorway:"Grey",           brand:"New Balance",price:5559, img:"images/nb 990v5.png" },
+    { name:"Air Jordan 4 Retro",        colorway:"Breds",          brand:"Jordan",     price:5559, img:"images/aj4 bred.png" },
+    { name:"Puma Melns La France",      colorway:"La France",      brand:"Puma",       price:5559, img:"images/puma melons lafrance.png" },
+  ];
+
+  const searchOverlay  = document.getElementById("search-overlay");
+  const searchInput    = document.getElementById("search-input");
+  const searchClearBtn = document.getElementById("search-clear-btn");
+  const resultsPanel   = document.getElementById("search-results-panel");
+
+  function openSearch()  { searchOverlay.classList.add("open"); searchInput.focus(); }
+  function closeSearch() {
+    searchOverlay.classList.remove("open");
+    searchInput.value = ""; searchClearBtn.classList.remove("visible");
+    resultsPanel.innerHTML = ""; resultsPanel.classList.remove("has-results");
+  }
+
+  document.getElementById("search-open-btn").addEventListener("click", openSearch);
+  document.getElementById("search-open-btn-mobile")?.addEventListener("click", () => {
+    document.getElementById("mobile-menu").classList.remove("open");
+    openSearch();
+  });
+  searchOverlay.addEventListener("click", e => { if (e.target === searchOverlay) closeSearch(); });
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && searchOverlay.classList.contains("open")) closeSearch();
+    if ((e.metaKey || e.ctrlKey) && e.key === "k") { e.preventDefault(); openSearch(); }
+  });
+  searchClearBtn.addEventListener("click", () => {
+    searchInput.value = ""; searchClearBtn.classList.remove("visible");
+    resultsPanel.innerHTML = ""; resultsPanel.classList.remove("has-results");
+    searchInput.focus();
+  });
+
+  function highlight(text, query) {
+    if (!query) return escH(text);
+    return escH(text).replace(new RegExp(`(${escapeRegex(query)})`,"gi"),'<span class="search-highlight">$1</span>');
+  }
+
+  function runSearch(query) {
+    searchClearBtn.classList.toggle("visible", query.length > 0);
+    if (!query.trim()) { resultsPanel.innerHTML = ""; resultsPanel.classList.remove("has-results"); return; }
+    const q    = query.toLowerCase();
+    const hits = PRODUCTS.filter(p => p.name.toLowerCase().includes(q) || p.colorway.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q));
+    resultsPanel.classList.add("has-results");
+    if (!hits.length) {
+      resultsPanel.innerHTML = `<div class="search-no-results"><span class="emoji">👟</span>No sneakers found for "<strong>${escH(query)}</strong>"</div>`;
+      return;
+    }
+    resultsPanel.innerHTML = hits.map((p, i) => `
+      <div class="search-result-item" data-idx="${i}" role="option" tabindex="0" style="animation-delay:${i*40}ms">
+        <img class="sri-img" src="${escH(p.img)}" alt="${escH(p.name)}" onerror="this.style.background='#e5e5e5'">
+        <div class="sri-info">
+          <div class="sri-name">${highlight(p.name, query)}</div>
+          <div class="sri-sub">${highlight(p.colorway, query)} · ${highlight(p.brand, query)}</div>
+        </div>
+        <div class="sri-price">₹${p.price.toLocaleString("en-IN")}</div>
+      </div>`).join("");
+
+    resultsPanel.querySelectorAll(".search-result-item").forEach((item, i) => {
+      item.addEventListener("click", () => {
+        const p   = hits[i];
+        const w   = getWishlist();
+        const wid = p.name.replace(/\s+/g,"-").toLowerCase() + "-wish";
+        if (!w.find(x => x.id === wid)) {
+          w.push({ id:wid, name:p.name, colorway:p.colorway, brand:p.brand, price:p.price, img:p.img });
+          saveWishlist(w);
+          render();
+          showToast(`${p.name} added to wishlist! ❤️`, false);
+        } else {
+          showToast("Already in your wishlist", false);
+        }
+        closeSearch();
+      });
+    });
+  }
+
+  let debounceTimer;
+  searchInput.addEventListener("input", () => { clearTimeout(debounceTimer); debounceTimer = setTimeout(() => runSearch(searchInput.value), 160); });
+
+  // ── AI CHAT (same knowledge base as index) ───────────────────────────────
+  const QUICK_REPLIES = ["What's on sale? 🔥","Size guide","Shipping info","Best Jordans","Returns policy"];
+  const KB = [
+    { keys:["sale","deal","discount","offer"], reply:"🔥 We've got the Air Jordan 1 Chicago on sale right now! Plus check out our Hot Deals page for more steals. Free shipping kicks in above ₹50,000 too!" },
+    { keys:["jordan","aj1","jordan 1","chicago bulls","air jordan"], reply:"The Air Jordan 1 Retro High Chicago Bulls is one of our most 🔥 pieces — a certified grail. Prices start at ₹21,500 and vary by size. Grab it before it's gone!" },
+    { keys:["yeezy","700","azael","adidas yeezy"], reply:"The Yeezy 700 V3 Azael is pure fire 🧲 — that alien aesthetic is unmatched. Prices range ₹12,400–₹20,500 depending on size. Yeezys run small so go half a size up!" },
+    { keys:["travis","fragment","travis scott"], reply:"The Travis Scott x Fragment High is the rarest drop we carry 👁️ — prices go from ₹94,000 to ₹3,06,000 depending on size. A true collector piece." },
+    { keys:["size","sizing","fit","small","large","run"], reply:"📏 <strong>Heat Haven Size Guide</strong><br><br>👟 <strong>Air Jordans / Nike</strong> → Go half a size up.<br>🟡 <strong>Yeezys</strong> → Go a full size up.<br>⚖️ <strong>New Balance</strong> → True to size.<br>👟 <strong>Adidas</strong> → Generally true to size.<br><br>Still unsure? DM us @heatheaven.23_ 🙌" },
+    { keys:["shipping","delivery","ship","how long"], reply:"🚚 Free shipping above ₹50,000. ₹1,000 flat below that. 3–7 business days pan-India!" },
+    { keys:["return","exchange","refund","policy"], reply:"↩️ Returns within 7 days, unworn with original box. DM @heatheaven.23_ or email info@heathaven.in to start!" },
+    { keys:["pay","payment","upi","cod","cash","card"], reply:"💳 UPI, Cards (Visa/Mastercard/RuPay), and Cash on Delivery on select orders. 100% secure!" },
+    { keys:["authentic","real","legit","fake","original"], reply:"💯 Every pair is 100% authentic and verified by our team. No replicas, ever." },
+    { keys:["contact","reach","call","whatsapp","instagram","email"], reply:"📞 Reach us!<br>• Instagram: @heatheaven.23_<br>• WhatsApp: +91 9205443488<br>• Email: info@heathaven.in" },
+    { keys:["hello","hi","hey","sup","yo"], reply:"Hey! 👋 Welcome to Heat Haven — your go-to spot for premium kicks in India. What can I help you with today? 👟" },
+    { keys:["thanks","thank you","thx"], reply:"Anytime! 🙏 Happy to help. Stay fresh and keep it 🔥" },
+    { keys:["wishlist","saved","heart","favourite"], reply:"You're already here! 🤍 Your wishlist shows all your saved kicks. Hit 'Add to Cart' whenever you're ready to cop." },
+  ];
+  function getReply(text) {
+    const q = text.toLowerCase();
+    for (const e of KB) { if (e.keys.some(k => q.includes(k))) return e.reply; }
+    return "Hmm, not sure about that one! 🤔 DM us on Instagram <strong>@heatheaven.23_</strong> or WhatsApp <strong>+91 9205443488</strong> and our team will help! 👟";
+  }
+
+  const chatWidget = document.getElementById("hh-chat-widget");
+  const chatToggle = document.getElementById("hh-chat-toggle");
+  const msgs       = document.getElementById("hh-messages");
+  const input      = document.getElementById("hh-input");
+  const sendBtn    = document.getElementById("hh-send");
+  const chipsEl    = document.getElementById("hh-chips");
+  const notifDot   = document.getElementById("hh-notif-dot");
+  let hasOpened    = false;
+
+  chatToggle.addEventListener("click", () => {
+    chatWidget.classList.toggle("open");
+    if (!hasOpened) {
+      hasOpened = true; notifDot.style.display = "none";
+      setTimeout(() => {
+        addBot("Hey! 👟 Welcome to <strong>Heat Haven</strong>. I'm your personal sneaker assistant.");
+        setTimeout(() => { addBot("Ask me about products, sizing, shipping, or anything sneaker-related!"); showChips(); }, 800);
+      }, 300);
+    }
+  });
+
+  function showChips(chips = QUICK_REPLIES) {
+    chipsEl.innerHTML = "";
+    chips.forEach(t => {
+      const b = document.createElement("button"); b.className = "hh-chip"; b.textContent = t;
+      b.onclick = () => { chipsEl.innerHTML = ""; sendMsg(t); };
+      chipsEl.appendChild(b);
+    });
+  }
+  function addBot(html) {
+    const d = document.createElement("div"); d.className = "hh-msg bot";
+    d.innerHTML = `<div class="hh-bot-avatar">HH</div><div class="hh-bubble">${html.replace(/\n/g,"<br>")}</div>`;
+    msgs.appendChild(d); msgs.scrollTop = msgs.scrollHeight;
+  }
+  function addUser(text) {
+    const d = document.createElement("div"); d.className = "hh-msg user";
+    d.innerHTML = `<div class="hh-bubble">${escH(text)}</div>`;
+    msgs.appendChild(d); msgs.scrollTop = msgs.scrollHeight;
+  }
+  function showTyping() {
+    const d = document.createElement("div"); d.className = "hh-msg bot"; d.id = "hh-typing-indicator";
+    d.innerHTML = `<div class="hh-bot-avatar">HH</div><div class="hh-bubble" style="padding:10px 16px"><div class="hh-typing"><span></span><span></span><span></span></div></div>`;
+    msgs.appendChild(d); msgs.scrollTop = msgs.scrollHeight;
+  }
+  function hideTyping() { const e = document.getElementById("hh-typing-indicator"); if (e) e.remove(); }
+  function sendMsg(text) {
+    text = text.trim(); if (!text) return;
+    chipsEl.innerHTML = ""; addUser(text); input.value = ""; showTyping();
+    setTimeout(() => {
+      hideTyping(); addBot(getReply(text));
+      showChips(["Tell me more","Shipping info","Size guide","Contact us"]);
+    }, 600 + Math.random() * 400);
+  }
+  sendBtn.addEventListener("click", () => sendMsg(input.value));
+  input.addEventListener("keydown", e => { if (e.key === "Enter") sendMsg(input.value); });
+  setTimeout(() => { if (!hasOpened) notifDot.style.display = "block"; }, 3000);
+
+  // ── INTERSECTION OBSERVER for section headings + footer cols ─────────────
+  // (mirrors the IntersectionObserver in index.html)
+  observeRevealEls(); // initial run before render adds rows
+
+  // ── CURRENT PAGE nav highlight (same as index) ───────────────────────────
+  const currentPage = location.pathname.split('/').pop() || 'wishlist.html';
+  document.querySelectorAll('.nav-link').forEach(link => {
+    if (link.getAttribute('href') === currentPage) { link.classList.add('font-semibold'); link.style.color = '#ff4500'; }
+  });
+
+  // ── INIT ─────────────────────────────────────────────────────────────────
+  render();
 </script>
 </body>
 </html>
