@@ -22,80 +22,55 @@
     .mobile-menu { transform:translateX(100%); transition:transform 0.3s ease-in-out; }
     .mobile-menu.open { transform:translateX(0); }
 
-    /* ══════════════════════════════════════════════
-       INDEX ANIMATIONS (full set)
-    ══════════════════════════════════════════════ */
-
-    /* ── Nav drop-in ── */
+    /* ══ INDEX ANIMATIONS ══ */
     @keyframes nav-drop { from{transform:translateY(-100%);opacity:0} to{transform:translateY(0);opacity:1} }
     nav { animation:nav-drop 0.6s cubic-bezier(0.16,1,0.3,1) both; }
 
-    /* ── Brand shimmer ── */
     @keyframes brand-shimmer { 0%{background-position:-200% center} 100%{background-position:200% center} }
-    .brand a {
-      background:linear-gradient(90deg, currentColor 40%, #ff4500 50%, currentColor 60%);
-      background-size:200% auto;
-      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-      animation:brand-shimmer 3.5s ease 0.5s 1 forwards;
-    }
+    .brand a { background:linear-gradient(90deg, currentColor 40%, #ff4500 50%, currentColor 60%); background-size:200% auto; -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; animation:brand-shimmer 3.5s ease 0.5s 1 forwards; }
 
-    /* ── Nav link underline ── */
     .nav-link { position:relative; }
     .nav-link::after { content:''; position:absolute; bottom:-2px; left:0; width:0; height:2px; background:#ff4500; border-radius:2px; transition:width 0.3s cubic-bezier(0.4,0,0.2,1); }
     .nav-link:hover::after { width:100%; }
 
-    /* ── Page fadeIn ── */
     .page-transition { animation:fadeIn 0.5s ease-in-out; }
     @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
 
-    /* ── Hero word entrance ── */
     @keyframes hero-word-in { from{opacity:0;transform:translateY(40px) skewY(3deg);filter:blur(4px)} to{opacity:1;transform:translateY(0) skewY(0);filter:blur(0)} }
     .hero-title-word { display:inline-block; animation:hero-word-in 0.8s cubic-bezier(0.16,1,0.3,1) both; }
-    .hero-title-word:nth-child(1){animation-delay:0.05s}
-    .hero-title-word:nth-child(2){animation-delay:0.18s}
-    .hero-title-word:nth-child(3){animation-delay:0.31s}
+    .hero-title-word:nth-child(1){animation-delay:0.05s} .hero-title-word:nth-child(2){animation-delay:0.18s} .hero-title-word:nth-child(3){animation-delay:0.31s}
 
-    /* ── Sub fade-up ── */
     @keyframes hero-sub-in { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
     .hero-sub { animation:hero-sub-in 0.65s ease 0.5s both; }
 
-    /* ── Accent line grow ── */
     @keyframes line-grow { from{width:0} to{width:64px} }
     .hero-accent-line { display:block; height:3px; background:#ff4500; border-radius:2px; margin:10px 0 0; animation:line-grow 0.6s ease 0.7s both; }
 
-    /* ── Scroll reveal ── */
     .reveal       { opacity:0; transform:translateY(28px); transition:opacity 0.7s cubic-bezier(0.16,1,0.3,1),transform 0.7s cubic-bezier(0.16,1,0.3,1); }
     .reveal.visible { opacity:1; transform:translateY(0); }
     .reveal-left  { opacity:0; transform:translateX(-38px); transition:opacity 0.7s cubic-bezier(0.16,1,0.3,1),transform 0.7s cubic-bezier(0.16,1,0.3,1); }
     .reveal-right { opacity:0; transform:translateX(38px);  transition:opacity 0.7s cubic-bezier(0.16,1,0.3,1),transform 0.7s cubic-bezier(0.16,1,0.3,1); }
     .reveal-left.visible,.reveal-right.visible { opacity:1; transform:translateX(0); }
 
-    /* ── Section heading underline ── */
     .section-heading { position:relative; display:inline-block; }
     .section-heading::after { content:''; position:absolute; bottom:-5px; left:0; width:0; height:3px; background:#ff4500; border-radius:2px; transition:width 0.5s cubic-bezier(0.4,0,0.2,1) 0.1s; }
     .section-heading.visible::after { width:100%; }
 
-    /* ── Cursor glow ── */
     #cursor-glow { position:fixed; width:320px; height:320px; border-radius:50%; background:radial-gradient(circle,rgba(255,69,0,0.07) 0%,transparent 70%); pointer-events:none; z-index:0; transform:translate(-50%,-50%); transition:opacity 0.4s ease; opacity:0; }
     body:hover #cursor-glow { opacity:1; }
 
-    /* ── Section divider ── */
     .section-divider { height:1px; background:linear-gradient(90deg,transparent,#ff4500 30%,#ff4500 70%,transparent); opacity:0.12; }
 
-    /* ── Footer scanning line ── */
     footer { position:relative; overflow:hidden; }
     footer::before { content:''; position:absolute; top:0; left:-100%; width:60%; height:1px; background:linear-gradient(90deg,transparent,#ff4500,transparent); animation:footer-line 3s ease 1.5s infinite; }
     @keyframes footer-line { 0%{left:-60%} 100%{left:140%} }
 
-    /* ── Theme toggle ── */
-    #theme-toggle .sun-icon,
-    #theme-toggle .moon-icon { position:absolute; width:1.4rem; height:1.4rem; transition:transform 0.4s ease,opacity 0.4s ease; }
+    #theme-toggle .sun-icon,#theme-toggle .moon-icon { position:absolute; width:1.4rem; height:1.4rem; transition:transform 0.4s ease,opacity 0.4s ease; }
     #theme-toggle .sun-icon  { opacity:1; transform:rotate(0deg) scale(1); }
     #theme-toggle .moon-icon { opacity:0; transform:rotate(90deg) scale(0.4); }
     .dark #theme-toggle .sun-icon  { opacity:0; transform:rotate(-90deg) scale(0.4); }
     .dark #theme-toggle .moon-icon { opacity:1; transform:rotate(0deg) scale(1); }
 
-    /* ── Toast ── */
     #toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#111827; color:#fff; padding:.75rem 1.5rem; border-radius:9999px; font-size:.875rem; display:none; align-items:center; gap:.5rem; z-index:9999; }
     #toast.show { display:flex; animation:toast-fade 2.5s ease-out forwards; }
     @keyframes toast-fade { 0%{opacity:0;transform:translate(-50%,10px)} 10%,85%{opacity:1;transform:translate(-50%,0)} 100%{opacity:0;transform:translate(-50%,10px)} }
@@ -103,10 +78,8 @@
     nav { background:#fff; }
     .dark nav { background:#000; border-bottom:1px solid #1a1a1a; }
 
-    /* ── Search pill ── */
     .nav-search-pill { display:flex; align-items:center; min-width:190px; padding:0; border-radius:999px; border:none; cursor:pointer; background:transparent; font-family:"Poppins",sans-serif; font-size:13px; font-weight:500; transition:transform 0.15s; position:relative; white-space:nowrap; }
-    .nav-search-pill:hover { transform:scale(1.02); }
-    .nav-search-pill:active { transform:scale(0.97); }
+    .nav-search-pill:hover { transform:scale(1.02); } .nav-search-pill:active { transform:scale(0.97); }
     .nav-search-pill .pill-border { position:absolute; inset:0; border-radius:999px; padding:2px; background:linear-gradient(100deg,#4285f4,#ea4335,#fbbc04,#34a853,#4285f4); background-size:250% 250%; animation:pill-gradient 3s ease infinite; -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0); -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none; }
     .nav-search-pill .pill-inner { display:flex; align-items:center; gap:10px; width:100%; padding:8px 18px 8px 14px; border-radius:999px; background:#f8f9fa; position:relative; z-index:1; transition:background 0.2s,box-shadow 0.2s; }
     .nav-search-pill:hover .pill-inner { background:#fff; box-shadow:0 2px 16px rgba(66,133,244,0.18),0 1px 6px rgba(234,67,53,0.1); }
@@ -115,13 +88,10 @@
     .pill-search-icon svg { width:13px; height:13px; }
     .pill-label { flex:1; text-align:left; color:#5f6368; font-size:13px; }
     .pill-kbd { display:inline-flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.07); border-radius:6px; padding:2px 7px; font-size:11px; font-family:monospace; color:#999; line-height:1.5; flex-shrink:0; }
-    .dark .nav-search-pill .pill-inner { background:#1a1a1a; }
-    .dark .nav-search-pill:hover .pill-inner { background:#222; }
-    .dark .pill-label { color:#9aa0a6; }
-    .dark .pill-kbd { background:rgba(255,255,255,0.07); color:#666; }
+    .dark .nav-search-pill .pill-inner { background:#1a1a1a; } .dark .nav-search-pill:hover .pill-inner { background:#222; }
+    .dark .pill-label { color:#9aa0a6; } .dark .pill-kbd { background:rgba(255,255,255,0.07); color:#666; }
     @keyframes pill-gradient { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
 
-    /* ── Search overlay ── */
     #search-overlay { position:fixed; inset:0; z-index:9998; background:rgba(255,255,255,0.85); backdrop-filter:blur(20px); display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding-top:120px; opacity:0; pointer-events:none; transition:opacity 0.3s ease; }
     .dark #search-overlay { background:rgba(0,0,0,0.88); }
     #search-overlay.open { opacity:1; pointer-events:all; }
@@ -132,186 +102,80 @@
     .dark .search-inner { background:#111; }
     .search-icon-wrap { color:#5f6368; flex-shrink:0; font-size:18px; display:flex; align-items:center; }
     #search-input { flex:1; border:none; outline:none; background:transparent; font-family:"Poppins",sans-serif; font-size:18px; color:#202124; }
-    .dark #search-input { color:#e8eaed; }
-    #search-input::placeholder { color:#9aa0a6; }
+    .dark #search-input { color:#e8eaed; } #search-input::placeholder { color:#9aa0a6; }
     #search-clear-btn { background:none; border:none; cursor:pointer; color:#9aa0a6; font-size:16px; display:none; padding:4px; border-radius:50%; transition:color 0.15s; flex-shrink:0; }
     #search-clear-btn.visible { display:flex; align-items:center; justify-content:center; }
     #search-results-panel { width:100%; max-width:620px; padding:0 20px; margin-top:16px; max-height:calc(100vh - 280px); overflow-y:auto; display:none; }
     #search-results-panel.has-results { display:block; }
     .search-result-item { display:flex; align-items:center; gap:14px; padding:12px 18px; background:#fff; border-radius:14px; margin-bottom:8px; cursor:pointer; transition:background 0.15s,transform 0.15s,box-shadow 0.15s; animation:result-in 0.2s ease; box-shadow:0 1px 6px rgba(0,0,0,0.08); }
     @keyframes result-in { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
-    .dark .search-result-item { background:#1c1c1e; box-shadow:none; }
-    .search-result-item:hover { background:#f8f9fa; transform:translateY(-1px); }
-    .dark .search-result-item:hover { background:#2c2c2e; }
+    .dark .search-result-item { background:#1c1c1e; box-shadow:none; } .search-result-item:hover { background:#f8f9fa; transform:translateY(-1px); } .dark .search-result-item:hover { background:#2c2c2e; }
     .sri-img { width:52px; height:52px; object-fit:contain; border-radius:10px; flex-shrink:0; background:#f1f3f4; }
-    .sri-name { font-weight:600; font-size:14px; color:#202124; }
-    .dark .sri-name { color:#e8eaed; }
-    .sri-sub  { font-size:12px; color:#5f6368; margin-top:2px; }
-    .sri-price { font-weight:700; font-size:14px; color:#202124; flex-shrink:0; }
-    .dark .sri-price { color:#e8eaed; }
-    .search-highlight { color:#1a73e8; font-weight:700; }
-    .dark .search-highlight { color:#8ab4f8; }
-    .search-no-results { text-align:center; padding:40px 16px; background:#fff; border-radius:14px; font-size:14px; color:#5f6368; }
-    .dark .search-no-results { background:#1c1c1e; color:#9aa0a6; }
+    .sri-name { font-weight:600; font-size:14px; color:#202124; } .dark .sri-name { color:#e8eaed; }
+    .sri-sub  { font-size:12px; color:#5f6368; margin-top:2px; } .sri-price { font-weight:700; font-size:14px; color:#202124; flex-shrink:0; } .dark .sri-price { color:#e8eaed; }
+    .search-highlight { color:#1a73e8; font-weight:700; } .dark .search-highlight { color:#8ab4f8; }
+    .search-no-results { text-align:center; padding:40px 16px; background:#fff; border-radius:14px; font-size:14px; color:#5f6368; } .dark .search-no-results { background:#1c1c1e; color:#9aa0a6; }
     #search-close-hint { margin-top:16px; font-size:12px; color:#9aa0a6; font-family:"Poppins",sans-serif; }
     #search-close-hint kbd { background:rgba(0,0,0,0.08); color:#5f6368; padding:2px 8px; border-radius:4px; font-family:monospace; }
     .dark #search-close-hint kbd { background:rgba(255,255,255,0.1); color:#9aa0a6; }
 
-    /* ══════════════════════════════════════════════
-       REGISTRATION-SPECIFIC STYLES
-    ══════════════════════════════════════════════ */
+    /* ══ REGISTRATION STYLES ══ */
+    .reg-bg { min-height:100vh; background:radial-gradient(ellipse at 20% 50%, rgba(255,69,0,0.06) 0%, transparent 60%), radial-gradient(ellipse at 80% 20%, rgba(255,140,0,0.04) 0%, transparent 50%); }
+    .dark .reg-bg { background:radial-gradient(ellipse at 20% 50%, rgba(255,69,0,0.08) 0%, transparent 60%), radial-gradient(ellipse at 80% 20%, rgba(255,140,0,0.05) 0%, transparent 50%); }
 
-    /* ── Background gradient mesh ── */
-    .reg-bg {
-      min-height:100vh;
-      background: radial-gradient(ellipse at 20% 50%, rgba(255,69,0,0.06) 0%, transparent 60%),
-                  radial-gradient(ellipse at 80% 20%, rgba(255,140,0,0.04) 0%, transparent 50%),
-                  radial-gradient(ellipse at 60% 80%, rgba(255,69,0,0.04) 0%, transparent 50%);
-    }
-    .dark .reg-bg {
-      background: radial-gradient(ellipse at 20% 50%, rgba(255,69,0,0.08) 0%, transparent 60%),
-                  radial-gradient(ellipse at 80% 20%, rgba(255,140,0,0.05) 0%, transparent 50%),
-                  radial-gradient(ellipse at 60% 80%, rgba(255,69,0,0.05) 0%, transparent 50%);
-    }
-
-    /* ── Multi-step progress bar ── */
     .step-bar { position:relative; display:flex; align-items:center; justify-content:center; gap:0; }
-    .step-node {
-      width:36px; height:36px; border-radius:50%;
-      display:flex; align-items:center; justify-content:center;
-      font-size:13px; font-weight:700; font-family:"Archivo Black",sans-serif;
-      border:2px solid #e5e7eb; background:#fff; color:#9ca3af;
-      transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1);
-      position:relative; z-index:1; flex-shrink:0;
-    }
+    .step-node { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; font-family:"Archivo Black",sans-serif; border:2px solid #e5e7eb; background:#fff; color:#9ca3af; transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1); position:relative; z-index:1; flex-shrink:0; }
     .step-node.active { border-color:#ff4500; background:#ff4500; color:#fff; box-shadow:0 0 0 6px rgba(255,69,0,0.15); }
     .step-node.done   { border-color:#22c55e; background:#22c55e; color:#fff; }
     .dark .step-node  { background:#111; border-color:#333; color:#555; }
     .dark .step-node.active { background:#ff4500; border-color:#ff4500; color:#fff; }
     .dark .step-node.done   { background:#22c55e; border-color:#22c55e; color:#fff; }
-    .step-line {
-      height:2px; flex:1; background:#e5e7eb; max-width:60px;
-      transition:background 0.4s ease;
-    }
-    .step-line.done { background:#22c55e; }
-    .dark .step-line { background:#222; }
-    .dark .step-line.done { background:#22c55e; }
-    .step-label {
-      position:absolute; bottom:-22px; left:50%; transform:translateX(-50%);
-      font-size:10px; font-weight:600; white-space:nowrap; letter-spacing:0.5px;
-      color:#9ca3af; text-transform:uppercase; transition:color 0.3s;
-    }
-    .step-node.active .step-label,
-    .step-node.done   .step-label { color:#ff4500; }
+    .step-line { height:2px; flex:1; background:#e5e7eb; max-width:60px; transition:background 0.4s ease; }
+    .step-line.done { background:#22c55e; } .dark .step-line { background:#222; } .dark .step-line.done { background:#22c55e; }
+    .step-label { position:absolute; bottom:-22px; left:50%; transform:translateX(-50%); font-size:10px; font-weight:600; white-space:nowrap; letter-spacing:0.5px; color:#9ca3af; text-transform:uppercase; transition:color 0.3s; }
+    .step-node.active .step-label, .step-node.done .step-label { color:#ff4500; }
 
-    /* ── Form card ── */
-    .form-card {
-      background:#fff; border:1px solid #e5e7eb; border-radius:20px;
-      padding:40px; box-shadow:0 8px 40px rgba(0,0,0,0.08);
-      position:relative; overflow:hidden;
-    }
+    .form-card { background:#fff; border:1px solid #e5e7eb; border-radius:20px; padding:40px; box-shadow:0 8px 40px rgba(0,0,0,0.08); position:relative; overflow:hidden; }
     .dark .form-card { background:#0d0d0d; border-color:#1f1f1f; box-shadow:0 8px 40px rgba(0,0,0,0.5); }
-    /* shimmer on hover — same as shoe-card */
-    .form-card::after {
-      content:''; position:absolute; inset:0;
-      background:linear-gradient(115deg, transparent 40%, rgba(255,255,255,0.08) 50%, transparent 60%);
-      transform:translateX(-100%); transition:transform 0.7s ease; pointer-events:none;
-    }
+    .form-card::after { content:''; position:absolute; inset:0; background:linear-gradient(115deg, transparent 40%, rgba(255,255,255,0.08) 50%, transparent 60%); transform:translateX(-100%); transition:transform 0.7s ease; pointer-events:none; }
     .form-card:hover::after { transform:translateX(100%); }
 
-    /* ── Step panels ── */
     .step-panel { display:none; }
-    .step-panel.active {
-      display:block;
-      animation:step-in 0.45s cubic-bezier(0.16,1,0.3,1) both;
-    }
-    .step-panel.exit {
-      animation:step-out 0.3s ease forwards;
-    }
+    .step-panel.active { display:block; animation:step-in 0.45s cubic-bezier(0.16,1,0.3,1) both; }
+    .step-panel.exit   { animation:step-out 0.3s ease forwards; }
     @keyframes step-in  { from{opacity:0;transform:translateX(30px)} to{opacity:1;transform:translateX(0)} }
     @keyframes step-out { from{opacity:1;transform:translateX(0)} to{opacity:0;transform:translateX(-30px)} }
 
-    /* ── Form inputs ── */
-    .form-input {
-      width:100%; padding:13px 16px;
-      border:1.5px solid #e5e7eb; border-radius:12px;
-      background:#f9fafb; color:#111;
-      font-family:"Poppins",sans-serif; font-size:14px;
-      outline:none;
-      transition:border-color 0.22s, box-shadow 0.22s, background 0.22s, transform 0.2s;
-    }
-    .form-input:focus {
-      border-color:#ff4500;
-      box-shadow:0 0 0 3px rgba(255,69,0,0.12);
-      background:#fff;
-      transform:translateY(-1px);
-    }
+    .form-input { width:100%; padding:13px 16px; border:1.5px solid #e5e7eb; border-radius:12px; background:#f9fafb; color:#111; font-family:"Poppins",sans-serif; font-size:14px; outline:none; transition:border-color 0.22s, box-shadow 0.22s, background 0.22s, transform 0.2s; }
+    .form-input:focus { border-color:#ff4500; box-shadow:0 0 0 3px rgba(255,69,0,0.12); background:#fff; transform:translateY(-1px); }
     .form-input.error { border-color:#ef4444; box-shadow:0 0 0 3px rgba(239,68,68,0.12); }
-    .dark .form-input { background:#111; border-color:#2a2a2a; color:#f0f0f0; }
-    .dark .form-input:focus { background:#1a1a1a; border-color:#ff4500; }
+    .dark .form-input { background:#111; border-color:#2a2a2a; color:#f0f0f0; } .dark .form-input:focus { background:#1a1a1a; border-color:#ff4500; }
 
-    /* ── Form label ── */
-    .form-label {
-      display:block; font-size:13px; font-weight:600; margin-bottom:6px;
-      color:#374151; transition:color 0.2s;
-    }
-    .dark .form-label { color:#d1d5db; }
-    .form-group:focus-within .form-label { color:#ff4500; }
+    .form-label { display:block; font-size:13px; font-weight:600; margin-bottom:6px; color:#374151; transition:color 0.2s; }
+    .dark .form-label { color:#d1d5db; } .form-group:focus-within .form-label { color:#ff4500; }
 
-    /* ── Input icon wrapper ── */
     .input-wrap { position:relative; }
-    .input-icon {
-      position:absolute; left:14px; top:50%; transform:translateY(-50%);
-      color:#9ca3af; font-size:14px; pointer-events:none;
-      transition:color 0.2s;
-    }
+    .input-icon { position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#9ca3af; font-size:14px; pointer-events:none; transition:color 0.2s; }
     .input-wrap:focus-within .input-icon { color:#ff4500; }
     .input-wrap .form-input { padding-left:42px; }
-    .input-wrap .toggle-pw {
-      position:absolute; right:14px; top:50%; transform:translateY(-50%);
-      background:none; border:none; cursor:pointer; color:#9ca3af; font-size:14px;
-      transition:color 0.2s;
-    }
+    .input-wrap .toggle-pw { position:absolute; right:14px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; color:#9ca3af; font-size:14px; transition:color 0.2s; }
     .input-wrap .toggle-pw:hover { color:#ff4500; }
 
-    /* ── Error message ── */
     .field-error { font-size:11px; color:#ef4444; margin-top:4px; display:none; }
     .field-error.show { display:block; animation:hero-sub-in 0.3s ease; }
-
-    /* ── Password strength bar ── */
     #pw-strength-bar { height:3px; border-radius:2px; margin-top:8px; width:0%; transition:width 0.4s ease, background 0.4s ease; }
 
-    /* ── Size selector chips ── */
-    .size-chip {
-      padding:8px 14px; border-radius:8px; border:1.5px solid #e5e7eb;
-      font-size:13px; font-weight:600; cursor:pointer; background:#f9fafb;
-      color:#374151; transition:all 0.2s cubic-bezier(0.34,1.56,0.64,1);
-      user-select:none;
-    }
+    .size-chip { padding:8px 14px; border-radius:8px; border:1.5px solid #e5e7eb; font-size:13px; font-weight:600; cursor:pointer; background:#f9fafb; color:#374151; transition:all 0.2s cubic-bezier(0.34,1.56,0.64,1); user-select:none; }
     .size-chip:hover { border-color:#ff4500; color:#ff4500; transform:translateY(-2px) scale(1.05); }
     .size-chip.selected { background:#ff4500; border-color:#ff4500; color:#fff; box-shadow:0 4px 12px rgba(255,69,0,0.35); transform:translateY(-2px) scale(1.05); }
-    .dark .size-chip { background:#111; border-color:#2a2a2a; color:#d1d5db; }
-    .dark .size-chip:hover { border-color:#ff4500; color:#ff4500; }
+    .dark .size-chip { background:#111; border-color:#2a2a2a; color:#d1d5db; } .dark .size-chip:hover { border-color:#ff4500; color:#ff4500; }
 
-    /* ── Brand interest chips ── */
-    .brand-chip {
-      padding:7px 16px; border-radius:999px; border:1.5px solid #e5e7eb;
-      font-size:12px; font-weight:600; cursor:pointer; background:#f9fafb;
-      color:#374151; transition:all 0.2s cubic-bezier(0.34,1.56,0.64,1);
-      user-select:none;
-    }
+    .brand-chip { padding:7px 16px; border-radius:999px; border:1.5px solid #e5e7eb; font-size:12px; font-weight:600; cursor:pointer; background:#f9fafb; color:#374151; transition:all 0.2s cubic-bezier(0.34,1.56,0.64,1); user-select:none; }
     .brand-chip:hover { border-color:#ff4500; color:#ff4500; transform:scale(1.04); }
     .brand-chip.selected { background:#ff4500; border-color:#ff4500; color:#fff; box-shadow:0 4px 12px rgba(255,69,0,0.3); }
     .dark .brand-chip { background:#111; border-color:#2a2a2a; color:#d1d5db; }
 
-    /* ── Avatar upload ── */
-    #avatar-wrap {
-      width:100px; height:100px; border-radius:50%; border:3px dashed #e5e7eb;
-      display:flex; align-items:center; justify-content:center;
-      cursor:pointer; overflow:hidden; position:relative;
-      transition:border-color 0.25s, box-shadow 0.25s, transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
-      background:#f9fafb; margin:0 auto 20px;
-    }
+    #avatar-wrap { width:100px; height:100px; border-radius:50%; border:3px dashed #e5e7eb; display:flex; align-items:center; justify-content:center; cursor:pointer; overflow:hidden; position:relative; transition:border-color 0.25s, box-shadow 0.25s, transform 0.25s cubic-bezier(0.34,1.56,0.64,1); background:#f9fafb; margin:0 auto 20px; }
     #avatar-wrap:hover { border-color:#ff4500; box-shadow:0 0 0 4px rgba(255,69,0,0.12); transform:scale(1.05); }
     #avatar-wrap img { width:100%; height:100%; object-fit:cover; display:none; }
     #avatar-placeholder { display:flex; flex-direction:column; align-items:center; gap:4px; color:#9ca3af; font-size:11px; font-weight:600; letter-spacing:0.5px; }
@@ -319,103 +183,77 @@
     #avatar-wrap:hover #avatar-placeholder i { color:#ff4500; }
     .dark #avatar-wrap { background:#111; border-color:#2a2a2a; }
 
-    /* ── Submit / Next button ── */
-    .btn-primary {
-      position:relative; overflow:hidden;
-      background:#000; color:#fff; border:none; border-radius:12px;
-      padding:14px 32px; font-size:15px; font-weight:700; font-family:"Poppins",sans-serif;
-      cursor:pointer; width:100%;
-      transition:transform 0.2s cubic-bezier(0.175,0.885,0.32,1.275), box-shadow 0.2s, background 0.2s;
-      box-shadow:0 4px 16px rgba(0,0,0,0.2);
-      letter-spacing:0.3px;
-    }
+    .btn-primary { position:relative; overflow:hidden; background:#000; color:#fff; border:none; border-radius:12px; padding:14px 32px; font-size:15px; font-weight:700; font-family:"Poppins",sans-serif; cursor:pointer; width:100%; transition:transform 0.2s cubic-bezier(0.175,0.885,0.32,1.275), box-shadow 0.2s, background 0.2s; box-shadow:0 4px 16px rgba(0,0,0,0.2); letter-spacing:0.3px; }
     .btn-primary::after { content:''; position:absolute; inset:0; background:rgba(255,255,255,0.2); border-radius:inherit; transform:scale(0); opacity:0; transition:transform 0.35s ease,opacity 0.35s ease; }
     .btn-primary:active::after { transform:scale(2.5); opacity:0; transition:0s; }
-    .btn-primary:hover { transform:translateY(-2px) scale(1.02); box-shadow:0 8px 28px rgba(0,0,0,0.3); background:#111; }
-    .btn-primary:active { transform:scale(0.98); }
-    .dark .btn-primary { background:#fff; color:#000; }
-    .dark .btn-primary:hover { background:#e5e5e5; box-shadow:0 8px 28px rgba(255,255,255,0.1); }
+    .btn-primary:hover { transform:translateY(-2px) scale(1.02); box-shadow:0 8px 28px rgba(0,0,0,0.3); background:#111; } .btn-primary:active { transform:scale(0.98); }
+    .dark .btn-primary { background:#fff; color:#000; } .dark .btn-primary:hover { background:#e5e5e5; }
 
-    .btn-secondary {
-      background:transparent; color:#6b7280; border:1.5px solid #e5e7eb; border-radius:12px;
-      padding:13px 24px; font-size:14px; font-weight:600; font-family:"Poppins",sans-serif;
-      cursor:pointer; transition:all 0.2s;
-    }
+    .btn-secondary { background:transparent; color:#6b7280; border:1.5px solid #e5e7eb; border-radius:12px; padding:13px 24px; font-size:14px; font-weight:600; font-family:"Poppins",sans-serif; cursor:pointer; transition:all 0.2s; }
     .btn-secondary:hover { border-color:#111; color:#111; transform:translateY(-1px); }
-    .dark .btn-secondary { border-color:#2a2a2a; color:#9ca3af; }
-    .dark .btn-secondary:hover { border-color:#fff; color:#fff; }
+    .dark .btn-secondary { border-color:#2a2a2a; color:#9ca3af; } .dark .btn-secondary:hover { border-color:#fff; color:#fff; }
 
-    /* ── Success screen ── */
-    #success-screen {
-      display:none; text-align:center; padding:60px 20px;
-      animation:fadeIn 0.6s ease;
-    }
+    #success-screen { display:none; text-align:center; padding:60px 20px; animation:fadeIn 0.6s ease; }
     @keyframes success-pop { 0%{transform:scale(0.3) rotate(-10deg);opacity:0} 60%{transform:scale(1.15) rotate(5deg)} 80%{transform:scale(0.95)} 100%{transform:scale(1) rotate(0);opacity:1} }
     #success-icon { animation:success-pop 0.7s cubic-bezier(0.34,1.56,0.64,1) 0.2s both; display:inline-block; }
     @keyframes confetti-fall { 0%{transform:translateY(-20px) rotate(0deg);opacity:1} 100%{transform:translateY(60px) rotate(360deg);opacity:0} }
     .confetti-dot { position:absolute; width:8px; height:8px; border-radius:2px; animation:confetti-fall 1.2s ease-out forwards; }
 
-    /* ── Decorative floating sneaker ── */
-    @keyframes float-shoe { 0%,100%{transform:translateY(0) rotate(-8deg)} 50%{transform:translateY(-14px) rotate(-6deg)} }
-    .floating-shoe { animation:float-shoe 4s ease-in-out infinite; filter:drop-shadow(0 12px 24px rgba(255,69,0,0.2)); }
-
-    /* ── AMOLED scrollbar ── */
-    .dark ::-webkit-scrollbar { width:5px; }
-    .dark ::-webkit-scrollbar-track { background:#000; }
-    .dark ::-webkit-scrollbar-thumb { background:#222; border-radius:3px; }
-
-    /* ── Social login buttons ── */
-    .social-btn {
-      display:flex; align-items:center; justify-content:center; gap:10px;
-      border:1.5px solid #e5e7eb; border-radius:12px; padding:11px 16px;
-      font-size:13px; font-weight:600; cursor:pointer; background:#fff;
-      color:#374151; transition:all 0.2s cubic-bezier(0.34,1.56,0.64,1);
-      flex:1;
+    /* ═══════════════════════════════════════════════
+       FLOATING LOGO — STRAIGHT, NO ROTATION AT ALL
+       Pure vertical bob only: translateY up/down
+    ═══════════════════════════════════════════════ */
+    @keyframes float-logo {
+      0%   { transform: translateY(0px);   }
+      50%  { transform: translateY(-14px); }
+      100% { transform: translateY(0px);   }
     }
-    .social-btn:hover { transform:translateY(-2px) scale(1.03); box-shadow:0 6px 18px rgba(0,0,0,0.1); border-color:#aaa; }
-    .social-btn:active { transform:scale(0.97); }
-    .dark .social-btn { background:#111; border-color:#2a2a2a; color:#d1d5db; }
-    .dark .social-btn:hover { border-color:#555; }
+    .floating-logo-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px 0 20px;
+      /* glow underneath the image — no transform applied here */
+      filter: drop-shadow(0 18px 30px rgba(255, 69, 0, 0.25));
+    }
+    .floating-logo-wrap img {
+      /* fixed pixel size — comfortable for the 360px sidebar */
+      width:  200px;
+      height: 200px;
+      object-fit: contain;
+      display: block;
+      /* animation applied to the image itself, translateY ONLY */
+      animation: float-logo 4s ease-in-out infinite;
+    }
 
-    /* ── OR divider ── */
+    .dark ::-webkit-scrollbar { width:5px; } .dark ::-webkit-scrollbar-track { background:#000; } .dark ::-webkit-scrollbar-thumb { background:#222; border-radius:3px; }
+
+    .social-btn { display:flex; align-items:center; justify-content:center; gap:10px; border:1.5px solid #e5e7eb; border-radius:12px; padding:11px 16px; font-size:13px; font-weight:600; cursor:pointer; background:#fff; color:#374151; transition:all 0.2s cubic-bezier(0.34,1.56,0.64,1); flex:1; }
+    .social-btn:hover { transform:translateY(-2px) scale(1.03); box-shadow:0 6px 18px rgba(0,0,0,0.1); border-color:#aaa; } .social-btn:active { transform:scale(0.97); }
+    .dark .social-btn { background:#111; border-color:#2a2a2a; color:#d1d5db; } .dark .social-btn:hover { border-color:#555; }
+
     .or-divider { display:flex; align-items:center; gap:12px; margin:20px 0; }
     .or-divider::before,.or-divider::after { content:''; flex:1; height:1px; background:#e5e7eb; }
     .dark .or-divider::before,.dark .or-divider::after { background:#222; }
     .or-divider span { font-size:12px; font-weight:600; color:#9ca3af; letter-spacing:1px; }
 
-    /* ── Checkbox ── */
-    .hh-checkbox {
-      width:18px; height:18px; border:2px solid #e5e7eb; border-radius:4px;
-      appearance:none; cursor:pointer; transition:all 0.2s;
-      flex-shrink:0; margin-top:1px;
-      position:relative;
-    }
+    .hh-checkbox { width:18px; height:18px; border:2px solid #e5e7eb; border-radius:4px; appearance:none; cursor:pointer; transition:all 0.2s; flex-shrink:0; margin-top:1px; position:relative; }
     .hh-checkbox:checked { background:#ff4500; border-color:#ff4500; }
     .hh-checkbox:checked::after { content:'✓'; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); color:#fff; font-size:11px; font-weight:700; }
     .hh-checkbox:focus { box-shadow:0 0 0 3px rgba(255,69,0,0.15); }
 
-    /* ── Side info panel ── */
-    .info-panel {
-      background:linear-gradient(145deg, #000 0%, #111 100%);
-      border-radius:20px; padding:40px; color:#fff;
-      position:relative; overflow:hidden;
-    }
+    .info-panel { background:linear-gradient(145deg, #000 0%, #111 100%); border-radius:20px; padding:40px; color:#fff; position:relative; overflow:hidden; }
     .info-panel::before { content:''; position:absolute; top:-40%; right:-20%; width:200px; height:200px; border-radius:50%; background:radial-gradient(circle, rgba(255,69,0,0.3) 0%, transparent 70%); pointer-events:none; }
     .info-panel::after  { content:''; position:absolute; bottom:-20%; left:-10%; width:150px; height:150px; border-radius:50%; background:radial-gradient(circle, rgba(255,140,0,0.15) 0%, transparent 70%); pointer-events:none; }
 
-    /* ── Feature list ── */
     .feature-item { animation:menu-in 0.5s cubic-bezier(0.16,1,0.3,1) both; }
-    .feature-item:nth-child(1){animation-delay:0.3s}
-    .feature-item:nth-child(2){animation-delay:0.42s}
-    .feature-item:nth-child(3){animation-delay:0.54s}
-    .feature-item:nth-child(4){animation-delay:0.66s}
+    .feature-item:nth-child(1){animation-delay:0.3s} .feature-item:nth-child(2){animation-delay:0.42s} .feature-item:nth-child(3){animation-delay:0.54s} .feature-item:nth-child(4){animation-delay:0.66s}
     @keyframes menu-in { from{opacity:0;transform:translateX(-18px)} to{opacity:1;transform:translateX(0)} }
   </style>
 </head>
 
 <body class="bg-white dark:bg-amoled text-black dark:text-white transition-colors duration-300">
 
-<!-- Cursor Glow -->
 <div id="cursor-glow"></div>
 
 <!-- SEARCH OVERLAY -->
@@ -451,9 +289,7 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between h-16">
       <div class="flex items-center">
-        <div class="brand text-2xl font-bold">
-          <a href="index.html" class="text-black dark:text-white">HEAT HAVEN</a>
-        </div>
+        <div class="brand text-2xl font-bold"><a href="index.html" class="text-black dark:text-white">HEAT HAVEN</a></div>
         <div class="hidden md:flex items-center ml-10 space-x-8">
           <a href="index.html"   class="nav-link text-black dark:text-white hover:text-gray-600 px-2 transition-colors">Home</a>
           <a href="product.html" class="nav-link text-black dark:text-white hover:text-gray-600 px-2 transition-colors">Products</a>
@@ -465,11 +301,7 @@
         <button id="search-open-btn" class="nav-search-pill" aria-label="Open search">
           <div class="pill-border"></div>
           <span class="pill-inner">
-            <span class="pill-search-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-              </svg>
-            </span>
+            <span class="pill-search-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>
             <span class="pill-label">Search sneakers…</span>
             <span class="pill-kbd">👟</span>
           </span>
@@ -497,9 +329,7 @@
       <a href="owners.html"  class="nav-link text-black dark:text-gray-200 font-medium">Owners</a>
     </div>
     <div class="mt-6 pt-5 border-t border-gray-200 dark:border-gray-700 flex items-center gap-3">
-      <button id="search-open-btn-mobile" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark">
-        <i class="fas fa-search text-gray-600 dark:text-gray-300"></i>
-      </button>
+      <button id="search-open-btn-mobile" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark"><i class="fas fa-search text-gray-600 dark:text-gray-300"></i></button>
       <a href="cart.html" class="relative p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark">
         <i class="fas fa-shopping-cart text-gray-600 dark:text-gray-300"></i>
         <span id="cart-count-mobile" class="absolute -top-0.5 -right-0.5 bg-red-500 text-white text-[10px] rounded-full h-5 w-5 flex items-center justify-center">0</span>
@@ -509,13 +339,10 @@
   </div>
 </nav>
 
-<!-- ═════════════════════════════════════════════
-     MAIN REGISTRATION PAGE
-═════════════════════════════════════════════ -->
+<!-- MAIN -->
 <div class="reg-bg min-h-screen py-10 px-4 sm:px-6 page-transition">
   <div class="max-w-6xl mx-auto">
 
-    <!-- Page title (hero-word-in) -->
     <div class="text-center mb-10 reveal">
       <h1 class="text-3xl md:text-4xl font-bold dark:text-white">
         <span class="hero-title-word">Join</span>
@@ -528,733 +355,239 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8 items-start">
 
-      <!-- ── LEFT: Form Card ── -->
+      <!-- Form Card -->
       <div class="form-card reveal">
-
-        <!-- Progress Steps -->
         <div class="step-bar mb-10 pb-8 relative" id="step-bar">
           <div class="step-node active" id="node-1">1<span class="step-label">Account</span></div>
-          <div class="step-line"        id="line-1"></div>
-          <div class="step-node"        id="node-2">2<span class="step-label">Profile</span></div>
-          <div class="step-line"        id="line-2"></div>
-          <div class="step-node"        id="node-3">3<span class="step-label">Preferences</span></div>
-          <div class="step-line"        id="line-3"></div>
-          <div class="step-node"        id="node-4">4<span class="step-label">Confirm</span></div>
+          <div class="step-line" id="line-1"></div>
+          <div class="step-node" id="node-2">2<span class="step-label">Profile</span></div>
+          <div class="step-line" id="line-2"></div>
+          <div class="step-node" id="node-3">3<span class="step-label">Preferences</span></div>
+          <div class="step-line" id="line-3"></div>
+          <div class="step-node" id="node-4">4<span class="step-label">Confirm</span></div>
         </div>
 
-        <!-- SUCCESS SCREEN -->
         <div id="success-screen">
           <div id="success-icon" class="text-7xl mb-4">🎉</div>
           <h2 class="text-2xl font-bold dark:text-white mb-2">Welcome to Heat Haven!</h2>
           <p class="text-gray-500 dark:text-zinc-400 mb-6 text-sm">Your account is ready. Time to cop some heat.</p>
-          <a href="index.html">
-            <button class="btn-primary" style="width:auto;padding:13px 36px;">Start Shopping 👟</button>
-          </a>
+          <a href="index.html"><button class="btn-primary" style="width:auto;padding:13px 36px;">Start Shopping 👟</button></a>
         </div>
 
-        <!-- ── STEP 1: Account ── -->
+        <!-- STEP 1 -->
         <div class="step-panel active" id="step-1">
           <h2 class="text-xl font-bold mb-1 dark:text-white section-heading">Create Your Account</h2>
           <p class="text-gray-500 dark:text-zinc-500 text-sm mb-7 mt-3">Enter your login credentials</p>
-
-          <!-- Social login -->
           <div class="flex gap-3 mb-5">
             <button class="social-btn" onclick="showToast('Google sign-up coming soon!', false)">
               <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
               Continue with Google
             </button>
-            <button class="social-btn" onclick="showToast('Facebook sign-up coming soon!', false)">
-              <i class="fab fa-facebook text-blue-600 text-lg"></i>
-              Facebook
-            </button>
+            <button class="social-btn" onclick="showToast('Facebook sign-up coming soon!', false)"><i class="fab fa-facebook text-blue-600 text-lg"></i> Facebook</button>
           </div>
-
           <div class="or-divider"><span>OR</span></div>
-
           <div class="space-y-5">
             <div class="form-group">
               <label class="form-label" for="email">Email Address</label>
-              <div class="input-wrap">
-                <i class="fas fa-envelope input-icon"></i>
-                <input type="email" id="email" class="form-input" placeholder="you@example.com" autocomplete="email" />
-              </div>
+              <div class="input-wrap"><i class="fas fa-envelope input-icon"></i><input type="email" id="email" class="form-input" placeholder="you@example.com" autocomplete="email" /></div>
               <p class="field-error" id="email-error">Please enter a valid email address.</p>
             </div>
-
             <div class="form-group">
               <label class="form-label" for="password">Password</label>
-              <div class="input-wrap">
-                <i class="fas fa-lock input-icon"></i>
-                <input type="password" id="password" class="form-input" placeholder="At least 8 characters" autocomplete="new-password" oninput="checkPwStrength(this.value)" />
-                <button class="toggle-pw" type="button" onclick="togglePw('password',this)"><i class="fas fa-eye"></i></button>
-              </div>
+              <div class="input-wrap"><i class="fas fa-lock input-icon"></i><input type="password" id="password" class="form-input" placeholder="At least 8 characters" autocomplete="new-password" oninput="checkPwStrength(this.value)" /><button class="toggle-pw" type="button" onclick="togglePw('password',this)"><i class="fas fa-eye"></i></button></div>
               <div id="pw-strength-bar"></div>
               <p class="text-xs text-gray-400 dark:text-zinc-600 mt-1" id="pw-strength-label"></p>
               <p class="field-error" id="password-error">Password must be at least 8 characters.</p>
             </div>
-
             <div class="form-group">
               <label class="form-label" for="confirm-password">Confirm Password</label>
-              <div class="input-wrap">
-                <i class="fas fa-lock input-icon"></i>
-                <input type="password" id="confirm-password" class="form-input" placeholder="Repeat your password" autocomplete="new-password" />
-                <button class="toggle-pw" type="button" onclick="togglePw('confirm-password',this)"><i class="fas fa-eye"></i></button>
-              </div>
+              <div class="input-wrap"><i class="fas fa-lock input-icon"></i><input type="password" id="confirm-password" class="form-input" placeholder="Repeat your password" autocomplete="new-password" /><button class="toggle-pw" type="button" onclick="togglePw('confirm-password',this)"><i class="fas fa-eye"></i></button></div>
               <p class="field-error" id="confirm-error">Passwords do not match.</p>
             </div>
-
             <div class="flex items-start gap-3">
               <input type="checkbox" id="terms" class="hh-checkbox" />
-              <label for="terms" class="text-sm text-gray-500 dark:text-zinc-400 leading-relaxed cursor-pointer">
-                I agree to the <a href="#" class="text-red-500 font-semibold hover:underline">Terms of Service</a> and <a href="#" class="text-red-500 font-semibold hover:underline">Privacy Policy</a>
-              </label>
+              <label for="terms" class="text-sm text-gray-500 dark:text-zinc-400 leading-relaxed cursor-pointer">I agree to the <a href="#" class="text-red-500 font-semibold hover:underline">Terms of Service</a> and <a href="#" class="text-red-500 font-semibold hover:underline">Privacy Policy</a></label>
             </div>
           </div>
-
-          <div class="flex gap-3 mt-7">
-            <button class="btn-primary" onclick="nextStep(1)">
-              Continue <i class="fas fa-arrow-right ml-2 text-sm"></i>
-            </button>
-          </div>
-
-          <p class="text-center text-sm text-gray-500 dark:text-zinc-500 mt-5">
-            Already have an account? <a href="profile login.html" class="text-red-500 font-semibold hover:underline">Sign In</a>
-          </p>
+          <div class="flex gap-3 mt-7"><button class="btn-primary" onclick="nextStep(1)">Continue <i class="fas fa-arrow-right ml-2 text-sm"></i></button></div>
+          <p class="text-center text-sm text-gray-500 dark:text-zinc-500 mt-5">Already have an account? <a href="profile login.html" class="text-red-500 font-semibold hover:underline">Sign In</a></p>
         </div>
 
-        <!-- ── STEP 2: Profile ── -->
+        <!-- STEP 2 -->
         <div class="step-panel" id="step-2">
           <h2 class="text-xl font-bold mb-1 dark:text-white section-heading">Your Profile</h2>
           <p class="text-gray-500 dark:text-zinc-500 text-sm mb-7 mt-3">Tell us a bit about yourself</p>
-
-          <!-- Avatar -->
           <div id="avatar-wrap" onclick="document.getElementById('avatar-input').click()">
             <img id="avatar-preview" src="" alt="Profile photo" />
-            <div id="avatar-placeholder">
-              <i class="fas fa-camera"></i>
-              <span>Add Photo</span>
-            </div>
+            <div id="avatar-placeholder"><i class="fas fa-camera"></i><span>Add Photo</span></div>
           </div>
           <input type="file" id="avatar-input" accept="image/*" class="hidden" onchange="previewAvatar(this)" />
           <p class="text-center text-xs text-gray-400 dark:text-zinc-600 mb-7">Optional — tap to upload</p>
-
           <div class="space-y-5">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              <div class="form-group">
-                <label class="form-label" for="first-name">First Name</label>
-                <div class="input-wrap">
-                  <i class="fas fa-user input-icon"></i>
-                  <input type="text" id="first-name" class="form-input" placeholder="Kanishak" autocomplete="given-name" />
-                </div>
-                <p class="field-error" id="first-name-error">First name is required.</p>
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="last-name">Last Name</label>
-                <div class="input-wrap">
-                  <i class="fas fa-user input-icon"></i>
-                  <input type="text" id="last-name" class="form-input" placeholder="Choudhary" autocomplete="family-name" />
-                </div>
-              </div>
+              <div class="form-group"><label class="form-label" for="first-name">First Name</label><div class="input-wrap"><i class="fas fa-user input-icon"></i><input type="text" id="first-name" class="form-input" placeholder="Kanishak" autocomplete="given-name" /></div><p class="field-error" id="first-name-error">First name is required.</p></div>
+              <div class="form-group"><label class="form-label" for="last-name">Last Name</label><div class="input-wrap"><i class="fas fa-user input-icon"></i><input type="text" id="last-name" class="form-input" placeholder="Choudhary" autocomplete="family-name" /></div></div>
             </div>
-
-            <div class="form-group">
-              <label class="form-label" for="phone">Phone Number</label>
-              <div class="input-wrap">
-                <i class="fas fa-phone input-icon"></i>
-                <input type="tel" id="phone" class="form-input" placeholder="+91 98765 43210" autocomplete="tel" />
-              </div>
-              <p class="field-error" id="phone-error">Enter a valid 10-digit phone number.</p>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label" for="dob">Date of Birth</label>
-              <div class="input-wrap">
-                <i class="fas fa-calendar input-icon"></i>
-                <input type="date" id="dob" class="form-input" />
-              </div>
-            </div>
-
+            <div class="form-group"><label class="form-label" for="phone">Phone Number</label><div class="input-wrap"><i class="fas fa-phone input-icon"></i><input type="tel" id="phone" class="form-input" placeholder="+91 98765 43210" autocomplete="tel" /></div><p class="field-error" id="phone-error">Enter a valid 10-digit phone number.</p></div>
+            <div class="form-group"><label class="form-label" for="dob">Date of Birth</label><div class="input-wrap"><i class="fas fa-calendar input-icon"></i><input type="date" id="dob" class="form-input" /></div></div>
             <div class="form-group">
               <label class="form-label">Gender</label>
               <div class="flex gap-3 flex-wrap mt-1">
-                <label class="flex items-center gap-2 cursor-pointer text-sm font-medium text-gray-600 dark:text-zinc-400 hover:text-black dark:hover:text-white transition">
-                  <input type="radio" name="gender" value="male" class="accent-red-500" /> Male
-                </label>
-                <label class="flex items-center gap-2 cursor-pointer text-sm font-medium text-gray-600 dark:text-zinc-400 hover:text-black dark:hover:text-white transition">
-                  <input type="radio" name="gender" value="female" class="accent-red-500" /> Female
-                </label>
-                <label class="flex items-center gap-2 cursor-pointer text-sm font-medium text-gray-600 dark:text-zinc-400 hover:text-black dark:hover:text-white transition">
-                  <input type="radio" name="gender" value="other" class="accent-red-500" /> Non-binary / Other
-                </label>
+                <label class="flex items-center gap-2 cursor-pointer text-sm font-medium text-gray-600 dark:text-zinc-400"><input type="radio" name="gender" value="male" class="accent-red-500" /> Male</label>
+                <label class="flex items-center gap-2 cursor-pointer text-sm font-medium text-gray-600 dark:text-zinc-400"><input type="radio" name="gender" value="female" class="accent-red-500" /> Female</label>
+                <label class="flex items-center gap-2 cursor-pointer text-sm font-medium text-gray-600 dark:text-zinc-400"><input type="radio" name="gender" value="other" class="accent-red-500" /> Non-binary / Other</label>
               </div>
             </div>
           </div>
-
-          <div class="flex gap-3 mt-7">
-            <button class="btn-secondary" onclick="prevStep(2)"><i class="fas fa-arrow-left mr-2 text-sm"></i> Back</button>
-            <button class="btn-primary" onclick="nextStep(2)">Continue <i class="fas fa-arrow-right ml-2 text-sm"></i></button>
-          </div>
+          <div class="flex gap-3 mt-7"><button class="btn-secondary" onclick="prevStep(2)"><i class="fas fa-arrow-left mr-2 text-sm"></i> Back</button><button class="btn-primary" onclick="nextStep(2)">Continue <i class="fas fa-arrow-right ml-2 text-sm"></i></button></div>
         </div>
 
-        <!-- ── STEP 3: Preferences ── -->
+        <!-- STEP 3 -->
         <div class="step-panel" id="step-3">
           <h2 class="text-xl font-bold mb-1 dark:text-white section-heading">Your Sneaker Style</h2>
           <p class="text-gray-500 dark:text-zinc-500 text-sm mb-7 mt-3">Help us personalise your Heat Haven experience</p>
-
           <div class="space-y-7">
-            <!-- Shoe Size -->
-            <div>
-              <label class="form-label mb-3 block">Preferred Shoe Size (UK)</label>
-              <div class="flex flex-wrap gap-2" id="size-grid">
-                <!-- Rendered by JS -->
-              </div>
-              <p class="field-error" id="size-error">Please select your shoe size.</p>
-            </div>
-
-            <!-- Favourite Brands -->
-            <div>
-              <label class="form-label mb-3 block">Favourite Brands <span class="text-gray-400 font-normal">(pick any)</span></label>
-              <div class="flex flex-wrap gap-2" id="brand-grid">
-                <!-- Rendered by JS -->
-              </div>
-            </div>
-
-            <!-- Delivery Address -->
-            <div class="form-group">
-              <label class="form-label" for="address">Default Delivery Address</label>
-              <div class="input-wrap">
-                <i class="fas fa-map-marker-alt input-icon"></i>
-                <input type="text" id="address" class="form-input" placeholder="Flat No., Street, City, PIN" autocomplete="street-address" />
-              </div>
-            </div>
-
-            <!-- How did you hear -->
+            <div><label class="form-label mb-3 block">Preferred Shoe Size (UK)</label><div class="flex flex-wrap gap-2" id="size-grid"></div><p class="field-error" id="size-error">Please select your shoe size.</p></div>
+            <div><label class="form-label mb-3 block">Favourite Brands <span class="text-gray-400 font-normal">(pick any)</span></label><div class="flex flex-wrap gap-2" id="brand-grid"></div></div>
+            <div class="form-group"><label class="form-label" for="address">Default Delivery Address</label><div class="input-wrap"><i class="fas fa-map-marker-alt input-icon"></i><input type="text" id="address" class="form-input" placeholder="Flat No., Street, City, PIN" autocomplete="street-address" /></div></div>
             <div class="form-group">
               <label class="form-label" for="referral">How did you find us?</label>
               <div class="relative">
-                <select id="referral" class="form-input appearance-none pr-10 cursor-pointer" style="padding-left:16px;">
-                  <option value="">Select an option…</option>
-                  <option>Instagram</option>
-                  <option>WhatsApp</option>
-                  <option>Friend / Word of Mouth</option>
-                  <option>Google Search</option>
-                  <option>YouTube</option>
-                  <option>Other</option>
+                <select id="referral" class="form-input appearance-none cursor-pointer" style="padding-left:16px;padding-right:40px;">
+                  <option value="">Select an option…</option><option>Instagram</option><option>WhatsApp</option><option>Friend / Word of Mouth</option><option>Google Search</option><option>YouTube</option><option>Other</option>
                 </select>
-                <i class="fas fa-chevron-down absolute right-14px top-50% text-gray-400 text-xs pointer-events-none" style="right:14px;top:50%;transform:translateY(-50%);position:absolute;"></i>
+                <i class="fas fa-chevron-down text-gray-400 text-xs pointer-events-none" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);"></i>
               </div>
             </div>
-
-            <!-- Newsletter -->
-            <div class="flex items-start gap-3">
-              <input type="checkbox" id="newsletter" class="hh-checkbox" checked />
-              <label for="newsletter" class="text-sm text-gray-500 dark:text-zinc-400 leading-relaxed cursor-pointer">
-                Send me exclusive drops, restocks, and deals via email 🔥
-              </label>
-            </div>
+            <div class="flex items-start gap-3"><input type="checkbox" id="newsletter" class="hh-checkbox" checked /><label for="newsletter" class="text-sm text-gray-500 dark:text-zinc-400 leading-relaxed cursor-pointer">Send me exclusive drops, restocks, and deals via email 🔥</label></div>
           </div>
-
-          <div class="flex gap-3 mt-7">
-            <button class="btn-secondary" onclick="prevStep(3)"><i class="fas fa-arrow-left mr-2 text-sm"></i> Back</button>
-            <button class="btn-primary" onclick="nextStep(3)">Continue <i class="fas fa-arrow-right ml-2 text-sm"></i></button>
-          </div>
+          <div class="flex gap-3 mt-7"><button class="btn-secondary" onclick="prevStep(3)"><i class="fas fa-arrow-left mr-2 text-sm"></i> Back</button><button class="btn-primary" onclick="nextStep(3)">Continue <i class="fas fa-arrow-right ml-2 text-sm"></i></button></div>
         </div>
 
-        <!-- ── STEP 4: Confirm ── -->
+        <!-- STEP 4 -->
         <div class="step-panel" id="step-4">
           <h2 class="text-xl font-bold mb-1 dark:text-white section-heading">Review & Confirm</h2>
           <p class="text-gray-500 dark:text-zinc-500 text-sm mb-7 mt-3">Everything look good?</p>
-
-          <div class="space-y-4" id="review-panel">
-            <!-- Filled by JS -->
+          <div class="space-y-4" id="review-panel"></div>
+          <div class="mt-7 p-4 rounded-xl bg-orange-50 dark:bg-orange-950 border border-orange-200 dark:border-orange-900 text-sm text-orange-700 dark:text-orange-300">
+            <i class="fas fa-shield-halved mr-2"></i>Your data is encrypted and never shared. Heat Haven is 100% authentic — no replicas, ever.
           </div>
-
-          <div class="mt-7 p-4 rounded-xl bg-orange-50 dark:bg-orange-950 border border-orange-200 dark:border-orange-900 text-sm text-orange-700 dark:text-orange-300 reveal" style="transition-delay:0.1s">
-            <i class="fas fa-shield-halved mr-2"></i>
-            Your data is encrypted and never shared. Heat Haven is 100% authentic — no replicas, ever.
-          </div>
-
           <div class="flex gap-3 mt-7">
             <button class="btn-secondary" onclick="prevStep(4)"><i class="fas fa-arrow-left mr-2 text-sm"></i> Back</button>
-            <button class="btn-primary" id="submit-btn" onclick="submitForm()">
-              <i class="fas fa-rocket mr-2 text-sm"></i> Create My Account
-            </button>
+            <button class="btn-primary" id="submit-btn" onclick="submitForm()"><i class="fas fa-rocket mr-2 text-sm"></i> Create My Account</button>
           </div>
         </div>
-
       </div>
 
-      <!-- ── RIGHT: Info Panel ── -->
+      <!-- RIGHT: Info Panel -->
       <div class="reveal-right hidden lg:block">
 
-        <!-- Floating logo illustration placeholder -->
-       <div class="text-center mb-6">
-            <div class="floating-shoe">
-              <img src="images/heat haven main logo.png" 
-                    alt="logo" 
-                    class="mx-auto w-32 h-32 object-contain"
-                  />
-                </div>
-              </div>
+        <!-- ✅ STRAIGHT floating logo — pure vertical bob, zero rotation -->
+        <div class="floating-logo-wrap">
+          <img src="images/heat haven main logo.png" alt="Heat Haven Logo" />
+        </div>
 
         <div class="info-panel">
           <h3 class="text-lg font-bold mb-5 text-white">Why join Heat Haven?</h3>
           <div class="space-y-5">
             <div class="feature-item flex items-start gap-4">
-              <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
-                <i class="fas fa-fire text-orange-400 text-sm"></i>
-              </div>
-              <div>
-                <p class="font-semibold text-white text-sm">Exclusive Drops</p>
-                <p class="text-white/50 text-xs mt-0.5">Early access to limited releases before anyone else</p>
-              </div>
+              <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0"><i class="fas fa-fire text-orange-400 text-sm"></i></div>
+              <div><p class="font-semibold text-white text-sm">Exclusive Drops</p><p class="text-white/50 text-xs mt-0.5">Early access to limited releases before anyone else</p></div>
             </div>
             <div class="feature-item flex items-start gap-4">
-              <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
-                <i class="fas fa-heart text-red-400 text-sm"></i>
-              </div>
-              <div>
-                <p class="font-semibold text-white text-sm">Save Your Wishlist</p>
-                <p class="text-white/50 text-xs mt-0.5">Bookmark grails and get notified when they restock</p>
-              </div>
+              <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0"><i class="fas fa-heart text-red-400 text-sm"></i></div>
+              <div><p class="font-semibold text-white text-sm">Save Your Wishlist</p><p class="text-white/50 text-xs mt-0.5">Bookmark grails and get notified when they restock</p></div>
             </div>
             <div class="feature-item flex items-start gap-4">
-              <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
-                <i class="fas fa-truck text-green-400 text-sm"></i>
-              </div>
-              <div>
-                <p class="font-semibold text-white text-sm">Free Shipping</p>
-                <p class="text-white/50 text-xs mt-0.5">Free delivery on all orders above ₹50,000</p>
-              </div>
+              <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0"><i class="fas fa-truck text-green-400 text-sm"></i></div>
+              <div><p class="font-semibold text-white text-sm">Free Shipping</p><p class="text-white/50 text-xs mt-0.5">Free delivery on all orders above ₹50,000</p></div>
             </div>
             <div class="feature-item flex items-start gap-4">
-              <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
-                <i class="fas fa-shield-halved text-blue-400 text-sm"></i>
-              </div>
-              <div>
-                <p class="font-semibold text-white text-sm">100% Authentic</p>
-                <p class="text-white/50 text-xs mt-0.5">Every pair verified by our team. Zero replicas</p>
-              </div>
+              <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0"><i class="fas fa-shield-halved text-blue-400 text-sm"></i></div>
+              <div><p class="font-semibold text-white text-sm">100% Authentic</p><p class="text-white/50 text-xs mt-0.5">Every pair verified by our team. Zero replicas</p></div>
             </div>
           </div>
-
-          <!-- Stats -->
           <div class="grid grid-cols-3 gap-3 mt-8 pt-6 border-t border-white/10">
-            <div class="text-center">
-              <p class="text-xl font-bold text-white">500+</p>
-              <p class="text-white/40 text-xs mt-0.5">Products</p>
-            </div>
-            <div class="text-center">
-              <p class="text-xl font-bold text-white">10K+</p>
-              <p class="text-white/40 text-xs mt-0.5">Members</p>
-            </div>
-            <div class="text-center">
-              <p class="text-xl font-bold text-white">4.9★</p>
-              <p class="text-white/40 text-xs mt-0.5">Rating</p>
-            </div>
+            <div class="text-center"><p class="text-xl font-bold text-white">500+</p><p class="text-white/40 text-xs mt-0.5">Products</p></div>
+            <div class="text-center"><p class="text-xl font-bold text-white">10K+</p><p class="text-white/40 text-xs mt-0.5">Members</p></div>
+            <div class="text-center"><p class="text-xl font-bold text-white">4.9★</p><p class="text-white/40 text-xs mt-0.5">Rating</p></div>
           </div>
         </div>
       </div>
+
     </div>
   </div>
 </div>
 
 <div class="section-divider"></div>
 
-<!-- Footer -->
 <footer class="bg-black text-white py-12">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-      <div class="reveal-left">
-        <h3 class="text-lg font-bold mb-4">HEAT HAVEN</h3>
-        <p class="text-zinc-500 text-sm">Premium sneakers, exceptional service.</p>
-        <div class="flex space-x-3 mt-4">
-          <a href="https://www.instagram.com/heatheaven.23_/" target="_blank"><i class="fab fa-instagram text-xl text-red-500"></i></a>
-          <a href="https://web.whatsapp.com/" target="_blank"><i class="fab fa-whatsapp text-xl text-red-500"></i></a>
-        </div>
-      </div>
-      <div class="reveal">
-        <h3 class="text-lg font-bold mb-4">Shop</h3>
-        <ul class="space-y-2">
-          <li><a href="product.html"  class="text-zinc-500 hover:text-white text-sm transition-colors">All Products</a></li>
-          <li><a href="deals.html"    class="text-zinc-500 hover:text-white text-sm transition-colors">Hot Deals</a></li>
-          <li><a href="wishlist.html" class="text-zinc-500 hover:text-white text-sm transition-colors">My Wishlist</a></li>
-          <li><a href="ar-tryon.html" class="text-zinc-500 hover:text-white text-sm transition-colors">👟 AR Try-On</a></li>
-        </ul>
-      </div>
-      <div class="reveal">
-        <h3 class="text-lg font-bold mb-4">Customer Service</h3>
-        <ul class="space-y-2">
-          <li><a href="#" class="text-zinc-500 hover:text-white text-sm transition-colors">Contact Us</a></li>
-          <li><a href="#" class="text-zinc-500 hover:text-white text-sm transition-colors">FAQs</a></li>
-          <li><a href="#" class="text-zinc-500 hover:text-white text-sm transition-colors">Shipping & Returns</a></li>
-          <li><a href="#" class="text-zinc-500 hover:text-white text-sm transition-colors">Size Guide</a></li>
-        </ul>
-      </div>
-      <div class="reveal-right">
-        <h3 class="text-lg font-bold mb-4">Newsletter</h3>
-        <p class="text-zinc-500 text-sm mb-3">Subscribe for drops and exclusive deals.</p>
-        <form class="flex">
-          <input type="email" placeholder="Your email" class="px-4 py-2 rounded-l focus:outline-none text-gray-800 w-full text-sm"/>
-          <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-r hover:bg-red-600"><i class="fas fa-arrow-right"></i></button>
-        </form>
-      </div>
+      <div class="reveal-left"><h3 class="text-lg font-bold mb-4">HEAT HAVEN</h3><p class="text-zinc-500 text-sm">Premium sneakers, exceptional service.</p><div class="flex space-x-3 mt-4"><a href="https://www.instagram.com/heatheaven.23_/" target="_blank"><i class="fab fa-instagram text-xl text-red-500"></i></a><a href="https://web.whatsapp.com/" target="_blank"><i class="fab fa-whatsapp text-xl text-red-500"></i></a></div></div>
+      <div class="reveal"><h3 class="text-lg font-bold mb-4">Shop</h3><ul class="space-y-2"><li><a href="product.html" class="text-zinc-500 hover:text-white text-sm transition-colors">All Products</a></li><li><a href="deals.html" class="text-zinc-500 hover:text-white text-sm transition-colors">Hot Deals</a></li><li><a href="wishlist.html" class="text-zinc-500 hover:text-white text-sm transition-colors">My Wishlist</a></li><li><a href="ar-tryon.html" class="text-zinc-500 hover:text-white text-sm transition-colors">👟 AR Try-On</a></li></ul></div>
+      <div class="reveal"><h3 class="text-lg font-bold mb-4">Customer Service</h3><ul class="space-y-2"><li><a href="#" class="text-zinc-500 hover:text-white text-sm transition-colors">Contact Us</a></li><li><a href="#" class="text-zinc-500 hover:text-white text-sm transition-colors">FAQs</a></li><li><a href="#" class="text-zinc-500 hover:text-white text-sm transition-colors">Shipping & Returns</a></li><li><a href="#" class="text-zinc-500 hover:text-white text-sm transition-colors">Size Guide</a></li></ul></div>
+      <div class="reveal-right"><h3 class="text-lg font-bold mb-4">Newsletter</h3><p class="text-zinc-500 text-sm mb-3">Subscribe for drops and exclusive deals.</p><form class="flex"><input type="email" placeholder="Your email" class="px-4 py-2 rounded-l focus:outline-none text-gray-800 w-full text-sm"/><button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-r hover:bg-red-600"><i class="fas fa-arrow-right"></i></button></form></div>
     </div>
     <div class="border-t border-zinc-900 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
       <p class="text-zinc-700 text-sm mb-4 md:mb-0">&copy; 2025 Heat Haven. All rights reserved.</p>
-      <div class="flex space-x-4">
-        <i class="fab fa-cc-visa text-lg text-zinc-700"></i>
-        <i class="fab fa-cc-mastercard text-lg text-zinc-700"></i>
-        <i class="fab fa-cc-amex text-lg text-zinc-700"></i>
-        <i class="fab fa-cc-paypal text-lg text-zinc-700"></i>
-      </div>
+      <div class="flex space-x-4"><i class="fab fa-cc-visa text-lg text-zinc-700"></i><i class="fab fa-cc-mastercard text-lg text-zinc-700"></i><i class="fab fa-cc-amex text-lg text-zinc-700"></i><i class="fab fa-cc-paypal text-lg text-zinc-700"></i></div>
     </div>
   </div>
 </footer>
 
-<!-- Toast -->
-<div id="toast">
-  <i class="fas fa-check-circle" style="color:#22c55e"></i>
-  <span></span>
-</div>
+<div id="toast"><i class="fas fa-check-circle" style="color:#22c55e"></i><span></span></div>
 
 <script>
-// ── DARK MODE ─────────────────────────────────────────────
 if (localStorage.getItem("theme") === "dark") document.documentElement.classList.add("dark");
-document.getElementById("theme-toggle").addEventListener("click", () => {
-  const d = document.documentElement.classList.toggle("dark");
-  localStorage.setItem("theme", d ? "dark" : "light");
-});
+document.getElementById("theme-toggle").addEventListener("click", () => { const d=document.documentElement.classList.toggle("dark"); localStorage.setItem("theme",d?"dark":"light"); });
+document.getElementById("mobile-menu-button").addEventListener("click",()=>document.getElementById("mobile-menu").classList.add("open"));
+document.getElementById("close-menu").addEventListener("click",()=>document.getElementById("mobile-menu").classList.remove("open"));
+const glow=document.getElementById('cursor-glow'); document.addEventListener('mousemove',e=>{glow.style.left=e.clientX+'px';glow.style.top=e.clientY+'px';});
+function getCart(){try{return JSON.parse(localStorage.getItem("hh_cart")||"[]");}catch(e){return[];}}
+const tc=getCart().reduce((s,i)=>s+(i.qty||0),0); document.querySelectorAll("#cart-count,#cart-count-mobile").forEach(el=>el.textContent=tc);
+function escH(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function escReg(s){return s.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");}
+function showToast(msg,isError){const t=document.getElementById("toast");t.querySelector("i").className=isError?"fas fa-exclamation-circle":"fas fa-check-circle";t.querySelector("i").style.color=isError?"#facc15":"#22c55e";t.querySelector("span").textContent=msg;t.classList.remove("show");void t.offsetWidth;t.classList.add("show");}
+const io=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:0.08,rootMargin:'0px 0px -30px 0px'});
+document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.section-heading').forEach(el=>io.observe(el));
 
-// ── MOBILE MENU ───────────────────────────────────────────
-document.getElementById("mobile-menu-button").addEventListener("click", () => document.getElementById("mobile-menu").classList.add("open"));
-document.getElementById("close-menu").addEventListener("click", () => document.getElementById("mobile-menu").classList.remove("open"));
+// FORM
+let currentStep=1; const TOTAL_STEPS=4;
+const SIZES=['UK 6','UK 7','UK 8','UK 9','UK 10','UK 11','UK 12']; let selectedSize='';
+const sizeGrid=document.getElementById('size-grid');
+SIZES.forEach(s=>{const chip=document.createElement('button');chip.type='button';chip.className='size-chip';chip.textContent=s;chip.onclick=()=>{document.querySelectorAll('.size-chip').forEach(c=>c.classList.remove('selected'));chip.classList.add('selected');selectedSize=s;document.getElementById('size-error').classList.remove('show');};sizeGrid.appendChild(chip);});
+const BRANDS=['Air Jordan','Nike','Yeezy','Adidas','New Balance','Puma','Rick Owens','Asics','Salehe Bembury','Travis Scott']; let selectedBrands=new Set();
+const brandGrid=document.getElementById('brand-grid');
+BRANDS.forEach(b=>{const chip=document.createElement('button');chip.type='button';chip.className='brand-chip';chip.textContent=b;chip.onclick=()=>{chip.classList.toggle('selected');if(selectedBrands.has(b))selectedBrands.delete(b);else selectedBrands.add(b);};brandGrid.appendChild(chip);});
+function goToStep(from,to){const fp=document.getElementById('step-'+from),tp=document.getElementById('step-'+to);fp.classList.add('exit');setTimeout(()=>{fp.classList.remove('active','exit');tp.classList.add('active');},280);for(let i=1;i<=TOTAL_STEPS;i++){const node=document.getElementById('node-'+i),line=document.getElementById('line-'+i);if(i<to){node.classList.add('done');node.classList.remove('active');}else if(i===to){node.classList.add('active');node.classList.remove('done');}else{node.classList.remove('done','active');}if(line&&i<to)line.classList.add('done');else if(line)line.classList.remove('done');}currentStep=to;window.scrollTo({top:0,behavior:'smooth'});}
+function showError(id,show){const el=document.getElementById(id);if(el){show?el.classList.add('show'):el.classList.remove('show');}}
+function markInput(id,error){const el=document.getElementById(id);if(el){error?el.classList.add('error'):el.classList.remove('error');}}
+function validateStep1(){let ok=true;const email=document.getElementById('email').value.trim();const emailOk=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);showError('email-error',!emailOk);markInput('email',!emailOk);if(!emailOk)ok=false;const pw=document.getElementById('password').value;const pwOk=pw.length>=8;showError('password-error',!pwOk);markInput('password',!pwOk);if(!pwOk)ok=false;const cpw=document.getElementById('confirm-password').value;const cpwOk=cpw===pw&&cpw.length>0;showError('confirm-error',!cpwOk);markInput('confirm-password',!cpwOk);if(!cpwOk)ok=false;if(!document.getElementById('terms').checked){showToast('Please accept the Terms of Service to continue.',true);ok=false;}return ok;}
+function validateStep2(){let ok=true;const fn=document.getElementById('first-name').value.trim();showError('first-name-error',!fn);markInput('first-name',!fn);if(!fn)ok=false;const phone=document.getElementById('phone').value.trim().replace(/\D/g,'');const phoneOk=phone.length>=10;showError('phone-error',!phoneOk);markInput('phone',!phoneOk);if(!phoneOk)ok=false;return ok;}
+function validateStep3(){if(!selectedSize){document.getElementById('size-error').classList.add('show');showToast('Please select your shoe size 👟',true);return false;}document.getElementById('size-error').classList.remove('show');return true;}
+function nextStep(step){let valid=true;if(step===1)valid=validateStep1();if(step===2)valid=validateStep2();if(step===3)valid=validateStep3();if(!valid)return;if(step===3)buildReview();goToStep(step,step+1);}
+function prevStep(step){goToStep(step,step-1);}
+function buildReview(){const name=(document.getElementById('first-name').value+' '+document.getElementById('last-name').value).trim();const email=document.getElementById('email').value;const phone=document.getElementById('phone').value;const addr=document.getElementById('address').value||'—';const brands=selectedBrands.size?[...selectedBrands].join(', '):'—';const rows=[{icon:'fas fa-user',label:'Full Name',val:name||'—'},{icon:'fas fa-envelope',label:'Email',val:email},{icon:'fas fa-phone',label:'Phone',val:phone||'—'},{icon:'fas fa-shoe-prints',label:'Preferred Size',val:selectedSize},{icon:'fas fa-heart',label:'Fav. Brands',val:brands},{icon:'fas fa-map-marker-alt',label:'Delivery Address',val:addr.length>40?addr.slice(0,40)+'…':addr}];document.getElementById('review-panel').innerHTML=rows.map(r=>`<div class="flex items-center gap-4 p-4 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800" style="animation:step-in 0.4s ease both"><div class="w-9 h-9 rounded-full bg-orange-50 dark:bg-orange-950 flex items-center justify-center flex-shrink-0"><i class="${escH(r.icon)} text-red-500 text-sm"></i></div><div class="flex-1 min-w-0"><p class="text-xs text-gray-400 dark:text-zinc-500 font-semibold uppercase tracking-wider">${escH(r.label)}</p><p class="text-sm font-semibold dark:text-white truncate mt-0.5">${escH(r.val)}</p></div></div>`).join('');}
+function submitForm(){const btn=document.getElementById('submit-btn');btn.innerHTML='<i class="fas fa-spinner fa-spin mr-2 text-sm"></i> Creating Account…';btn.disabled=true;const userData={name:(document.getElementById('first-name').value+' '+document.getElementById('last-name').value).trim(),email:document.getElementById('email').value,phone:document.getElementById('phone').value,size:selectedSize,brands:[...selectedBrands],joinedAt:new Date().toISOString()};localStorage.setItem('hh_user',JSON.stringify(userData));setTimeout(()=>{for(let i=1;i<=TOTAL_STEPS;i++){const p=document.getElementById('step-'+i);if(p)p.classList.remove('active');}document.getElementById('step-bar').style.display='none';document.getElementById('success-screen').style.display='block';launchConfetti();showToast('Account created! Welcome to Heat Haven 🔥',false);},1800);}
+function launchConfetti(){const colors=['#ff4500','#ff8c00','#22c55e','#3b82f6','#f59e0b','#ec4899'];const card=document.querySelector('.form-card');for(let i=0;i<18;i++){const dot=document.createElement('div');dot.className='confetti-dot';dot.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*40}%;background:${colors[Math.floor(Math.random()*colors.length)]};animation-delay:${Math.random()*0.6}s;animation-duration:${1+Math.random()*0.8}s;transform:rotate(${Math.random()*360}deg);border-radius:${Math.random()>0.5?'50%':'3px'};`;card.appendChild(dot);setTimeout(()=>dot.remove(),2500);}}
+function checkPwStrength(val){const bar=document.getElementById('pw-strength-bar'),lbl=document.getElementById('pw-strength-label');if(!val){bar.style.width='0%';lbl.textContent='';return;}let score=0;if(val.length>=8)score++;if(/[A-Z]/.test(val))score++;if(/[0-9]/.test(val))score++;if(/[^A-Za-z0-9]/.test(val))score++;const levels=[{w:'20%',bg:'#ef4444',text:'Weak 😬'},{w:'45%',bg:'#f97316',text:'Fair 🙂'},{w:'70%',bg:'#eab308',text:'Good 👍'},{w:'100%',bg:'#22c55e',text:'Strong 💪'}];const lvl=levels[score-1]||levels[0];bar.style.width=lvl.w;bar.style.background=lvl.bg;lbl.textContent=lvl.text;lbl.style.color=lvl.bg;}
+function togglePw(id,btn){const inp=document.getElementById(id);const isText=inp.type==='text';inp.type=isText?'password':'text';btn.querySelector('i').className=isText?'fas fa-eye':'fas fa-eye-slash';}
+function previewAvatar(input){if(!input.files||!input.files[0])return;const reader=new FileReader();reader.onload=e=>{const img=document.getElementById('avatar-preview'),ph=document.getElementById('avatar-placeholder');img.src=e.target.result;img.style.display='block';ph.style.display='none';};reader.readAsDataURL(input.files[0]);}
 
-// ── CURSOR GLOW ───────────────────────────────────────────
-const glow = document.getElementById('cursor-glow');
-document.addEventListener('mousemove', e => { glow.style.left = e.clientX + 'px'; glow.style.top = e.clientY + 'px'; });
-
-// ── CART BADGE ────────────────────────────────────────────
-function getCart() { try { return JSON.parse(localStorage.getItem("hh_cart") || "[]"); } catch(e) { return []; } }
-const t = getCart().reduce((s,i) => s + (i.qty||0), 0);
-document.querySelectorAll("#cart-count,#cart-count-mobile").forEach(el => el.textContent = t);
-
-// ── HELPERS ───────────────────────────────────────────────
-function escH(s) { return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
-function escReg(s) { return s.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"); }
-
-function showToast(msg, isError) {
-  const t = document.getElementById("toast");
-  t.querySelector("i").className = isError ? "fas fa-exclamation-circle" : "fas fa-check-circle";
-  t.querySelector("i").style.color = isError ? "#facc15" : "#22c55e";
-  t.querySelector("span").textContent = msg;
-  t.classList.remove("show"); void t.offsetWidth; t.classList.add("show");
-}
-
-// ── INTERSECTION OBSERVER ─────────────────────────────────
-const io = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
-document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.section-heading').forEach(el => io.observe(el));
-
-// ── NAV HIGHLIGHT ─────────────────────────────────────────
-const cp = location.pathname.split('/').pop();
-document.querySelectorAll('.nav-link').forEach(link => {
-  if (link.getAttribute('href') === cp) { link.style.color = '#ff4500'; }
-});
-
-// ═══════════════════════════════════════════════════════════
-// MULTI-STEP FORM LOGIC
-// ═══════════════════════════════════════════════════════════
-let currentStep = 1;
-const TOTAL_STEPS = 4;
-
-// ── Shoe sizes ────────────────────────────────────────────
-const SIZES = ['UK 6','UK 7','UK 8','UK 9','UK 10','UK 11','UK 12'];
-let selectedSize = '';
-const sizeGrid = document.getElementById('size-grid');
-SIZES.forEach(s => {
-  const chip = document.createElement('button');
-  chip.type = 'button';
-  chip.className = 'size-chip';
-  chip.textContent = s;
-  chip.onclick = () => {
-    document.querySelectorAll('.size-chip').forEach(c => c.classList.remove('selected'));
-    chip.classList.add('selected');
-    selectedSize = s;
-    document.getElementById('size-error').classList.remove('show');
-  };
-  sizeGrid.appendChild(chip);
-});
-
-// ── Brand chips ───────────────────────────────────────────
-const BRANDS = ['Air Jordan','Nike','Yeezy','Adidas','New Balance','Puma','Rick Owens','Asics','Salehe Bembury','Travis Scott'];
-let selectedBrands = new Set();
-const brandGrid = document.getElementById('brand-grid');
-BRANDS.forEach(b => {
-  const chip = document.createElement('button');
-  chip.type = 'button';
-  chip.className = 'brand-chip';
-  chip.textContent = b;
-  chip.onclick = () => {
-    chip.classList.toggle('selected');
-    if (selectedBrands.has(b)) selectedBrands.delete(b); else selectedBrands.add(b);
-  };
-  brandGrid.appendChild(chip);
-});
-
-// ── Step navigation ───────────────────────────────────────
-function goToStep(from, to) {
-  const fromPanel = document.getElementById('step-' + from);
-  const toPanel   = document.getElementById('step-' + to);
-
-  fromPanel.classList.add('exit');
-  setTimeout(() => {
-    fromPanel.classList.remove('active','exit');
-    toPanel.classList.add('active');
-  }, 280);
-
-  // Update nodes
-  for (let i = 1; i <= TOTAL_STEPS; i++) {
-    const node = document.getElementById('node-' + i);
-    const line = document.getElementById('line-' + i);
-    if (i < to)  { node.classList.add('done');   node.classList.remove('active'); }
-    else if (i === to) { node.classList.add('active'); node.classList.remove('done'); }
-    else          { node.classList.remove('done','active'); }
-    if (line && i < to) line.classList.add('done');
-    else if (line) line.classList.remove('done');
-  }
-  currentStep = to;
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-// ── Validation ────────────────────────────────────────────
-function showError(id, show) {
-  const el = document.getElementById(id);
-  if (el) { show ? el.classList.add('show') : el.classList.remove('show'); }
-}
-function markInput(id, error) {
-  const el = document.getElementById(id);
-  if (el) { error ? el.classList.add('error') : el.classList.remove('error'); }
-}
-
-function validateStep1() {
-  let ok = true;
-  const email = document.getElementById('email').value.trim();
-  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  showError('email-error', !emailOk); markInput('email', !emailOk);
-  if (!emailOk) ok = false;
-
-  const pw = document.getElementById('password').value;
-  const pwOk = pw.length >= 8;
-  showError('password-error', !pwOk); markInput('password', !pwOk);
-  if (!pwOk) ok = false;
-
-  const cpw = document.getElementById('confirm-password').value;
-  const cpwOk = cpw === pw && cpw.length > 0;
-  showError('confirm-error', !cpwOk); markInput('confirm-password', !cpwOk);
-  if (!cpwOk) ok = false;
-
-  const terms = document.getElementById('terms').checked;
-  if (!terms) { showToast('Please accept the Terms of Service to continue.', true); ok = false; }
-  return ok;
-}
-
-function validateStep2() {
-  let ok = true;
-  const fn = document.getElementById('first-name').value.trim();
-  showError('first-name-error', !fn); markInput('first-name', !fn);
-  if (!fn) ok = false;
-
-  const phone = document.getElementById('phone').value.trim().replace(/\D/g,'');
-  const phoneOk = phone.length >= 10;
-  showError('phone-error', !phoneOk); markInput('phone', !phoneOk);
-  if (!phoneOk) ok = false;
-
-  return ok;
-}
-
-function validateStep3() {
-  if (!selectedSize) {
-    document.getElementById('size-error').classList.add('show');
-    showToast('Please select your shoe size 👟', true);
-    return false;
-  }
-  document.getElementById('size-error').classList.remove('show');
-  return true;
-}
-
-function nextStep(step) {
-  let valid = true;
-  if (step === 1) valid = validateStep1();
-  if (step === 2) valid = validateStep2();
-  if (step === 3) valid = validateStep3();
-  if (!valid) return;
-  if (step === 3) buildReview();
-  goToStep(step, step + 1);
-}
-function prevStep(step) { goToStep(step, step - 1); }
-
-// ── Build review panel ────────────────────────────────────
-function buildReview() {
-  const name  = (document.getElementById('first-name').value + ' ' + document.getElementById('last-name').value).trim();
-  const email = document.getElementById('email').value;
-  const phone = document.getElementById('phone').value;
-  const addr  = document.getElementById('address').value || '—';
-  const brands= selectedBrands.size ? [...selectedBrands].join(', ') : '—';
-  const rows = [
-    { icon:'fas fa-user',         label:'Full Name',        val:name || '—' },
-    { icon:'fas fa-envelope',     label:'Email',            val:email },
-    { icon:'fas fa-phone',        label:'Phone',            val:phone || '—' },
-    { icon:'fas fa-shoe-prints',  label:'Preferred Size',   val:selectedSize },
-    { icon:'fas fa-heart',        label:'Fav. Brands',      val:brands },
-    { icon:'fas fa-map-marker-alt',label:'Delivery Address', val:addr.length > 40 ? addr.slice(0,40)+'…' : addr },
-  ];
-  document.getElementById('review-panel').innerHTML = rows.map(r => `
-    <div class="flex items-center gap-4 p-4 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 reveal" style="animation:step-in 0.4s ease both">
-      <div class="w-9 h-9 rounded-full bg-orange-50 dark:bg-orange-950 flex items-center justify-center flex-shrink-0">
-        <i class="${escH(r.icon)} text-red-500 text-sm"></i>
-      </div>
-      <div class="flex-1 min-w-0">
-        <p class="text-xs text-gray-400 dark:text-zinc-500 font-semibold uppercase tracking-wider">${escH(r.label)}</p>
-        <p class="text-sm font-semibold dark:text-white truncate mt-0.5">${escH(r.val)}</p>
-      </div>
-    </div>`).join('');
-}
-
-// ── Submit ────────────────────────────────────────────────
-function submitForm() {
-  const btn = document.getElementById('submit-btn');
-  btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2 text-sm"></i> Creating Account…';
-  btn.disabled = true;
-
-  // Save basic user data to localStorage
-  const userData = {
-    name: (document.getElementById('first-name').value + ' ' + document.getElementById('last-name').value).trim(),
-    email: document.getElementById('email').value,
-    phone: document.getElementById('phone').value,
-    size: selectedSize,
-    brands: [...selectedBrands],
-    joinedAt: new Date().toISOString(),
-  };
-  localStorage.setItem('hh_user', JSON.stringify(userData));
-
-  // Simulate API call
-  setTimeout(() => {
-    // Hide form steps, show success
-    for (let i = 1; i <= TOTAL_STEPS; i++) {
-      const p = document.getElementById('step-' + i);
-      if (p) p.classList.remove('active');
-    }
-    document.getElementById('step-bar').style.display = 'none';
-    const success = document.getElementById('success-screen');
-    success.style.display = 'block';
-    launchConfetti();
-    showToast('Account created! Welcome to Heat Haven 🔥', false);
-  }, 1800);
-}
-
-// ── Confetti ──────────────────────────────────────────────
-function launchConfetti() {
-  const colors = ['#ff4500','#ff8c00','#22c55e','#3b82f6','#f59e0b','#ec4899'];
-  const card = document.querySelector('.form-card');
-  for (let i = 0; i < 18; i++) {
-    const dot = document.createElement('div');
-    dot.className = 'confetti-dot';
-    dot.style.cssText = `
-      left:${Math.random()*100}%; top:${Math.random()*40}%;
-      background:${colors[Math.floor(Math.random()*colors.length)]};
-      animation-delay:${Math.random()*0.6}s;
-      animation-duration:${1 + Math.random()*0.8}s;
-      transform:rotate(${Math.random()*360}deg);
-      border-radius:${Math.random()>0.5?'50%':'3px'};
-    `;
-    card.appendChild(dot);
-    setTimeout(() => dot.remove(), 2500);
-  }
-}
-
-// ── Password strength ─────────────────────────────────────
-function checkPwStrength(val) {
-  const bar = document.getElementById('pw-strength-bar');
-  const lbl = document.getElementById('pw-strength-label');
-  if (!val) { bar.style.width='0%'; lbl.textContent=''; return; }
-  let score = 0;
-  if (val.length >= 8) score++;
-  if (/[A-Z]/.test(val)) score++;
-  if (/[0-9]/.test(val)) score++;
-  if (/[^A-Za-z0-9]/.test(val)) score++;
-  const levels = [
-    { w:'20%', bg:'#ef4444', text:'Weak 😬' },
-    { w:'45%', bg:'#f97316', text:'Fair 🙂' },
-    { w:'70%', bg:'#eab308', text:'Good 👍' },
-    { w:'100%',bg:'#22c55e', text:'Strong 💪' },
-  ];
-  const lvl = levels[score - 1] || levels[0];
-  bar.style.width      = lvl.w;
-  bar.style.background = lvl.bg;
-  lbl.textContent      = lvl.text;
-  lbl.style.color      = lvl.bg;
-}
-
-// ── Toggle password visibility ────────────────────────────
-function togglePw(id, btn) {
-  const inp = document.getElementById(id);
-  const isText = inp.type === 'text';
-  inp.type = isText ? 'password' : 'text';
-  btn.querySelector('i').className = isText ? 'fas fa-eye' : 'fas fa-eye-slash';
-}
-
-// ── Avatar preview ────────────────────────────────────────
-function previewAvatar(input) {
-  if (!input.files || !input.files[0]) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    const img = document.getElementById('avatar-preview');
-    const placeholder = document.getElementById('avatar-placeholder');
-    img.src = e.target.result;
-    img.style.display = 'block';
-    placeholder.style.display = 'none';
-  };
-  reader.readAsDataURL(input.files[0]);
-}
-
-// ═══════════════════════════════════════════════════════════
 // SEARCH
-// ═══════════════════════════════════════════════════════════
-const PRODUCTS = [
-  { name:"Air Jordan 1 Retro High",   colorway:"Chicago Bulls",  brand:"Jordan",     price:5559, img:"images/aj 1 chichgo.png" },
-  { name:"Nike Uptempo Slide",         colorway:"Chicago Bulls",  brand:"Nike",       price:5559, img:"images/uptempo slide bulls.png" },
-  { name:"Yeezy 700 V3",              colorway:"Azael",          brand:"Yeezy",      price:5559, img:"images/yzy 700 v3 azael.png" },
-  { name:"Travis x Fragment High",    colorway:"Fragment",       brand:"Jordan",     price:5559, img:"images/travis x fragment high.png" },
-  { name:"New Balance 990v5",         colorway:"Grey",           brand:"New Balance",price:5559, img:"images/nb 990v5.png" },
-  { name:"Air Jordan 4 Retro",        colorway:"Breds",          brand:"Jordan",     price:5559, img:"images/aj4 bred.png" },
-  { name:"Adidas Campus",             colorway:"Clear Sky Gum",  brand:"Adidas",     price:5559, img:"images/adidas campus clear sky gum.png" },
-  { name:"Nike SB Dunk Low",          colorway:"Gulf",           brand:"Nike",       price:5559, img:"images/sb gulf.png" },
-];
-
+const PRODUCTS=[{name:"Air Jordan 1 Retro High",colorway:"Chicago Bulls",brand:"Jordan",price:5559,img:"images/aj 1 chichgo.png"},{name:"Nike Uptempo Slide",colorway:"Chicago Bulls",brand:"Nike",price:5559,img:"images/uptempo slide bulls.png"},{name:"Yeezy 700 V3",colorway:"Azael",brand:"Yeezy",price:5559,img:"images/yzy 700 v3 azael.png"},{name:"Travis x Fragment High",colorway:"Fragment",brand:"Jordan",price:5559,img:"images/travis x fragment high.png"},{name:"New Balance 990v5",colorway:"Grey",brand:"New Balance",price:5559,img:"images/nb 990v5.png"},{name:"Air Jordan 4 Retro",colorway:"Breds",brand:"Jordan",price:5559,img:"images/aj4 bred.png"},{name:"Adidas Campus",colorway:"Clear Sky Gum",brand:"Adidas",price:5559,img:"images/adidas campus clear sky gum.png"},{name:"Nike SB Dunk Low",colorway:"Gulf",brand:"Nike",price:5559,img:"images/sb gulf.png"}];
 const so=document.getElementById("search-overlay"),si=document.getElementById("search-input"),sc=document.getElementById("search-clear-btn"),rp=document.getElementById("search-results-panel");
-function openSearch(){ so.classList.add("open"); setTimeout(()=>si.focus(),50); }
-function closeSearch(){ so.classList.remove("open"); si.value=""; sc.classList.remove("visible"); rp.innerHTML=""; rp.classList.remove("has-results"); }
-document.getElementById("search-open-btn").addEventListener("click", openSearch);
-document.getElementById("search-open-btn-mobile")?.addEventListener("click", ()=>{ document.getElementById("mobile-menu").classList.remove("open"); openSearch(); });
-so.addEventListener("click",e=>{ if(e.target===so) closeSearch(); });
-document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeSearch(); if((e.metaKey||e.ctrlKey)&&e.key==="k"){e.preventDefault();openSearch();} });
-sc.addEventListener("click",()=>{ si.value=""; sc.classList.remove("visible"); rp.innerHTML=""; rp.classList.remove("has-results"); si.focus(); });
-function hl(t,q){ if(!q)return escH(t); return escH(t).replace(new RegExp("("+escReg(q)+")","gi"),'<span class="search-highlight">$1</span>'); }
-function runSearch(q){
-  sc.classList.toggle("visible",q.length>0);
-  if(!q.trim()){ rp.innerHTML=""; rp.classList.remove("has-results"); return; }
-  const hits=PRODUCTS.filter(p=>[p.name,p.colorway,p.brand].join(" ").toLowerCase().includes(q.toLowerCase()));
-  rp.classList.add("has-results");
-  if(!hits.length){ rp.innerHTML=`<div class="search-no-results"><span style="font-size:36px;display:block;margin-bottom:10px">👟</span>No results for "<strong>${escH(q)}</strong>"</div>`; return; }
-  rp.innerHTML=hits.map((p,i)=>`<div class="search-result-item" data-i="${i}" tabindex="0" style="animation-delay:${i*40}ms"><img class="sri-img" src="${escH(p.img)}" onerror="this.src='https://via.placeholder.com/52'"><div style="flex:1;min-width:0"><div class="sri-name">${hl(p.name,q)}</div><div class="sri-sub">${hl(p.colorway,q)} · ${hl(p.brand,q)}</div></div><div class="sri-price">₹${p.price.toLocaleString("en-IN")}</div></div>`).join("");
-  rp.querySelectorAll(".search-result-item").forEach((row,i)=>{
-    row.addEventListener("click",()=>{ closeSearch(); window.location.href="product.html"; });
-    row.addEventListener("keydown",e=>{ if(e.key==="Enter") row.click(); });
-  });
-}
-let dbt; si.addEventListener("input",()=>{ clearTimeout(dbt); dbt=setTimeout(()=>runSearch(si.value),160); });
+function openSearch(){so.classList.add("open");setTimeout(()=>si.focus(),50);}
+function closeSearch(){so.classList.remove("open");si.value="";sc.classList.remove("visible");rp.innerHTML="";rp.classList.remove("has-results");}
+document.getElementById("search-open-btn").addEventListener("click",openSearch);
+document.getElementById("search-open-btn-mobile")?.addEventListener("click",()=>{document.getElementById("mobile-menu").classList.remove("open");openSearch();});
+so.addEventListener("click",e=>{if(e.target===so)closeSearch();});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeSearch();if((e.metaKey||e.ctrlKey)&&e.key==="k"){e.preventDefault();openSearch();}});
+sc.addEventListener("click",()=>{si.value="";sc.classList.remove("visible");rp.innerHTML="";rp.classList.remove("has-results");si.focus();});
+function hl(t,q){if(!q)return escH(t);return escH(t).replace(new RegExp("("+escReg(q)+")","gi"),'<span class="search-highlight">$1</span>');}
+function runSearch(q){sc.classList.toggle("visible",q.length>0);if(!q.trim()){rp.innerHTML="";rp.classList.remove("has-results");return;}const hits=PRODUCTS.filter(p=>[p.name,p.colorway,p.brand].join(" ").toLowerCase().includes(q.toLowerCase()));rp.classList.add("has-results");if(!hits.length){rp.innerHTML=`<div class="search-no-results"><span style="font-size:36px;display:block;margin-bottom:10px">👟</span>No results for "<strong>${escH(q)}</strong>"</div>`;return;}rp.innerHTML=hits.map((p,i)=>`<div class="search-result-item" tabindex="0" style="animation-delay:${i*40}ms"><img class="sri-img" src="${escH(p.img)}" onerror="this.src='https://via.placeholder.com/52'"><div style="flex:1;min-width:0"><div class="sri-name">${hl(p.name,q)}</div><div class="sri-sub">${hl(p.colorway,q)} · ${hl(p.brand,q)}</div></div><div class="sri-price">₹${p.price.toLocaleString("en-IN")}</div></div>`).join("");rp.querySelectorAll(".search-result-item").forEach(row=>{row.addEventListener("click",()=>{closeSearch();window.location.href="product.html";});row.addEventListener("keydown",e=>{if(e.key==="Enter")row.click();});});}
+let dbt; si.addEventListener("input",()=>{clearTimeout(dbt);dbt=setTimeout(()=>runSearch(si.value),160);});
 </script>
 </body>
 </html>
