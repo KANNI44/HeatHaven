@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -69,6 +68,7 @@
     }
     .select-shake { animation:shake 0.4s ease; }
 
+    /* ── WISHLIST BUTTON ── */
     .wishlist-btn {
       width:38px; height:38px; display:flex; align-items:center; justify-content:center;
       border-radius:50%; background:rgba(255,255,255,0.95);
@@ -76,13 +76,16 @@
       transition:background 0.2s, transform 0.2s, box-shadow 0.2s;
     }
     .wishlist-btn:hover { background:#fff; box-shadow:0 4px 14px rgba(0,0,0,0.18); transform:scale(1.15); }
-    .wishlist-btn i { font-size:15px; color:#374151; transition:color 0.2s; }
+    .wishlist-btn i { font-size:15px; color:#374151; transition:color 0.2s, transform 0.2s; }
     .dark .wishlist-btn { background:rgba(255,255,255,0.93); }
     .dark .wishlist-btn:hover { background:#fff; }
-    .wishlist-btn.wishlisted i,
-    .dark .wishlist-btn.wishlisted i { color:#ef4444; }
-    .heart-bounce { animation:heart-pop 0.35s ease-out; }
+
+    /* wishlisted state — red filled heart */
+    .wishlist-btn.wishlisted i { color:#ef4444 !important; }
+    .dark .wishlist-btn.wishlisted i { color:#ef4444 !important; }
+
     @keyframes heart-pop { 0%{transform:scale(1)} 40%{transform:scale(1.45)} 70%{transform:scale(0.9)} 100%{transform:scale(1)} }
+    .heart-bounce { animation:heart-pop 0.35s ease-out; }
 
     /* Dual Range Slider */
     .range-wrap { position:relative; height:36px; display:flex; align-items:center; margin:4px 0; }
@@ -216,113 +219,49 @@
     .dark .hh-powered { background:#0a0a0a; color:#333; }
     @media (max-width:420px) { #hh-chat-panel { width:calc(100vw - 48px); } }
 
-    /* ══ PREMIUM ANIMATIONS (matching index.html) ══════════════════════ */
-
-    /* Cursor glow */
-    #cursor-glow {
-      position:fixed; width:320px; height:320px; border-radius:50%;
-      background:radial-gradient(circle, rgba(255,69,0,0.07) 0%, transparent 70%);
-      pointer-events:none; z-index:0; transform:translate(-50%,-50%);
-      transition:opacity 0.4s ease; opacity:0;
-    }
+    /* ══ PREMIUM ANIMATIONS ══ */
+    #cursor-glow { position:fixed; width:320px; height:320px; border-radius:50%; background:radial-gradient(circle, rgba(255,69,0,0.07) 0%, transparent 70%); pointer-events:none; z-index:0; transform:translate(-50%,-50%); transition:opacity 0.4s ease; opacity:0; }
     body:hover #cursor-glow { opacity:1; }
 
-    /* Nav drop-in */
-    @keyframes nav-drop {
-      from { transform:translateY(-100%); opacity:0; }
-      to   { transform:translateY(0);     opacity:1; }
-    }
+    @keyframes nav-drop { from{transform:translateY(-100%);opacity:0} to{transform:translateY(0);opacity:1} }
     nav { animation:nav-drop 0.6s cubic-bezier(0.16,1,0.3,1) both; }
 
-    /* Brand shimmer */
-    @keyframes brand-shimmer {
-      0%   { background-position:-200% center; }
-      100% { background-position: 200% center; }
-    }
-    .brand a {
-      background:linear-gradient(90deg, currentColor 40%, #ff4500 50%, currentColor 60%);
-      background-size:200% auto;
-      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-      animation:brand-shimmer 3.5s ease 0.5s 1 forwards;
-    }
+    @keyframes brand-shimmer { 0%{background-position:-200% center} 100%{background-position:200% center} }
+    .brand a { background:linear-gradient(90deg, currentColor 40%, #ff4500 50%, currentColor 60%); background-size:200% auto; -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; animation:brand-shimmer 3.5s ease 0.5s 1 forwards; }
 
-    /* Nav link underline */
     .nav-link { position:relative; }
-    .nav-link::after {
-      content:''; position:absolute; bottom:-2px; left:0;
-      width:0; height:2px; background:#ff4500; border-radius:2px;
-      transition:width 0.3s cubic-bezier(0.4,0,0.2,1);
-    }
+    .nav-link::after { content:''; position:absolute; bottom:-2px; left:0; width:0; height:2px; background:#ff4500; border-radius:2px; transition:width 0.3s cubic-bezier(0.4,0,0.2,1); }
     .nav-link:hover::after { width:100%; }
 
-    /* Section heading underline reveal */
     .section-heading { position:relative; display:inline-block; }
-    .section-heading::after {
-      content:''; position:absolute; bottom:-6px; left:0;
-      width:0; height:3px; background:#ff4500; border-radius:2px;
-      transition:width 0.5s cubic-bezier(0.4,0,0.2,1) 0.1s;
-    }
+    .section-heading::after { content:''; position:absolute; bottom:-6px; left:0; width:0; height:3px; background:#ff4500; border-radius:2px; transition:width 0.5s cubic-bezier(0.4,0,0.2,1) 0.1s; }
     .section-heading.visible::after { width:100%; }
 
-    /* Scroll reveal */
-    .reveal {
-      opacity:0; transform:translateY(32px);
-      transition:opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
-    }
+    .reveal { opacity:0; transform:translateY(32px); transition:opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1); }
     .reveal.visible { opacity:1; transform:translateY(0); }
 
-    /* Product cards — staggered entrance + hover lift */
-    .shoe-card {
-      opacity:0; transform:translateY(28px) scale(0.97);
-      transition:opacity 0.55s cubic-bezier(0.16,1,0.3,1),
-                 transform 0.55s cubic-bezier(0.16,1,0.3,1),
-                 box-shadow 0.25s ease;
-    }
+    .shoe-card { opacity:0; transform:translateY(28px) scale(0.97); transition:opacity 0.55s cubic-bezier(0.16,1,0.3,1), transform 0.55s cubic-bezier(0.16,1,0.3,1), box-shadow 0.25s ease; }
     .shoe-card.visible { opacity:1; transform:translateY(0) scale(1); }
     .shoe-card:hover { transform:translateY(-6px) scale(1.01) !important; box-shadow:0 20px 40px rgba(0,0,0,0.14); }
     .dark .shoe-card:hover { box-shadow:0 0 0 1px rgba(255,69,0,0.18), 0 20px 40px rgba(0,0,0,0.6); }
-
-    /* Card shine sweep */
     .shoe-card .relative { overflow:hidden; }
-    .shoe-card .relative::after {
-      content:''; position:absolute; inset:0;
-      background:linear-gradient(115deg, transparent 40%, rgba(255,255,255,0.18) 50%, transparent 60%);
-      transform:translateX(-100%); transition:transform 0.5s ease;
-      pointer-events:none; z-index:5;
-    }
+    .shoe-card .relative::after { content:''; position:absolute; inset:0; background:linear-gradient(115deg, transparent 40%, rgba(255,255,255,0.18) 50%, transparent 60%); transform:translateX(-100%); transition:transform 0.5s ease; pointer-events:none; z-index:5; }
     .shoe-card:hover .relative::after { transform:translateX(100%); }
 
-    /* Filter pill hover */
     .filter-btn { transition:all 0.22s cubic-bezier(0.4,0,0.2,1); }
-    .filter-btn:hover:not(.active) {
-      border-color:#ff4500 !important; color:#ff4500 !important;
-      transform:translateY(-1px); box-shadow:0 4px 14px rgba(255,69,0,0.15);
-    }
+    .filter-btn:hover:not(.active) { border-color:#ff4500 !important; color:#ff4500 !important; transform:translateY(-1px); box-shadow:0 4px 14px rgba(255,69,0,0.15); }
 
-    /* Add-to-cart ripple */
     .add-to-cart-btn { position:relative; overflow:hidden; }
-    .add-to-cart-btn::after {
-      content:''; position:absolute; inset:0;
-      background:rgba(255,255,255,0.25); border-radius:inherit;
-      transform:scale(0); opacity:0; transition:transform 0.35s ease, opacity 0.35s ease;
-    }
+    .add-to-cart-btn::after { content:''; position:absolute; inset:0; background:rgba(255,255,255,0.25); border-radius:inherit; transform:scale(0); opacity:0; transition:transform 0.35s ease, opacity 0.35s ease; }
     .add-to-cart-btn:active::after { transform:scale(2); opacity:0; transition:0s; }
 
-    /* Footer runner line */
     footer { position:relative; overflow:hidden; }
-    footer::before {
-      content:''; position:absolute; top:0; left:-100%;
-      width:60%; height:1px;
-      background:linear-gradient(90deg, transparent, #ff4500, transparent);
-      animation:footer-line 3s ease 1.5s infinite;
-    }
+    footer::before { content:''; position:absolute; top:0; left:-100%; width:60%; height:1px; background:linear-gradient(90deg, transparent, #ff4500, transparent); animation:footer-line 3s ease 1.5s infinite; }
     @keyframes footer-line { 0%{left:-60%} 100%{left:140%} }
 
-    /* Page fade in */
     @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
     #products, .brand-filter-section { animation:fadeIn 0.6s ease 0.1s both; }
 
-    /* Deal badge pulse */
     @keyframes badge-pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.85;transform:scale(1.04)} }
     .deal-badge { animation:badge-pulse 2.5s ease-in-out infinite; }
   </style>
@@ -330,7 +269,6 @@
 
 <body class="bg-white text-black dark:bg-amoled dark:text-white transition-colors duration-300">
 
-  <!-- Cursor glow -->
   <div id="cursor-glow"></div>
 
   <!-- Search Overlay -->
@@ -380,15 +318,12 @@
             <a href="owners.html"  class="nav-link text-black dark:text-zinc-400 hover:text-gray-600 dark:hover:text-white px-2 transition-colors">Owners</a>
           </div>
         </div>
-         <!-- Right: Icons -->
-      <div class="hidden md:flex items-center gap-2 flex-shrink-0">
-        <!-- Wishlist (active) -->
-        <a href="wishlist.html" class="p-2 rounded-full bg-red-50 dark:bg-red-950 relative" aria-label="Wishlist">
-          <i class="fas fa-heart text-red-500 text-sm"></i>
-          <span id="wish-nav-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 items-center justify-center hidden">0</span>
-        </a>
-        <div class="flex items-center">
-          <div class="hidden md:flex items-center space-x-2">
+        <div class="hidden md:flex items-center gap-2 flex-shrink-0">
+          <a href="wishlist.html" class="p-2 rounded-full bg-red-50 dark:bg-red-950 relative" aria-label="Wishlist">
+            <i class="fas fa-heart text-red-500 text-sm"></i>
+            <span id="wish-nav-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 items-center justify-center hidden">0</span>
+          </a>
+          <div class="flex items-center space-x-2">
             <button id="search-open-btn" class="nav-search-pill" aria-label="Open search">
               <div class="pill-border"></div>
               <span class="pill-inner">
@@ -773,31 +708,104 @@
     document.getElementById('mobile-menu-button').addEventListener('click', () => document.getElementById('mobile-menu').classList.add('open'));
     document.getElementById('close-menu').addEventListener('click', () => document.getElementById('mobile-menu').classList.remove('open'));
 
-    // ══ BRAND FILTER PILLS ══
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    const shoeCards     = document.querySelectorAll('.shoe-card');
-    filterButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        filterButtons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        const brand = btn.dataset.brand;
-        shoeCards.forEach(card => {
-          card.style.display = (brand === 'all' || card.dataset.brand === brand) ? 'block' : 'none';
-        });
-      });
-    });
+    // ══ HELPERS ══
+    function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function escRegex(s) { return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'); }
 
     // ══ TOAST ══
     const toastEl = document.getElementById('toast');
     let toastTimeout;
     function showToast(msg, isError) {
       const icon = toastEl.querySelector('i'), span = toastEl.querySelector('span');
-      if (msg) span.textContent = msg;
+      if (msg)  span.textContent = msg;
       if (icon) icon.className = isError ? 'fas fa-exclamation-circle text-yellow-400' : 'fas fa-check-circle text-green-400';
       toastEl.classList.add('show');
       if (toastTimeout) clearTimeout(toastTimeout);
       toastTimeout = setTimeout(() => toastEl.classList.remove('show'), 2200);
     }
+
+    // ═══════════════════════════════════════════════════════════
+    // WISHLIST — reads & writes hh_wishlist in localStorage
+    // Same schema as wishlist.html: { id, name, colorway, brand, price, img }
+    // ═══════════════════════════════════════════════════════════
+    function getWishlist() {
+      try { return JSON.parse(localStorage.getItem('hh_wishlist') || '[]'); } catch(e) { return []; }
+    }
+    function saveWishlist(w) { localStorage.setItem('hh_wishlist', JSON.stringify(w)); }
+
+    // Build a stable wishlist ID from name + colorway (no size needed for these items)
+    function wishId(card) {
+      return (card.dataset.name || 'item').toLowerCase().replace(/\s+/g, '-') + '-wish';
+    }
+
+    // Sync all heart buttons to reflect current localStorage state on load
+    function syncWishlistUI() {
+      const w = getWishlist();
+      document.querySelectorAll('.shoe-card').forEach(card => {
+        const btn  = card.querySelector('.wishlist-btn');
+        const icon = btn?.querySelector('i');
+        if (!btn || !icon) return;
+        const inList = w.some(item => item.id === wishId(card));
+        btn.classList.toggle('wishlisted', inList);
+        // filled heart when wishlisted, outline when not
+        icon.className = inList ? 'fas fa-heart' : 'far fa-heart';
+      });
+
+      // Update nav wishlist badge
+      const badge = document.getElementById('wish-nav-badge');
+      if (badge) {
+        badge.textContent = w.length;
+        badge.style.display = w.length > 0 ? 'flex' : 'none';
+      }
+    }
+
+    // Wire up all wishlist buttons
+    document.querySelectorAll('.wishlist-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const card     = btn.closest('.shoe-card');
+        const icon     = btn.querySelector('i');
+        const id       = wishId(card);
+        const name     = card.dataset.name     || 'Item';
+        const colorway = card.dataset.colorway || '';
+        const brand    = card.dataset.brand    || '';
+        const price    = parseFloat(card.dataset.price) || 0;
+        const img      = card.dataset.img      || '';
+
+        // Heart bounce animation (same as index/wishlist pages)
+        icon.classList.remove('heart-bounce');
+        void icon.offsetWidth;
+        icon.classList.add('heart-bounce');
+
+        let w        = getWishlist();
+        const exists = w.some(item => item.id === id);
+
+        if (exists) {
+          // Remove from wishlist
+          w = w.filter(item => item.id !== id);
+          saveWishlist(w);
+          btn.classList.remove('wishlisted');
+          icon.className = 'far fa-heart';
+          showToast('Removed from wishlist', false);
+        } else {
+          // Add to wishlist — same object shape as wishlist.html expects
+          w.push({ id, name, colorway, brand, price, img });
+          saveWishlist(w);
+          btn.classList.add('wishlisted');
+          icon.className = 'fas fa-heart';
+          showToast('❤️ Saved to wishlist!', false);
+        }
+
+        // Update nav badge
+        const badge = document.getElementById('wish-nav-badge');
+        if (badge) {
+          badge.textContent = w.length;
+          badge.style.display = w.length > 0 ? 'flex' : 'none';
+        }
+      });
+    });
+
+    // Sync UI on page load
+    syncWishlistUI();
 
     // ══ CART ══
     function getCart() { try { return JSON.parse(localStorage.getItem('hh_cart') || '[]'); } catch(e) { return []; } }
@@ -806,20 +814,29 @@
       const total = getCart().reduce((s, i) => s + i.qty, 0);
       document.querySelectorAll('#cart-count, #cart-count-mobile').forEach(el => el.textContent = total);
     }
+
     document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.preventDefault();
-        const card = btn.closest('.shoe-card');
+        const card       = btn.closest('.shoe-card');
         const sizeSelect = card ? card.querySelector('select.size-select') : null;
-        const size = sizeSelect ? sizeSelect.value : 'One Size';
+        const size       = sizeSelect ? sizeSelect.value : 'One Size';
         if (sizeSelect && !size) {
           sizeSelect.classList.add('select-shake');
-          sizeSelect.style.borderColor = '#ef4444';
-          sizeSelect.style.boxShadow = '0 0 0 2px rgba(239,68,68,0.25)';
-          setTimeout(() => { sizeSelect.classList.remove('select-shake'); sizeSelect.style.borderColor = ''; sizeSelect.style.boxShadow = ''; }, 600);
+          sizeSelect.style.borderColor  = '#ef4444';
+          sizeSelect.style.boxShadow    = '0 0 0 2px rgba(239,68,68,0.25)';
+          setTimeout(() => { sizeSelect.classList.remove('select-shake'); sizeSelect.style.borderColor=''; sizeSelect.style.boxShadow=''; }, 600);
           showToast('Pick a size first! 👟', true); return;
         }
-        const item = { id:(card.dataset.name||'item')+'-'+size, name:card.dataset.name||'Item', colorway:card.dataset.colorway||'', brand:card.dataset.brand||'', price:parseFloat(card.dataset.price)||0, img:card.dataset.img||'', size, qty:1 };
+        const item = {
+          id:       (card.dataset.name||'item') + '-' + size,
+          name:     card.dataset.name    || 'Item',
+          colorway: card.dataset.colorway || '',
+          brand:    card.dataset.brand    || '',
+          price:    parseFloat(card.dataset.price) || 0,
+          img:      card.dataset.img      || '',
+          size, qty: 1
+        };
         const cart = getCart(), existing = cart.find(i => i.id === item.id);
         if (existing) { existing.qty++; } else { cart.push(item); }
         saveCart(cart); updateCartBadge();
@@ -832,14 +849,17 @@
     });
     updateCartBadge();
 
-    // ══ WISHLIST ══
-    document.querySelectorAll('.wishlist-btn').forEach(btn => {
+    // ══ BRAND FILTER PILLS ══
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const shoeCards     = document.querySelectorAll('.shoe-card');
+    filterButtons.forEach(btn => {
       btn.addEventListener('click', () => {
-        const icon = btn.querySelector('i');
-        const isWished = btn.classList.toggle('wishlisted');
-        icon.classList.toggle('fas', isWished);
-        icon.classList.toggle('far', !isWished);
-        icon.classList.remove('heart-bounce'); void icon.offsetWidth; icon.classList.add('heart-bounce');
+        filterButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const brand = btn.dataset.brand;
+        shoeCards.forEach(card => {
+          card.style.display = (brand === 'all' || card.dataset.brand === brand) ? 'block' : 'none';
+        });
       });
     });
 
@@ -887,7 +907,7 @@
     }));
     const overlay = document.getElementById('search-overlay'), searchInput = document.getElementById('search-input');
     const clearBtn = document.getElementById('search-clear-btn'), resultsPanel = document.getElementById('search-results-panel');
-    function openSearch() { overlay.classList.add('open'); searchInput.focus(); }
+    function openSearch()  { overlay.classList.add('open'); searchInput.focus(); }
     function closeSearch() { overlay.classList.remove('open'); searchInput.value=''; clearBtn.classList.remove('visible'); resultsPanel.innerHTML=''; resultsPanel.classList.remove('has-results'); }
     document.getElementById('search-open-btn').addEventListener('click', openSearch);
     document.getElementById('search-open-btn-mobile')?.addEventListener('click', () => { document.getElementById('mobile-menu').classList.remove('open'); openSearch(); });
@@ -897,8 +917,6 @@
     });
     overlay.addEventListener('click', e => { if (e.target===overlay) closeSearch(); });
     clearBtn.addEventListener('click', () => { searchInput.value=''; clearBtn.classList.remove('visible'); resultsPanel.innerHTML=''; resultsPanel.classList.remove('has-results'); searchInput.focus(); });
-    function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-    function escRegex(s) { return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'); }
     function highlight(t,q) { if(!q)return escHtml(t); return escHtml(t).replace(new RegExp(`(${escRegex(q)})`,'gi'),'<span class="search-highlight">$1</span>'); }
     function runSearch(query) {
       clearBtn.classList.toggle('visible', query.length > 0);
@@ -915,11 +933,7 @@
     searchInput.addEventListener('input', () => { clearTimeout(debounceTimer); debounceTimer=setTimeout(()=>runSearch(searchInput.value),160); });
 
     // ══ AI CHAT ══
-    const SYSTEM_PROMPT = `You are a friendly, knowledgeable assistant for Heat Haven, a premium sneaker and streetwear store in India.
-STORE INFO: Heat Haven | Instagram: @heatheaven.23_ | Currency: ₹ | Sizes: UK 6–12
-HOT DEALS: Ferrari Team Jacket ₹23,430 | Seductive Scales ₹43,430 | Bearbrick Batman 1000% ₹54,999 | Air Jordan 4 Bred ₹5,000 | Butterfly Blossom Shirt ₹32,410 | Yeezy Boost V2 Zebra ₹3,559 | Fear Of God Essentials Hoodie ₹3,559
-POLICIES: Free shipping above ₹5,000 | Returns: 7 days unworn | Payment: UPI/Card/COD
-PERSONALITY: Short 2-3 sentence replies, casual, hype-culture savvy. Use deal energy!`;
+    const SYSTEM_PROMPT = `You are a friendly assistant for Heat Haven, a premium sneaker store in India. Currency: ₹. Keep replies 2-3 sentences, casual, hype-culture savvy.`;
     const QUICK_REPLIES = ["Best deals? 🔥","Shipping info","Yeezy sizing","Jordan sizing","Returns","Contact us"];
     const widget=document.getElementById('hh-chat-widget'), chatToggle=document.getElementById('hh-chat-toggle');
     const msgs=document.getElementById('hh-messages'), chatInput=document.getElementById('hh-input');
@@ -927,31 +941,25 @@ PERSONALITY: Short 2-3 sentence replies, casual, hype-culture savvy. Use deal en
     const notifDot=document.getElementById('hh-notif-dot');
     let chatHistory=[], isTyping=false, hasOpened=false;
     chatToggle.addEventListener('click',()=>{ widget.classList.toggle('open'); if(!hasOpened){hasOpened=true;notifDot.style.display='none';showWelcome();} });
-    function showWelcome(){ setTimeout(()=>{ addBot("Hey! 🔥 Welcome to **Heat Haven Deals**. Copped anything yet?"); setTimeout(()=>{ addBot("Ask me about sizing, shipping, or our hottest deals!"); showChips(); },800); },300); }
+    function showWelcome(){ setTimeout(()=>{ addBot("Hey! 🔥 Welcome to <strong>Heat Haven Deals</strong>. Copped anything yet?"); setTimeout(()=>{ addBot("Ask me about sizing, shipping, or our hottest deals!"); showChips(); },800); },300); }
     function showChips(chips=QUICK_REPLIES){ chipsEl.innerHTML=''; chips.forEach(t=>{const b=document.createElement('button');b.className='hh-chip';b.textContent=t;b.onclick=()=>{chipsEl.innerHTML='';sendMsg(t);};chipsEl.appendChild(b);}); }
-    function addBot(text){ const d=document.createElement('div');d.className='hh-msg bot';d.innerHTML=`<div class="hh-bot-avatar">🤖</div><div class="hh-bubble">${text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>')}</div>`;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight; }
+    function addBot(text){ const d=document.createElement('div');d.className='hh-msg bot';d.innerHTML=`<div class="hh-bot-avatar">🤖</div><div class="hh-bubble">${text.replace(/\n/g,'<br>')}</div>`;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight; }
     function addUser(text){ const d=document.createElement('div');d.className='hh-msg user';d.innerHTML=`<div class="hh-bubble">${escHtml(text)}</div>`;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight; }
     function showTyping(){ const d=document.createElement('div');d.className='hh-msg bot';d.id='hh-typing-indicator';d.innerHTML=`<div class="hh-bot-avatar">🤖</div><div class="hh-bubble" style="padding:10px 16px"><div class="hh-typing"><span></span><span></span><span></span></div></div>`;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight; }
     function hideTyping(){ const e=document.getElementById('hh-typing-indicator');if(e)e.remove(); }
     async function sendMsg(text){ text=text.trim();if(!text||isTyping)return; chipsEl.innerHTML='';addUser(text);chatInput.value='';isTyping=true;sendBtn.style.opacity='0.5';chatHistory.push({role:'user',content:text});showTyping();
       try{ const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:SYSTEM_PROMPT,messages:chatHistory})});const data=await res.json();const reply=data.content?.[0]?.text||"Sorry, try again!";chatHistory.push({role:'assistant',content:reply});hideTyping();addBot(reply);showChips(["Tell me more","Any other deals?","Shipping info","Contact support"]); }
-      catch(err){ hideTyping();addBot("Connectivity issue! DM us on Instagram **@heatheaven.23_** 🙏"); }
+      catch(err){ hideTyping();addBot("Connectivity issue! DM us on Instagram <strong>@heatheaven.23_</strong> 🙏"); }
       isTyping=false;sendBtn.style.opacity='1';
     }
     sendBtn.addEventListener('click',()=>sendMsg(chatInput.value));
     chatInput.addEventListener('keydown',e=>{if(e.key==='Enter')sendMsg(chatInput.value);});
     setTimeout(()=>{if(!hasOpened)notifDot.style.display='block';},3000);
 
-    // ══ PREMIUM ANIMATIONS ══════════════════════════════════════
-
-    // Cursor glow
+    // ══ PREMIUM ANIMATIONS ══
     const glow = document.getElementById('cursor-glow');
-    document.addEventListener('mousemove', e => {
-      glow.style.left = e.clientX + 'px';
-      glow.style.top  = e.clientY + 'px';
-    });
+    document.addEventListener('mousemove', e => { glow.style.left = e.clientX + 'px'; glow.style.top = e.clientY + 'px'; });
 
-    // Scroll reveal + staggered cards
     const cards = document.querySelectorAll('.shoe-card');
     cards.forEach((card, i) => { card.style.transitionDelay = (i * 0.07) + 's'; });
 
@@ -959,11 +967,9 @@ PERSONALITY: Short 2-3 sentence replies, casual, hype-culture savvy. Use deal en
     const io = new IntersectionObserver((entries) => {
       entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
     }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-
     revealEls.forEach(el => io.observe(el));
     cards.forEach(el => io.observe(el));
 
-    // Active nav link highlight
     const currentPage = location.pathname.split('/').pop() || 'deals.html';
     document.querySelectorAll('.nav-link').forEach(link => {
       if (link.getAttribute('href') === currentPage) {
