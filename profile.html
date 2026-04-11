@@ -16,161 +16,78 @@
 
   <style>
     :root { --primary:#000; --accent:#ff4500; }
-    body {
-      font-family: "Poppins", sans-serif;
-      overflow-x: hidden;
-      background-image: url("images/scape.jpg");
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
-    }
+    body { font-family:"Poppins",sans-serif; overflow-x:hidden; background-image:url("images/scape.jpg"); background-size:cover; background-position:center; background-repeat:no-repeat; background-attachment:fixed; }
     h1,h2,h3,h4,.brand { font-family:"Archivo Black",sans-serif; letter-spacing:-0.5px; }
     .mobile-menu { transform:translateX(100%); transition:transform 0.3s ease-in-out; }
     .mobile-menu.open { transform:translateX(0); }
 
-    /* ══════════════════════════════════════════════
-       ALL ANIMATIONS FROM INDEX.HTML
-    ══════════════════════════════════════════════ */
-
-    /* ── Nav drop-in ── */
     @keyframes nav-drop { from{transform:translateY(-100%);opacity:0} to{transform:translateY(0);opacity:1} }
     nav { animation:nav-drop 0.6s cubic-bezier(0.16,1,0.3,1) both; }
-
-    /* ── Brand shimmer ── */
     @keyframes brand-shimmer { 0%{background-position:-200% center} 100%{background-position:200% center} }
-    .brand a {
-      background:linear-gradient(90deg, currentColor 40%, #ff4500 50%, currentColor 60%);
-      background-size:200% auto;
-      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-      animation:brand-shimmer 3.5s ease 0.5s 1 forwards;
-    }
-
-    /* ── Nav link underline hover ── */
+    .brand a { background:linear-gradient(90deg, currentColor 40%, #ff4500 50%, currentColor 60%); background-size:200% auto; -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; animation:brand-shimmer 3.5s ease 0.5s 1 forwards; }
     .nav-link { position:relative; }
     .nav-link::after { content:''; position:absolute; bottom:-2px; left:0; width:0; height:2px; background:#ff4500; border-radius:2px; transition:width 0.3s cubic-bezier(0.4,0,0.2,1); }
     .nav-link:hover::after { width:100%; }
-
-    /* ── Page fadeIn ── */
     .page-transition { animation:fadeIn 0.5s ease-in-out; }
     @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
-
-    /* ── Hero word entrance ── */
     @keyframes hero-word-in { from{opacity:0;transform:translateY(40px) skewY(3deg);filter:blur(4px)} to{opacity:1;transform:translateY(0) skewY(0);filter:blur(0)} }
     .hero-title-word { display:inline-block; animation:hero-word-in 0.8s cubic-bezier(0.16,1,0.3,1) both; }
-    .hero-title-word:nth-child(1){animation-delay:0.1s}
-    .hero-title-word:nth-child(2){animation-delay:0.22s}
-    .hero-title-word:nth-child(3){animation-delay:0.34s}
-
-    /* ── Hero sub fade-up ── */
+    .hero-title-word:nth-child(1){animation-delay:0.1s} .hero-title-word:nth-child(2){animation-delay:0.22s}
     @keyframes hero-sub-in { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
     .hero-sub { animation:hero-sub-in 0.7s ease 0.5s both; }
-
-    /* ── Accent line grow ── */
     @keyframes line-grow { from{width:0} to{width:72px} }
     .hero-accent-line { display:block; height:3px; background:#ff4500; border-radius:2px; margin:10px 0 0; animation:line-grow 0.6s ease 0.75s both; }
-
-    /* ── Scroll reveal ── */
     .reveal       { opacity:0; transform:translateY(28px); transition:opacity 0.7s cubic-bezier(0.16,1,0.3,1),transform 0.7s cubic-bezier(0.16,1,0.3,1); }
     .reveal.visible { opacity:1; transform:translateY(0); }
     .reveal-left  { opacity:0; transform:translateX(-38px); transition:opacity 0.7s cubic-bezier(0.16,1,0.3,1),transform 0.7s cubic-bezier(0.16,1,0.3,1); }
     .reveal-right { opacity:0; transform:translateX(38px);  transition:opacity 0.7s cubic-bezier(0.16,1,0.3,1),transform 0.7s cubic-bezier(0.16,1,0.3,1); }
     .reveal-left.visible,.reveal-right.visible { opacity:1; transform:translateX(0); }
-
-    /* ── Section heading animated underline ── */
     .section-heading { position:relative; display:inline-block; }
     .section-heading::after { content:''; position:absolute; bottom:-5px; left:0; width:0; height:3px; background:#ff4500; border-radius:2px; transition:width 0.5s cubic-bezier(0.4,0,0.2,1) 0.1s; }
     .section-heading.visible::after { width:100%; }
-
-    /* ── Spring card (same as shoe-card hover: lift + shimmer) ── */
-    .spring-card {
-      transition:transform 0.25s cubic-bezier(0.175,0.885,0.32,1.275),
-                 box-shadow 0.25s ease, border-color 0.25s ease;
-      will-change:transform, box-shadow;
-      position:relative; overflow:hidden;
-    }
-    .spring-card::after {
-      content:''; position:absolute; inset:0;
-      background:linear-gradient(115deg, transparent 40%, rgba(255,255,255,0.16) 50%, transparent 60%);
-      transform:translateX(-100%); transition:transform 0.5s ease;
-      pointer-events:none; z-index:5;
-    }
+    .spring-card { transition:transform 0.25s cubic-bezier(0.175,0.885,0.32,1.275),box-shadow 0.25s ease,border-color 0.25s ease; will-change:transform,box-shadow; position:relative; overflow:hidden; }
+    .spring-card::after { content:''; position:absolute; inset:0; background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,0.16) 50%,transparent 60%); transform:translateX(-100%); transition:transform 0.5s ease; pointer-events:none; z-index:5; }
     .spring-card:hover::after { transform:translateX(100%); }
     .spring-card:hover { transform:translateY(-5px) scale(1.02); box-shadow:0 18px 36px rgba(0,0,0,0.28); }
-
-    /* ── Profile card stagger entrance ── */
     @keyframes card-in { from{opacity:0;transform:translateY(24px) scale(0.97)} to{opacity:1;transform:translateY(0) scale(1)} }
     .profile-card-enter { animation:card-in 0.6s cubic-bezier(0.16,1,0.3,1) both; }
-
-    /* ── Avatar entrance ── */
     @keyframes avatar-pop { 0%{transform:scale(0.4) rotate(-8deg);opacity:0} 70%{transform:scale(1.08) rotate(2deg)} 100%{transform:scale(1) rotate(0);opacity:1} }
     .avatar-pop { animation:avatar-pop 0.7s cubic-bezier(0.34,1.56,0.64,1) 0.2s both; }
-
-    /* ── Stats counter fade-up ── */
     @keyframes stat-in { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
     .stat-item { animation:stat-in 0.5s ease both; }
-    .stat-item:nth-child(1){animation-delay:0.55s}
-    .stat-item:nth-child(2){animation-delay:0.68s}
-    .stat-item:nth-child(3){animation-delay:0.81s}
-
-    /* ── Sidebar menu item stagger ── */
+    .stat-item:nth-child(1){animation-delay:0.55s} .stat-item:nth-child(2){animation-delay:0.68s} .stat-item:nth-child(3){animation-delay:0.81s}
     @keyframes menu-in { from{opacity:0;transform:translateX(-20px)} to{opacity:1;transform:translateX(0)} }
     .menu-item { animation:menu-in 0.45s cubic-bezier(0.16,1,0.3,1) both; }
-    .menu-item:nth-child(1){animation-delay:0.3s}
-    .menu-item:nth-child(2){animation-delay:0.38s}
-    .menu-item:nth-child(3){animation-delay:0.46s}
-    .menu-item:nth-child(4){animation-delay:0.54s}
-    .menu-item:nth-child(5){animation-delay:0.62s}
-
-    /* ── Input field focus ring ── */
-    .profile-input {
-      width:100%; margin-top:8px; padding:10px 14px;
-      border:1.5px solid rgba(255,255,255,0.35); border-radius:10px;
-      background:rgba(255,255,255,0.85); color:#111;
-      font-family:"Poppins",sans-serif; font-size:14px;
-      outline:none;
-      transition:border-color 0.2s, box-shadow 0.2s, transform 0.2s;
-    }
-    .profile-input:focus {
-      border-color:#ff4500;
-      box-shadow:0 0 0 3px rgba(255,69,0,0.18);
-      transform:translateY(-1px);
-    }
-
-    /* ── Save button ripple ── */
-    .save-btn {
-      position:relative; overflow:hidden;
-      transition:transform 0.2s cubic-bezier(0.175,0.885,0.32,1.275), box-shadow 0.2s;
-      box-shadow:0 4px 16px rgba(220,38,38,0.4);
-    }
-    .save-btn::after { content:''; position:absolute; inset:0; background:rgba(255,255,255,0.22); border-radius:inherit; transform:scale(0); opacity:0; transition:transform 0.35s ease,opacity 0.35s ease; }
-    .save-btn:active::after { transform:scale(2.5); opacity:0; transition:0s; }
+    .menu-item:nth-child(1){animation-delay:0.3s} .menu-item:nth-child(2){animation-delay:0.38s} .menu-item:nth-child(3){animation-delay:0.46s} .menu-item:nth-child(4){animation-delay:0.54s} .menu-item:nth-child(5){animation-delay:0.62s}
+    .profile-input { width:100%; margin-top:8px; padding:10px 14px; border:1.5px solid rgba(255,255,255,0.35); border-radius:10px; background:rgba(255,255,255,0.85); color:#111; font-family:"Poppins",sans-serif; font-size:14px; outline:none; transition:border-color 0.2s,box-shadow 0.2s,transform 0.2s; }
+    .profile-input:focus { border-color:#ff4500; box-shadow:0 0 0 3px rgba(255,69,0,0.18); transform:translateY(-1px); }
+    .save-btn { position:relative; overflow:hidden; transition:transform 0.2s cubic-bezier(0.175,0.885,0.32,1.275),box-shadow 0.2s; box-shadow:0 4px 16px rgba(220,38,38,0.4); }
     .save-btn:hover { transform:translateY(-2px) scale(1.03); box-shadow:0 8px 24px rgba(220,38,38,0.55); }
     .save-btn:active { transform:scale(0.97); }
-
-    /* ── Logout button pulse ── */
     @keyframes logout-pulse { 0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,0.35)} 50%{box-shadow:0 0 0 8px rgba(239,68,68,0)} }
     .logout-btn { animation:logout-pulse 2.5s ease-in-out infinite; }
-    .logout-btn:hover { animation:none; transform:translateY(-3px) scale(1.03); box-shadow:0 8px 24px rgba(239,68,68,0.5) !important; }
-
-    /* ── Cursor glow ── */
+    .logout-btn:hover { animation:none; transform:translateY(-3px) scale(1.03); box-shadow:0 8px 24px rgba(239,68,68,0.5)!important; }
     #cursor-glow { position:fixed; width:320px; height:320px; border-radius:50%; background:radial-gradient(circle,rgba(255,69,0,0.07) 0%,transparent 70%); pointer-events:none; z-index:0; transform:translate(-50%,-50%); transition:opacity 0.4s ease; opacity:0; }
     body:hover #cursor-glow { opacity:1; }
 
-    /* ── Theme toggle (same animated sun/moon as index) ── */
-    #theme-toggle .sun-icon,
-    #theme-toggle .moon-icon { position:absolute; width:1.4rem; height:1.4rem; transition:transform 0.4s ease,opacity 0.4s ease; }
+    /* DARK TOGGLE */
+    #theme-toggle .sun-icon,#theme-toggle .moon-icon { position:absolute; width:1.4rem; height:1.4rem; transition:transform 0.4s ease,opacity 0.4s ease; }
     #theme-toggle .sun-icon  { opacity:1; transform:rotate(0deg) scale(1); }
     #theme-toggle .moon-icon { opacity:0; transform:rotate(90deg) scale(0.4); }
     .dark #theme-toggle .sun-icon  { opacity:0; transform:rotate(-90deg) scale(0.4); }
     .dark #theme-toggle .moon-icon { opacity:1; transform:rotate(0deg) scale(1); }
 
-    /* ── Toast (same as index) ── */
+    /* TOAST */
     #toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#111827; color:#fff; padding:.75rem 1.5rem; border-radius:9999px; font-size:.875rem; display:none; align-items:center; gap:.5rem; z-index:9999; }
     #toast.show { display:flex; animation:toast-fade 2.2s ease-out forwards; }
     @keyframes toast-fade { 0%{opacity:0;transform:translate(-50%,10px)} 10%,85%{opacity:1;transform:translate(-50%,0)} 100%{opacity:0;transform:translate(-50%,10px)} }
 
-    /* ── Search pill (gradient-border, same as index) ── */
+    /* AVATAR PULSE */
+    @keyframes ring-pulse { 0%,100%{box-shadow:0 0 0 0 rgba(255,69,0,0.4)} 50%{box-shadow:0 0 0 8px rgba(255,69,0,0)} }
+    #profile-avatar-img { cursor:pointer; transition:opacity 0.2s; }
+    #profile-avatar-img:hover { opacity:0.85; animation:ring-pulse 1.5s ease-in-out infinite; }
+
+    /* ══ SEARCH PILL ══ */
     .nav-search-pill { display:flex; align-items:center; min-width:190px; padding:0; border-radius:999px; border:none; cursor:pointer; background:transparent; font-family:"Poppins",sans-serif; font-size:13px; font-weight:500; transition:transform 0.15s; position:relative; white-space:nowrap; }
     .nav-search-pill:hover { transform:scale(1.02); }
     .nav-search-pill:active { transform:scale(0.97); }
@@ -183,76 +100,113 @@
     .pill-label { flex:1; text-align:left; color:#5f6368; font-size:13px; }
     .pill-kbd { display:inline-flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.07); border-radius:6px; padding:2px 7px; font-size:11px; font-family:monospace; color:#999; line-height:1.5; flex-shrink:0; }
     .dark .nav-search-pill .pill-inner { background:#1a1a1a; }
-    .dark .nav-search-pill:hover .pill-inner { background:#222; box-shadow:0 2px 16px rgba(66,133,244,0.12); }
+    .dark .nav-search-pill:hover .pill-inner { background:#222; }
     .dark .pill-label { color:#9aa0a6; }
     .dark .pill-kbd { background:rgba(255,255,255,0.07); color:#666; }
     @keyframes pill-gradient { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
 
-    /* ── Search overlay (same as index) ── */
+    /* ══ SEARCH OVERLAY ══ */
     #search-overlay { position:fixed; inset:0; z-index:9998; background:rgba(255,255,255,0.85); backdrop-filter:blur(20px); display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding-top:120px; opacity:0; pointer-events:none; transition:opacity 0.3s ease; }
     .dark #search-overlay { background:rgba(0,0,0,0.88); }
     #search-overlay.open { opacity:1; pointer-events:all; }
-    #search-box-wrap { width:100%; max-width:620px; padding:0 20px; position:relative; }
-    .search-border-wrap { position:relative; border-radius:999px; padding:3px; background:linear-gradient(135deg,#4285f4,#ea4335,#fbbc04,#34a853,#4285f4); background-size:300% 300%; animation:gradient-shift 4s ease infinite; box-shadow:0 8px 40px rgba(66,133,244,0.25),0 4px 20px rgba(234,67,53,0.15); }
-    @keyframes gradient-shift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+    #search-box-wrap { width:100%; max-width:620px; padding:0 20px; }
+    .search-border-wrap { position:relative; border-radius:999px; padding:3px; background:linear-gradient(135deg,#4285f4,#ea4335,#fbbc04,#34a853,#4285f4); background-size:300% 300%; animation:grad-shift 4s ease infinite; box-shadow:0 8px 40px rgba(66,133,244,0.25); }
+    @keyframes grad-shift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
     .search-inner { display:flex; align-items:center; background:#fff; border-radius:999px; padding:14px 20px 14px 22px; gap:14px; }
     .dark .search-inner { background:#111; }
-    .search-icon-wrap { color:#5f6368; flex-shrink:0; font-size:18px; display:flex; align-items:center; }
-    .dark .search-icon-wrap { color:#9aa0a6; }
-    #search-input { flex:1; border:none; outline:none; background:transparent; font-family:"Poppins",sans-serif; font-size:18px; color:#202124; letter-spacing:0.01em; }
+    .search-icon-wrap { color:#5f6368; flex-shrink:0; font-size:18px; }
+    #search-input { flex:1; border:none; outline:none; background:transparent; font-family:"Poppins",sans-serif; font-size:18px; color:#202124; }
     .dark #search-input { color:#e8eaed; }
     #search-input::placeholder { color:#9aa0a6; }
-    #search-clear-btn { background:none; border:none; cursor:pointer; color:#9aa0a6; font-size:16px; display:none; padding:4px; border-radius:50%; transition:color 0.15s,background 0.15s; flex-shrink:0; }
-    #search-clear-btn:hover { background:#f1f3f4; color:#5f6368; }
-    .dark #search-clear-btn:hover { background:#303134; }
+    #search-clear-btn { background:none; border:none; cursor:pointer; color:#9aa0a6; font-size:16px; display:none; padding:4px; border-radius:50%; flex-shrink:0; }
     #search-clear-btn.visible { display:flex; align-items:center; justify-content:center; }
     #search-results-panel { width:100%; max-width:620px; padding:0 20px; margin-top:16px; max-height:calc(100vh - 280px); overflow-y:auto; display:none; }
     #search-results-panel.has-results { display:block; }
-    #search-results-panel::-webkit-scrollbar { width:4px; }
-    #search-results-panel::-webkit-scrollbar-thumb { background:#ccc; border-radius:2px; }
-    .dark #search-results-panel::-webkit-scrollbar-thumb { background:#444; }
-    .search-result-item { display:flex; align-items:center; gap:14px; padding:12px 18px; background:#fff; border-radius:14px; margin-bottom:8px; cursor:pointer; transition:background 0.15s,transform 0.15s,box-shadow 0.15s; animation:result-in 0.2s ease; box-shadow:0 1px 6px rgba(0,0,0,0.08); }
-    @keyframes result-in { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+    .search-result-item { display:flex; align-items:center; gap:14px; padding:12px 18px; background:#fff; border-radius:14px; margin-bottom:8px; cursor:pointer; transition:background 0.15s,transform 0.15s,box-shadow 0.15s; animation:res-in 0.2s ease; box-shadow:0 1px 6px rgba(0,0,0,0.08); }
+    @keyframes res-in { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
     .dark .search-result-item { background:#1c1c1e; box-shadow:none; }
-    .search-result-item:hover { background:#f8f9fa; transform:translateY(-1px); box-shadow:0 4px 16px rgba(0,0,0,0.1); }
+    .search-result-item:hover { background:#f8f9fa; transform:translateY(-1px); }
     .dark .search-result-item:hover { background:#2c2c2e; }
     .sri-img { width:52px; height:52px; object-fit:contain; border-radius:10px; flex-shrink:0; background:#f1f3f4; }
     .dark .sri-img { background:#2c2c2e; }
-    .sri-info { flex:1; min-width:0; }
-    .sri-name { font-weight:600; font-size:14px; color:#202124; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .sri-name { font-weight:600; font-size:14px; color:#202124; }
     .dark .sri-name { color:#e8eaed; }
-    .sri-sub { font-size:12px; color:#5f6368; margin-top:2px; }
-    .dark .sri-sub { color:#9aa0a6; }
+    .sri-sub  { font-size:12px; color:#5f6368; margin-top:2px; }
     .sri-price { font-weight:700; font-size:14px; color:#202124; flex-shrink:0; }
     .dark .sri-price { color:#e8eaed; }
-    .search-no-results { text-align:center; padding:40px 16px; background:#fff; border-radius:14px; font-size:14px; color:#5f6368; box-shadow:0 1px 6px rgba(0,0,0,0.08); }
-    .dark .search-no-results { background:#1c1c1e; color:#9aa0a6; box-shadow:none; }
-    .search-no-results .emoji { font-size:36px; display:block; margin-bottom:10px; }
     .search-highlight { color:#1a73e8; font-weight:700; }
     .dark .search-highlight { color:#8ab4f8; }
+    .search-no-results { text-align:center; padding:40px 16px; background:#fff; border-radius:14px; font-size:14px; color:#5f6368; }
+    .dark .search-no-results { background:#1c1c1e; color:#9aa0a6; }
     #search-close-hint { margin-top:16px; font-size:12px; color:#9aa0a6; font-family:"Poppins",sans-serif; }
     #search-close-hint kbd { background:rgba(0,0,0,0.08); color:#5f6368; padding:2px 8px; border-radius:4px; font-family:monospace; }
     .dark #search-close-hint kbd { background:rgba(255,255,255,0.1); color:#9aa0a6; }
 
-    /* ── Cart badge bump ── */
-    @keyframes cart-bump { 0%{transform:scale(1)} 40%{transform:scale(1.5)} 70%{transform:scale(0.85)} 100%{transform:scale(1)} }
-    .cart-bump { animation:cart-bump 0.35s ease-out; }
+    /* ══ CHATBOT ══ */
+    #chat-fab { position:fixed; bottom:90px; right:24px; z-index:999; width:56px; height:56px; border-radius:50%; background:linear-gradient(135deg,#ff4500,#ff8c00); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 6px 24px rgba(255,69,0,0.5); transition:transform 0.2s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.2s; animation:fab-bounce 3s ease-in-out infinite; }
+    #chat-fab:hover { transform:scale(1.12)!important; box-shadow:0 10px 32px rgba(255,69,0,0.6); animation:none; }
+    #chat-fab:active { transform:scale(0.95)!important; }
+    @keyframes fab-bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+
+    #chat-badge { position:absolute; top:-4px; right:-4px; width:18px; height:18px; border-radius:50%; background:#ef4444; color:#fff; font-size:10px; font-weight:700; display:none; align-items:center; justify-content:center; border:2px solid white; }
+    #chat-badge.show { display:flex; }
+
+    #chat-window { position:fixed; bottom:160px; right:24px; z-index:9997; width:360px; max-height:520px; border-radius:20px; overflow:hidden; box-shadow:0 24px 64px rgba(0,0,0,0.35); display:flex; flex-direction:column; opacity:0; pointer-events:none; transform:translateY(20px) scale(0.95); transition:opacity 0.3s ease,transform 0.3s cubic-bezier(0.34,1.56,0.64,1); }
+    #chat-window.open { opacity:1; pointer-events:all; transform:translateY(0) scale(1); }
+    .dark #chat-window { box-shadow:0 24px 64px rgba(0,0,0,0.7); }
+
+    #chat-header { background:linear-gradient(135deg,#ff4500,#ff8c00); padding:16px 18px; display:flex; align-items:center; gap:12px; flex-shrink:0; }
+    .bot-avatar { width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+    .bot-name { font-family:"Archivo Black",sans-serif; color:#fff; font-size:14px; }
+    .bot-status { color:rgba(255,255,255,0.75); font-size:11px; display:flex; align-items:center; gap:4px; margin-top:2px; }
+    .bot-status::before { content:''; width:6px; height:6px; border-radius:50%; background:#22c55e; display:inline-block; }
+    #chat-close-btn { margin-left:auto; background:rgba(255,255,255,0.2); border:none; border-radius:50%; width:28px; height:28px; cursor:pointer; color:#fff; font-size:12px; display:flex; align-items:center; justify-content:center; transition:background 0.15s; }
+    #chat-close-btn:hover { background:rgba(255,255,255,0.35); }
+
+    #chat-messages { flex:1; overflow-y:auto; padding:16px; background:#fff; display:flex; flex-direction:column; gap:10px; }
+    .dark #chat-messages { background:#0d0d0d; }
+    #chat-messages::-webkit-scrollbar { width:4px; }
+    #chat-messages::-webkit-scrollbar-thumb { background:#e5e7eb; border-radius:2px; }
+    .dark #chat-messages::-webkit-scrollbar-thumb { background:#2a2a2a; }
+
+    .msg { max-width:82%; padding:10px 14px; border-radius:16px; font-size:13px; line-height:1.55; animation:msg-in 0.25s ease; word-wrap:break-word; }
+    @keyframes msg-in { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+    .msg.bot  { background:#f3f4f6; color:#111; border-bottom-left-radius:4px; align-self:flex-start; }
+    .dark .msg.bot { background:#1c1c1e; color:#e8eaed; }
+    .msg.user { background:linear-gradient(135deg,#ff4500,#ff8c00); color:#fff; border-bottom-right-radius:4px; align-self:flex-end; }
+    .msg.typing { background:#f3f4f6; align-self:flex-start; border-bottom-left-radius:4px; padding:12px 16px; }
+    .dark .msg.typing { background:#1c1c1e; }
+    .typing-dots { display:flex; gap:4px; align-items:center; height:16px; }
+    .typing-dots span { width:6px; height:6px; background:#9ca3af; border-radius:50%; animation:dot-b 1.2s infinite ease-in-out; }
+    .typing-dots span:nth-child(1){animation-delay:0s} .typing-dots span:nth-child(2){animation-delay:0.2s} .typing-dots span:nth-child(3){animation-delay:0.4s}
+    @keyframes dot-b { 0%,80%,100%{transform:translateY(0)} 40%{transform:translateY(-6px)} }
+
+    .quick-replies { display:flex; flex-wrap:wrap; gap:6px; margin-top:2px; }
+    .qr-btn { padding:5px 12px; border-radius:999px; border:1.5px solid #ff4500; background:transparent; color:#ff4500; font-size:11px; font-weight:600; cursor:pointer; font-family:"Poppins",sans-serif; transition:all 0.15s; white-space:nowrap; }
+    .qr-btn:hover { background:#ff4500; color:#fff; }
+
+    #chat-input-row { display:flex; align-items:center; gap:8px; padding:12px 14px; background:#fff; border-top:1px solid #f3f4f6; flex-shrink:0; }
+    .dark #chat-input-row { background:#0d0d0d; border-top-color:#1a1a1a; }
+    #chat-input { flex:1; border:1.5px solid #e5e7eb; border-radius:999px; padding:9px 16px; font-size:13px; font-family:"Poppins",sans-serif; outline:none; background:#f9fafb; color:#111; transition:border-color 0.2s; }
+    .dark #chat-input { background:#111; border-color:#2a2a2a; color:#f0f0f0; }
+    #chat-input:focus { border-color:#ff4500; }
+    #chat-send-btn { width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,#ff4500,#ff8c00); border:none; cursor:pointer; color:#fff; font-size:14px; display:flex; align-items:center; justify-content:center; transition:transform 0.15s,box-shadow 0.15s; flex-shrink:0; }
+    #chat-send-btn:hover { transform:scale(1.1); box-shadow:0 4px 12px rgba(255,69,0,0.4); }
+    #chat-send-btn:active { transform:scale(0.95); }
   </style>
 </head>
-
 <body class="text-black transition-colors duration-300">
 
-<!-- Cursor Glow (from index) -->
 <div id="cursor-glow"></div>
 
-<!-- SEARCH OVERLAY (same as index) -->
+<!-- ══ SEARCH OVERLAY ══ -->
 <div id="search-overlay" role="dialog" aria-label="Search products">
   <div id="search-box-wrap">
     <div class="search-border-wrap">
       <div class="search-inner">
         <div class="search-icon-wrap"><i class="fas fa-search"></i></div>
-        <input id="search-input" type="text" placeholder="Search sneakers, brands, colorways…" autocomplete="off" aria-label="Search" />
-        <button id="search-clear-btn" aria-label="Clear search">✕</button>
+        <input id="search-input" type="text" placeholder="Search sneakers, brands, colorways…" autocomplete="off" />
+        <button id="search-clear-btn" aria-label="Clear">✕</button>
       </div>
     </div>
   </div>
@@ -260,41 +214,57 @@
   <p id="search-close-hint">Press <kbd>Esc</kbd> to close</p>
 </div>
 
-<!-- Dark Mode Toggle (animated sun/moon from index) -->
+<!-- ══ CHATBOT FAB ══ -->
+<button id="chat-fab" aria-label="Open Heat Haven Assistant" onclick="toggleChat()">
+  <span style="font-size:22px;line-height:1;">🔥</span>
+  <span id="chat-badge">1</span>
+</button>
+
+<!-- ══ CHATBOT WINDOW ══ -->
+<div id="chat-window">
+  <div id="chat-header">
+    <div class="bot-avatar">🤖</div>
+    <div>
+      <div class="bot-name">HH Assistant</div>
+      <div class="bot-status">Online · Heat Haven</div>
+    </div>
+    <button id="chat-close-btn" onclick="toggleChat()" aria-label="Close chat"><i class="fas fa-times"></i></button>
+  </div>
+  <div id="chat-messages"></div>
+  <div id="chat-input-row">
+    <input id="chat-input" type="text" placeholder="Ask me anything…" autocomplete="off" />
+    <button id="chat-send-btn" onclick="sendMessage()" aria-label="Send"><i class="fas fa-paper-plane"></i></button>
+  </div>
+</div>
+
+<!-- ══ DARK MODE TOGGLE ══ -->
 <div class="fixed bottom-10 right-6 z-50">
-  <button id="theme-toggle"
-    class="relative flex items-center justify-center w-12 h-12 rounded-full shadow-xl bg-gray-200 dark:bg-cardDark transition-all duration-300 hover:scale-110"
-    aria-label="Toggle dark mode">
-    <svg class="sun-icon text-yellow-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <circle cx="12" cy="12" r="4" fill="currentColor" stroke="none"/>
-      <path stroke-linecap="round" d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
-    </svg>
-    <svg class="moon-icon text-yellow-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/>
-    </svg>
+  <button id="theme-toggle" class="relative flex items-center justify-center w-12 h-12 rounded-full shadow-xl bg-gray-200 dark:bg-cardDark transition-all duration-300 hover:scale-110" aria-label="Toggle dark mode">
+    <svg class="sun-icon text-yellow-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4" fill="currentColor" stroke="none"/><path stroke-linecap="round" d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+    <svg class="moon-icon text-yellow-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg>
   </button>
 </div>
 
-<!-- NAV (nav-drop + brand-shimmer + nav-link underlines) -->
+<!-- ══ NAV ══ -->
 <nav class="bg-white dark:bg-amoled shadow-md sticky top-0 z-40">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between h-16">
       <div class="flex items-center">
-        <div class="brand text-2xl font-bold">
-          <a href="index.html" class="text-black dark:text-white">HEAT HAVEN</a>
-        </div>
+        <div class="brand text-2xl font-bold"><a href="index.html" class="text-black dark:text-white">HEAT HAVEN</a></div>
         <div class="hidden md:flex items-center ml-10 space-x-8">
-          <a href="index.html"   class="nav-link text-black dark:text-white hover:text-gray-600 px-2 transition-colors">Home</a>
-          <a href="product.html" class="nav-link text-black dark:text-white hover:text-gray-600 px-2 transition-colors">Products</a>
-          <a href="deals.html"   class="nav-link text-black dark:text-white hover:text-gray-600 px-2 transition-colors">Hot Deals</a>
-          <a href="owners.html"  class="nav-link text-black dark:text-white hover:text-gray-600 px-2 transition-colors">Owners</a>
+          <a href="index.html"   class="nav-link text-black dark:text-white hover:text-gray-600 px-2">Home</a>
+          <a href="product.html" class="nav-link text-black dark:text-white hover:text-gray-600 px-2">Products</a>
+          <a href="deals.html"   class="nav-link text-black dark:text-white hover:text-gray-600 px-2">Hot Deals</a>
+          <a href="#contact"     class="nav-link text-black dark:text-white hover:text-gray-600 px-2">Contact</a>
         </div>
       </div>
       <div class="flex items-center">
         <div class="hidden md:flex items-center space-x-2">
-          <a href="wishlist.html" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark transition-colors relative" aria-label="Wishlist">
-            <i class="fas fa-heart text-red-600 dark:text-red-600"></i>
+          <a href="wishlist.html" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark transition-colors" aria-label="Wishlist">
+            <i class="fas fa-heart text-red-600"></i>
           </a>
+
+          <!-- ✅ WORKING SEARCH PILL -->
           <button id="search-open-btn" class="nav-search-pill" aria-label="Open search">
             <div class="pill-border"></div>
             <span class="pill-inner">
@@ -307,14 +277,15 @@
               <span class="pill-kbd">👟</span>
             </span>
           </button>
+
           <a href="cart.html" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark relative">
             <i class="fas fa-shopping-cart text-gray-600 dark:text-gray-300"></i>
             <span id="cart-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
           </a>
-          <a href="profile.html" class="p-2 rounded-full bg-gray-100 dark:bg-hoverDark">
-            <i class="fas fa-user text-black dark:text-white"></i>
+          <a href="profile.html" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark">
+            <!-- <i class="fas fa-user text-gray-600 dark:text-gray-300"></i> -->
           </a>
-          <a href="profile login.html" class="ml-2 px-4 py-1.5 rounded-full text-sm font-medium border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition">Login</a>
+          <!-- <a href="profile login.html" class="ml-2 px-4 py-1.5 rounded-full text-sm font-medium border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition">Login/SignUP</a> -->
         </div>
         <button class="md:hidden p-2 rounded-md focus:outline-none" id="mobile-menu-button">
           <i class="fas fa-bars text-black dark:text-white"></i>
@@ -322,322 +293,374 @@
       </div>
     </div>
   </div>
-  <div class="mobile-menu fixed inset-y-0 right-0 w-64 bg-white dark:bg-cardDark shadow-xl z-50 p-5" id="mobile-menu">
+  <!-- Mobile menu -->
+  <div class="mobile-menu fixed inset-y-0 right-0 w-64 bg-white dark:bg-gray-900 shadow-lg z-50 p-4" id="mobile-menu">
     <div class="flex justify-between items-center mb-8">
-      <div class="brand text-xl dark:text-white">HEAT HAVEN</div>
+      <div class="brand text-xl font-bold dark:text-white">HEAT HAVEN</div>
       <button id="close-menu"><i class="fas fa-times text-xl dark:text-white"></i></button>
     </div>
-    <div class="flex flex-col space-y-5">
-      <a href="index.html"    class="nav-link text-black dark:text-gray-200 font-medium">Home</a>
-      <a href="product.html"  class="nav-link text-black dark:text-gray-200 font-medium">Products</a>
-      <a href="deals.html"    class="nav-link text-black dark:text-gray-200 font-medium">Hot Deals</a>
-      <a href="owners.html"   class="nav-link text-black dark:text-gray-200 font-medium">Owners</a>
-      <a href="wishlist.html" class="flex items-center gap-2 text-red-500 font-medium"><i class="fas fa-heart text-sm"></i> Wishlist</a>
+    <div class="flex flex-col space-y-4">
+      <a href="index.html"    class="nav-link text-black dark:text-white hover:text-gray-600">Home</a>
+      <a href="product.html"  class="nav-link text-black dark:text-white hover:text-gray-600">Products</a>
+      <a href="deals.html"    class="nav-link text-black dark:text-white hover:text-gray-600">Hot Deals</a>
+      <a href="#contact"      class="nav-link text-black dark:text-white hover:text-gray-600">Contact</a>
+      <a href="wishlist.html" class="flex items-center gap-2 text-red-500 font-medium"><i class="fas fa-heart text-sm"></i>Wishlist</a>
     </div>
-    <button id="search-open-btn-mobile" class="mt-6 w-full flex items-center gap-3 bg-gray-100 dark:bg-gray-800 rounded-full px-4 py-2.5 text-sm text-gray-400">
-      <i class="fas fa-search text-gray-500 text-sm"></i> Search sneakers…
-    </button>
-    <div class="mt-6 pt-5 border-t border-gray-200 dark:border-gray-700 flex items-center gap-3 flex-wrap">
-      <a href="cart.html" class="relative p-2 rounded-full hover:bg-gray-100 dark:hover:bg-hoverDark">
-        <i class="fas fa-shopping-cart text-gray-600 dark:text-gray-300"></i>
-        <span id="cart-count-mobile" class="absolute -top-0.5 -right-0.5 bg-red-500 text-white text-[10px] rounded-full h-5 w-5 flex items-center justify-center">0</span>
-      </a>
-      <a href="profile.html" class="p-2 rounded-full bg-gray-100 dark:bg-hoverDark">
-        <i class="fas fa-user text-black dark:text-white"></i>
-      </a>
-      <a href="profile login.html" class="px-4 py-1.5 rounded-full text-sm font-medium border border-gray-300 dark:border-gray-600 hover:bg-black hover:text-white transition">Login</a>
+    <div class="mt-8 pt-4 border-t border-gray-200 dark:border-gray-700">
+      <div class="flex items-center space-x-4">
+        <button id="search-open-btn-mobile" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700" aria-label="Search">
+          <i class="fas fa-search text-gray-600 dark:text-gray-300"></i>
+        </button>
+        <a href="cart.html" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 relative">
+          <i class="fas fa-shopping-cart text-gray-600 dark:text-gray-300"></i>
+          <span id="cart-count-mobile" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+        </a>
+      </div>
     </div>
   </div>
 </nav>
 
-<!-- ═══════════════════════════════════════════════
-     PROFILE HEADER  (hero-word-in + avatar-pop + stat-in)
-═══════════════════════════════════════════════ -->
+<!-- ══ PROFILE HEADER ══ -->
 <section class="max-w-6xl mx-auto px-6 pt-10 pb-10 page-transition">
-  <div class="profile-card-enter inline-flex flex-col md:flex-row items-center md:items-start gap-6
-              bg-white/20 text-black dark:text-white
-              rounded-2xl p-6 shadow-xl
-              backdrop-blur-lg border border-white/40
-              w-full max-w-3xl mx-auto spring-card">
-
-    <!-- Avatar (avatar-pop) -->
+  <div class="profile-card-enter spring-card inline-flex flex-col md:flex-row items-center md:items-start gap-6 bg-white/20 text-black dark:text-white rounded-2xl p-6 shadow-xl backdrop-blur-lg border border-white/40 w-full max-w-3xl mx-auto">
     <div class="relative flex-shrink-0 avatar-pop">
-      <img src="images/profile.jpeg"
+      <img id="profile-avatar-img" src="images/profile.jpeg" alt="Profile Photo" title="Click to change photo"
            class="w-32 h-32 md:w-36 md:h-36 rounded-full border-4 border-red-600 object-cover shadow-lg"
+           onclick="document.getElementById('avatar-file-input').click()"
            onerror="this.src='https://via.placeholder.com/144x144/f3f4f6/111?text=👤'" />
-      <button class="absolute bottom-1 right-1 bg-red-600 p-2 rounded-full text-white text-xs md:text-sm
-                     hover:bg-red-700 transition hover:scale-110 active:scale-95 shadow-md"
-              onclick="showToast('Profile photo update coming soon! 📸', false)">✎</button>
+      <button class="absolute bottom-1 right-1 bg-red-600 p-2 rounded-full text-white text-xs md:text-sm hover:bg-red-700 transition hover:scale-110 active:scale-95 shadow-md"
+              onclick="document.getElementById('avatar-file-input').click()" title="Change photo">✎</button>
+      <input type="file" id="avatar-file-input" accept="image/*" class="hidden" onchange="handleAvatarChange(event)" />
     </div>
-
-    <!-- User Info (hero-word-in title) -->
     <div class="mt-4 md:mt-0 md:ml-4 flex-1">
       <h1 class="text-3xl md:text-4xl font-bold">
-        <span class="hero-title-word">Kanishak</span>
-        <span class="hero-title-word"> Choudhary</span>
+        <span class="hero-title-word" id="profile-firstname">—</span>
+        <span class="hero-title-word" id="profile-lastname"></span>
       </h1>
       <span class="hero-accent-line"></span>
-      <p class="hero-sub text-white/80 dark:text-gray-400 mt-3 text-sm font-medium">
-        Sneaker Collector · Heat Haven Member
+      <p class="hero-sub text-blac dark:text-gray-400 mt-3 text-sm font-medium">Sneaker Collector · Heat Haven Member</p>
+      <p class="hero-sub mt-1.5 flex items-center gap-2 flex-wrap">
+        <span class="inline-flex items-center gap-1.5 text-[11px] font-mono tracking-widest bg-black/30 text-white/50 border border-white/15 px-3 py-1 rounded-full backdrop-blur-sm select-all cursor-text" title="Your Member ID">
+          <i class="fas fa-fingerprint text-red-400 text-[10px]"></i>
+          <span id="profile-id-badge-text">—</span>
+        </span>
       </p>
-
-      <!-- Stats (stat-in stagger) -->
       <div class="flex gap-8 mt-5">
-        <div class="stat-item text-center">
-          <p class="text-2xl font-bold">12</p>
-          <p class="text-white/70 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider mt-0.5">Orders</p>
-        </div>
-        <div class="stat-item text-center">
-          <p class="text-2xl font-bold" id="wishlist-count">0</p>
-          <p class="text-white/70 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider mt-0.5">Wishlist</p>
-        </div>
-        <div class="stat-item text-center">
-          <p class="text-2xl font-bold">1</p>
-          <p class="text-white/70 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider mt-0.5">Returns</p>
-        </div>
+        <div class="stat-item text-center"><p class="text-2xl font-bold">12</p><p class="text-white/70 text-xs font-semibold uppercase tracking-wider mt-0.5">Orders</p></div>
+        <div class="stat-item text-center"><p class="text-2xl font-bold" id="wishlist-count">0</p><p class="text-white/70 text-xs font-semibold uppercase tracking-wider mt-0.5">Wishlist</p></div>
+        <div class="stat-item text-center"><p class="text-2xl font-bold">1</p><p class="text-white/70 text-xs font-semibold uppercase tracking-wider mt-0.5">Returns</p></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════
-     PROFILE CONTENT  (sidebar + details card)
-═══════════════════════════════════════════════ -->
+<!-- ══ PROFILE BODY ══ -->
 <section class="max-w-7xl mx-auto px-6 pb-20 grid grid-cols-1 md:grid-cols-[260px_minmax(0,1fr)] gap-8 -mt-2 page-transition">
-
-  <!-- LEFT SIDEBAR (menu-item stagger, reveal-left) -->
   <div class="w-full md:w-[260px] reveal-left">
-    <div class="menu-item block mb-3">
-      <a href="account_details.html">
-        <button class="spring-card w-full border border-white/40 py-3 rounded-xl flex items-center justify-center gap-2
-                       bg-white/20 backdrop-blur-lg hover:bg-white/30 text-black dark:text-white font-medium shadow-sm">
-          <i class="fas fa-user-circle text-sm text-red-500"></i> Account Details
-        </button>
-      </a>
-    </div>
-    <div class="menu-item block mb-3">
-      <a href="orders.html">
-        <button class="spring-card w-full border border-white/40 py-3 rounded-xl flex items-center justify-center gap-2
-                       bg-white/20 backdrop-blur-lg hover:bg-white/30 text-black dark:text-white font-medium shadow-sm">
-          <i class="fas fa-box text-sm text-orange-500"></i> Orders
-        </button>
-      </a>
-    </div>
-    <div class="menu-item block mb-3">
-      <a href="address.html">
-        <button class="spring-card w-full border border-white/40 py-3 rounded-xl flex items-center justify-center gap-2
-                       bg-white/20 backdrop-blur-lg hover:bg-white/30 text-black dark:text-white font-medium shadow-sm">
-          <i class="fas fa-map-marker-alt text-sm text-blue-500"></i> Addresses
-        </button>
-      </a>
-    </div>
-    <div class="menu-item block mb-3">
-      <a href="wishlist.html">
-        <button class="spring-card w-full border border-white/40 py-3 rounded-xl flex items-center justify-center gap-2
-                       bg-white/20 backdrop-blur-lg hover:bg-white/30 text-black dark:text-white font-medium shadow-sm">
-          <i class="fas fa-heart text-sm text-red-500"></i> Wishlist
-        </button>
-      </a>
-    </div>
+    <!-- <div class="menu-item block mb-3"><a href="account_details.html"><button class="spring-card w-full border border-white/40 py-3 rounded-xl flex items-center justify-center gap-2 bg-white/20 backdrop-blur-lg hover:bg-white/30 text-black dark:text-white font-medium shadow-sm"><i class="fas fa-user-circle text-sm text-red-500"></i>Account Details</button></a></div> -->
+    <div class="menu-item block mb-3"><a href="orders.html"><button class="spring-card w-full border border-white/40 py-3 rounded-xl flex items-center justify-center gap-2 bg-white/20 backdrop-blur-lg hover:bg-white/30 text-black dark:text-white font-medium shadow-sm"><i class="fas fa-box text-sm text-orange-500"></i>Orders</button></a></div>
+    <div class="menu-item block mb-3"><a href="address.html"><button class="spring-card w-full border border-white/40 py-3 rounded-xl flex items-center justify-center gap-2 bg-white/20 backdrop-blur-lg hover:bg-white/30 text-black dark:text-white font-medium shadow-sm"><i class="fas fa-map-marker-alt text-sm text-blue-500"></i>Addresses</button></a></div>
+    <div class="menu-item block mb-3"><a href="wishlist.html"><button class="spring-card w-full border border-white/40 py-3 rounded-xl flex items-center justify-center gap-2 bg-white/20 backdrop-blur-lg hover:bg-white/30 text-black dark:text-white font-medium shadow-sm"><i class="fas fa-heart text-sm text-red-500"></i>Wishlist</button></a></div>
     <div class="menu-item block">
-      <a href="profile login.html">
-        <button class="logout-btn spring-card w-full text-white py-3 rounded-xl bg-red-500 hover:bg-red-600 font-semibold shadow-md">
-          <i class="fas fa-sign-out-alt text-sm mr-1"></i> Logout
-        </button>
-      </a>
+      <button onclick="handleLogout()" class="logout-btn spring-card w-full text-white py-3 rounded-xl bg-red-500 hover:bg-red-600 font-semibold shadow-md">
+        <i class="fas fa-sign-out-alt text-sm mr-1"></i>Logout
+      </button>
     </div>
   </div>
 
-  <!-- DETAILS CARD (reveal-right + section-heading + staggered fields) -->
   <div class="spring-card bg-white/20 text-black dark:text-white rounded-2xl p-8 shadow-xl backdrop-blur-lg border border-white/40 reveal-right">
-
     <h2 class="text-2xl font-bold mb-1 section-heading">Account Information</h2>
     <p class="text-sm text-white/60 dark:text-gray-500 mb-8 mt-3">Update your personal details below</p>
-
     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-
-      <!-- Each field fades in with reveal stagger -->
+      <div class="reveal bg-white/10 rounded-xl p-4 backdrop-blur-sm border border-white/20 md:col-span-2" style="transition-delay:0.02s">
+        <label class="text-xs font-semibold uppercase tracking-widest text-black block mb-1"><i class="fas fa-fingerprint text-red-400 mr-1"></i>Member ID</label>
+        <div class="flex items-center gap-2 mt-2">
+          <input type="text" id="field-userid" class="profile-input font-mono text-xs tracking-widest flex-1" placeholder="—" readonly style="color:#000000;cursor:default;background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.15);" />
+          <button id="copy-id-btn" onclick="copyId()" class="flex-shrink-0 px-3 py-2 rounded-lg bg-black hover:bg-red-600 hover:text-white text-white/60 border border-white/20 transition-all duration-200 text-xs font-semibold"><i class="fas fa-copy mr-1"></i>Copy</button>
+        </div>
+        <p class="text-xs text-black mt-1.5">Your unique Heat Haven member ID — read only.</p>
+      </div>
       <div class="reveal bg-white/10 rounded-xl p-4 backdrop-blur-sm border border-white/20" style="transition-delay:0.05s">
         <label class="text-sm font-semibold block mb-1">Full Name</label>
-        <input type="text" value="Kanishak Choudhary" class="profile-input" placeholder="Your name" />
+        <input type="text" id="field-name" class="profile-input" placeholder="Your name" />
       </div>
-
       <div class="reveal bg-white/10 rounded-xl p-4 backdrop-blur-sm border border-white/20" style="transition-delay:0.12s">
         <label class="text-sm font-semibold block mb-1">Email</label>
-        <input type="email" value="kanishakchoudhary268@gmail.com" class="profile-input" placeholder="your@email.com" />
+        <input type="email" id="field-email" class="profile-input" placeholder="your@email.com" />
       </div>
-
       <div class="reveal bg-white/10 rounded-xl p-4 backdrop-blur-sm border border-white/20" style="transition-delay:0.19s">
         <label class="text-sm font-semibold block mb-1">Phone</label>
-        <input type="text" placeholder="+91 XXXXX XX488" class="profile-input" />
+        <input type="text" id="field-phone" class="profile-input" placeholder="+91 XXXXX XXXXX" />
       </div>
-
       <div class="reveal bg-white/10 rounded-xl p-4 backdrop-blur-sm border border-white/20" style="transition-delay:0.26s">
-        <label class="text-sm font-semibold block mb-1">Password</label>
-        <input type="password" value="password" class="profile-input" />
+        <label class="text-sm font-semibold block mb-1">Delivery Address</label>
+        <input type="text" id="field-address" class="profile-input" placeholder="Flat, Street, City, PIN" />
+      </div>
+      <div class="reveal bg-white/10 rounded-xl p-4 backdrop-blur-sm border border-white/20" style="transition-delay:0.33s">
+        <label class="text-sm font-semibold block mb-1">Shoe Size (UK)</label>
+        <input type="text" id="field-size" class="profile-input" placeholder="—" readonly style="cursor:default;background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.15);" />
+      </div>
+      <div class="reveal bg-white/10 rounded-xl p-4 backdrop-blur-sm border border-white/20" style="transition-delay:0.4s">
+        <label class="text-sm font-semibold block mb-2">Favourite Brands</label>
+        <div id="field-brands" class="flex flex-wrap gap-2 min-h-[28px]"></div>
       </div>
     </div>
-
-    <div class="mt-8 reveal" style="transition-delay:0.33s">
-      <a href="save_changes.html">
-        <button class="save-btn bg-red-600 text-white px-10 py-3 rounded-xl font-semibold"
-                onclick="showToast('Changes saved! ✅', false)">
-          <i class="fas fa-check mr-2"></i>Save Changes
-        </button>
-      </a>
+    <div class="mt-8 reveal" style="transition-delay:0.47s">
+      <button id="save-btn" onclick="saveChanges()" class="save-btn bg-red-600 text-white px-10 py-3 rounded-xl font-semibold">
+        <i class="fas fa-check mr-2"></i>Save Changes
+      </button>
     </div>
   </div>
-
 </section>
 
-<!-- Toast -->
-<div id="toast">
-  <i class="fas fa-check-circle" style="color:#22c55e"></i>
-  <span></span>
-</div>
+<div id="toast"><i class="fas fa-check-circle" style="color:#22c55e"></i><span></span></div>
 
 <script>
-// ── DARK MODE ─────────────────────────────────────────────
-if (localStorage.getItem("theme") === "dark") document.documentElement.classList.add("dark");
-document.getElementById("theme-toggle").addEventListener("click", () => {
-  const d = document.documentElement.classList.toggle("dark");
-  localStorage.setItem("theme", d ? "dark" : "light");
+/* ══ STORAGE ══ */
+const HH_KEY='hh_user';
+function getUser(){try{return JSON.parse(localStorage.getItem(HH_KEY)||'null');}catch(e){return null;}}
+function saveUser(p){const u=Object.assign(getUser()||{},p);localStorage.setItem(HH_KEY,JSON.stringify(u));return u;}
+
+/* ══ PROFILE ══ */
+function loadProfile(){
+  const u=getUser();if(!u)return;
+  const fn=u.firstName||(u.name||'').split(' ')[0]||'';
+  const ln=u.lastName||(u.name||'').split(' ').slice(1).join(' ')||'';
+  setText('profile-firstname',fn||'Guest');
+  setText('profile-lastname',ln?' '+ln:'');
+  setText('profile-id-badge-text',u._id||'—');
+  if(u.avatar)document.getElementById('profile-avatar-img').src=u.avatar;
+  setVal('field-userid',u._id||'');
+  setVal('field-name',u.name||(fn+' '+ln).trim());
+  setVal('field-email',u.email||'');
+  setVal('field-phone',u.phone||'');
+  setVal('field-address',u.address||'');
+  setVal('field-size',u.size||'');
+  const be=document.getElementById('field-brands');
+  if(be){const b=Array.isArray(u.brands)?u.brands:[];be.innerHTML=b.length?b.map(x=>`<span class="px-3 py-1 text-xs font-semibold rounded-full bg-red-500/20 text-red-300 border border-red-500/30">${escH(x)}</span>`).join(''):'<span class="text-xs text-white/30">None selected</span>';}
+}
+function setText(id,v){const e=document.getElementById(id);if(e)e.textContent=v;}
+function setVal(id,v){const e=document.getElementById(id);if(e)e.value=v;}
+function escH(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function saveChanges(){
+  const name=(document.getElementById('field-name')?.value||'').trim();
+  const email=(document.getElementById('field-email')?.value||'').trim();
+  const phone=(document.getElementById('field-phone')?.value||'').trim();
+  const address=(document.getElementById('field-address')?.value||'').trim();
+  if(!name){showToast('Please enter your name.',true);return;}
+  if(!email){showToast('Please enter your email.',true);return;}
+  const p=name.split(' ');
+  const u=saveUser({name,email,phone,address,firstName:p[0]||'',lastName:p.slice(1).join(' ')||''});
+  setText('profile-firstname',u.firstName||u.name||'');
+  setText('profile-lastname',u.lastName?' '+u.lastName:'');
+  showToast('Profile saved! ✅',false);
+}
+
+function handleAvatarChange(e){
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=ev=>{const d=ev.target.result;document.getElementById('profile-avatar-img').src=d;saveUser({avatar:d});showToast('Profile photo updated! 📸',false);};
+  r.readAsDataURL(f);
+}
+
+function copyId(){
+  const v=document.getElementById('field-userid')?.value||'';if(!v)return;
+  navigator.clipboard.writeText(v).then(()=>{
+    const b=document.getElementById('copy-id-btn');if(b){const o=b.innerHTML;b.innerHTML='<i class="fas fa-check mr-1"></i>Copied!';b.style.background='#16a34a';setTimeout(()=>{b.innerHTML=o;b.style.background='';},2000);}
+    showToast('Member ID copied! 📋',false);
+  }).catch(()=>{const e=document.getElementById('field-userid');if(e){e.select();document.execCommand('copy');}showToast('Member ID copied! 📋',false);});
+}
+
+function handleLogout(){localStorage.removeItem(HH_KEY);showToast('Logged out. See you soon! 👟',false);setTimeout(()=>{window.location.href='profile login.html';},1200);}
+
+/* ══ TOAST ══ */
+function showToast(msg,isErr){
+  const t=document.getElementById("toast");
+  t.querySelector("i").className=isErr?"fas fa-exclamation-circle":"fas fa-check-circle";
+  t.querySelector("i").style.color=isErr?"#facc15":"#22c55e";
+  t.querySelector("span").textContent=msg;
+  t.classList.remove("show");void t.offsetWidth;t.classList.add("show");
+}
+
+/* ══ DARK MODE ══ */
+if(localStorage.getItem("theme")==="dark")document.documentElement.classList.add("dark");
+document.getElementById("theme-toggle").addEventListener("click",()=>{
+  const d=document.documentElement.classList.toggle("dark");
+  localStorage.setItem("theme",d?"dark":"light");
 });
 
-// ── MOBILE MENU ───────────────────────────────────────────
-document.getElementById("mobile-menu-button").addEventListener("click", () => document.getElementById("mobile-menu").classList.add("open"));
-document.getElementById("close-menu").addEventListener("click", () => document.getElementById("mobile-menu").classList.remove("open"));
+/* ══ MOBILE MENU ══ */
+document.getElementById("mobile-menu-button").addEventListener("click",()=>document.getElementById("mobile-menu").classList.add("open"));
+document.getElementById("close-menu").addEventListener("click",()=>document.getElementById("mobile-menu").classList.remove("open"));
 
-// ── CURSOR GLOW (from index) ──────────────────────────────
-const glow = document.getElementById('cursor-glow');
-document.addEventListener('mousemove', e => { glow.style.left = e.clientX + 'px'; glow.style.top = e.clientY + 'px'; });
+/* ══ CURSOR GLOW ══ */
+const glow=document.getElementById('cursor-glow');
+document.addEventListener('mousemove',e=>{glow.style.left=e.clientX+'px';glow.style.top=e.clientY+'px';});
 
-// ── HELPERS ───────────────────────────────────────────────
-function escH(s) { return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
-function escReg(s) { return s.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"); }
+/* ══ BADGES ══ */
+try{const c=JSON.parse(localStorage.getItem("hh_cart")||"[]");const n=c.reduce((s,i)=>s+(i.qty||0),0);document.querySelectorAll("#cart-count,#cart-count-mobile").forEach(el=>el.textContent=n);}catch(e){}
+try{const wl=JSON.parse(localStorage.getItem("hh_wishlist")||"[]");const wc=document.getElementById("wishlist-count");if(wc)wc.textContent=wl.length;}catch(e){}
 
-function showToast(msg, isError) {
-  const t = document.getElementById("toast");
-  t.querySelector("i").className = isError ? "fas fa-exclamation-circle" : "fas fa-check-circle";
-  t.querySelector("i").style.color = isError ? "#facc15" : "#22c55e";
-  t.querySelector("span").textContent = msg;
-  t.classList.remove("show"); void t.offsetWidth; t.classList.add("show");
+/* ══ SCROLL REVEAL ══ */
+const io=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:0.1,rootMargin:'0px 0px -30px 0px'});
+document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.section-heading').forEach(el=>io.observe(el));
+
+/* 3D tilt */
+const card=document.querySelector('.reveal-right.spring-card');
+if(card){
+  card.addEventListener('mousemove',e=>{const r=card.getBoundingClientRect();const x=(e.clientX-r.left)/r.width-0.5;const y=(e.clientY-r.top)/r.height-0.5;card.style.transform=`perspective(900px) rotateX(${-y*6}deg) rotateY(${x*6}deg) translateY(-4px) scale(1.01)`;});
+  card.addEventListener('mouseleave',()=>{card.style.transform='';});
 }
 
-// ── CART BADGE ────────────────────────────────────────────
-function getCart() { try { return JSON.parse(localStorage.getItem("hh_cart") || "[]"); } catch(e) { return []; } }
-function updateCartBadge() {
-  const t = getCart().reduce((s, i) => s + (i.qty || 0), 0);
-  document.querySelectorAll("#cart-count,#cart-count-mobile").forEach(el => el.textContent = t);
-}
-updateCartBadge();
-
-// ── WISHLIST COUNT ────────────────────────────────────────
-function getWishlist() { try { return JSON.parse(localStorage.getItem("hh_wishlist") || "[]"); } catch(e) { return []; } }
-const wcEl = document.getElementById("wishlist-count");
-if (wcEl) wcEl.textContent = getWishlist().length;
-
-// ── INTERSECTION OBSERVER (scroll reveals — same as index) ─
-const io = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
-document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.section-heading').forEach(el => io.observe(el));
-
-// ── 3D TILT on details card (same as deal-card on index) ──
-const detailCard = document.querySelector('.reveal-right.spring-card');
-if (detailCard) {
-  detailCard.addEventListener('mousemove', e => {
-    const r = detailCard.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width  - 0.5;
-    const y = (e.clientY - r.top)  / r.height - 0.5;
-    detailCard.style.transform = `perspective(900px) rotateX(${-y * 6}deg) rotateY(${x * 6}deg) translateY(-4px) scale(1.01)`;
-  });
-  detailCard.addEventListener('mouseleave', () => { detailCard.style.transform = ''; });
-}
-
-// ── NAV HIGHLIGHT (same as index) ─────────────────────────
-const currentPage = location.pathname.split('/').pop() || 'profile.html';
-document.querySelectorAll('.nav-link').forEach(link => {
-  if (link.getAttribute('href') === currentPage) { link.classList.add('font-semibold'); link.style.color = '#ff4500'; }
-});
-
-// ── SEARCH (same as index) ────────────────────────────────
-const PRODUCT_INDEX = [
-  { name:'Air Jordan 1 Retro High',    colorway:'Chicago Bulls',   brand:'Jordan',      price:5559, img:'images/aj 1 chichgo.png' },
-  { name:'Nike Uptempo Slide',         colorway:'Chicago Bulls',   brand:'Nike',        price:5559, img:'images/uptempo slide bulls.png' },
-  { name:'Nike SB Dunk Low',           colorway:'Gulf',            brand:'Nike',        price:5559, img:'images/sb gulf.png' },
-  { name:'Adidas Campus',             colorway:'Clear Sky Gum',   brand:'Adidas',      price:5559, img:'images/adidas campus clear sky gum.png' },
-  { name:'Air Force 1 Low',           colorway:'Lakers Home',     brand:'Nike',        price:5559, img:'images/af1 kobe yellow.png' },
-  { name:'Yeezy Boost 350 V2',        colorway:'Zebra',           brand:'Yeezy',       price:5559, img:'images/yeezy zebra.png' },
-  { name:'Yeezy 700 V3',              colorway:'Azael',           brand:'Yeezy',       price:5559, img:'images/yzy 700 v3 azael.png' },
-  { name:'Rick Owens Hollywood High', colorway:'Black Milk',      brand:'Rick Owens',  price:5559, img:'images/rick owens hollywood high black milk.png' },
-  { name:'Puma Melns',                colorway:'La France',       brand:'Puma',        price:5559, img:'images/puma melons lafrance.png' },
-  { name:'Travis x Fragment High',    colorway:'Fragment',        brand:'Jordan',      price:5559, img:'images/travis x fragment high.png' },
-  { name:'New Balance 990v5',         colorway:'Grey',            brand:'New Balance', price:5559, img:'images/nb 990v5.png' },
-  { name:'Air Jordan 4 Retro',        colorway:'Breds',           brand:'Jordan',      price:5559, img:'images/aj4 bred.png' },
-  { name:'Salehe Bembury x Crocs',    colorway:'Horchata',        brand:'Crocs',       price:5559, img:'images/crocs horchata.png' },
+/* ══════════════════════════════════════
+   SEARCH — fully working
+══════════════════════════════════════ */
+const PRODUCTS=[
+  {name:'Air Jordan 1 Retro High',    colorway:'Chicago Bulls',  brand:'Jordan',      price:5559,  img:'images/aj 1 chichgo.png'},
+  {name:'Nike Uptempo Slide',         colorway:'Chicago Bulls',  brand:'Nike',        price:5559,  img:'images/uptempo slide bulls.png'},
+  {name:'Nike SB Dunk Low',           colorway:'Gulf',           brand:'Nike',        price:5559,  img:'images/sb gulf.png'},
+  {name:'Adidas Campus',             colorway:'Clear Sky Gum',  brand:'Adidas',      price:5559,  img:'images/adidas campus clear sky gum.png'},
+  {name:'Air Force 1 Low',           colorway:'Lakers Home',    brand:'Nike',        price:5559,  img:'images/af1 kobe yellow.png'},
+  {name:'Yeezy Boost 350 V2',        colorway:'Zebra',          brand:'Yeezy',       price:5559,  img:'images/yeezy zebra.png'},
+  {name:'Yeezy 700 V3',              colorway:'Azael',          brand:'Yeezy',       price:5559,  img:'images/yzy 700 v3 azael.png'},
+  {name:'Rick Owens Hollywood High', colorway:'Black Milk',     brand:'Rick Owens',  price:5559,  img:'images/rick owens hollywood high black milk.png'},
+  {name:'Puma Melons',               colorway:'La France',      brand:'Puma',        price:5559,  img:'images/puma melons lafrance.png'},
+  {name:'Travis x Fragment High',    colorway:'Fragment',       brand:'Jordan',      price:5559,  img:'images/travis x fragment high.png'},
+  {name:'New Balance 990v5',         colorway:'Grey',           brand:'New Balance', price:5559,  img:'images/nb 990v5.png'},
+  {name:'Air Jordan 4 Retro',        colorway:'Breds',          brand:'Jordan',      price:5559,  img:'images/aj4 bred.png'},
+  {name:'Salehe Bembury x Crocs',    colorway:'Horchata',       brand:'Crocs',       price:5559,  img:'images/crocs horchata.png'},
 ];
 
-const overlay      = document.getElementById("search-overlay");
-const searchInput  = document.getElementById("search-input");
-const clearBtn     = document.getElementById("search-clear-btn");
-const resultsPanel = document.getElementById("search-results-panel");
+const overlay=document.getElementById("search-overlay");
+const sInput=document.getElementById("search-input");
+const sClear=document.getElementById("search-clear-btn");
+const sPanel=document.getElementById("search-results-panel");
 
-function openSearch() { overlay.classList.add("open"); setTimeout(() => searchInput.focus(), 50); }
-function closeSearch() {
-  overlay.classList.remove("open");
-  searchInput.value = ""; clearBtn.classList.remove("visible");
-  resultsPanel.innerHTML = ""; resultsPanel.classList.remove("has-results");
-}
+function openSearch(){overlay.classList.add("open");setTimeout(()=>sInput.focus(),60);}
+function closeSearch(){overlay.classList.remove("open");sInput.value="";sClear.classList.remove("visible");sPanel.innerHTML="";sPanel.classList.remove("has-results");}
 
-document.getElementById("search-open-btn").addEventListener("click", openSearch);
-document.getElementById("search-open-btn-mobile")?.addEventListener("click", () => {
-  document.getElementById("mobile-menu").classList.remove("open"); openSearch();
-});
-overlay.addEventListener("click", e => { if (e.target === overlay) closeSearch(); });
-document.addEventListener("keydown", e => {
-  if (e.key === "Escape") closeSearch();
-  if ((e.metaKey || e.ctrlKey) && e.key === "k") { e.preventDefault(); openSearch(); }
-});
-clearBtn.addEventListener("click", () => {
-  searchInput.value = ""; clearBtn.classList.remove("visible");
-  resultsPanel.innerHTML = ""; resultsPanel.classList.remove("has-results"); searchInput.focus();
-});
+document.getElementById("search-open-btn").addEventListener("click",openSearch);
+document.getElementById("search-open-btn-mobile")?.addEventListener("click",()=>{document.getElementById("mobile-menu").classList.remove("open");openSearch();});
+overlay.addEventListener("click",e=>{if(e.target===overlay)closeSearch();});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeSearch();if((e.metaKey||e.ctrlKey)&&e.key==="k"){e.preventDefault();openSearch();}});
+sClear.addEventListener("click",()=>{sInput.value="";sClear.classList.remove("visible");sPanel.innerHTML="";sPanel.classList.remove("has-results");sInput.focus();});
 
-function highlight(text, q) {
-  if (!q) return escH(text);
-  return escH(text).replace(new RegExp(`(${escReg(q)})`,"gi"),'<span class="search-highlight">$1</span>');
-}
+function escReg(s){return s.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");}
+function hl(t,q){if(!q)return escH(t);return escH(t).replace(new RegExp(`(${escReg(q)})`,"gi"),'<span class="search-highlight">$1</span>');}
 
-function runSearch(query) {
-  clearBtn.classList.toggle("visible", query.length > 0);
-  if (!query.trim()) { resultsPanel.innerHTML = ""; resultsPanel.classList.remove("has-results"); return; }
-  const q = query.toLowerCase();
-  const hits = PRODUCT_INDEX.filter(p =>
-    p.name.toLowerCase().includes(q) || p.colorway.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q)
-  );
-  resultsPanel.classList.add("has-results");
-  if (!hits.length) {
-    resultsPanel.innerHTML = `<div class="search-no-results"><span class="emoji">👟</span>No sneakers found for "<strong>${escH(query)}</strong>"</div>`;
-    return;
-  }
-  resultsPanel.innerHTML = hits.map((p,i) => `
-    <div class="search-result-item" data-idx="${i}" role="option" tabindex="0" style="animation-delay:${i*40}ms">
-      <img class="sri-img" src="${escH(p.img)}" alt="${escH(p.name)}" onerror="this.src='https://via.placeholder.com/52'" />
-      <div class="sri-info">
-        <div class="sri-name">${highlight(p.name,query)}</div>
-        <div class="sri-sub">${highlight(p.colorway,query)} · ${highlight(p.brand,query)}</div>
+function runSearch(q){
+  sClear.classList.toggle("visible",q.length>0);
+  if(!q.trim()){sPanel.innerHTML="";sPanel.classList.remove("has-results");return;}
+  const lq=q.toLowerCase();
+  const hits=PRODUCTS.filter(p=>p.name.toLowerCase().includes(lq)||p.colorway.toLowerCase().includes(lq)||p.brand.toLowerCase().includes(lq));
+  sPanel.classList.add("has-results");
+  if(!hits.length){sPanel.innerHTML=`<div class="search-no-results"><span style="font-size:36px;display:block;margin-bottom:10px">👟</span>No sneakers found for "<strong>${escH(q)}</strong>"</div>`;return;}
+  sPanel.innerHTML=hits.map((p,i)=>`
+    <div class="search-result-item" tabindex="0" style="animation-delay:${i*40}ms">
+      <img class="sri-img" src="${escH(p.img)}" alt="${escH(p.name)}" onerror="this.src='https://via.placeholder.com/52'"/>
+      <div style="flex:1;min-width:0">
+        <div class="sri-name">${hl(p.name,q)}</div>
+        <div class="sri-sub">${hl(p.colorway,q)} · ${hl(p.brand,q)}</div>
       </div>
       <div class="sri-price">₹${p.price.toLocaleString("en-IN")}</div>
-    </div>`).join("");
-  resultsPanel.querySelectorAll(".search-result-item").forEach((item,i) => {
-    item.addEventListener("click", () => { closeSearch(); window.location.href = "product.html"; });
-    item.addEventListener("keydown", e => { if (e.key === "Enter") item.click(); });
+    </div>`).join('');
+  sPanel.querySelectorAll(".search-result-item").forEach(item=>{
+    item.addEventListener("click",()=>{closeSearch();window.location.href="product.html";});
+    item.addEventListener("keydown",e=>{if(e.key==="Enter")item.click();});
   });
 }
-
 let dbt;
-searchInput.addEventListener("input", () => { clearTimeout(dbt); dbt = setTimeout(() => runSearch(searchInput.value), 160); });
+sInput.addEventListener("input",()=>{clearTimeout(dbt);dbt=setTimeout(()=>runSearch(sInput.value),160);});
+
+/* ══════════════════════════════════════
+   CHATBOT
+══════════════════════════════════════ */
+let chatOpen=false;
+const chatWin=document.getElementById('chat-window');
+const chatMsgs=document.getElementById('chat-messages');
+const chatInp=document.getElementById('chat-input');
+const chatBadge=document.getElementById('chat-badge');
+
+/* show unread badge after 3s */
+setTimeout(()=>{if(!chatOpen)chatBadge.classList.add('show');},3000);
+
+function toggleChat(){
+  chatOpen=!chatOpen;
+  chatWin.classList.toggle('open',chatOpen);
+  if(chatOpen){
+    chatBadge.classList.remove('show');
+    if(chatMsgs.children.length===0)initChat();
+    setTimeout(()=>chatInp.focus(),300);
+  }
+}
+
+function initChat(){
+  addBotMsg("Hey! 👟 I'm your Heat Haven Assistant. How can I help you today?");
+  setTimeout(()=>addQuickReplies(['Track my order','Size guide','Return policy','What\'s new?','Contact support']),450);
+}
+
+/* Knowledge base */
+const KB=[
+  {k:['order','track','delivery','shipped','when','arrive','status'],r:"Your orders are delivered within 3–5 business days. Track from the Orders section in your profile. 📦"},
+  {k:['return','refund','exchange','replace','send back'],r:"Returns accepted within 7 days of delivery for unused items in original packaging. Go to Orders → tap 'Return'. 🔄"},
+  {k:['size','sizing','fit','uk','us','eu','guide','measurement','chart'],r:"We stock sizes UK 6–12. Full conversion chart (UK/US/EU) is on every product page. When in doubt, go half a size up! 📏"},
+  {k:['new','latest','drop','release','restock','fresh','collection','launch'],r:"Check our Hot Deals page for the freshest drops! We restock popular pairs every Friday. Subscribe to our newsletter! 🔥"},
+  {k:['payment','pay','upi','card','cash','cod','emi','gpay','phonepe'],r:"We accept UPI, all major debit/credit cards, net banking, and EMI. All payments are 100% secure. 💳"},
+  {k:['authentic','real','fake','genuine','original','replica','verify','legit'],r:"Every pair at Heat Haven is 100% authentic — personally verified before shipping. Zero replicas, ever. ✅"},
+  {k:['contact','support','help','call','email','whatsapp','chat','reach'],r:"Reach us on Instagram @heatheaven.23_ or WhatsApp (link in footer). We reply within 2 hours! 📱"},
+  {k:['price','cost','discount','offer','coupon','promo','sale','deal','cheap'],r:"Check our Hot Deals page for current offers! Use code HEATFIRST for 5% off your first order. 🏷️"},
+  {k:['profile','account','login','signup','password','forgot','register'],r:"Update your profile details, address, and preferences right here on this page. For login issues, click 'Forgot Password' on the login page. 👤"},
+  {k:['wishlist','save','favourite','favorite','bookmark','heart'],r:"Tap ❤️ on any product to add it to your Wishlist. View saved items from the Wishlist section in your profile."},
+  {k:['shipping','free shipping','delivery charge','courier'],r:"Free shipping on all orders above ₹50,000! Standard delivery takes 3–5 business days across India. 🚚"},
+  {k:['hello','hi','hey','hola','howdy','sup','yo','what\'s up','namaste'],r:"Hey there! 🔥 Great to see you at Heat Haven. What can I help you with today?"},
+  {k:['thanks','thank','thx','ty','great','awesome','perfect','love it','nice'],r:"You're welcome! Happy to help. Anything else I can do for you? 🙌"},
+  {k:['bye','goodbye','later','cya','see you','done','nothing'],r:"Catch you later! Keep it heat 🔥 Don't forget to check our new drops!"},
+];
+
+function getBotReply(text){
+  const t=text.toLowerCase().trim();
+  for(const e of KB){if(e.k.some(kw=>t.includes(kw)))return e.r;}
+  return "Hmm, I'm not sure about that one! 🤔 Try asking about orders, sizing, returns, or new drops — or reach our support team for specifics.";
+}
+
+function addMsg(text,type){
+  const d=document.createElement('div');d.className=`msg ${type}`;d.textContent=text;
+  chatMsgs.appendChild(d);chatMsgs.scrollTop=chatMsgs.scrollHeight;
+}
+function addBotMsg(t){addMsg(t,'bot');}
+function addUserMsg(t){addMsg(t,'user');}
+
+function addTyping(){
+  const d=document.createElement('div');d.className='msg typing';d.id='typing-ind';
+  d.innerHTML='<div class="typing-dots"><span></span><span></span><span></span></div>';
+  chatMsgs.appendChild(d);chatMsgs.scrollTop=chatMsgs.scrollHeight;
+}
+function removeTyping(){const t=document.getElementById('typing-ind');if(t)t.remove();}
+
+function addQuickReplies(opts){
+  const d=document.createElement('div');d.className='quick-replies';
+  opts.forEach(o=>{
+    const b=document.createElement('button');b.className='qr-btn';b.textContent=o;
+    b.onclick=()=>{d.remove();handleUserMsg(o);};
+    d.appendChild(b);
+  });
+  chatMsgs.appendChild(d);chatMsgs.scrollTop=chatMsgs.scrollHeight;
+}
+
+function handleUserMsg(text){
+  addUserMsg(text);addTyping();
+  setTimeout(()=>{removeTyping();addBotMsg(getBotReply(text));},700+Math.random()*500);
+}
+
+function sendMessage(){
+  const t=chatInp.value.trim();if(!t)return;
+  chatInp.value='';handleUserMsg(t);
+}
+chatInp.addEventListener('keydown',e=>{if(e.key==='Enter')sendMessage();});
+
+/* ══ RUN ══ */
+loadProfile();
 </script>
 </body>
 </html>
