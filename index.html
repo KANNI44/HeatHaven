@@ -130,7 +130,7 @@
     /* ══ LOADING SCREEN ══ */
 #hh-loader {
   position: fixed; inset: 0; z-index: 99999;
-  background: #f0efe9;
+  background: #000000;
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   transition: opacity 0.5s ease, visibility 0.5s ease;
@@ -138,8 +138,8 @@
 #hh-loader.hide { opacity: 0; visibility: hidden; }
 #hh-loader .ld-logo {
   font-family: "Archivo Black", sans-serif;
-  font-size: 32px; letter-spacing: -1px; color: #000; margin-bottom: 6px;
-  background: linear-gradient(90deg, #000 40%, #ff4500 50%, #000 60%);
+  font-size: 32px; letter-spacing: -1px; color: #fff; margin-bottom: 6px;
+  background: linear-gradient(90deg, #fff 40%, #ff4500 50%, #fff 60%);
   background-size: 200% auto;
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -151,12 +151,12 @@
 }
 #hh-loader .ld-tag {
   font-family: "Poppins", sans-serif;
-  font-size: 10px; letter-spacing: 4px; color: #444;
+  font-size: 10px; letter-spacing: 4px; color: #aaa;
   text-transform: uppercase; margin-bottom: 44px;
 }
 #hh-loader .ld-track {
   width: 200px; height: 5px; margin-top: 36px;
-  background: #ccc; border-radius: 99px; overflow: hidden;
+  background: #222; border-radius: 99px; overflow: hidden;
 }
 #hh-loader .ld-fill {
   height: 100%; width: 0%; background: #ff4500;
