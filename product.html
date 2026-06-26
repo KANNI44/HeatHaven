@@ -173,6 +173,28 @@
     .dark .hh-chip:hover { background:#fff; color:#000; border-color:#fff; }
     .dark .hh-powered { background:#0a0a0a; color:#333; }
     @media (max-width:420px) { #hh-chat-panel { width:calc(100vw - 48px); } }
+    @media (max-width: 768px) {
+  .shoe-card {
+    font-size: 12px;
+  }
+  .shoe-card img {
+    height: 140px !important;
+  }
+  .shoe-card .p-4 {
+    padding: 8px !important;
+  }
+  .shoe-card h3 {
+    font-size: 13px !important;
+  }
+  .shoe-card .add-to-cart-btn {
+    font-size: 11px !important;
+    padding: 4px 8px !important;
+  }
+  #products .grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+}
     #cursor-glow { position:fixed; width:320px; height:320px; border-radius:50%; background:radial-gradient(circle, rgba(255,69,0,0.07) 0%, transparent 70%); pointer-events:none; z-index:0; transform:translate(-50%,-50%); transition:opacity 0.4s ease; opacity:0; }
     body:hover #cursor-glow { opacity:1; }
     @keyframes nav-drop { from { transform:translateY(-100%); opacity:0; } to { transform:translateY(0); opacity:1; } }
