@@ -121,6 +121,55 @@
     #search-close-hint kbd { background:rgba(0,0,0,0.08); color:#5f6368; padding:2px 8px; border-radius:4px; font-family:monospace; }
     .dark #search-close-hint kbd { background:rgba(255,255,255,0.1); color:#9aa0a6; }
 
+    /* ══ LOADING SCREEN ══ */
+#hh-loader {
+  position: fixed; inset: 0; z-index: 99999;
+  background: #f0efe9;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+#hh-loader.hide { opacity: 0; visibility: hidden; }
+#hh-loader .ld-logo {
+  font-family: "Archivo Black", sans-serif;
+  font-size: 32px; letter-spacing: -1px; color: #000; margin-bottom: 6px;
+  background: linear-gradient(90deg, #000 40%, #ff4500 50%, #000 60%);
+  background-size: 200% auto;
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: ld-shimmer 2.5s ease infinite;
+}
+@keyframes ld-shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+#hh-loader .ld-tag {
+  font-family: "Poppins", sans-serif;
+  font-size: 10px; letter-spacing: 4px; color: #444;
+  text-transform: uppercase; margin-bottom: 44px;
+}
+#hh-loader .ld-track {
+  width: 200px; height: 5px; margin-top: 36px;
+  background: #ccc; border-radius: 99px; overflow: hidden;
+}
+#hh-loader .ld-fill {
+  height: 100%; width: 0%; background: #ff4500;
+  border-radius: 99px;
+  animation: ld-bar 1.8s cubic-bezier(0.4,0,0.2,1) 0.2s forwards;
+}
+#hh-loader .ld-fill {
+  height: 100%; width: 0%; background: #ff4500;
+  border-radius: 99px;
+  animation: ld-bar 1.8s cubic-bezier(0.4,0,0.2,1) 0.2s forwards;
+}
+@keyframes ld-bar {
+  0%   { width: 0%; }
+  40%  { width: 55%; }
+  70%  { width: 80%; }
+  90%  { width: 94%; }
+  100% { width: 100%; }
+}
+
     /* ══ FILTER PANEL — fixed position, opens below the filter button ══ */
     #filterPanel {
       position:fixed;
@@ -200,6 +249,19 @@
     .dark .hh-chip:hover { background:#fff; color:#000; border-color:#fff; }
     .dark .hh-powered { background:#0a0a0a; color:#333; }
     @media (max-width:420px) { #hh-chat-panel { width:calc(100vw - 48px); } }
+    @media (max-width: 768px) {
+  .hero-video {
+    height: 100vh;
+    object-position: center center;
+  }
+  .hero-sub {
+    font-size: 1rem !important;
+  }
+  .hero-cta {
+    font-size: 1rem !important;
+    padding: 0.75rem 2rem !important;
+  }
+}
     #cursor-glow { position:fixed; width:320px; height:320px; border-radius:50%; background:radial-gradient(circle, rgba(255,69,0,0.07) 0%, transparent 70%); pointer-events:none; z-index:0; transform:translate(-50%,-50%); transition:opacity 0.4s ease; opacity:0; }
     body:hover #cursor-glow { opacity:1; }
     @keyframes brand-shimmer { 0%{background-position:-200% center;} 100%{background-position:200% center;} }
@@ -250,6 +312,15 @@
 </head>
 
 <body class="bg-white dark:bg-amoled text-black dark:text-white transition-colors duration-300">
+  <body class="bg-white dark:bg-amoled text-black dark:text-white transition-colors duration-300"></body>
+
+  <div id="hh-loader">
+  <div class="ld-logo">HEAT HAVEN</div>
+  <div class="ld-tag">Premium Sneakers</div>
+  <div class="ld-track">
+    <div class="ld-fill"></div>
+  </div>
+</div>
 
   <div id="search-overlay" role="dialog" aria-label="Search products">
     <div id="search-box-wrap">
@@ -741,6 +812,18 @@
       const isDark = document.documentElement.classList.toggle("dark");
       localStorage.setItem("theme", isDark ? "dark" : "light");
     });
+   // LOADING SCREEN — show only once per session
+if (sessionStorage.getItem('hh_loaded')) {
+  document.getElementById('hh-loader').classList.add('hide');
+} else {
+  window.addEventListener('load', function() {
+    setTimeout(function() {
+      var loader = document.getElementById('hh-loader');
+      if (loader) loader.classList.add('hide');
+      sessionStorage.setItem('hh_loaded', '1');
+    }, 2000);
+  });
+}
 
     // MOBILE MENU
     document.getElementById("mobile-menu-button").addEventListener("click", () => document.getElementById("mobile-menu").classList.add("open"));
